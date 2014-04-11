@@ -15,7 +15,6 @@
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,16 +52,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\mflib\src\MediaFoundation-2010.csproj">
-      <Project>{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}</Project>
-      <Name>MediaFoundation-2010</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MediaFoundation.Net\MediaFoundation.Net.csproj">
-      <Project>{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}</Project>
-      <Name>MediaFoundation.Net</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -68,4 +60,14 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\MediaFoundation.Net\MediaFoundation.Net.csproj">
+      <Project>{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}</Project>
+      <Name>MediaFoundation.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mflib\src\MediaFoundation-2010.csproj">
+      <Project>{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}</Project>
+      <Name>MediaFoundation-2010</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

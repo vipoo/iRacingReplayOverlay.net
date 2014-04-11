@@ -39,6 +39,8 @@ namespace iRacingReplayOverlay.net
 		{
 			var duration = sourceReader.MediaSource.Duration;
 
+			Console.WriteLine (duration);
+
 			int count = 0;
 			foreach (var s in sourceReader.Streams)
 				if (s.IsSelected)
@@ -46,7 +48,7 @@ namespace iRacingReplayOverlay.net
 
 			foreach (var stream in sourceReader.Streams.Where(s => s.IsSelected))
 			{
-				var nativeMediaType = stream.GetNativeMediaType( 0 );
+				var nativeMediaType = stream.NativeMediaType;
 
 				var isVideo = nativeMediaType.IsVideo;
 				var isAudio = nativeMediaType.IsAudio;
@@ -60,7 +62,17 @@ namespace iRacingReplayOverlay.net
 				else
 					continue;
 
-				sinkWriter.AddStream (targetType);
+				var sinkStream = sinkWriter.AddStream (targetType);
+
+				if (isAudio)
+				{
+					var mediaType = new MediaType () { MajorType = MFMediaType.Audio,  SubType = MFMediaType.Float };
+
+					stream.CurrentMediaType = mediaType;
+					var currentMediaType = stream.CurrentMediaType;
+					sinkStream.InputMediaType = currentMediaType;
+
+				}
 			}
 		}
 
@@ -96,9 +108,10 @@ namespace iRacingReplayOverlay.net
 				FrameSize = size,
 				FrameRate = rate,
 				AspectRatio = aspect,
-				BitRate = bitRate
+				BitRate = bitRate,
+				InterlaceMode = MFVideoInterlaceMode.Progressive
 			};
-		
+
 			return mediaType;
 		}
     }
