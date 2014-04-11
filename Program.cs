@@ -21,19 +21,17 @@ namespace iRacingReplayOverlay.net
             {
                 var readWriteFactory = new ReadWriteClassFactory();
             
-                var attributes = new Attributes(1);
+                var attributes = new Attributes();
 
-                attributes.ReadWriterEnableHardwareTransforms = false;
-                attributes.SourceReaderEanbleVideoProcessing = true;
+                attributes.ReadWriterEnableHardwareTransforms = true;
+                attributes.SourceReaderEnableVideoProcessing = true;
 
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(@"C:\Users\dean\Documents\iRacingShort.mp4", attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(@"C:\Users\dean\documents\output.wmv", attributes);
 
-				ConnectSourceToSink (sourceReader, sinkWriter);
+                ConnectSourceToSink(sourceReader, sinkWriter);
 
-				ProcessSamples (sourceReader, sinkWriter);
-
-				sinkWriter.Dispose();
+				ProcessSamples(sourceReader, sinkWriter);
             }
         }
 
@@ -75,13 +73,6 @@ namespace iRacingReplayOverlay.net
 		{
 			var duration = sourceReader.MediaSource.Duration;
 
-			Console.WriteLine (duration);
-
-			int count = 0;
-			foreach (var s in sourceReader.Streams)
-				if (s.IsSelected)
-					count++;
-
 			foreach (var stream in sourceReader.Streams.Where(s => s.IsSelected))
 			{
 				var sourceStream = stream;
@@ -105,22 +96,24 @@ namespace iRacingReplayOverlay.net
 
 				if (isAudio)
 				{
-					var mediaType = new MediaType () { MajorType = MFMediaType.Audio,  SubType = MFMediaType.Float };
-
-					sourceStream.CurrentMediaType = mediaType;
-					sinkStream.InputMediaType = sourceStream.CurrentMediaType;
+                    using (var mediaType = new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.Float })
+                    {
+                        sourceStream.CurrentMediaType = mediaType;
+                        sinkStream.InputMediaType = sourceStream.CurrentMediaType;
+                    }
 				}
 				else if(isVideo)
 				{
-					var mediaType = new MediaType () { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
-
-					sourceStream.CurrentMediaType = mediaType;
-					sinkStream.InputMediaType = sourceStream.CurrentMediaType;
+                    using (var mediaType = new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 })
+                    {
+                        sourceStream.CurrentMediaType = mediaType;
+                        sinkStream.InputMediaType = sourceStream.CurrentMediaType;
+                    }
 				}
 			}
 		}
 
-		static void ProcessSamples (SourceReader sourceReader, SinkWriter sinkWriter)
+		static void ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
 		{
 			using (sinkWriter.BeginWriting ())
 			{
@@ -132,42 +125,14 @@ namespace iRacingReplayOverlay.net
 						sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
 		
 					if (sample.Count == 0)
-					{
-
-						var s = sample.Sample;
-						s.Discontinuity = true;
-
 						sample.Sample.Discontinuity = true;
-					}
 
-					sinkStream.WriteSample (sample.Sample);
+                    sinkStream.WriteSample(sample.Sample);
 
-					if (sample.Flags.StreamTick)
-						sinkStream.SendStreamTick (sample.Timestamp);
-
-
-					/*				if( sample.Flags & MF_SOURCE_READER_FLAG.EndOfStream )
-				{
-					sinkStream.NotifyEndOfSegment ();
-
-					streamInfo.fEOS = TRUE;
-					cStreamsAtEOS++;
-
-					if( cStreamsAtEOS == m_cSelectedStreams )
-					{
-						break;
-					}
-				}*/
-
-
+                    if (sample.Flags.StreamTick)
+                        sinkStream.SendStreamTick(sample.Timestamp);
 				}
-
 			}
-		}
-
-		static void HandleFormatChange (SourceStream stream)
-		{
-			throw new NotImplementedException ();
 		}
 
 		static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
