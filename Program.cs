@@ -9,18 +9,18 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.net
 {
-    class Program
+	class Program
     {
         static void Main(string[] args)
         {
-            using( MediaFoundation.Net.MFSystem.Start() )
+            using( MFSystem.Start() )
             {
                 var readWriteFactory = new ReadWriteClassFactory();
             
-                var attributes = new Attributes();
-
-                attributes.ReadWriterEnableHardwareTransforms = true;
-                attributes.SourceReaderEnableVideoProcessing = true;
+				var attributes = new Attributes {
+					ReadWriterEnableHardwareTransforms = true,
+					SourceReaderEnableVideoProcessing = true
+				};
 
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(@"C:\Users\dean\Documents\iRacingShort.mp4", attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(@"C:\Users\dean\documents\output.wmv", attributes);
@@ -31,43 +31,10 @@ namespace iRacingReplayOverlay.net
             }
         }
 
-		public struct StreamInfo
-		{
-			private readonly SinkStream sinkStream;
-			private int sampleCount;
-
-			public StreamInfo(SinkStream sinkStream)
-			{
-				this.sinkStream = sinkStream;
-				this.sampleCount = 0;
-			}
-
-			public SinkStream SinkStream
-			{
-				get
-				{
-					return sinkStream;
-				}
-			}
-
-			public int SampleCount
-			{
-				get
-				{
-					return sampleCount;
-				}
-				set
-				{
-					sampleCount = value;
-				}
-			}
-		}
-
 		static Dictionary<SourceStream, SinkStream> streamMapping = new Dictionary<SourceStream, SinkStream> ();
 
 		static void ConnectSourceToSink(SourceReader sourceReader, SinkWriter sinkWriter)
 		{
-			var duration = sourceReader.MediaSource.Duration;
 
 			foreach (var stream in sourceReader.Streams.Where(s => s.IsSelected))
 			{
@@ -111,6 +78,14 @@ namespace iRacingReplayOverlay.net
 
 		static void ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
 		{
+			var progress = 0;
+			var progressBarTicks = 52;
+
+			Console.Write( "            0%-------20%-------40%-------60%-------80%-------100%\n" );
+			Console.Write("Writing:    ");
+
+			var duration = sourceReader.MediaSource.Duration;
+
 			using (sinkWriter.BeginWriting ())
 			{
 				foreach (var sample in sourceReader.Samples())
@@ -131,8 +106,25 @@ namespace iRacingReplayOverlay.net
                         sinkStream.WriteSample(sample.Sample);
                     }
 
-                    if (sample.Flags.StreamTick)
-                        sinkStream.SendStreamTick(sample.Timestamp);
+					if(sample.Flags.StreamTick)
+					{
+						sinkStream.SendStreamTick(sample.Timestamp);
+						Console.WriteLine("Time tick " +sample.Timestamp);
+					}
+
+					if( sample.Timestamp != 0 )
+					{
+						var percentComplete = Math.Max(sample.Timestamp, 0) * 100L / (long)duration;
+
+						var currentProgress = (Math.Min(percentComplete, 100) * progressBarTicks / 100);
+
+						//Console.WriteLine("time is " + duration / 10000000L + ", " + sample.Timestamp / 10000000L);
+						while(progress <= currentProgress)
+						{
+							progress++;
+							Console.Write( "*" );
+						}
+					}
 				}
 			}
 		}
