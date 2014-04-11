@@ -45,34 +45,20 @@ namespace iRacingReplayOverlay.net
 				var isVideo = nativeMediaType.IsVideo;
 				var isAudio = nativeMediaType.IsAudio;
 
-				MediaType targetType;
-
-				if (isAudio)
-					targetType = CreateTargetAudioMediaType (nativeMediaType);
-				else if (isVideo)
-					targetType = CreateTargetVideoMediaType (nativeMediaType);
-				else
+				if( !isAudio && !isVideo)
 					throw new Exception("Unknown stream type");
 
-				var sinkStream = sinkWriter.AddStream (targetType);
-				streamMapping.Add (sourceStream, sinkStream);
+				var targetType = isAudio ? CreateTargetAudioMediaType(nativeMediaType) : CreateTargetVideoMediaType(nativeMediaType);
 
-				if (isAudio)
-				{
-                    using (var mediaType = new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.Float })
-                    {
-                        sourceStream.CurrentMediaType = mediaType;
-                        sinkStream.InputMediaType = sourceStream.CurrentMediaType;
-                    }
-				}
-				else if(isVideo)
-				{
-                    using (var mediaType = new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 })
-                    {
-                        sourceStream.CurrentMediaType = mediaType;
-                        sinkStream.InputMediaType = sourceStream.CurrentMediaType;
-                    }
-				}
+				var sinkStream = sinkWriter.AddStream(targetType);
+				streamMapping.Add(sourceStream, sinkStream);
+
+				var mediaType = isAudio
+					? new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.Float }
+					: new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
+
+                sourceStream.CurrentMediaType = mediaType;
+                sinkStream.InputMediaType = sourceStream.CurrentMediaType;
 			}
 		}
 
@@ -118,7 +104,6 @@ namespace iRacingReplayOverlay.net
 
 						var currentProgress = (Math.Min(percentComplete, 100) * progressBarTicks / 100);
 
-						//Console.WriteLine("time is " + duration / 10000000L + ", " + sample.Timestamp / 10000000L);
 						while(progress <= currentProgress)
 						{
 							progress++;
