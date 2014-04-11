@@ -1,16 +1,11 @@
 ﻿using MediaFoundation;
-using MediaFoundation.Misc;
-using MediaFoundation.ReadWrite;
 using MediaFoundation.Net;
+using MediaFoundation.Transform;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediaFoundation.Transform;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-
+using System.Linq;
 
 namespace iRacingReplayOverlay.net
 {
