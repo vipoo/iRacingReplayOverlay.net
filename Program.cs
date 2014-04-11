@@ -29,13 +29,49 @@ namespace iRacingReplayOverlay.net
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(@"C:\Users\dean\Documents\iRacingShort.mp4", attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(@"C:\Users\dean\documents\output.wmv", attributes);
 
-				GetDuration (sourceReader, sinkWriter);
+				ConnectSourceToSink (sourceReader, sinkWriter);
+
+				ProcessSamples (sourceReader, sinkWriter);
 
 				sinkWriter.Dispose();
             }
         }
 
-		static void GetDuration(SourceReader sourceReader, SinkWriter sinkWriter)
+		public struct StreamInfo
+		{
+			private readonly SinkStream sinkStream;
+			private int sampleCount;
+
+			public StreamInfo(SinkStream sinkStream)
+			{
+				this.sinkStream = sinkStream;
+				this.sampleCount = 0;
+			}
+
+			public SinkStream SinkStream
+			{
+				get
+				{
+					return sinkStream;
+				}
+			}
+
+			public int SampleCount
+			{
+				get
+				{
+					return sampleCount;
+				}
+				set
+				{
+					sampleCount = value;
+				}
+			}
+		}
+
+		static Dictionary<SourceStream, SinkStream> streamMapping = new Dictionary<SourceStream, SinkStream> ();
+
+		static void ConnectSourceToSink(SourceReader sourceReader, SinkWriter sinkWriter)
 		{
 			var duration = sourceReader.MediaSource.Duration;
 
@@ -48,7 +84,9 @@ namespace iRacingReplayOverlay.net
 
 			foreach (var stream in sourceReader.Streams.Where(s => s.IsSelected))
 			{
-				var nativeMediaType = stream.NativeMediaType;
+				var sourceStream = stream;
+
+				var nativeMediaType = sourceStream.NativeMediaType;
 
 				var isVideo = nativeMediaType.IsVideo;
 				var isAudio = nativeMediaType.IsAudio;
@@ -60,20 +98,76 @@ namespace iRacingReplayOverlay.net
 				else if (isVideo)
 					targetType = CreateTargetVideoMediaType (nativeMediaType);
 				else
-					continue;
+					throw new Exception("Unknown stream type");
 
 				var sinkStream = sinkWriter.AddStream (targetType);
+				streamMapping.Add (sourceStream, sinkStream);
 
 				if (isAudio)
 				{
 					var mediaType = new MediaType () { MajorType = MFMediaType.Audio,  SubType = MFMediaType.Float };
 
-					stream.CurrentMediaType = mediaType;
-					var currentMediaType = stream.CurrentMediaType;
-					sinkStream.InputMediaType = currentMediaType;
+					sourceStream.CurrentMediaType = mediaType;
+					sinkStream.InputMediaType = sourceStream.CurrentMediaType;
+				}
+				else if(isVideo)
+				{
+					var mediaType = new MediaType () { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
 
+					sourceStream.CurrentMediaType = mediaType;
+					sinkStream.InputMediaType = sourceStream.CurrentMediaType;
 				}
 			}
+		}
+
+		static void ProcessSamples (SourceReader sourceReader, SinkWriter sinkWriter)
+		{
+			using (sinkWriter.BeginWriting ())
+			{
+				foreach (var sample in sourceReader.Samples())
+				{
+					var sinkStream = streamMapping [sample.Stream];
+
+					if (sample.Flags.CurrentMediaTypeChanged)
+						sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
+		
+					if (sample.Count == 0)
+					{
+
+						var s = sample.Sample;
+						s.Discontinuity = true;
+
+						sample.Sample.Discontinuity = true;
+					}
+
+					sinkStream.WriteSample (sample.Sample);
+
+					if (sample.Flags.StreamTick)
+						sinkStream.SendStreamTick (sample.Timestamp);
+
+
+					/*				if( sample.Flags & MF_SOURCE_READER_FLAG.EndOfStream )
+				{
+					sinkStream.NotifyEndOfSegment ();
+
+					streamInfo.fEOS = TRUE;
+					cStreamsAtEOS++;
+
+					if( cStreamsAtEOS == m_cSelectedStreams )
+					{
+						break;
+					}
+				}*/
+
+
+				}
+
+			}
+		}
+
+		static void HandleFormatChange (SourceStream stream)
+		{
+			throw new NotImplementedException ();
 		}
 
 		static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
