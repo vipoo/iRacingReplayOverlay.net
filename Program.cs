@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediaFoundation.Transform;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 
 namespace iRacingReplayOverlay.net
@@ -123,17 +124,43 @@ namespace iRacingReplayOverlay.net
 
 					if (sample.Flags.CurrentMediaTypeChanged)
 						sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
-		
-					if (sample.Count == 0)
-						sample.Sample.Discontinuity = true;
 
-                    sinkStream.WriteSample(sample.Sample);
+                    if (sample.Sample != null)
+                    {
+                        if (sample.Count == 0)
+                            sample.Sample.Discontinuity = true;
+
+                        if (sample.Stream.CurrentMediaType.IsVideo)
+                            ApplyBitmap(sample.Sample);
+
+                        sinkStream.WriteSample(sample.Sample);
+                    }
 
                     if (sample.Flags.StreamTick)
                         sinkStream.SendStreamTick(sample.Timestamp);
 				}
 			}
 		}
+
+        private static void ApplyBitmap(Sample sample)
+        {
+            using (var buffer = sample.ConvertToContiguousBuffer())
+            {
+                using (var data = buffer.Lock())
+                {
+                    var b = new Bitmap(1920, 1080, 1920 * 4, System.Drawing.Imaging.PixelFormat.Format32bppRgb, data.Buffer);
+
+                    Graphics g = Graphics.FromImage(b);
+
+                    Point p = new Point(400, 400);
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    g.DrawString("Does my text appear", new Font("Tahoma", 64), Brushes.Black, p);
+                    g.Flush();
+                }
+            }
+        }
 
 		static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
 		static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
