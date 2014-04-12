@@ -7,54 +7,55 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation.Net", "..\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation-2010", "..\mflib\src\MediaFoundation-2010.csproj", "{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagerOverlayer", "ImagerOverlayer\ImagerOverlayer.csproj", "{6C5CA680-20D7-48AA-9458-554E18BABFFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDataFeed", "..\iRacingDataFeed\iRacingDataFeed.csproj", "{5422AE20-F220-4BE1-9E61-5296981ABB5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpikeIRSDK", "..\SpikeIRSDK\SpikeIRSDK.csproj", "{8BDF1915-3140-478E-827F-25D495B8CDC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
 		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
 		Debug|x64 = Debug|x64
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x64.Build.0 = Debug|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x86.Build.0 = Debug|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.ActiveCfg = Release|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.Build.0 = Release|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x86.ActiveCfg = Release|Any CPU
-		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x86.Build.0 = Release|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.Build.0 = Debug|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.Build.0 = Debug|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.ActiveCfg = Release|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.Build.0 = Release|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x86.ActiveCfg = Release|Any CPU
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x86.Build.0 = Release|Any CPU
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x64.ActiveCfg = Debug|x64
+		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x64.Build.0 = Debug|x64
+		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x86.ActiveCfg = Debug|x86
+		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Debug|x86.Build.0 = Debug|x86
+		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.ActiveCfg = Release|x64
+		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.Build.0 = Release|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.ActiveCfg = Debug|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.Build.0 = Debug|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x86.ActiveCfg = Debug|x86
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x86.Build.0 = Debug|x86
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.ActiveCfg = Release|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.Build.0 = Release|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.ActiveCfg = Debug|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.Build.0 = Debug|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.ActiveCfg = Debug|x86
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.Build.0 = Debug|x86
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.ActiveCfg = Release|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.Build.0 = Release|x64
+		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x64.ActiveCfg = Debug|x64
+		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x64.Build.0 = Debug|x64
+		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x86.ActiveCfg = Debug|x86
+		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x86.Build.0 = Debug|x86
+		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.ActiveCfg = Release|x64
+		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.Build.0 = Release|x64
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.Build.0 = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.ActiveCfg = Debug|x86
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.ActiveCfg = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.Build.0 = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x86.ActiveCfg = Debug|x86
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x86.Build.0 = Debug|x86
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.ActiveCfg = Release|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.Build.0 = Release|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x86.ActiveCfg = Release|x86
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = iRacingReplayOverlay.net.csproj
+		StartupItem = ImagerOverlayer\ImagerOverlayer.csproj
 	EndGlobalSection
 EndGlobal

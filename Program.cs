@@ -35,7 +35,6 @@ namespace iRacingReplayOverlay.net
 
 		static void ConnectSourceToSink(SourceReader sourceReader, SinkWriter sinkWriter)
 		{
-
 			foreach (var stream in sourceReader.Streams.Where(s => s.IsSelected))
 			{
 				var sourceStream = stream;
@@ -62,74 +61,96 @@ namespace iRacingReplayOverlay.net
 			}
 		}
 
-		static void ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
+		public class Progressor
 		{
-			var progress = 0;
-			var progressBarTicks = 52;
+			private int progress = 0;
+			private int progressBarTicks = 52;
 
-			Console.Write( "            0%-------20%-------40%-------60%-------80%-------100%\n" );
-			Console.Write("Writing:    ");
-
-			var duration = sourceReader.MediaSource.Duration;
-
-			using (sinkWriter.BeginWriting ())
+			public Progressor()
 			{
-				foreach (var sample in sourceReader.Samples())
+				Console.Write( "            0%-------20%-------40%-------60%-------80%-------100%\n" );
+				Console.Write("Writing:    ");
+			}
+
+			public void Update(int percentageCompleted)
+			{
+				var currentProgress = (Math.Min(percentageCompleted, 100) * progressBarTicks / 100);
+
+				while(progress <= currentProgress)
 				{
-					var sinkStream = streamMapping [sample.Stream];
-
-					if (sample.Flags.CurrentMediaTypeChanged)
-						sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
-
-                    if (sample.Sample != null)
-                    {
-                        if (sample.Count == 0)
-                            sample.Sample.Discontinuity = true;
-
-                        if (sample.Stream.CurrentMediaType.IsVideo)
-                            ApplyBitmap(sample.Sample);
-
-                        sinkStream.WriteSample(sample.Sample);
-                    }
-
-					if(sample.Flags.StreamTick)
-					{
-						sinkStream.SendStreamTick(sample.Timestamp);
-						Console.WriteLine("Time tick " +sample.Timestamp);
-					}
-
-					if( sample.Timestamp != 0 )
-					{
-						var percentComplete = Math.Max(sample.Timestamp, 0) * 100L / (long)duration;
-
-						var currentProgress = (Math.Min(percentComplete, 100) * progressBarTicks / 100);
-
-						while(progress <= currentProgress)
-						{
-							progress++;
-							Console.Write( "*" );
-						}
-					}
+					progress++;
+					Console.Write( "*" );
 				}
 			}
 		}
 
-        private static void ApplyBitmap(Sample sample)
+		static void ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
+		{
+			var progressor = new Progressor();
+
+			using(sinkWriter.BeginWriting())
+				foreach (var sample in sourceReader.Samples())
+					ProcessSample(sample, progressor);
+		}
+
+		private static void ProcessSample(SourceReaderSample sample, Progressor progressor)
+		{
+			var sinkStream = streamMapping [sample.Stream];
+
+			ProcessMediaChange(sinkStream, sample);
+
+			WriteStream(sinkStream, sample);
+
+			SendStreamTick(sinkStream, sample);
+
+			UpdateProgress(sample, progressor);
+		}
+
+		static void ProcessMediaChange(SinkStream sinkStream, SourceReaderSample sample)
+		{
+			if (sample.Flags.CurrentMediaTypeChanged)
+				sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
+		}
+
+		static void WriteStream(SinkStream sinkStream, SourceReaderSample sample)
+		{
+			if(sample.Sample == null)
+				return;
+
+			if (sample.Count == 0)
+				sample.Sample.Discontinuity = true;
+
+			if (sample.Stream.CurrentMediaType.IsVideo)
+				ApplyBitmap(sample);
+
+			sinkStream.WriteSample(sample.Sample);
+		}
+
+		static void SendStreamTick(SinkStream sinkStream, SourceReaderSample sample)
+		{
+			if(sample.Flags.StreamTick)
+				sinkStream.SendStreamTick(sample.Timestamp);
+		}
+
+		static void UpdateProgress(SourceReaderSample sample, Progressor progressor)
+		{
+			if( sample.Timestamp != 0 )
+				progressor.Update(sample.PercentageCompleted);
+		}
+
+		private static void ApplyBitmap(SourceReaderSample sample)
         {
-            using (var buffer = sample.ConvertToContiguousBuffer())
+			using (var buffer = sample.Sample.ConvertToContiguousBuffer())
             {
                 using (var data = buffer.Lock())
                 {
-                    var b = new Bitmap(1920, 1080, 1920 * 4, System.Drawing.Imaging.PixelFormat.Format32bppRgb, data.Buffer);
+					var b = new Bitmap(1920, 1080, 1920 * 4, System.Drawing.Imaging.PixelFormat.Format32bppRgb, data.Buffer);
 
-                    Graphics g = Graphics.FromImage(b);
+					Graphics g = Graphics.FromImage(b);
 
-                    Point p = new Point(400, 400);
-                    g.SmoothingMode = SmoothingMode.AntiAlias;
-                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    g.DrawString("Does my text appear", new Font("Tahoma", 64), Brushes.Black, p);
-                    g.Flush();
+					Overlayer.Leaderboard(sample.Timestamp, g);
+
+					g.Flush();
                 }
             }
         }
