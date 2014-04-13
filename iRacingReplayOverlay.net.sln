@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagerOverlayer", "ImagerOverlayer\ImagerOverlayer.csproj", "{6C5CA680-20D7-48AA-9458-554E18BABFFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingData", "..\iRacingSDK.Net\iRacingData.csproj", "{5422AE20-F220-4BE1-9E61-5296981ABB5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK", "..\iRacingSDK.Net\iRacingSDK.csproj", "{5422AE20-F220-4BE1-9E61-5296981ABB5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation-2010", "..\SuperMFLib\src\MediaFoundation-2010.csproj", "{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}"
 EndProject
