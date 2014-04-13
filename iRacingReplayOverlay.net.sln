@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation-2010", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMFLib", "..\SuperMFLib\SuperMFLib\SuperMFLib.csproj", "{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "..\iRacingSDK.Net\Sample\Sample.csproj", "{8BDF1915-3140-478E-827F-25D495B8CDC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -42,6 +44,12 @@ Global
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x86.Build.0 = Debug|x86
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.ActiveCfg = Release|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.Build.0 = Release|x64
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.Build.0 = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.Build.0 = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.Build.0 = Debug|x86
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.ActiveCfg = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.Build.0 = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x86.ActiveCfg = Debug|x86
@@ -50,6 +58,6 @@ Global
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ImagerOverlayer\ImagerOverlayer.csproj
+		StartupItem = ..\iRacingSDK.Net\Sample\Sample.csproj
 	EndGlobalSection
 EndGlobal
