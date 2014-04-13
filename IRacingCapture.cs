@@ -19,6 +19,7 @@
 using System;
 using System.Threading;
 using iRacingSDK;
+using System.IO;
 
 namespace iRacingReplayOverlay.net
 {
@@ -72,15 +73,26 @@ namespace iRacingReplayOverlay.net
 				if(!iRacing.Connect())
 					throw new Exception("Unable to connect to iRacing server"); //TODO: Exception gets lost
 
-
-				foreach(var data in iRacing.Feed)
+				using(var file = File.CreateText(@"C:\users\dean\documents\leaders-table.csv"))
 				{
-					if( workerStopRequest )
-						return;
+					var startTime = DateTime.Now;
 
-					Console.WriteLine("Tick, Session Time: " + data["TickCount"] + ", " + data["SessionTime"]);
+					file.WriteLine("StartTime, Drivers");
+					foreach(var data in iRacing.Feed)
+					{
+						var timeNow = DateTime.Now - startTime;
+						file.WriteLine(timeNow.Seconds.ToString() + "," + "{drivers}");
 
-				}			
+						for(int i = 0; i < 1000; i++)
+						{
+							if( workerStopRequest )
+								return;
+							Thread.Sleep(1);
+						}
+
+						Console.WriteLine("Tick, Session Time: " + data["TickCount"] + ", " + data["SessionTime"]);
+					}
+				}
 			}
 			catch(Exception e)
 			{
