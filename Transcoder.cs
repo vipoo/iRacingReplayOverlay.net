@@ -27,9 +27,9 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.net
 {
-	class Program
+	public class Transcoder
     {
-        static void Main(string[] args)
+        public static void TranscodeVideo()
         {
             using( MFSystem.Start() )
             {
