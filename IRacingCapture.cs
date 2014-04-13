@@ -90,7 +90,7 @@ namespace iRacingReplayOverlay.net
 							Thread.Sleep(1);
 						}
 
-						Console.WriteLine("Tick, Session Time: " + data["TickCount"] + ", " + data["SessionTime"]);
+						Console.WriteLine("Tick, Session Time: " + data.Telementary["TickCount"] + ", " + data.Telementary["SessionTime"]);
 					}
 				}
 			}
