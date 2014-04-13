@@ -31,6 +31,7 @@ namespace iRacingReplayOverlay.net
     public partial class Main : Form
     {
 		KeyboardHook keyboardHook;
+		IRacingCapture iRacingCapture;
 
         public Main()
         {
@@ -47,17 +48,22 @@ namespace iRacingReplayOverlay.net
 			keyboardHook = new KeyboardHook();
 			keyboardHook.KeyReleased += GlobalKeyPressed;
 			keyboardHook.Start();
+
+			iRacingCapture = new IRacingCapture();
         }
 
 		void GlobalKeyPressed(Keys keyCode)
 		{
-			if( keyCode == Keys.F9)
-				captureLight.Visible = !captureLight.Visible;
+			if(keyCode != Keys.F9)
+				return;
+
+			captureLight.Visible = iRacingCapture.Toogle();
 		}
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
 			keyboardHook.Dispose();
+			iRacingCapture.Dispose();
         }
     }
 }

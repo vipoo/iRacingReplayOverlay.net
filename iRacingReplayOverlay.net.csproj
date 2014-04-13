@@ -76,6 +76,7 @@
     <Compile Include="KeyboardHook.cs" />
     <Compile Include="DllImports\Kernel32\Dll.cs" />
     <Compile Include="DllImports\Win32\Hooks.cs" />
+    <Compile Include="IRacingCapture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -97,6 +98,10 @@
     <ProjectReference Include="..\SuperMFLib\SuperMFLib\SuperMFLib.csproj">
       <Project>{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}</Project>
       <Name>SuperMFLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
+      <Name>iRacingSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

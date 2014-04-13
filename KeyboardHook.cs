@@ -33,10 +33,12 @@ namespace iRacingReplayOverlay.net
 		public event KeyReleasedEvent KeyReleased;
 
 		IntPtr hookID;
+        Hooks.LowLevelKeyboardProc hookDelegate;
 
 		public void Start()
 		{
-			hookID = SetHook(GlobalKeyEvent);
+            hookDelegate = new Hooks.LowLevelKeyboardProc(GlobalKeyEvent);
+			hookID = SetHook(hookDelegate);
 		}
 
 		public void Dispose()
@@ -46,7 +48,8 @@ namespace iRacingReplayOverlay.net
 
 			if( !Hooks.UnhookWindowsHookEx(hookID) )
 				throw new Win32Exception(Marshal.GetLastWin32Error());
-		
+
+            hookDelegate = null;
 			hookID = IntPtr.Zero;
 		}
 
@@ -60,7 +63,6 @@ namespace iRacingReplayOverlay.net
 					if( KeyReleased != null)
 						KeyReleased((Keys)vkCode);
 				}
-
 			}
 			catch(Exception e)
 			{
@@ -71,13 +73,13 @@ namespace iRacingReplayOverlay.net
 			return Hooks.CallNextHookEx(hookID, nCode, wParam, lParam);
 		}
 
-		static IntPtr SetHook(Hooks.LowLevelKeyboardProc proc)
+        static IntPtr SetHook(Hooks.LowLevelKeyboardProc proc)
 		{
 			using (Process curProcess = Process.GetCurrentProcess())
 				using (ProcessModule curModule = curProcess.MainModule)
 				{
 					var hookId = Hooks.SetWindowsHookEx(Hooks.WH_KEYBOARD_LL, proc, Dll.GetModuleHandle(curModule.ModuleName), 0);
-				if( hookId == IntPtr.Zero)
+					if( hookId == IntPtr.Zero)
 						throw new Win32Exception(Marshal.GetLastWin32Error());
 
 					return hookId;
