@@ -24,13 +24,28 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Threading;
 
 namespace iRacingReplayOverlay.net
 {
 	public class Transcoder
     {
+		static Thread worker = null;
+
         public static void TranscodeVideo()
-        {
+		{
+			if(worker != null)
+				return;
+
+			worker = new Thread(Transcode);
+			worker.Start();
+
+		}
+
+		static void Transcode()
+		{
+			try
+			{
             using( MFSystem.Start() )
             {
                 var readWriteFactory = new ReadWriteClassFactory();
@@ -47,6 +62,11 @@ namespace iRacingReplayOverlay.net
 
 				ProcessSamples(sourceReader, sinkWriter);
             }
+			}
+			finally
+			{
+				worker = null;
+			}
         }
 
 		static Dictionary<SourceStream, SinkStream> streamMapping = new Dictionary<SourceStream, SinkStream> ();
