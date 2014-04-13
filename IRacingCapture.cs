@@ -20,6 +20,7 @@ using System;
 using System.Threading;
 using iRacingSDK;
 using System.IO;
+using System.Linq;
 
 namespace iRacingReplayOverlay.net
 {
@@ -80,8 +81,19 @@ namespace iRacingReplayOverlay.net
 					file.WriteLine("StartTime, Drivers");
 					foreach(var data in iRacing.Feed)
 					{
-						var timeNow = DateTime.Now - startTime;
-						file.WriteLine(timeNow.Seconds.ToString() + "," + "{drivers}");
+                        var timeNow = DateTime.Now - startTime;
+
+                        var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
+
+                        var positions = data.Telementary.Cars
+                            .Take(numberOfDrivers)
+                            .Where(c => c.Index != 0)
+                            .OrderByDescending(c => c.Lap + c.DistancePercentage);
+
+                        var drivers = String.Join(",", positions.Select(c => c.Driver.UserName).ToArray());
+
+                        file.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
+                        Console.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
 
 						for(int i = 0; i < 1000; i++)
 						{
@@ -90,7 +102,6 @@ namespace iRacingReplayOverlay.net
 							Thread.Sleep(1);
 						}
 
-						Console.WriteLine("Tick, Session Time: " + data.Telementary["TickCount"] + ", " + data.Telementary["SessionTime"]);
 					}
 				}
 			}
