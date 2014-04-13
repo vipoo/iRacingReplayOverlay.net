@@ -67,13 +67,13 @@
   </Target>
   -->
   <ItemGroup>
-    <ProjectReference Include="..\MediaFoundation.Net\MediaFoundation.Net.csproj">
-      <Project>{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}</Project>
-      <Name>MediaFoundation.Net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\mflib\src\MediaFoundation-2010.csproj">
+    <ProjectReference Include="..\SuperMFLib\src\MediaFoundation-2010.csproj">
       <Project>{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}</Project>
       <Name>MediaFoundation-2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SuperMFLib\SuperMFLib\SuperMFLib.csproj">
+      <Project>{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}</Project>
+      <Name>SuperMFLib</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
