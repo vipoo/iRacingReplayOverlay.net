@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+VisualStudioVersion = {0}
+MinimumVisualStudioVersion = {0}
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net", "iRacingReplayOverlay.net.csproj", "{0E523573-2972-4DC0-AECB-C4CF746854BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagerOverlayer", "ImagerOverlayer\ImagerOverlayer.csproj", "{6C5CA680-20D7-48AA-9458-554E18BABFFC}"
