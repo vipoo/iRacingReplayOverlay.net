@@ -70,39 +70,29 @@ namespace iRacingReplayOverlay.net
 		{
 			try
 			{
-				var iRacing = new DataFeed();
-				if(!iRacing.Connect())
-					throw new Exception("Unable to connect to iRacing server"); //TODO: Exception gets lost
-
-				using(var file = File.CreateText(@"C:\users\dean\documents\leaders-table.csv"))
+                using(var file = File.CreateText(@"C:\users\dean\documents\leaders-table.csv"))
 				{
-					var startTime = DateTime.Now;
-
+                   	var startTime = DateTime.Now;
 					file.WriteLine("StartTime, Drivers");
-					foreach(var data in iRacing.Feed)
-					{
-                        var timeNow = DateTime.Now - startTime;
 
-                        var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
+                    foreach (var data in iRacing.GetDataFeed())
+                    {
+                        if (!data.IsConnected)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Unable to connect to iRacing server ...");
+                            continue;
+                        }
 
-                        var positions = data.Telementary.Cars
-                            .Take(numberOfDrivers)
-                            .Where(c => c.Index != 0)
-                            .OrderByDescending(c => c.Lap + c.DistancePercentage);
+                        WriteNewLeaderBoardRow(file, startTime, data);
 
-                        var drivers = String.Join(",", positions.Select(c => c.Driver.UserName).ToArray());
-
-                        file.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
-                        Console.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
-
-						for(int i = 0; i < 1000; i++)
+						for(int i = 0; i < 2000; i++)
 						{
 							if( workerStopRequest )
 								return;
 							Thread.Sleep(1);
 						}
-
-					}
+                    }
 				}
 			}
 			catch(Exception e)
@@ -115,6 +105,24 @@ namespace iRacingReplayOverlay.net
 				worker = null;
 			}
 		}
+
+        private static void WriteNewLeaderBoardRow(StreamWriter file, DateTime startTime, DataSample data)
+        {
+            var timeNow = DateTime.Now - startTime;
+
+            var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
+
+            var positions = data.Telementary.Cars
+                .Take(numberOfDrivers)
+                .Where(c => c.Index != 0)
+                .OrderByDescending(c => c.Lap + c.DistancePercentage)
+                .ToArray();
+
+            var drivers = String.Join(",", positions.Select(c => c.Driver.UserName).ToArray());
+
+            file.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
+            Console.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
+        }
 
 		void StopCapture()
 		{
