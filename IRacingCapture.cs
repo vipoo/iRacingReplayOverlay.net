@@ -24,7 +24,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.net
 {
-	class IRacingCapture : IDisposable
+	class IRacingCaptureWorker : IDisposable
 	{
 		bool captureOn = false;
 		static Thread worker = null;

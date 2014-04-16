@@ -22,46 +22,59 @@ using MediaFoundation.Transform;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 
 namespace iRacingReplayOverlay.net
 {
-	public class Transcoder
+	public class OverlayWorker
     {
-		static Thread worker = null;
+        public delegate void _Progress(int percentage);
 
-        public static void TranscodeVideo()
+        Dictionary<SourceStream, SinkStream> streamMapping;
+        SynchronizationContext uiContext;
+        Thread worker = null;
+        bool requestCancel = false;
+        
+        public event _Progress Progress;
+        public event Action Completed;
+
+        public void TranscodeVideo()
 		{
 			if(worker != null)
 				return;
 
-			worker = new Thread(Transcode);
-			worker.Start();
+            uiContext = SynchronizationContext.Current;
+            streamMapping = new Dictionary<SourceStream, SinkStream>();
+            requestCancel = false;
 
+			worker = new Thread(Transcode);
+            worker.Start(uiContext);
 		}
 
-		static void Transcode()
+		void Transcode(object state)
 		{
 			try
 			{
-            using( MFSystem.Start() )
-            {
-                var readWriteFactory = new ReadWriteClassFactory();
+                using( MFSystem.Start() )
+                {
+                    var readWriteFactory = new ReadWriteClassFactory();
             
-				var attributes = new Attributes {
-					ReadWriterEnableHardwareTransforms = true,
-					SourceReaderEnableVideoProcessing = true
-				};
+				    var attributes = new Attributes {
+					    ReadWriterEnableHardwareTransforms = true,
+					    SourceReaderEnableVideoProcessing = true
+				    };
 
-                var sourceReader = readWriteFactory.CreateSourceReaderFromURL(@"C:\Users\dean\Documents\iRacingShort.mp4", attributes);
-                var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(@"C:\Users\dean\documents\output.wmv", attributes);
+                    var sourceReader = readWriteFactory.CreateSourceReaderFromURL(@"C:\Users\dean\Documents\iRacingShort.mp4", attributes);
+                    var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(@"C:\Users\dean\documents\output.wmv", attributes);
 
-                ConnectSourceToSink(sourceReader, sinkWriter);
+                    ConnectSourceToSink(sourceReader, sinkWriter);
 
-				ProcessSamples(sourceReader, sinkWriter);
-            }
+				    ProcessSamples(sourceReader, sinkWriter);
+
+                    if( Completed != null )
+                        uiContext.Post(ignored => Completed(), null);
+                }
 			}
 			finally
 			{
@@ -69,9 +82,7 @@ namespace iRacingReplayOverlay.net
 			}
         }
 
-		static Dictionary<SourceStream, SinkStream> streamMapping = new Dictionary<SourceStream, SinkStream> ();
-
-		static void ConnectSourceToSink(SourceReader sourceReader, SinkWriter sinkWriter)
+		void ConnectSourceToSink(SourceReader sourceReader, SinkWriter sinkWriter)
 		{
 			foreach (var stream in sourceReader.Streams.Where(s => s.IsSelected))
 			{
@@ -99,39 +110,18 @@ namespace iRacingReplayOverlay.net
 			}
 		}
 
-		public class Progressor
+		void ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
 		{
-			private int progress = 0;
-			private int progressBarTicks = 52;
-
-			public Progressor()
-			{
-				Console.Write( "            0%-------20%-------40%-------60%-------80%-------100%\n" );
-				Console.Write("Writing:    ");
-			}
-
-			public void Update(int percentageCompleted)
-			{
-				var currentProgress = (Math.Min(percentageCompleted, 100) * progressBarTicks / 100);
-
-				while(progress <= currentProgress)
-				{
-					progress++;
-					Console.Write( "*" );
-				}
-			}
-		}
-
-		static void ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
-		{
-			var progressor = new Progressor();
-
 			using(sinkWriter.BeginWriting())
-				foreach (var sample in sourceReader.Samples())
-					ProcessSample(sample, progressor);
+                foreach (var sample in sourceReader.Samples())
+                {
+                    ProcessSample(sample);
+                    if (requestCancel)
+                        return;
+                }
 		}
 
-		private static void ProcessSample(SourceReaderSample sample, Progressor progressor)
+		void ProcessSample(SourceReaderSample sample)
 		{
 			var sinkStream = streamMapping [sample.Stream];
 
@@ -141,16 +131,16 @@ namespace iRacingReplayOverlay.net
 
 			SendStreamTick(sinkStream, sample);
 
-			UpdateProgress(sample, progressor);
+			UpdateProgress(sample);
 		}
 
-		static void ProcessMediaChange(SinkStream sinkStream, SourceReaderSample sample)
+		void ProcessMediaChange(SinkStream sinkStream, SourceReaderSample sample)
 		{
 			if (sample.Flags.CurrentMediaTypeChanged)
 				sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
 		}
 
-		static void WriteStream(SinkStream sinkStream, SourceReaderSample sample)
+		void WriteStream(SinkStream sinkStream, SourceReaderSample sample)
 		{
 			if(sample.Sample == null)
 				return;
@@ -164,19 +154,19 @@ namespace iRacingReplayOverlay.net
 			sinkStream.WriteSample(sample.Sample);
 		}
 
-		static void SendStreamTick(SinkStream sinkStream, SourceReaderSample sample)
+		void SendStreamTick(SinkStream sinkStream, SourceReaderSample sample)
 		{
 			if(sample.Flags.StreamTick)
 				sinkStream.SendStreamTick(sample.Timestamp);
 		}
 
-		static void UpdateProgress(SourceReaderSample sample, Progressor progressor)
+		void UpdateProgress(SourceReaderSample sample)
 		{
-			if( sample.Timestamp != 0 )
-				progressor.Update(sample.PercentageCompleted);
+            if (sample.Timestamp != 0 && Progress != null)
+                uiContext.Post(state => Progress(sample.PercentageCompleted), null);
 		}
 
-		private static void ApplyBitmap(SourceReaderSample sample)
+		void ApplyBitmap(SourceReaderSample sample)
         {
 			using (var buffer = sample.Sample.ConvertToContiguousBuffer())
             {
@@ -196,7 +186,7 @@ namespace iRacingReplayOverlay.net
 		static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
 		static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
 
-		public static MediaType CreateTargetAudioMediaType(MediaType nativeMediaType)
+		MediaType CreateTargetAudioMediaType(MediaType nativeMediaType)
 		{
 			var numberOfChannels = nativeMediaType.AudioNumberOfChannels;
 			var sampleRate = nativeMediaType.AudioSamplesPerSecond;
@@ -212,7 +202,7 @@ namespace iRacingReplayOverlay.net
 			throw new Exception ("Unable to find target audio format");
 		}
 
-		public static MediaType CreateTargetVideoMediaType(MediaType nativeMediaType)
+		MediaType CreateTargetVideoMediaType(MediaType nativeMediaType)
 		{
 			var size = nativeMediaType.FrameSize;
 			var rate = nativeMediaType.FrameRate;
@@ -231,5 +221,10 @@ namespace iRacingReplayOverlay.net
 
 			return mediaType;
 		}
+
+        internal void Cancel()
+        {
+            requestCancel = true;
+        }
     }
 }

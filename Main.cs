@@ -31,7 +31,8 @@ namespace iRacingReplayOverlay.net
     public partial class Main : Form
     {
 		KeyboardHook keyboardHook;
-		IRacingCapture iRacingCapture;
+		IRacingCaptureWorker iRacingCaptureWorker;
+        OverlayWorker overlayWorker;
 
         public Main()
         {
@@ -40,7 +41,23 @@ namespace iRacingReplayOverlay.net
 
         private void TranscodeVideo_Click(object sender, EventArgs e)
         {
-            Transcoder.TranscodeVideo();
+            transcodeVideoButton.Enabled = false;
+            transcodeCancelButton.Visible = true;
+            overlayWorker.TranscodeVideo();
+        }
+
+        private void OnTranscoderCompleted()
+        {
+            transcodeCancelButton.Visible = false;
+            transcodeVideoButton.Enabled = true;
+            transcodeProgressBar.Value = 0;
+            transcodeProgressBar.Visible = false;
+        }
+
+        private void OnTranscoderProgress(int percentage)
+        {
+            transcodeProgressBar.Visible = true;
+            transcodeProgressBar.Value = percentage;
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -49,7 +66,11 @@ namespace iRacingReplayOverlay.net
 			keyboardHook.KeyReleased += GlobalKeyPressed;
 			keyboardHook.Start();
 
-			iRacingCapture = new IRacingCapture();
+			iRacingCaptureWorker = new IRacingCaptureWorker();
+
+            overlayWorker = new OverlayWorker();
+            overlayWorker.Progress += OnTranscoderProgress;
+            overlayWorker.Completed += OnTranscoderCompleted;
         }
 
 		void GlobalKeyPressed(Keys keyCode)
@@ -57,13 +78,19 @@ namespace iRacingReplayOverlay.net
 			if(keyCode != Keys.F9)
 				return;
 
-			captureLight.Visible = iRacingCapture.Toogle();
+			captureLight.Visible = iRacingCaptureWorker.Toogle();
 		}
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
 			keyboardHook.Dispose();
-			iRacingCapture.Dispose();
+			iRacingCaptureWorker.Dispose();
+        }
+
+        private void transcodeCancel_Click(object sender, EventArgs e)
+        {
+            transcodeCancelButton.Visible = false;
+            overlayWorker.Cancel();
         }
     }
 }
