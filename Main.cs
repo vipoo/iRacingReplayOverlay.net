@@ -83,6 +83,8 @@ namespace iRacingReplayOverlay.net
  
             aTimer = new System.Timers.Timer(500);
             aTimer.Elapsed += (s, a) => uiContext.Post(ignored => GuessFinializeProgress(), null);
+
+            workingFolderTextBox.Text = Settings.Default.WorkingFolder;
         }
 
         private void OnTranscoderReadFramesCompleted()
@@ -106,16 +108,51 @@ namespace iRacingReplayOverlay.net
 			captureLight.Visible = iRacingCaptureWorker.Toogle();
 		}
 
-        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
 			keyboardHook.Dispose();
 			iRacingCaptureWorker.Dispose();
         }
 
-        private void transcodeCancel_Click(object sender, EventArgs e)
+        void transcodeCancel_Click(object sender, EventArgs e)
         {
             transcodeCancelButton.Visible = false;
             overlayWorker.Cancel();
+        }
+
+        void sourceVideoButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new OpenFileDialog();
+            fbd.Filter = "Mpeg 4|*.mp4|All files (*.*)|*.*";
+            var dr = fbd.ShowDialog();
+
+            if (dr == DialogResult.OK)
+                sourceVideoTextBox.Text = fbd.FileName;
+            
+        }
+
+        void sourceGameDataButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new OpenFileDialog();
+            var dr = fbd.ShowDialog();
+
+            if (dr == DialogResult.OK)
+                sourceGameDataTextBox.Text = fbd.FileName;
+        }
+
+        private void workingFolderButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = workingFolderTextBox.Text;
+
+            var dr = fbd.ShowDialog();
+
+            if (dr == DialogResult.OK)
+            {
+                Settings.Default.WorkingFolder = workingFolderTextBox.Text = fbd.SelectedPath;
+                Settings.Default.Save();
+            }
+                
         }
     }
 }
