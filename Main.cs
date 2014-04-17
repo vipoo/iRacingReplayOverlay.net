@@ -77,8 +77,6 @@ namespace iRacingReplayOverlay.net
             overlayWorker.Completed += OnTranscoderCompleted;
             overlayWorker.ReadFramesCompleted += OnTranscoderReadFramesCompleted;
 
-            //var uiContext = SynchronizationContext.Current;
-
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
             fileWatchTimer.Tick += (s, a) => OnGameDataFileChanged();
