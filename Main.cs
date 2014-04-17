@@ -57,11 +57,11 @@ namespace iRacingReplayOverlay.net
             transcodeProgressBar.Visible = false;
         }
 
-        const long GuessFinalizationRequiredSeconds = 25;
-        const long NanoSecond = 10000000;
+        const int GuessFinalizationRequiredSeconds = 25;
+        
         private void OnTranscoderProgress(long timestamp, long duration)
         {
-            duration += GuessFinalizationRequiredSeconds * NanoSecond;
+            duration += GuessFinalizationRequiredSeconds.FromSecondsToNano();
             transcodeProgressBar.Visible = true;
             transcodeProgressBar.Value = (int)(timestamp * transcodeProgressBar.Maximum / duration);
         }

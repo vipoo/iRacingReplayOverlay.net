@@ -118,10 +118,10 @@ namespace iRacingReplayOverlay.net
                 .OrderByDescending(c => c.Lap + c.DistancePercentage)
                 .ToArray();
 
-            var drivers = String.Join(",", positions.Select(c => c.Driver.UserName).ToArray());
+            var drivers = String.Join("|", positions.Select(c => c.Driver.UserName).ToArray());
 
-            file.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
-            Console.WriteLine(timeNow.Seconds.ToString() + ",\"" + drivers + "\"");
+            file.WriteLine(timeNow.Seconds.ToString() + "," + drivers);
+            Console.WriteLine(timeNow.Seconds.ToString() + "," + drivers);
         }
 
 		void StopCapture()

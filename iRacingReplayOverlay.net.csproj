@@ -57,6 +57,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LeaderBoard.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,13 +73,14 @@
     <Compile Include="OverlayWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamInfo.cs" />
-    <Compile Include="Overlayer.cs" />
     <Compile Include="KeyboardHook.cs" />
     <Compile Include="DllImports\Kernel32\Dll.cs" />
     <Compile Include="DllImports\Win32\Hooks.cs" />
     <Compile Include="IRacingCapture.cs" />
     <Compile Include="SourceReaderSampleWithBitmap.cs" />
+    <Compile Include="TimingExtension.cs" />
     <Compile Include="Transcoder.cs" />
+    <Compile Include="TimingSample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

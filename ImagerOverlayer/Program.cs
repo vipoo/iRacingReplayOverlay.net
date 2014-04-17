@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using iRacingReplayOverlay.net;
 
 namespace ImagerOverlayer
 {
@@ -12,7 +13,9 @@ namespace ImagerOverlayer
 
 			var g = Graphics.FromImage(bitmap);
 
-			iRacingReplayOverlay.net.Overlayer.Leaderboard(05000000, g);
+			var leaderboard = new LeaderBoard();
+
+			leaderboard.Overlay(g, 05000000);
 
 			g.Flush();
 

@@ -61,13 +61,18 @@ namespace iRacingReplayOverlay.net
                     DestinationFile = @"C:\Users\dean\documents\output.wmv"
                 };
 
+                var leaderBoard = new LeaderBoard
+                {
+                    SourceFile = @"C:\Users\dean\documents\leaders-table.csv"
+                };
+
                 foreach( var frame in transcoder.Frames())
                 {
                     if (frame.Flags.EndOfStream && ReadFramesCompleted != null)
                         uiContext.Post(ignored => ReadFramesCompleted(), null);
                     else
                     {
-                        Overlayer.Leaderboard(frame.Timestamp, frame.Graphic);
+                        leaderBoard.Overlay(frame.Graphic, frame.Timestamp);
 
                         UpdateProgress(frame);
                     }
