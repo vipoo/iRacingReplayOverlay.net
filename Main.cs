@@ -17,15 +17,8 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay.net
@@ -35,7 +28,7 @@ namespace iRacingReplayOverlay.net
 		KeyboardHook keyboardHook;
 		IRacingCaptureWorker iRacingCaptureWorker;
         OverlayWorker overlayWorker;
-        private System.Timers.Timer aTimer;
+        private System.Windows.Forms.Timer aTimer;
         private int guessedProgessedAmount;
 
         public Main()
@@ -48,7 +41,8 @@ namespace iRacingReplayOverlay.net
             transcodeVideoButton.Enabled = false;
             transcodeCancelButton.Visible = true;
             var destinationFile = Path.ChangeExtension(sourceVideoTextBox.Text, "wmv");
-            overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameDataTextBox.Text);
+            var sourceGameData = Path.ChangeExtension(sourceVideoTextBox.Text, "csv");
+            overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameData);
         }
 
         private void OnTranscoderCompleted()
@@ -60,6 +54,8 @@ namespace iRacingReplayOverlay.net
         }
 
         const int GuessFinalizationRequiredSeconds = 25;
+        private FileSystemWatcher fileWatch;
+        private System.Windows.Forms.Timer fileWatchTimer;
         
         private void OnTranscoderProgress(long timestamp, long duration)
         {
@@ -75,18 +71,29 @@ namespace iRacingReplayOverlay.net
 			keyboardHook.Start();
 
 			iRacingCaptureWorker = new IRacingCaptureWorker();
-
+            iRacingCaptureWorker.NewVideoFileFound += NewVideoFileFound;
             overlayWorker = new OverlayWorker();
             overlayWorker.Progress += OnTranscoderProgress;
             overlayWorker.Completed += OnTranscoderCompleted;
             overlayWorker.ReadFramesCompleted += OnTranscoderReadFramesCompleted;
 
-            var uiContext = SynchronizationContext.Current;
- 
-            aTimer = new System.Timers.Timer(500);
-            aTimer.Elapsed += (s, a) => uiContext.Post(ignored => GuessFinializeProgress(), null);
+            //var uiContext = SynchronizationContext.Current;
+
+            fileWatchTimer = new System.Windows.Forms.Timer();
+            fileWatchTimer.Interval = 10;
+            fileWatchTimer.Tick += (s, a) => OnGameDataFileChanged();
+            fileWatchTimer.Start();
+
+            aTimer = new System.Windows.Forms.Timer();
+            aTimer.Interval = 500;
+            aTimer.Tick += (s,a) => GuessFinializeProgress();
 
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
+        }
+
+        void NewVideoFileFound(string latestVideoFileName)
+        {
+            this.sourceVideoTextBox.Text = latestVideoFileName;
         }
 
         private void OnTranscoderReadFramesCompleted()
@@ -107,7 +114,7 @@ namespace iRacingReplayOverlay.net
 			if(keyCode != Keys.F9)
 				return;
 
-			captureLight.Visible = iRacingCaptureWorker.Toogle();
+			captureLight.Visible = iRacingCaptureWorker.Toogle(workingFolderTextBox.Text);
 		}
 
         void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -126,19 +133,12 @@ namespace iRacingReplayOverlay.net
         {
             var fbd = new OpenFileDialog();
             fbd.Filter = "Mpeg 4|*.mp4|All files (*.*)|*.*";
+            fbd.FileName = sourceVideoTextBox.Text;
+
             var dr = fbd.ShowDialog();
 
             if (dr == DialogResult.OK)
                 sourceVideoTextBox.Text = fbd.FileName;
-        }
-
-        void sourceGameDataButton_Click(object sender, EventArgs e)
-        {
-            var fbd = new OpenFileDialog();
-            var dr = fbd.ShowDialog();
-
-            if (dr == DialogResult.OK)
-                sourceGameDataTextBox.Text = fbd.FileName;
         }
 
         private void workingFolderButton_Click(object sender, EventArgs e)
@@ -153,6 +153,28 @@ namespace iRacingReplayOverlay.net
                 Settings.Default.WorkingFolder = workingFolderTextBox.Text = fbd.SelectedPath;
                 Settings.Default.Save();
             }
+        }
+
+        void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if(fileWatch != null)
+                fileWatch.Dispose();
+
+            OnGameDataFileChanged();
+        }
+
+        void OnGameDataFileChanged()
+        {
+            if( sourceVideoTextBox.Text == null || sourceVideoTextBox.Text.Length == 0)
+            {
+                errorSourceVideoLabel.Visible = false;
+                transcodeVideoButton.Enabled = false;
+                return;
+            }
+
+            var gameDataFile = Path.ChangeExtension(sourceVideoTextBox.Text, ".csv");
+            errorSourceVideoLabel.Visible = !File.Exists(gameDataFile);
+            transcodeVideoButton.Enabled = !errorSourceVideoLabel.Visible && File.Exists(sourceVideoTextBox.Text);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace iRacingReplayOverlay.net
             requestCancel = false;
 
 			worker = new Thread(Transcode);
-            worker.Start(uiContext);
+            worker.Start();
 		}
 
 		void Transcode(object state)

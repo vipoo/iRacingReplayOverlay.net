@@ -27,20 +27,34 @@ namespace iRacingReplayOverlay.net
 	class IRacingCaptureWorker : IDisposable
 	{
 		bool captureOn = false;
-		static Thread worker = null;
-		static bool workerStopRequest = false;
+		Thread worker = null;
+		
+        bool workerStopRequest = false;
+        FileSystemWatcher fileWatcher;
+        string latestCreatedVideoFile;
 
-		public bool Toogle()
+        public event Action<string> NewVideoFileFound;
+        private SynchronizationContext uiContext;
+        
+		public bool Toogle(string workingFolder)
 		{
 			captureOn = !captureOn;
 
 			if(captureOn)
-				StartCapture();
+				StartCapture(workingFolder);
 			else
 				StopCapture();
 
 			return captureOn;
 		}
+
+        private void OnCreated(object sender, FileSystemEventArgs e)
+        {
+            latestCreatedVideoFile = e.FullPath;
+
+            if (NewVideoFileFound != null)
+                uiContext.Post(state => NewVideoFileFound(latestCreatedVideoFile), null);
+        }
 
 		public void Dispose()
 		{
@@ -56,21 +70,31 @@ namespace iRacingReplayOverlay.net
 			}
 		}
 
-		void StartCapture()
+		void StartCapture(string workingFolder)
 		{
 			if(worker != null)
 				throw new Exception("Capture thread already running");
+
+            uiContext = SynchronizationContext.Current;
+
+            latestCreatedVideoFile = null;
+            fileWatcher = new FileSystemWatcher(workingFolder, "*.mp4");
+            fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime;
+            fileWatcher.Created += OnCreated;
+            fileWatcher.EnableRaisingEvents = true;
 
 			workerStopRequest = false;
 			worker = new Thread(Loop);
 			worker.Start();
 		}
 
-		static void Loop()
+		void Loop()
 		{
-			try
+            var tempFileName = Path.GetTempFileName();
+            Console.WriteLine("Creating temp file for game data {0}", tempFileName);
+            try
 			{
-                using(var file = File.CreateText(@"C:\users\dean\documents\leaders-table.csv"))
+                using(var file = File.CreateText(tempFileName))
 				{
                    	var startTime = DateTime.Now;
 					file.WriteLine("StartTime, Drivers");
@@ -88,8 +112,8 @@ namespace iRacingReplayOverlay.net
 
 						for(int i = 0; i < 2000; i++)
 						{
-							if( workerStopRequest )
-								return;
+                            if (workerStopRequest)
+                                return;
 							Thread.Sleep(1);
 						}
                     }
@@ -102,7 +126,10 @@ namespace iRacingReplayOverlay.net
 			}
 			finally
 			{
-				worker = null;
+                if (latestCreatedVideoFile != null)
+                    File.Move(tempFileName, Path.ChangeExtension(latestCreatedVideoFile, ".csv"));
+
+                worker = null;
 			}
 		}
 
@@ -126,16 +153,24 @@ namespace iRacingReplayOverlay.net
 
 		void StopCapture()
 		{
-			if(worker == null)
-				throw new Exception("Capture thread not running");
+            try
+            {
+                if (worker == null)
+                    throw new Exception("Capture thread not running");
 
-			workerStopRequest = true;
-			if(!worker.Join(500))
-			{
-				worker.Abort();
-				throw new Exception("Capture thread did not shutdown cleanly");
-			}
-			worker = null;
+                workerStopRequest = true;
+                if (!worker.Join(500))
+                {
+                    worker.Abort();
+                    throw new Exception("Capture thread did not shutdown cleanly");
+                }
+            }
+            finally
+            {
+                worker = null;
+                fileWatcher.Dispose();
+                fileWatcher = null;
+            }
 		}
 	}
 }

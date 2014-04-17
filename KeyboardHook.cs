@@ -67,7 +67,7 @@ namespace iRacingReplayOverlay.net
 			catch(Exception e)
 			{
 				//Probably not wise to through exception through to windows api hook
-				Console.WriteLine("Error in winows hook processing " + e.Message);
+				Console.WriteLine("Error in windows hook processing " + e.Message);
 			}
 
 			return Hooks.CallNextHookEx(hookID, nCode, wParam, lParam);

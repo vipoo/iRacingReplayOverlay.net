@@ -56,13 +56,11 @@ namespace iRacingReplayOverlay.net
             this.label2 = new System.Windows.Forms.Label();
             this.sourceVideoTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.sourceVideoButton = new System.Windows.Forms.Button();
-            this.sourceGameDataButton = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.sourceGameDataTextBox = new System.Windows.Forms.TextBox();
-            this.workingFolderButton = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
             this.workingFolderTextBox = new System.Windows.Forms.TextBox();
+            this.sourceVideoButton = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.workingFolderButton = new System.Windows.Forms.Button();
+            this.errorSourceVideoLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.captureLight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -104,7 +102,7 @@ namespace iRacingReplayOverlay.net
             // 
             // transcodeProgressBar
             // 
-            this.transcodeProgressBar.Location = new System.Drawing.Point(45, 413);
+            this.transcodeProgressBar.Location = new System.Drawing.Point(45, 400);
             this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4);
             this.transcodeProgressBar.Maximum = 10000;
             this.transcodeProgressBar.Name = "transcodeProgressBar";
@@ -150,6 +148,7 @@ namespace iRacingReplayOverlay.net
             this.sourceVideoTextBox.Name = "sourceVideoTextBox";
             this.sourceVideoTextBox.Size = new System.Drawing.Size(464, 26);
             this.sourceVideoTextBox.TabIndex = 7;
+            this.sourceVideoTextBox.TextChanged += new System.EventHandler(this.sourceVideoTextBox_TextChanged);
             // 
             // label3
             // 
@@ -159,6 +158,13 @@ namespace iRacingReplayOverlay.net
             this.label3.Size = new System.Drawing.Size(94, 18);
             this.label3.TabIndex = 8;
             this.label3.Text = "Source Video:";
+            // 
+            // workingFolderTextBox
+            // 
+            this.workingFolderTextBox.Location = new System.Drawing.Point(134, 23);
+            this.workingFolderTextBox.Name = "workingFolderTextBox";
+            this.workingFolderTextBox.Size = new System.Drawing.Size(488, 26);
+            this.workingFolderTextBox.TabIndex = 13;
             // 
             // sourceVideoButton
             // 
@@ -170,31 +176,14 @@ namespace iRacingReplayOverlay.net
             this.sourceVideoButton.UseVisualStyleBackColor = true;
             this.sourceVideoButton.Click += new System.EventHandler(this.sourceVideoButton_Click);
             // 
-            // sourceGameDataButton
+            // label5
             // 
-            this.sourceGameDataButton.Location = new System.Drawing.Point(628, 352);
-            this.sourceGameDataButton.Name = "sourceGameDataButton";
-            this.sourceGameDataButton.Size = new System.Drawing.Size(64, 26);
-            this.sourceGameDataButton.TabIndex = 12;
-            this.sourceGameDataButton.Text = "browse";
-            this.sourceGameDataButton.UseVisualStyleBackColor = true;
-            this.sourceGameDataButton.Click += new System.EventHandler(this.sourceGameDataButton_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(28, 352);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(124, 18);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Source Game Data:";
-            // 
-            // sourceGameDataTextBox
-            // 
-            this.sourceGameDataTextBox.Location = new System.Drawing.Point(158, 352);
-            this.sourceGameDataTextBox.Name = "sourceGameDataTextBox";
-            this.sourceGameDataTextBox.Size = new System.Drawing.Size(464, 26);
-            this.sourceGameDataTextBox.TabIndex = 10;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(28, 23);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(100, 18);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Worker Folder:";
             // 
             // workingFolderButton
             // 
@@ -206,33 +195,26 @@ namespace iRacingReplayOverlay.net
             this.workingFolderButton.UseVisualStyleBackColor = true;
             this.workingFolderButton.Click += new System.EventHandler(this.workingFolderButton_Click);
             // 
-            // label5
+            // ErrorSourceVideo
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(28, 23);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(100, 18);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Worker Folder:";
-            // 
-            // workingFolderTextBox
-            // 
-            this.workingFolderTextBox.Location = new System.Drawing.Point(134, 23);
-            this.workingFolderTextBox.Name = "workingFolderTextBox";
-            this.workingFolderTextBox.Size = new System.Drawing.Size(488, 26);
-            this.workingFolderTextBox.TabIndex = 13;
+            this.errorSourceVideoLabel.ForeColor = System.Drawing.Color.DarkRed;
+            this.errorSourceVideoLabel.Location = new System.Drawing.Point(155, 349);
+            this.errorSourceVideoLabel.Name = "ErrorSourceVideo";
+            this.errorSourceVideoLabel.Size = new System.Drawing.Size(467, 47);
+            this.errorSourceVideoLabel.TabIndex = 16;
+            this.errorSourceVideoLabel.Text = "*Unable to transcode this video, as there is no associated captured game data (cs" +
+    "v file name based on the name of the source input video)";
+            this.errorSourceVideoLabel.Visible = false;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(742, 488);
+            this.ClientSize = new System.Drawing.Size(742, 455);
+            this.Controls.Add(this.errorSourceVideoLabel);
             this.Controls.Add(this.workingFolderButton);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.workingFolderTextBox);
-            this.Controls.Add(this.sourceGameDataButton);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.sourceGameDataTextBox);
             this.Controls.Add(this.sourceVideoButton);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.sourceVideoTextBox);
@@ -270,12 +252,10 @@ namespace iRacingReplayOverlay.net
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox sourceVideoTextBox;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button sourceVideoButton;
-        private System.Windows.Forms.Button sourceGameDataButton;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox sourceGameDataTextBox;
-        private System.Windows.Forms.Button workingFolderButton;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox workingFolderTextBox;
+        private System.Windows.Forms.Button sourceVideoButton;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button workingFolderButton;
+        private System.Windows.Forms.Label errorSourceVideoLabel;
     }
 }
