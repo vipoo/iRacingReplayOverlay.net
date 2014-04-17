@@ -22,6 +22,7 @@ using MediaFoundation.Transform;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -61,9 +62,20 @@ namespace iRacingReplayOverlay.net
                     DestinationFile = @"C:\Users\dean\documents\output.wmv"
                 };
 
+                var driverNickNames = new Dictionary<string, string>
+                {
+                    {"Dean Netherton", "Dino"},
+                    {"Paul Tarjavaara", "Tarj"}
+                };
+
                 var leaderBoard = new LeaderBoard
                 {
-                    SourceFile = @"C:\Users\dean\documents\leaders-table.csv"
+                    TimingSamples = File
+                        .ReadAllLines(@"C:\Users\dean\documents\leaders-table.csv")
+                        .Skip(1)
+                        .Select(line => line.Split(','))
+                        .Select(line => new TimingSample { StartTime = long.Parse(line[0]), Drivers = line[1].Split('|'), DriverNickNames = driverNickNames })
+                        .ToArray()
                 };
 
                 foreach( var frame in transcoder.Frames())

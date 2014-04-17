@@ -27,18 +27,22 @@ namespace iRacingReplayOverlay.net
 {
 	public class TimingSample
 	{
-        public Dictionary<string, string> DriverNickNames = new Dictionary<string,string> ();
+        public Dictionary<string, string> DriverNickNames;
 
 		public long StartTime;
 		public string[] Drivers;
+        string[] shortNames;
 
         public string[] ShortNames
         {
             get
             {
-                return Drivers
-                    .Select(d => GetDriversShortName(d))
-                    .ToArray();
+                if(shortNames == null)
+                    shortNames = Drivers
+                        .Select(d => GetDriversShortName(d))
+                        .ToArray();
+
+                return shortNames;
             }
         }
 
@@ -51,9 +55,9 @@ namespace iRacingReplayOverlay.net
             var name = names.First().Substring(0, 1).ToUpper()
                 + names.Last().Substring(0, 1).ToUpper()
                 + names.Last().Substring(1, 3);
-            
+
+            DriverNickNames[driversName] = name;
             return name;
         }
 	}
-	
 }

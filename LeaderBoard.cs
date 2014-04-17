@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -10,20 +9,7 @@ namespace iRacingReplayOverlay.net
 {
     class LeaderBoard
     {
-        TimingSample[] timingSamples;
-
-        public string SourceFile
-        {
-            set
-            {
-                var sourceFile = value;
-
-                timingSamples = File.ReadAllLines(sourceFile).Skip(1)
-                    .Select(line => line.Split(','))
-                    .Select(line => new TimingSample { StartTime = long.Parse(line[0]), Drivers = line[1].Split('|') })
-                    .ToArray();
-            }
-        }
+        public TimingSample[] TimingSamples;
 
         internal void Overlay(Graphics graphics, long timestamp)
         {
@@ -32,7 +18,7 @@ namespace iRacingReplayOverlay.net
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            var sample = timingSamples.LastOrDefault(s => s.StartTime <= timestamp);
+            var sample = TimingSamples.LastOrDefault(s => s.StartTime <= timestamp);
 
             if (sample == null)
                 return;
