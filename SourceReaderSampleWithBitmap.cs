@@ -52,14 +52,16 @@ namespace iRacingReplayOverlay.net
         }
 
 		public readonly long Timestamp;
-		public readonly int PercentageCompleted;
-		readonly SourceReaderSample sample;
+		public readonly long Duration;
+        public readonly SourceReaderSampleFlags Flags;
+        readonly SourceReaderSample sample;
 
         public SourceReaderSampleWithBitmap(SourceReaderSample sample)
         {
 			this.Timestamp = sample.Timestamp;
-			this.PercentageCompleted = sample.PercentageCompleted;
+			this.Duration = sample.Duration;
             this.sample = sample;
+            this.Flags = sample.Flags;
         }
 
 		public void Dispose()

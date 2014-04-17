@@ -29,7 +29,7 @@ namespace iRacingReplayOverlay.net
 {
 	public class OverlayWorker
     {
-        public delegate void _Progress(int percentage);
+        public delegate void _Progress(long count, long duration);
 
         SynchronizationContext uiContext;
         Thread worker = null;
@@ -37,6 +37,7 @@ namespace iRacingReplayOverlay.net
         
         public event _Progress Progress;
         public event Action Completed;
+        public event Action ReadFramesCompleted;
 
         public void TranscodeVideo()
 		{
@@ -62,9 +63,15 @@ namespace iRacingReplayOverlay.net
 
                 foreach( var frame in transcoder.Frames())
                 {
-                    Overlayer.Leaderboard(frame.Timestamp, frame.Graphic);
+                    if (frame.Flags.EndOfStream && ReadFramesCompleted != null)
+                        uiContext.Post(ignored => ReadFramesCompleted(), null);
+                    else
+                    {
+                        Overlayer.Leaderboard(frame.Timestamp, frame.Graphic);
 
-                    UpdateProgress(frame);
+                        UpdateProgress(frame);
+                    }
+
                     if (requestCancel)
                         break;
                 }
@@ -81,7 +88,7 @@ namespace iRacingReplayOverlay.net
 		void UpdateProgress(SourceReaderSampleWithBitmap sample)
 		{
             if (sample.Timestamp != 0 && Progress != null)
-                uiContext.Post(state => Progress(sample.PercentageCompleted), null);
+                uiContext.Post(state => Progress(sample.Timestamp, sample.Duration), null);
 		}
 
         internal void Cancel()

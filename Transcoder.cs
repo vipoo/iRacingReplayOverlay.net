@@ -64,7 +64,7 @@ namespace iRacingReplayOverlay.net
                 {
                     var sinkStream = ProcessIncoming(sample);
                     
-                    if (sample.Sample != null && sample.Stream.CurrentMediaType.IsVideo)
+                    if (sample.Stream.CurrentMediaType.IsVideo)
 						using(var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample) )
 							yield return sampleWithBitmap;
                     

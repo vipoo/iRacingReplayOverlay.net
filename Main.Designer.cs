@@ -58,12 +58,12 @@ namespace iRacingReplayOverlay.net
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // transcodeVideo
+            // transcodeVideoButton
             // 
             this.transcodeVideoButton.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.transcodeVideoButton.Location = new System.Drawing.Point(28, 151);
-            this.transcodeVideoButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.transcodeVideoButton.Name = "transcodeVideo";
+            this.transcodeVideoButton.Margin = new System.Windows.Forms.Padding(4);
+            this.transcodeVideoButton.Name = "transcodeVideoButton";
             this.transcodeVideoButton.Size = new System.Drawing.Size(163, 64);
             this.transcodeVideoButton.TabIndex = 0;
             this.transcodeVideoButton.Text = "Transcode Video";
@@ -74,7 +74,7 @@ namespace iRacingReplayOverlay.net
             // 
             this.captureLight.Image = ((System.Drawing.Image)(resources.GetObject("captureLight.Image")));
             this.captureLight.Location = new System.Drawing.Point(362, 13);
-            this.captureLight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.captureLight.Margin = new System.Windows.Forms.Padding(4);
             this.captureLight.Name = "captureLight";
             this.captureLight.Size = new System.Drawing.Size(56, 37);
             this.captureLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -93,20 +93,21 @@ namespace iRacingReplayOverlay.net
             this.label1.TabIndex = 2;
             this.label1.Text = "Capturing Game Data";
             // 
-            // transcodingProgress
+            // transcodeProgressBar
             // 
             this.transcodeProgressBar.Location = new System.Drawing.Point(45, 243);
-            this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.transcodeProgressBar.Name = "transcodingProgress";
+            this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4);
+            this.transcodeProgressBar.Maximum = 10000;
+            this.transcodeProgressBar.Name = "transcodeProgressBar";
             this.transcodeProgressBar.Size = new System.Drawing.Size(611, 32);
             this.transcodeProgressBar.TabIndex = 3;
             // 
-            // transcodeCancel
+            // transcodeCancelButton
             // 
             this.transcodeCancelButton.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.transcodeCancelButton.Location = new System.Drawing.Point(199, 151);
-            this.transcodeCancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.transcodeCancelButton.Name = "transcodeCancel";
+            this.transcodeCancelButton.Margin = new System.Windows.Forms.Padding(4);
+            this.transcodeCancelButton.Name = "transcodeCancelButton";
             this.transcodeCancelButton.Size = new System.Drawing.Size(163, 64);
             this.transcodeCancelButton.TabIndex = 4;
             this.transcodeCancelButton.Text = "Cancel Transcoding";
@@ -118,7 +119,7 @@ namespace iRacingReplayOverlay.net
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.pictureBox1.Location = new System.Drawing.Point(13, 115);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(680, 4);
             this.pictureBox1.TabIndex = 5;
@@ -148,7 +149,7 @@ namespace iRacingReplayOverlay.net
             this.Controls.Add(this.transcodeVideoButton);
             this.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "Main";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

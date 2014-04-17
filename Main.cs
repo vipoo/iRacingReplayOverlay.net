@@ -23,6 +23,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -33,6 +34,8 @@ namespace iRacingReplayOverlay.net
 		KeyboardHook keyboardHook;
 		IRacingCaptureWorker iRacingCaptureWorker;
         OverlayWorker overlayWorker;
+        private System.Timers.Timer aTimer;
+        private int guessedProgessedAmount;
 
         public Main()
         {
@@ -54,10 +57,13 @@ namespace iRacingReplayOverlay.net
             transcodeProgressBar.Visible = false;
         }
 
-        private void OnTranscoderProgress(int percentage)
+        const long GuessFinalizationRequiredSeconds = 25;
+        const long NanoSecond = 10000000;
+        private void OnTranscoderProgress(long timestamp, long duration)
         {
+            duration += GuessFinalizationRequiredSeconds * NanoSecond;
             transcodeProgressBar.Visible = true;
-            transcodeProgressBar.Value = percentage;
+            transcodeProgressBar.Value = (int)(timestamp * transcodeProgressBar.Maximum / duration);
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -71,6 +77,25 @@ namespace iRacingReplayOverlay.net
             overlayWorker = new OverlayWorker();
             overlayWorker.Progress += OnTranscoderProgress;
             overlayWorker.Completed += OnTranscoderCompleted;
+            overlayWorker.ReadFramesCompleted += OnTranscoderReadFramesCompleted;
+
+            var uiContext = SynchronizationContext.Current;
+ 
+            aTimer = new System.Timers.Timer(500);
+            aTimer.Elapsed += (s, a) => uiContext.Post(ignored => GuessFinializeProgress(), null);
+        }
+
+        private void OnTranscoderReadFramesCompleted()
+        {
+            guessedProgessedAmount = (transcodeProgressBar.Maximum - transcodeProgressBar.Value) / ((int)GuessFinalizationRequiredSeconds * 2);
+            aTimer.Start();
+        }
+
+        private void GuessFinializeProgress()
+        {
+            transcodeProgressBar.Value = Math.Min(transcodeProgressBar.Value + guessedProgessedAmount, transcodeProgressBar.Maximum);
+            if (transcodeProgressBar.Value == 100)
+                aTimer.Stop();
         }
 
 		void GlobalKeyPressed(Keys keyCode)
