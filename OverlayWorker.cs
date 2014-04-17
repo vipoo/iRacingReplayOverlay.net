@@ -39,11 +39,18 @@ namespace iRacingReplayOverlay.net
         public event _Progress Progress;
         public event Action Completed;
         public event Action ReadFramesCompleted;
+        private string sourceFile;
+        private string destinationFile;
+        private string gameDataFile;
 
-        public void TranscodeVideo()
+        public void TranscodeVideo(string sourceFile, string destinationFile, string gameDataFile)
 		{
 			if(worker != null)
 				return;
+
+            this.sourceFile = sourceFile;
+            this.destinationFile = destinationFile;
+            this.gameDataFile = gameDataFile;
 
             uiContext = SynchronizationContext.Current;
             requestCancel = false;
@@ -58,8 +65,8 @@ namespace iRacingReplayOverlay.net
 			{
                 var transcoder = new Transcoder
                 {
-                    SourceFile = @"C:\Users\dean\Documents\iRacingShort.mp4",
-                    DestinationFile = @"C:\Users\dean\documents\output.wmv"
+                    SourceFile = sourceFile,
+                    DestinationFile = destinationFile
                 };
 
                 var driverNickNames = new Dictionary<string, string>
@@ -71,7 +78,7 @@ namespace iRacingReplayOverlay.net
                 var leaderBoard = new LeaderBoard
                 {
                     TimingSamples = File
-                        .ReadAllLines(@"C:\Users\dean\documents\leaders-table.csv")
+                        .ReadAllLines(gameDataFile)
                         .Skip(1)
                         .Select(line => line.Split(','))
                         .Select(line => new TimingSample { StartTime = long.Parse(line[0]), Drivers = line[1].Split('|'), DriverNickNames = driverNickNames })

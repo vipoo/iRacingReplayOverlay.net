@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -46,7 +47,8 @@ namespace iRacingReplayOverlay.net
         {
             transcodeVideoButton.Enabled = false;
             transcodeCancelButton.Visible = true;
-            overlayWorker.TranscodeVideo();
+            var destinationFile = Path.ChangeExtension(sourceVideoTextBox.Text, "wmv");
+            overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameDataTextBox.Text);
         }
 
         private void OnTranscoderCompleted()
@@ -128,7 +130,6 @@ namespace iRacingReplayOverlay.net
 
             if (dr == DialogResult.OK)
                 sourceVideoTextBox.Text = fbd.FileName;
-            
         }
 
         void sourceGameDataButton_Click(object sender, EventArgs e)
@@ -144,7 +145,7 @@ namespace iRacingReplayOverlay.net
         {
             var fbd = new FolderBrowserDialog();
             fbd.SelectedPath = workingFolderTextBox.Text;
-
+            
             var dr = fbd.ShowDialog();
 
             if (dr == DialogResult.OK)
@@ -152,7 +153,6 @@ namespace iRacingReplayOverlay.net
                 Settings.Default.WorkingFolder = workingFolderTextBox.Text = fbd.SelectedPath;
                 Settings.Default.Save();
             }
-                
         }
     }
 }
