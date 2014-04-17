@@ -21,18 +21,49 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 
 namespace iRacingReplayOverlay.net
 {
 	public class TimingSample
 	{
+        public static TimingSample[] FromFile(string filename, Dictionary<string,string> driverNickNames)
+        {
+            return File
+                .ReadAllLines(filename)
+                .Skip(1)
+                .Select(line => line.Split(','))
+                .Select(line => new TimingSample
+                {
+                    StartTime = long.Parse(line[0]),
+                    Drivers = line[1].Split('|'),
+                    RacePosition = line[2],
+                    DriverNickNames = driverNickNames
+                })
+                .ToArray();
+        }
+        public static void WriteCSVHeader(StreamWriter file)
+        {
+            file.WriteLine("StartTime, Drivers, RacePosition");
+        }
+
+        public void WriteCSVRow(StreamWriter file)
+        {
+            file.Write(StartTime);
+            file.Write(',');
+            file.Write(String.Join("|", Drivers));
+            file.Write(',');
+            file.Write(RacePosition);
+            file.WriteLine();
+        }
+
         public Dictionary<string, string> DriverNickNames;
 
 		public long StartTime;
 		public string[] Drivers;
         string[] shortNames;
-        public string TimeRemaining;
+        public string RacePosition;
 
         public string[] ShortNames
         {

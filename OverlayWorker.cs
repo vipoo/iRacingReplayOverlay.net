@@ -77,16 +77,7 @@ namespace iRacingReplayOverlay.net
 
                 var leaderBoard = new LeaderBoard
                 {
-                    TimingSamples = File
-                        .ReadAllLines(gameDataFile)
-                        .Skip(1)
-                        .Select(line => line.Split(','))
-                        .Select(line => new TimingSample {
-                            StartTime = long.Parse(line[0]), 
-                            Drivers = line[1].Split('|'), 
-                            TimeRemaining = line[2],
-                            DriverNickNames = driverNickNames })
-                        .ToArray()
+                    TimingSamples = TimingSample.FromFile(gameDataFile, driverNickNames)
                 };
 
                 foreach( var frame in transcoder.Frames())

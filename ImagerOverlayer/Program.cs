@@ -22,8 +22,8 @@ namespace ImagerOverlayer
                     {
                         StartTime = 0, 
                         Drivers = new [] { "Dean Netherton", "Matty", "Fred" }, 
-                        TimeRemaining = "12:05",
-                        DriverNickNames = driverNickNames 
+                        RacePosition = "Lap 12/40",
+                        DriverNickNames = driverNickNames
                     }
                 }
             };

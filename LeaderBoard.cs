@@ -23,35 +23,14 @@ namespace iRacingReplayOverlay.net
             if (sample == null)
                 return;
 
-            DrawTimeRemainingRow(graphics, sample.TimeRemaining);
+            DrawLeaderboardHeading(graphics, sample.RacePosition);
+
             for (int i = 0; i < sample.ShortNames.Length; i++)
                 DrawRow(graphics, i + 1, sample.ShortNames[i]);
         }
 
-        public static class Styles
-        {
-            public const int AlphaLevel = 120;
-            public readonly static Color White = Color.FromArgb(AlphaLevel, Color.White);
-            public readonly static Color WhiteSmoke = Color.FromArgb(AlphaLevel, Color.WhiteSmoke);
-            public readonly static Color Black = Color.FromArgb(AlphaLevel, Color.Black);
 
-            public static class Pens
-            {
-                public readonly static Pen Black = new Pen(Styles.Black);
-            }
-
-            public static class Fonts
-            {
-                public readonly static Font LeaderBoard = new Font("Calibri", 24, FontStyle.Bold);
-            }
-
-            public static class Brushes
-            {
-                public readonly static Brush Black = new SolidBrush(Color.Black);
-            }
-        }
-
-        private void DrawTimeRemainingRow(Graphics graphics, string p)
+        private void DrawLeaderboardHeading(Graphics graphics, string p)
         {
             var rect = new Rectangle(80, 120 - 40, 160, 40);
             DrawBoxWithText(graphics, rect, p);
@@ -93,5 +72,27 @@ namespace iRacingReplayOverlay.net
             g.DrawString(text, Styles.Fonts.LeaderBoard, Styles.Brushes.Black, rect2, stringFormat);
         }
 
+        public static class Styles
+        {
+            public const int AlphaLevel = 120;
+            public readonly static Color White = Color.FromArgb(AlphaLevel, Color.White);
+            public readonly static Color WhiteSmoke = Color.FromArgb(AlphaLevel, Color.WhiteSmoke);
+            public readonly static Color Black = Color.FromArgb(AlphaLevel, Color.Black);
+
+            public static class Pens
+            {
+                public readonly static Pen Black = new Pen(Styles.Black);
+            }
+
+            public static class Fonts
+            {
+                public readonly static Font LeaderBoard = new Font("Calibri", 24, FontStyle.Bold);
+            }
+
+            public static class Brushes
+            {
+                public readonly static Brush Black = new SolidBrush(Color.Black);
+            }
+        }
     }
 }
