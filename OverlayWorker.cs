@@ -81,7 +81,11 @@ namespace iRacingReplayOverlay.net
                         .ReadAllLines(gameDataFile)
                         .Skip(1)
                         .Select(line => line.Split(','))
-                        .Select(line => new TimingSample { StartTime = long.Parse(line[0]), Drivers = line[1].Split('|'), DriverNickNames = driverNickNames })
+                        .Select(line => new TimingSample {
+                            StartTime = long.Parse(line[0]), 
+                            Drivers = line[1].Split('|'), 
+                            TimeRemaining = line[2],
+                            DriverNickNames = driverNickNames })
                         .ToArray()
                 };
 

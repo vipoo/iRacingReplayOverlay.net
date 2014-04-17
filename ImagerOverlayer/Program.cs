@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using iRacingReplayOverlay.net;
+using System.Collections.Generic;
 
 namespace ImagerOverlayer
 {
@@ -9,11 +10,23 @@ namespace ImagerOverlayer
 	{
 		public static void Main(string[] args)
 		{
+            var driverNickNames = new Dictionary<string, string>();
 			var bitmap = (Bitmap)Bitmap.FromFile(@"c:\users\dean\documents\image.bmp");
 
 			var g = Graphics.FromImage(bitmap);
 
-			var leaderboard = new LeaderBoard();
+            var leaderboard = new LeaderBoard
+            {
+                TimingSamples = new [] {
+                    new TimingSample
+                    {
+                        StartTime = 0, 
+                        Drivers = new [] { "Dean Netherton", "Matty", "Fred" }, 
+                        TimeRemaining = "12:05",
+                        DriverNickNames = driverNickNames 
+                    }
+                }
+            };
 
 			leaderboard.Overlay(g, 05000000);
 

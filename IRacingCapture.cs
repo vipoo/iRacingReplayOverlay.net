@@ -97,7 +97,7 @@ namespace iRacingReplayOverlay.net
                 using(var file = File.CreateText(tempFileName))
 				{
                    	var startTime = DateTime.Now;
-					file.WriteLine("StartTime, Drivers");
+					file.WriteLine("StartTime, Drivers, TimeRemaining");
 
                     foreach (var data in iRacing.GetDataFeed())
                     {
@@ -139,7 +139,7 @@ namespace iRacingReplayOverlay.net
 
             var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
 
-            var positions = data.Telementary.Cars
+			var positions = data.Telemetry.Cars
                 .Take(numberOfDrivers)
                 .Where(c => c.Index != 0)
                 .OrderByDescending(c => c.Lap + c.DistancePercentage)
@@ -147,8 +147,17 @@ namespace iRacingReplayOverlay.net
 
             var drivers = String.Join("|", positions.Select(c => c.Driver.UserName).ToArray());
 
-            file.WriteLine(timeNow.Seconds.ToString() + "," + drivers);
-            Console.WriteLine(timeNow.Seconds.ToString() + "," + drivers);
+            file.Write(timeNow.Seconds.ToString() + "," + drivers + ",");
+            Console.Write(timeNow.Seconds.ToString() + "," + drivers + ",");
+
+            var session = data.SessionInfo.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
+
+            var timespan = TimeSpan.FromSeconds(session.SessionTimeSeconds - data.Telemetry.SessionTime);
+            string timeString;
+
+            timeString = string.Format("{0}:{1}", timespan.Minutes, timespan.Seconds);
+            file.WriteLine(timeString);
+            Console.WriteLine(timeString);
         }
 
 		void StopCapture()

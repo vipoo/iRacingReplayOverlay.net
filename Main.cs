@@ -54,7 +54,6 @@ namespace iRacingReplayOverlay.net
         }
 
         const int GuessFinalizationRequiredSeconds = 25;
-        private FileSystemWatcher fileWatch;
         private System.Windows.Forms.Timer fileWatchTimer;
         
         private void OnTranscoderProgress(long timestamp, long duration)
@@ -155,9 +154,6 @@ namespace iRacingReplayOverlay.net
 
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
         {
-            if(fileWatch != null)
-                fileWatch.Dispose();
-
             OnGameDataFileChanged();
         }
 

@@ -32,6 +32,7 @@ namespace iRacingReplayOverlay.net
 		public long StartTime;
 		public string[] Drivers;
         string[] shortNames;
+        public string TimeRemaining;
 
         public string[] ShortNames
         {

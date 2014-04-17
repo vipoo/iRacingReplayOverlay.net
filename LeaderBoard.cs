@@ -23,6 +23,7 @@ namespace iRacingReplayOverlay.net
             if (sample == null)
                 return;
 
+            DrawTimeRemainingRow(graphics, sample.TimeRemaining);
             for (int i = 0; i < sample.ShortNames.Length; i++)
                 DrawRow(graphics, i + 1, sample.ShortNames[i]);
         }
@@ -49,6 +50,13 @@ namespace iRacingReplayOverlay.net
                 public readonly static Brush Black = new SolidBrush(Color.Black);
             }
         }
+
+        private void DrawTimeRemainingRow(Graphics graphics, string p)
+        {
+            var rect = new Rectangle(80, 120 - 40, 160, 40);
+            DrawBoxWithText(graphics, rect, p);
+        }
+
 
         void DrawRow(Graphics g, int position, string name)
         {
