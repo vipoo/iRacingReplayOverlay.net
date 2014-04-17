@@ -28,48 +28,71 @@ namespace iRacingReplayOverlay.net
 		KeyboardHook keyboardHook;
 		IRacingCaptureWorker iRacingCaptureWorker;
         OverlayWorker overlayWorker;
-        private System.Windows.Forms.Timer aTimer;
-        private int guessedProgessedAmount;
+        System.Windows.Forms.Timer aTimer;
+        int guessedProgessedAmount;
+        const int GuessFinalizationRequiredSeconds = 25;
+        System.Windows.Forms.Timer fileWatchTimer;
+        
+        enum States {Idle, CapturingGameData, Transcoding};
+        States _states = States.Idle;
+
+        States State
+        {
+            set
+            {
+                _states = value;
+                switch(_states)
+                {
+                    case States.Idle:
+                        transcodeVideoButton.Enabled = IsReadyForTranscoding();
+                        transcodeCancelButton.Visible = false;
+                        transcodeProgressBar.Visible = false;
+                        transcodeProgressBar.Value = 0;
+                        workingFolderTextBox.Enabled = 
+                        workingFolderButton.Enabled = 
+                        sourceVideoTextBox.Enabled =
+                        sourceVideoButton.Enabled = true;
+                        break;
+
+                    case States.CapturingGameData:
+                        transcodeVideoButton.Enabled = false;
+                        transcodeCancelButton.Visible = false;
+                        transcodeProgressBar.Visible = false;
+                        workingFolderTextBox.Enabled = 
+                        workingFolderButton.Enabled = 
+                        sourceVideoTextBox.Enabled =
+                        sourceVideoButton.Enabled = false;
+                        break;
+
+                    case States.Transcoding:
+                        transcodeVideoButton.Enabled = false;
+                        transcodeCancelButton.Visible = true;
+                        transcodeProgressBar.Visible = true;
+                        workingFolderTextBox.Enabled = 
+                        workingFolderButton.Enabled = 
+                        sourceVideoTextBox.Enabled =
+                        sourceVideoButton.Enabled = false;
+                        break;
+                }
+            }
+            get
+            {
+                return _states;
+            }
+        }
 
         public Main()
         {
             InitializeComponent();
         }
 
-        private void TranscodeVideo_Click(object sender, EventArgs e)
-        {
-            transcodeVideoButton.Enabled = false;
-            transcodeCancelButton.Visible = true;
-            var destinationFile = Path.ChangeExtension(sourceVideoTextBox.Text, "wmv");
-            var sourceGameData = Path.ChangeExtension(sourceVideoTextBox.Text, "csv");
-            overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameData);
-        }
-
-        private void OnTranscoderCompleted()
-        {
-            transcodeCancelButton.Visible = false;
-            transcodeVideoButton.Enabled = true;
-            transcodeProgressBar.Value = 0;
-            transcodeProgressBar.Visible = false;
-        }
-
-        const int GuessFinalizationRequiredSeconds = 25;
-        private System.Windows.Forms.Timer fileWatchTimer;
-        
-        private void OnTranscoderProgress(long timestamp, long duration)
-        {
-            duration += GuessFinalizationRequiredSeconds.FromSecondsToNano();
-            transcodeProgressBar.Visible = true;
-            transcodeProgressBar.Value = (int)(timestamp * transcodeProgressBar.Maximum / duration);
-        }
-
         private void Main_Load(object sender, EventArgs e)
         {
-			keyboardHook = new KeyboardHook();
-			keyboardHook.KeyReleased += GlobalKeyPressed;
-			keyboardHook.Start();
+            keyboardHook = new KeyboardHook();
+            keyboardHook.KeyReleased += GlobalKeyPressed;
+            keyboardHook.Start();
 
-			iRacingCaptureWorker = new IRacingCaptureWorker();
+            iRacingCaptureWorker = new IRacingCaptureWorker();
             iRacingCaptureWorker.NewVideoFileFound += NewVideoFileFound;
             overlayWorker = new OverlayWorker();
             overlayWorker.Progress += OnTranscoderProgress;
@@ -83,48 +106,45 @@ namespace iRacingReplayOverlay.net
 
             aTimer = new System.Windows.Forms.Timer();
             aTimer.Interval = 500;
-            aTimer.Tick += (s,a) => GuessFinializeProgress();
+            aTimer.Tick += (s, a) => GuessFinializeProgress();
 
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
         }
 
-        void NewVideoFileFound(string latestVideoFileName)
-        {
-            this.sourceVideoTextBox.Text = latestVideoFileName;
-        }
-
-        private void OnTranscoderReadFramesCompleted()
-        {
-            guessedProgessedAmount = (transcodeProgressBar.Maximum - transcodeProgressBar.Value) / ((int)GuessFinalizationRequiredSeconds * 2);
-            aTimer.Start();
-        }
-
-        private void GuessFinializeProgress()
-        {
-            transcodeProgressBar.Value = Math.Min(transcodeProgressBar.Value + guessedProgessedAmount, transcodeProgressBar.Maximum);
-            if (transcodeProgressBar.Value == 100)
-                aTimer.Stop();
-        }
-
-		void GlobalKeyPressed(Keys keyCode)
-		{
-			if(keyCode != Keys.F9)
-				return;
-
-			captureLight.Visible = iRacingCaptureWorker.Toogle(workingFolderTextBox.Text);
-		}
-
         void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-			keyboardHook.Dispose();
-			iRacingCaptureWorker.Dispose();
+            keyboardHook.Dispose();
+            iRacingCaptureWorker.Dispose();
+            overlayWorker.Dispose();
         }
 
-        void transcodeCancel_Click(object sender, EventArgs e)
+//Game Capture
+
+        void GlobalKeyPressed(Keys keyCode)
         {
-            transcodeCancelButton.Visible = false;
-            overlayWorker.Cancel();
+            if (State == States.Transcoding)
+                return;
+
+            if (keyCode != Keys.F9)
+                return;
+
+            captureLabel.Visible = captureLight.Visible = iRacingCaptureWorker.Toogle(workingFolderTextBox.Text);
+            State = captureLight.Visible ? States.CapturingGameData : States.Idle;
         }
+
+        void workingFolderButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = workingFolderTextBox.Text;
+
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.WorkingFolder = workingFolderTextBox.Text = fbd.SelectedPath;
+                Settings.Default.Save();
+            }
+        }
+
+//Transcoding
 
         void sourceVideoButton_Click(object sender, EventArgs e)
         {
@@ -132,24 +152,46 @@ namespace iRacingReplayOverlay.net
             fbd.Filter = "Mpeg 4|*.mp4|All files (*.*)|*.*";
             fbd.FileName = sourceVideoTextBox.Text;
 
-            var dr = fbd.ShowDialog();
-
-            if (dr == DialogResult.OK)
+            if (fbd.ShowDialog() == DialogResult.OK)
                 sourceVideoTextBox.Text = fbd.FileName;
         }
 
-        private void workingFolderButton_Click(object sender, EventArgs e)
+        void TranscodeVideo_Click(object sender, EventArgs e)
         {
-            var fbd = new FolderBrowserDialog();
-            fbd.SelectedPath = workingFolderTextBox.Text;
-            
-            var dr = fbd.ShowDialog();
+            State = States.Transcoding;
+            var destinationFile = Path.ChangeExtension(sourceVideoTextBox.Text, "wmv");
+            var sourceGameData = Path.ChangeExtension(sourceVideoTextBox.Text, "csv");
+            overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameData);
+        }
 
-            if (dr == DialogResult.OK)
-            {
-                Settings.Default.WorkingFolder = workingFolderTextBox.Text = fbd.SelectedPath;
-                Settings.Default.Save();
-            }
+        void OnTranscoderReadFramesCompleted()
+        {
+            guessedProgessedAmount = (transcodeProgressBar.Maximum - transcodeProgressBar.Value) / ((int)GuessFinalizationRequiredSeconds * 2);
+            aTimer.Start();
+        }
+
+        void OnTranscoderProgress(long timestamp, long duration)
+        {
+            duration += GuessFinalizationRequiredSeconds.FromSecondsToNano();
+            transcodeProgressBar.Value = (int)(timestamp * transcodeProgressBar.Maximum / duration);
+        }
+
+        void OnTranscoderCompleted()
+        {
+            State = States.Idle;
+        }
+        
+        void GuessFinializeProgress()
+        {
+            transcodeProgressBar.Value = Math.Min(transcodeProgressBar.Value + guessedProgessedAmount, transcodeProgressBar.Maximum-5);
+            if (transcodeProgressBar.Value == transcodeProgressBar.Maximum - 5)
+                aTimer.Stop();
+        }
+
+        void transcodeCancel_Click(object sender, EventArgs e)
+        {
+            overlayWorker.Cancel();
+            State = States.Idle;
         }
 
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
@@ -157,18 +199,24 @@ namespace iRacingReplayOverlay.net
             OnGameDataFileChanged();
         }
 
+        void NewVideoFileFound(string latestVideoFileName)
+        {
+            this.sourceVideoTextBox.Text = latestVideoFileName;
+        }
+
+        bool IsReadyForTranscoding()
+        {
+            if (sourceVideoTextBox.Text == null || sourceVideoTextBox.Text.Length == 0)
+                return false;
+
+            errorSourceVideoLabel.Visible = !File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".csv"));
+            return (!errorSourceVideoLabel.Visible && File.Exists(sourceVideoTextBox.Text));
+        }
+
         void OnGameDataFileChanged()
         {
-            if( sourceVideoTextBox.Text == null || sourceVideoTextBox.Text.Length == 0)
-            {
-                errorSourceVideoLabel.Visible = false;
-                transcodeVideoButton.Enabled = false;
-                return;
-            }
-
-            var gameDataFile = Path.ChangeExtension(sourceVideoTextBox.Text, ".csv");
-            errorSourceVideoLabel.Visible = !File.Exists(gameDataFile);
-            transcodeVideoButton.Enabled = !errorSourceVideoLabel.Visible && File.Exists(sourceVideoTextBox.Text);
+            if (State == States.Idle)
+                transcodeVideoButton.Enabled = IsReadyForTranscoding();
         }
     }
 }

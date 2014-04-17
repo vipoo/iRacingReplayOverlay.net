@@ -49,7 +49,7 @@ namespace iRacingReplayOverlay.net
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.transcodeVideoButton = new System.Windows.Forms.Button();
             this.captureLight = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.captureLabel = new System.Windows.Forms.Label();
             this.transcodeProgressBar = new System.Windows.Forms.ProgressBar();
             this.transcodeCancelButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -89,16 +89,17 @@ namespace iRacingReplayOverlay.net
             this.captureLight.TabStop = false;
             this.captureLight.Visible = false;
             // 
-            // label1
+            // captureLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(437, 105);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(219, 25);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Capturing Game Data";
+            this.captureLabel.AutoSize = true;
+            this.captureLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.captureLabel.Location = new System.Drawing.Point(437, 105);
+            this.captureLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.captureLabel.Name = "captureLabel";
+            this.captureLabel.Size = new System.Drawing.Size(219, 25);
+            this.captureLabel.TabIndex = 2;
+            this.captureLabel.Text = "Capturing Game Data";
+            this.captureLabel.Visible = false;
             // 
             // transcodeProgressBar
             // 
@@ -195,11 +196,11 @@ namespace iRacingReplayOverlay.net
             this.workingFolderButton.UseVisualStyleBackColor = true;
             this.workingFolderButton.Click += new System.EventHandler(this.workingFolderButton_Click);
             // 
-            // ErrorSourceVideo
+            // errorSourceVideoLabel
             // 
             this.errorSourceVideoLabel.ForeColor = System.Drawing.Color.DarkRed;
             this.errorSourceVideoLabel.Location = new System.Drawing.Point(155, 349);
-            this.errorSourceVideoLabel.Name = "ErrorSourceVideo";
+            this.errorSourceVideoLabel.Name = "errorSourceVideoLabel";
             this.errorSourceVideoLabel.Size = new System.Drawing.Size(467, 47);
             this.errorSourceVideoLabel.TabIndex = 16;
             this.errorSourceVideoLabel.Text = "*Unable to transcode this video, as there is no associated captured game data (cs" +
@@ -222,7 +223,7 @@ namespace iRacingReplayOverlay.net
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.transcodeCancelButton);
             this.Controls.Add(this.transcodeProgressBar);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.captureLabel);
             this.Controls.Add(this.captureLight);
             this.Controls.Add(this.transcodeVideoButton);
             this.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -245,7 +246,7 @@ namespace iRacingReplayOverlay.net
 
         private System.Windows.Forms.Button transcodeVideoButton;
         private System.Windows.Forms.PictureBox captureLight;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label captureLabel;
         private System.Windows.Forms.ProgressBar transcodeProgressBar;
         private System.Windows.Forms.Button transcodeCancelButton;
         private System.Windows.Forms.PictureBox pictureBox1;

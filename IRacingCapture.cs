@@ -164,13 +164,14 @@ namespace iRacingReplayOverlay.net
 		{
             try
             {
-                if (worker == null)
+                var w = worker;
+                if (w == null)
                     throw new Exception("Capture thread not running");
 
                 workerStopRequest = true;
-                if (!worker.Join(500))
+                if (!w.Join(500))
                 {
-                    worker.Abort();
+                    w.Abort();
                     throw new Exception("Capture thread did not shutdown cleanly");
                 }
             }

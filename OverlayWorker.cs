@@ -122,6 +122,17 @@ namespace iRacingReplayOverlay.net
         internal void Cancel()
         {
             requestCancel = true;
+            var w = worker;
+            if( w != null)
+            {
+                if(!w.Join(1000))
+                    w.Abort();
+            }
+        }
+
+        internal void Dispose()
+        {
+            Cancel();
         }
     }
 }
