@@ -23,7 +23,7 @@ namespace ImagerOverlayer
                         StartTime = 0, 
                         Drivers = new [] { "Dean Netherton", "Matty", "Fred" }, 
                         RacePosition = "Lap 12/40",
-                        CurrentDriver =new [] { "13", "th", "29","Somebody" },
+                        CurrentDriver =new [] { "3", "th", "29","Somebody" },
                         DriverNickNames = driverNickNames
                     }
                 }

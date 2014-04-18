@@ -58,7 +58,15 @@ namespace iRacingReplayOverlay.net
 			g.InRectangle(1920 / 2 - 150, 980, 70, 40)
 				.WithBrush(Styles.Brushes.Yellow)
 				.WithPen(Styles.Pens.Black)
-				.DrawRectangleWithBorder();
+				.DrawRectangleWithBorder()
+				.WithFont("Calibri", 24, FontStyle.Bold)
+				.WithBrush(Styles.Brushes.Black)
+				.WithStringFormat(StringAlignment.Near)
+				.DrawText(p[0], 3)
+				.AfterText(p[0], -5)
+				.WithFont("Calibri", 18, FontStyle.Bold)
+				.DrawText(p[1]);
+				
 
             
 

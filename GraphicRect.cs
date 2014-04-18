@@ -75,7 +75,7 @@ namespace iRacingReplayOverlay.net
 
         internal GraphicRect DrawText(string text, int leftOffset = 0)
         {
-            var rect2 = new Rectangle(r.Left + leftOffset + 1, r.Top + 2, r.Width, r.Height);
+			var rect2 = new Rectangle(r.Left + leftOffset + 1, r.Top, r.Width, r.Height);
             g.DrawString(text, f, b, rect2, sf);
             return this;
         }
@@ -105,6 +105,13 @@ namespace iRacingReplayOverlay.net
 
             return new GraphicRect(g, new Rectangle(r.Left + r.Width, r.Top, w, h), b, p, f, sf);
         }
+
+		public GraphicRect AfterText(string str, int i)
+		{
+			var size = g.MeasureString(str, f);
+			var newRect = new Rectangle(r.Left + (int)size.Width + i, r.Top, r.Width - (int)size.Width - i, r.Height);
+			return new GraphicRect(g, newRect, b, p, f, sf);
+		}
 
         internal GraphicRect WithStringFormat(StringAlignment alignment, StringAlignment lineAlignment = StringAlignment.Near)
         {
