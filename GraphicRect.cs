@@ -23,17 +23,18 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace iRacingReplayOverlay.net
 {
 	public class GraphicRect
     {
-        readonly Graphics g;
-        readonly Rectangle r;
-        readonly Brush b;
-        readonly Pen p;
-        readonly Font f;
-        readonly StringFormat sf;
+		protected readonly Graphics g;
+		protected readonly Rectangle r;
+		protected readonly Brush b;
+		protected readonly Pen p;
+		protected readonly Font f;
+		protected readonly StringFormat sf;
 
         public GraphicRect(Graphics g, Rectangle r)
         {
@@ -41,7 +42,7 @@ namespace iRacingReplayOverlay.net
             this.r = r;
         }
 
-        public GraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
+		internal GraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
         {
             this.g = g;
             this.r = r;
@@ -51,9 +52,14 @@ namespace iRacingReplayOverlay.net
             this.sf = sf;
         }
 
+		protected virtual GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
+		{
+			return new GraphicRect(g, r, b, p, f, sf);
+		}
+
         internal GraphicRect WithLinearGradientBrush(Color color1, Color color2, LinearGradientMode linearGradientMode)
         {
-            return new GraphicRect(g, r, new LinearGradientBrush(r, color1, color2, linearGradientMode), p, f, sf);
+			return New(g, r, new LinearGradientBrush(r, color1, color2, linearGradientMode), p, f, sf);
         }
 
         internal GraphicRect With(Func<GraphicRect, GraphicRect> modifiers)
@@ -63,31 +69,46 @@ namespace iRacingReplayOverlay.net
 
         internal GraphicRect WithPen(Pen pen)
         {
-            return new GraphicRect(g, r, b, pen, f, sf);
+			return New(g, r, b, pen, f, sf);
         }
 
-        internal GraphicRect DrawRectangleWithBorder()
+        internal virtual GraphicRect DrawRectangleWithBorder()
         {
             g.FillRectangle(b, r);
             g.DrawRectangle(p, r);
             return this;
         }
 
-        internal GraphicRect DrawText(string text, int leftOffset = 0)
+        const int TEXT_LEFT_OFFSET_MAGIC = -4;
+        const int TEXT_RIGHT_PADDING_MAGIC = 10;
+		internal virtual GraphicRect DrawText(string text, int leftOffset = 0)
         {
-			var rect2 = new Rectangle(r.Left + leftOffset + 1, r.Top, r.Width, r.Height);
+            var rect2 = new Rectangle(r.Left + leftOffset + TEXT_LEFT_OFFSET_MAGIC, r.Top, r.Width + TEXT_RIGHT_PADDING_MAGIC, r.Height);
             g.DrawString(text, f, b, rect2, sf);
             return this;
         }
 
+        public GraphicRect AfterText(string str, int i = 0)
+        {
+            var size = TextRenderer.MeasureText(g, str, f, new Size(0,0), TextFormatFlags.NoPadding);
+
+            var newRect = new Rectangle(r.Left + (int)size.Width + i, r.Top, r.Width - (int)size.Width - i, r.Height);
+            return New(g, newRect, b, p, f, sf);
+        }
+
+        public GraphicRect MoveRight(int right)
+        {
+            return New(g, new Rectangle(r.Left + right, r.Top, r.Width + right, r.Height), b, p, f, sf);
+        }
+
         internal GraphicRect WithBrush(Brush brush)
         {
-            return new GraphicRect(g, r, brush, p, f, sf);
+			return New(g, r, brush, p, f, sf);
         }
 
         internal GraphicRect WithFont(string prototype, float emSize, FontStyle style)
         {
-            return new GraphicRect(g, r, b, p, new Font(prototype, emSize, style), sf);
+			return New(g, r, b, p, new Font(prototype, emSize, style), sf);
         }
 
         internal GraphicRect ToBelow(int? width = null, int? height = null)
@@ -95,7 +116,7 @@ namespace iRacingReplayOverlay.net
             var w = width == null ? r.Width : width.Value;
             var h = height == null ? r.Height : height.Value;
 
-            return new GraphicRect(g, new Rectangle(r.Left, r.Top + r.Height, w, h), b, p, f, sf);
+			return New(g, new Rectangle(r.Left, r.Top + r.Height, w, h), b, p, f, sf);
         }
 
         internal GraphicRect ToRight(int? width = null, int? height = null)
@@ -103,21 +124,73 @@ namespace iRacingReplayOverlay.net
             var w = width == null ? r.Width : width.Value;
             var h = height == null ? r.Height : height.Value;
 
-            return new GraphicRect(g, new Rectangle(r.Left + r.Width, r.Top, w, h), b, p, f, sf);
+			return New(g, new Rectangle(r.Left + r.Width, r.Top, w, h), b, p, f, sf);
         }
-
-		public GraphicRect AfterText(string str, int i)
-		{
-			var size = g.MeasureString(str, f);
-			var newRect = new Rectangle(r.Left + (int)size.Width + i, r.Top, r.Width - (int)size.Width - i, r.Height);
-			return new GraphicRect(g, newRect, b, p, f, sf);
-		}
 
         internal GraphicRect WithStringFormat(StringAlignment alignment, StringAlignment lineAlignment = StringAlignment.Near)
         {
             var sf = new StringFormat { Alignment = alignment, LineAlignment = lineAlignment };
-            return new GraphicRect(g, r, b, p, f, sf);
+			return New(g, r, b, p, f, sf);
         }
+
+		public GraphicRect Center(Func<GraphicRect, GraphicRect> operation)
+		{
+			var newG = new CenterGraphicRect(g, r, b, p, f, sf);
+
+			var calculateCenter = (CenterGraphicRect)operation(newG);
+
+            var width = calculateCenter.Width;
+            var currentCenterPoint = r.Left + r.Width / 2;
+
+			var newRect = new Rectangle(currentCenterPoint - width/2, r.Top, width, r.Height);
+
+			var centeredGr = new GraphicRect(g, newRect, b, p, f, sf );
+
+            operation(centeredGr).ToBelow();
+
+			return this;
+		}
     }
     
+	public class CenterGraphicRect : GraphicRect
+	{
+		readonly int left;
+		readonly int right;
+
+		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
+			: base( g, r, b, p, f, sf)
+		{
+			this.left = int.MaxValue;
+			this.right = int.MinValue;
+		}
+
+		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int left, int right)
+			: base( g, r, b, p, f, sf)
+		{
+			this.left = left;
+			this.right = right;
+		}
+
+		protected override GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
+		{
+			return new CenterGraphicRect(g, r, b, p, f, sf, left, right);
+		}
+
+        internal int Width { get { return right-left; } }
+		
+		internal override GraphicRect DrawText(string text, int leftOffset = 0)
+		{
+            var size = TextRenderer.MeasureText(g, text, f, r.Size, TextFormatFlags.NoPadding);
+
+			var newleft = Math.Min(r.Left + leftOffset, left);
+			var newRight = Math.Max(right, r.Left + leftOffset + (int)size.Width);
+
+			return new CenterGraphicRect(g, r, b, p, f, sf, newleft, newRight);
+		}
+
+        internal override GraphicRect DrawRectangleWithBorder()
+        {
+            return this;
+        }
+	}
 }

@@ -55,18 +55,36 @@ namespace iRacingReplayOverlay.net
 
 		private void DrawCurrentDriverRow(Graphics g, string[] p)
         {
-			g.InRectangle(1920 / 2 - 150, 980, 70, 40)
-				.WithBrush(Styles.Brushes.Yellow)
-				.WithPen(Styles.Pens.Black)
-				.DrawRectangleWithBorder()
-				.WithFont("Calibri", 24, FontStyle.Bold)
-				.WithBrush(Styles.Brushes.Black)
-				.WithStringFormat(StringAlignment.Near)
-				.DrawText(p[0], 3)
-				.AfterText(p[0], -5)
-				.WithFont("Calibri", 18, FontStyle.Bold)
-				.DrawText(p[1]);
-				
+            g.InRectangle(1920/2-420/2, 980, 70, 40)
+                .WithBrush(Styles.Brushes.Yellow)
+                .WithPen(Styles.Pens.Black)
+                .DrawRectangleWithBorder()
+                .WithFont("Calibri", 24, FontStyle.Bold)
+                .WithBrush(Styles.Brushes.Black)
+                .WithStringFormat(StringAlignment.Near)
+                .Center(cg => cg
+                            .DrawText(p[0])
+                            .AfterText(p[0])
+                            .MoveRight(3)
+                            .WithFont("Calibri", 18, FontStyle.Bold)
+                            .DrawText(p[1])
+                )
+
+                .ToRight(50)
+                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.Horizontal)
+                .DrawRectangleWithBorder()
+                .WithStringFormat(StringAlignment.Center)
+                .WithBrush(Styles.Brushes.Black)
+                .DrawText(p[2])
+
+                .ToRight(300)
+                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.Horizontal)
+                .DrawRectangleWithBorder()
+                .WithStringFormat(StringAlignment.Center)
+                .WithBrush(Styles.Brushes.Black)
+                .DrawText(p[3]);
+            
+            //;
 
             
 

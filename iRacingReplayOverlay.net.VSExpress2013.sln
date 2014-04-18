@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-VisualStudioVersion = {0}
-MinimumVisualStudioVersion = {0}
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net", "iRacingReplayOverlay.net.csproj", "{0E523573-2972-4DC0-AECB-C4CF746854BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagerOverlayer", "ImagerOverlayer\ImagerOverlayer.csproj", "{6C5CA680-20D7-48AA-9458-554E18BABFFC}"
@@ -30,20 +30,6 @@ Global
 		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.ActiveCfg = Release|x64
 		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.Build.0 = Release|x64
 		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x86.ActiveCfg = Release|x64
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.ActiveCfg = Debug|x64
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.Build.0 = Debug|x64
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x86.ActiveCfg = Debug|x86
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x86.Build.0 = Debug|x86
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.ActiveCfg = Release|x64
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.Build.0 = Release|x64
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x86.ActiveCfg = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.ActiveCfg = Debug|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.Build.0 = Debug|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.ActiveCfg = Debug|x86
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.Build.0 = Debug|x86
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.ActiveCfg = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.Build.0 = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x86.ActiveCfg = Release|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x64.ActiveCfg = Debug|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x64.Build.0 = Debug|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Debug|x86.ActiveCfg = Debug|x86
@@ -51,13 +37,13 @@ Global
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.ActiveCfg = Release|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.Build.0 = Release|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x86.ActiveCfg = Release|x64
-		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.ActiveCfg = Debug|x86
-		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.Build.0 = Debug|x86
-		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.ActiveCfg = Debug|x86
-		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.Build.0 = Debug|x86
-		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.ActiveCfg = Debug|x86
-		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.Build.0 = Debug|x86
-		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x86.ActiveCfg = Debug|x86
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.ActiveCfg = Debug|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.Build.0 = Debug|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x86.ActiveCfg = Debug|x86
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x86.Build.0 = Debug|x86
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.ActiveCfg = Release|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.Build.0 = Release|x64
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x86.ActiveCfg = Release|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.ActiveCfg = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.Build.0 = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x86.ActiveCfg = Debug|x86
@@ -65,11 +51,25 @@ Global
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.ActiveCfg = Release|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.Build.0 = Release|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x86.ActiveCfg = Release|x64
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ..\iRacingSDK.Net\Sample\Sample.csproj
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.ActiveCfg = Debug|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.Build.0 = Debug|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.ActiveCfg = Debug|x86
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x86.Build.0 = Debug|x86
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.ActiveCfg = Release|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.Build.0 = Release|x64
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x86.ActiveCfg = Release|x64
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.Build.0 = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x86.Build.0 = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.ActiveCfg = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.Build.0 = Debug|x86
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x86.ActiveCfg = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = ..\iRacingSDK.Net\Sample\Sample.csproj
 	EndGlobalSection
 EndGlobal
