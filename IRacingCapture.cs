@@ -156,6 +156,7 @@ namespace iRacingReplayOverlay.net
                 StartTime = timeNow.Seconds,
                 Drivers = positions.Select(c => c.Driver.UserName).ToArray(),
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
+                CurrentDriver = new [] { data.Telemetry.CamCar.Driver.CarNumber.ToString(), data.Telemetry.CamCar.Driver.UserName }
             };
 
             timingSample.WriteCSVRow(file);

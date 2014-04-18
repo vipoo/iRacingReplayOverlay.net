@@ -86,6 +86,8 @@
     <Compile Include="TimingExtension.cs" />
     <Compile Include="Transcoder.cs" />
     <Compile Include="TimingSample.cs" />
+    <Compile Include="GraphicRect.cs" />
+    <Compile Include="GraphicsExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

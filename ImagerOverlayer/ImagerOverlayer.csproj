@@ -53,6 +53,12 @@
     <Compile Include="..\TimingExtension.cs">
       <Link>TimingExtension.cs</Link>
     </Compile>
+    <Compile Include="..\GraphicRect.cs">
+      <Link>GraphicRect.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphicsExtension.cs">
+      <Link>GraphicsExtension.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

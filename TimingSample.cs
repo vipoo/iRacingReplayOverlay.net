@@ -39,6 +39,7 @@ namespace iRacingReplayOverlay.net
                     StartTime = long.Parse(line[0]),
                     Drivers = line[1].Split('|'),
                     RacePosition = line[2],
+                    CurrentDriver = line[3].Split('|'),
                     DriverNickNames = driverNickNames
                 })
                 .ToArray();
@@ -55,6 +56,8 @@ namespace iRacingReplayOverlay.net
             file.Write(String.Join("|", Drivers));
             file.Write(',');
             file.Write(RacePosition);
+            file.Write(',');
+            file.Write(CurrentDriver);
             file.WriteLine();
         }
 
@@ -64,6 +67,7 @@ namespace iRacingReplayOverlay.net
 		public string[] Drivers;
         string[] shortNames;
         public string RacePosition;
+        public string[] CurrentDriver;
 
         public string[] ShortNames
         {
