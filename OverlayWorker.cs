@@ -39,15 +39,20 @@ namespace iRacingReplayOverlay.net
         public event _Progress Progress;
         public event Action Completed;
         public event Action ReadFramesCompleted;
-        private string sourceFile;
-        private string destinationFile;
-        private string gameDataFile;
+       
+        string sourceFile;
+        string destinationFile;
+        string gameDataFile;
+        int videoBitRate;
+        int audioBitRate;
 
-        public void TranscodeVideo(string sourceFile, string destinationFile, string gameDataFile)
+        public void TranscodeVideo(string sourceFile, string destinationFile, string gameDataFile, int videoBitRate, int audioBitRate)
 		{
 			if(worker != null)
 				return;
 
+            this.videoBitRate = videoBitRate;
+            this.audioBitRate = audioBitRate;
             this.sourceFile = sourceFile;
             this.destinationFile = destinationFile;
             this.gameDataFile = gameDataFile;
@@ -66,7 +71,10 @@ namespace iRacingReplayOverlay.net
                 var transcoder = new Transcoder
                 {
                     SourceFile = sourceFile,
-                    DestinationFile = destinationFile
+                    DestinationFile = destinationFile,
+                    VideoBitRate = videoBitRate,
+                    AudioBitRate = audioBitRate
+
                 };
 
                 var driverNickNames = new Dictionary<string, string>
@@ -125,5 +133,6 @@ namespace iRacingReplayOverlay.net
         {
             Cancel();
         }
+
     }
 }

@@ -34,5 +34,29 @@ namespace iRacingReplayOverlay.net {
                 this["WorkingFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int videoBitRate {
+            get {
+                return ((int)(this["videoBitRate"]));
+            }
+            set {
+                this["videoBitRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("48000")]
+        public int audioBitRate {
+            get {
+                return ((int)(this["audioBitRate"]));
+            }
+            set {
+                this["audioBitRate"] = value;
+            }
+        }
     }
 }

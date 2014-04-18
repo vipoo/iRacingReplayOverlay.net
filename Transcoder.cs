@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using MediaFoundation;
+using MediaFoundation.Misc;
 using MediaFoundation.Net;
 using MediaFoundation.Transform;
 using System;
@@ -30,6 +31,8 @@ namespace iRacingReplayOverlay.net
     {
         public string SourceFile { get; set; }
         public string DestinationFile { get; set; }
+        public int AudioBitRate;
+        public int VideoBitRate;
 
         Dictionary<SourceStream, SinkStream> streamMapping;
 
@@ -143,8 +146,16 @@ namespace iRacingReplayOverlay.net
 
             var availableTypes = MFSystem.TranscodeGetAudioOutputAvailableTypes(TARGET_AUDIO_FORMAT, MFT_EnumFlag.All);
 
+            foreach(var t in availableTypes)
+            {
+                if (t.AudioNumberOfChannels == numberOfChannels && t.AudioSamplesPerSecond == sampleRate)
+                    Console.WriteLine(t.GetInt(MFAttributesClsid.MF_MT_AUDIO_AVG_BYTES_PER_SECOND));
+            }
+
             var type = availableTypes
-                .FirstOrDefault(t => t.AudioNumberOfChannels == numberOfChannels && t.AudioSamplesPerSecond == sampleRate);
+                .FirstOrDefault(t => t.AudioNumberOfChannels == numberOfChannels &&
+                    t.AudioSamplesPerSecond == sampleRate &&
+                    t.AudioAverageBytesPerSecond == AudioBitRate);
 
             if (type != null)
                 return new MediaType(type);
@@ -157,7 +168,7 @@ namespace iRacingReplayOverlay.net
             var size = nativeMediaType.FrameSize;
             var rate = nativeMediaType.FrameRate;
             var aspect = nativeMediaType.AspectRatio;
-            var bitRate = nativeMediaType.BitRate;
+            var bitRate = VideoBitRate;
 
             var mediaType = new MediaType()
             {

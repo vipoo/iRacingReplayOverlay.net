@@ -61,6 +61,10 @@ namespace iRacingReplayOverlay.net
             this.label5 = new System.Windows.Forms.Label();
             this.workingFolderButton = new System.Windows.Forms.Button();
             this.errorSourceVideoLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.videoBitRate = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.audioBitRate = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.captureLight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -207,11 +211,52 @@ namespace iRacingReplayOverlay.net
     "v file name based on the name of the source input video)";
             this.errorSourceVideoLabel.Visible = false;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(380, 231);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(133, 18);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Video Bitrate (Mbs):";
+            // 
+            // videoBitRate
+            // 
+            this.videoBitRate.Location = new System.Drawing.Point(519, 231);
+            this.videoBitRate.Name = "videoBitRate";
+            this.videoBitRate.Size = new System.Drawing.Size(43, 26);
+            this.videoBitRate.TabIndex = 18;
+            this.videoBitRate.Text = "15";
+            this.videoBitRate.TextChanged += new System.EventHandler(this.videoBitRate_TextChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(380, 263);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(123, 18);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Audio Bitrate Kbps";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // audioBitRate
+            // 
+            this.audioBitRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.audioBitRate.FormattingEnabled = true;
+            this.audioBitRate.Location = new System.Drawing.Point(519, 263);
+            this.audioBitRate.Name = "audioBitRate";
+            this.audioBitRate.Size = new System.Drawing.Size(173, 26);
+            this.audioBitRate.TabIndex = 20;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(742, 455);
+            this.ClientSize = new System.Drawing.Size(729, 473);
+            this.Controls.Add(this.audioBitRate);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.videoBitRate);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.errorSourceVideoLabel);
             this.Controls.Add(this.workingFolderButton);
             this.Controls.Add(this.label5);
@@ -258,5 +303,9 @@ namespace iRacingReplayOverlay.net
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button workingFolderButton;
         private System.Windows.Forms.Label errorSourceVideoLabel;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox videoBitRate;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox audioBitRate;
     }
 }

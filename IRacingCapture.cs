@@ -121,7 +121,7 @@ namespace iRacingReplayOverlay.net
 			}
 			catch(Exception e)
 			{
-				Console.WriteLine("Error in worker " + e.Message);
+				Console.WriteLine("Error in worker " + e.Message + "\r\n" + e.StackTrace);
 				throw e;
 			}
 			finally
@@ -149,19 +149,59 @@ namespace iRacingReplayOverlay.net
 
             var timespan = TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain);
             var raceLapsPosition = string.Format("Lap {0}/{1}", session._SessionLaps - data.Telemetry.SessionLapsRemain, session.SessionLaps);
-            var raceTimePosition = string.Format("{0}:{1}", timespan.Minutes, timespan.Seconds);
+            var raceTimePosition = string.Format("{0:00}:{1:00}", timespan.Minutes, timespan.Seconds);
 
             var timingSample = new TimingSample
             {
-                StartTime = timeNow.Seconds,
+                StartTime = (int)timeNow.TotalSeconds,
                 Drivers = positions.Select(c => c.Driver.UserName).ToArray(),
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
-                CurrentDriver = new [] { data.Telemetry.CamCar.Driver.CarNumber.ToString(), data.Telemetry.CamCar.Driver.UserName }
+                CurrentDriver = GetCurrentDriverDetails(data, positions )
             };
 
             timingSample.WriteCSVRow(file);
         }
 
+        private static TimingSample._CurrentDriver GetCurrentDriverDetails(DataSample data, Car[] positions)
+        {
+            var position = positions
+                .Select((p,i) => new { Position = i+1, Details = p})
+                .FirstOrDefault(p => p.Details.Index == data.Telemetry.CamCarIdx);
+
+            if (position == null)
+                return new TimingSample._CurrentDriver();
+
+            return new TimingSample._CurrentDriver
+            {
+                Indicator = GetOrdinal(position.Position),
+                Position = position.Position.ToString(),
+                CarNumber = data.Telemetry.CamCar.Driver.CarNumber.ToString(),
+                Name = data.Telemetry.CamCar.Driver.UserName
+            };
+        }
+
+        public static string GetOrdinal(int num)
+        {
+            switch (num % 100)
+            {
+                case 11:
+                case 12:
+                case 13:
+                    return "th";
+            }
+
+            switch (num % 10)
+            {
+                case 1:
+                    return "st";
+                case 2:
+                    return "nd";
+                case 3:
+                    return "rd";
+                default:
+                    return "th";
+            }
+        }
 		void StopCapture()
 		{
             try

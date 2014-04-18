@@ -40,12 +40,12 @@ namespace iRacingReplayOverlay.net
                 .With(simpleWhiteBox)
                 .DrawText(sample.RacePosition.ToString());
 
-            for (int i = 0; i < sample.ShortNames.Length; i++)
+            for (int i = 0; i < Math.Min(sample.ShortNames.Length, 20); i++)
             {
                 r = r.ToBelow(width: 40);
 
                 r.With(simpleWhiteBox)
-                    .DrawText(i.ToString())
+                    .DrawText((i+1).ToString())
                     .ToRight(width: 120)
                     .With(simpleWhiteBox)
                     .WithStringFormat(StringAlignment.Near)
@@ -53,7 +53,7 @@ namespace iRacingReplayOverlay.net
             }
         }
 
-		private void DrawCurrentDriverRow(Graphics g, string[] p)
+		private void DrawCurrentDriverRow(Graphics g, TimingSample._CurrentDriver p)
         {
             g.InRectangle(1920/2-420/2, 980, 70, 40)
                 .WithBrush(Styles.Brushes.Yellow)
@@ -63,11 +63,11 @@ namespace iRacingReplayOverlay.net
                 .WithBrush(Styles.Brushes.Black)
                 .WithStringFormat(StringAlignment.Near)
                 .Center(cg => cg
-                            .DrawText(p[0])
-                            .AfterText(p[0])
+                            .DrawText(p.Position)
+                            .AfterText(p.Position)
                             .MoveRight(3)
                             .WithFont("Calibri", 18, FontStyle.Bold)
-                            .DrawText(p[1])
+                            .DrawText(p.Indicator)
                 )
 
                 .ToRight(50)
@@ -75,47 +75,15 @@ namespace iRacingReplayOverlay.net
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
                 .WithBrush(Styles.Brushes.Black)
-                .DrawText(p[2])
+                .DrawText(p.CarNumber)
 
                 .ToRight(300)
                 .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.Horizontal)
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
                 .WithBrush(Styles.Brushes.Black)
-                .DrawText(p[3]);
-            
-            //;
-
-            
-
-
-			/*
-            var left = 1920 / 2 - 150;
-            var rect = new Rectangle(left, 980, 70, 40);
-            DrawBoxWithText(graphics, rect, p[0], StringAlignment.Center, 0, Color.Yellow, Color.Yellow);
- 70, 40
-            DrawWhiteBox(graphics, rect, Color.Yellow, Color.Yellow);
-
-            var rect2 = new Rectangle(rect.Left + 1, rect.Top + 2, rect.Width, rect.Height);
-            graphics.DrawString(p[0], Styles.Fonts.LeaderBoard, Styles.Brushes.Black, rect2, stringLeftFormat);
-            var size = graphics.MeasureString(p[0], Styles.Fonts.LeaderBoard);
-
-            var font = new Font("Calibri", 16, FontStyle.Bold);
-
-            var width = (int)size.Width - 7;
-            var rect3 = new Rectangle(rect2.Left + width, rect2.Top, rect.Width - width, rect.Height);
-            graphics.DrawString(p[1], font, Styles.Brushes.Black, rect3);
-
-
-            var rect4 = new Rectangle(rect3.Left + rect3.Width, rect.Top, 60, rect.Height);
-            DrawWhiteBox(graphics, rect4);
-            
-            graphics.DrawString(p[2], Styles.Fonts.LeaderBoard, Styles.Brushes.Black, rect4, stringCenterFormat);
-*/
-
+                .DrawText(p.Name);
         }
-
-
 
         public static class Styles
         {

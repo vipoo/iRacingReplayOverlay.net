@@ -28,6 +28,13 @@ namespace iRacingReplayOverlay.net
 {
 	public class TimingSample
 	{
+        public class _CurrentDriver
+        {
+            public string Position;
+            public string Indicator;
+            public string CarNumber;
+            public string Name;
+        }
         public static TimingSample[] FromFile(string filename, Dictionary<string,string> driverNickNames)
         {
             return File
@@ -39,14 +46,19 @@ namespace iRacingReplayOverlay.net
                     StartTime = long.Parse(line[0]),
                     Drivers = line[1].Split('|'),
                     RacePosition = line[2],
-                    CurrentDriver = line[3].Split('|'),
+                    CurrentDriver = new _CurrentDriver() {
+                        Position = line[3],
+                        Indicator = line[4],
+                        CarNumber = line[5],
+                        Name = line[6]
+                    },
                     DriverNickNames = driverNickNames
                 })
                 .ToArray();
         }
         public static void WriteCSVHeader(StreamWriter file)
         {
-            file.WriteLine("StartTime, Drivers, RacePosition");
+            file.WriteLine("StartTime, Drivers, DriverPosition, DriverIndicator, DriverCarNumber, DriverName");
         }
 
         public void WriteCSVRow(StreamWriter file)
@@ -57,7 +69,13 @@ namespace iRacingReplayOverlay.net
             file.Write(',');
             file.Write(RacePosition);
             file.Write(',');
-            file.Write(CurrentDriver);
+            file.Write(CurrentDriver.Position);
+            file.Write(',');
+            file.Write(CurrentDriver.Indicator);
+            file.Write(',');
+            file.Write(CurrentDriver.CarNumber);
+            file.Write(',');
+            file.Write(CurrentDriver.Name);
             file.WriteLine();
         }
 
@@ -67,7 +85,8 @@ namespace iRacingReplayOverlay.net
 		public string[] Drivers;
         string[] shortNames;
         public string RacePosition;
-        public string[] CurrentDriver;
+        
+        public _CurrentDriver CurrentDriver = new _CurrentDriver();
 
         public string[] ShortNames
         {
