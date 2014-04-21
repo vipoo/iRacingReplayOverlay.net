@@ -137,7 +137,7 @@ namespace iRacingReplayOverlay.net
         {
             var timeNow = DateTime.Now - startTime;
 
-            var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
+            var numberOfDrivers = data.SessionData.DriverInfo.Drivers.Length;
 
 			var positions = data.Telemetry.Cars
                 .Take(numberOfDrivers)
@@ -145,7 +145,7 @@ namespace iRacingReplayOverlay.net
                 .OrderByDescending(c => c.Lap + c.DistancePercentage)
                 .ToArray();
 
-            var session = data.SessionInfo.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
+            var session = data.SessionData.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
 
             var timespan = TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain);
             var raceLapsPosition = string.Format("Lap {0}/{1}", session._SessionLaps - data.Telemetry.SessionLapsRemain, session.SessionLaps);
