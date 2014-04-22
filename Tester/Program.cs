@@ -28,7 +28,7 @@ namespace Tester
             var gapsToLeader = new GapsToLeader();
             var positionChanges = new PositionChanges();
 
-            foreach( var data in iRacing.GetDataFeed().WithCorrectedPercentages().AtSpeed(16).RaceOnly())
+            foreach( var data in iRacing.GetDataFeed().WithCorrectedPercentages().AtSpeed(16).RaceOnly().TakeWhile( d => d.Telemetry.RaceLaps < 6))
             {
                 if( sampleData == null )
                     sampleData = data;
@@ -37,6 +37,7 @@ namespace Tester
                 positionChanges.Process(data);
             }
 
+            Console.WriteLine("Positional changes per lap:");
             foreach( var p in positionChanges.LapDeltas )
             {
                 Console.WriteLine("On lap {0}", p.Lap);
@@ -47,6 +48,8 @@ namespace Tester
                 }
             }
 
+            Console.WriteLine("\n\n\nGap between leader and drivers:");
+
             foreach( var gap in gapsToLeader.GapsByLaps )
             {
                 Console.WriteLine("Lap {0}", gap.Lap);
@@ -56,6 +59,9 @@ namespace Tester
                     Console.WriteLine("   Car {0} - Gap {1}", DriverNameFor(kv.Key), kv.Value);
                 }
             }
+
+            Console.WriteLine("Press any key to continue");
+            Console.ReadLine();
         }
 
         static string DriverNameFor(int index)

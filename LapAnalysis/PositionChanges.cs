@@ -1,9 +1,11 @@
 ﻿using iRacingSDK;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using iRacingReplayOverlay.net.Support;
 
 namespace iRacingReplayOverlay.net.LapAnalysis
 {
@@ -36,7 +38,6 @@ namespace iRacingReplayOverlay.net.LapAnalysis
         {
             if (raceLap != data.Telemetry.RaceLaps)
             {
-                Console.WriteLine("Capturing data for lap {0}", raceLap);
                 numberOfDrivers = data.SessionData.DriverInfo.Drivers.Length;
 
                 raceLap = data.Telemetry.RaceLaps;
@@ -55,13 +56,14 @@ namespace iRacingReplayOverlay.net.LapAnalysis
                 {
                     var lap = laps[i];
 
-                    var previousPositions = new Dictionary<int, int>();
-                    foreach( var pp in laps[i - 1].CarIdxDistance
+                    Trace.WriteLine("On Lap {0}".F(lap.Lap));
+                    
+                    var previousPositions = laps[i - 1].CarIdxDistance
                         .Select((p, idx) => new { CarIdx = idx, Distance = p, Lap = (int)p })
                         .Where(c => c.CarIdx != 0)
                         .OrderByDescending(c => c.Distance)
-                        .Select((c, p) => new { CarIdx = c.CarIdx, Position = p}))
-                        previousPositions.Add(pp.CarIdx, pp.Position);
+                        .Select((c, p) => new { CarIdx = c.CarIdx, Position = p})
+                        .ToDictionary(kv => kv.CarIdx, kv => kv.Position);
 
                     var positions = lap.CarIdxDistance
                         .Select((d, idx) => new { CarIdx = idx, Distance = d, Lap = (int)d })
@@ -75,7 +77,12 @@ namespace iRacingReplayOverlay.net.LapAnalysis
                     {
                         int previousPosition;
                         if (previousPositions.TryGetValue(car.CarIdx, out previousPosition))
-                            delta.Add(new DeltaDetail { CarIdx = car.CarIdx, NewPosition = car.Position, Delta = previousPosition - car.Position });
+                        {
+                            var d = new DeltaDetail { CarIdx = car.CarIdx, NewPosition = car.Position, Delta = previousPosition - car.Position };
+                            delta.Add(d);
+
+                            Trace.WriteLine("  Car {0} has moved {1} positions to be in position {2}".F(d.CarIdx, d.Delta, d.NewPosition));
+                        }
                     }
 
                     lapDeltas.Add(new DeltaLaps { DeltaDetails = delta, Lap = lap.Lap });
