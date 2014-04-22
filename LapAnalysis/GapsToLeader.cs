@@ -57,12 +57,20 @@ namespace iRacingReplayOverlay.net.LapAnalysis
                     if (data.Telemetry.CarIdxLap[i] == raceLaps)
                     {
                         var gap = data.Telemetry.SessionTime - currentleaderTimeStamp;
-                        gapsByCarIndex.Add(i, gap);
+                        if (gapsByCarIndex.ContainsKey(i))
+                            Trace.WriteLine("Driver passed {0} start finished twice - {1}!!".F(i, gap));
+                        else
+                            gapsByCarIndex.Add(i, gap);
 
                         Trace.WriteLine("Driver {0} cross {1} seconds after leader".F(i, gap));
                     }
-                    else
+                    else if( data.Telemetry.CarIdxLap[i] == -1)
+                    {   //Retired
+                        Trace.WriteLine("Driver has retired {0}".F( i));
+                    } else
                     {
+                        Trace.WriteLine("--Adding  {0}".F(data.SessionData.DriverInfo.Drivers[i].UserName));
+
                         gapsByCarIndex.Add(i, data.Telemetry.CarIdxLap[i] - raceLaps);
                         Trace.WriteLine("Driver {0} is {1} laps down".F(i, data.Telemetry.CarIdxLap[i] - raceLaps));
                     }
