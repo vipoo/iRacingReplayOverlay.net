@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "..\iRacingSDK.Net
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDataModels", "..\iRacingSDK.Net\GenerateDataModels\GenerateDataModels.csproj", "{90126FE7-C20E-43EC-93AF-77AA5268E860}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,20 @@ Global
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x64.ActiveCfg = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x86.ActiveCfg = Release|Any CPU
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|x64.ActiveCfg = Debug|x64
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|x64.Build.0 = Debug|x64
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|x86.ActiveCfg = Debug|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|x86.Build.0 = Debug|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Any CPU.ActiveCfg = Release|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|x64.ActiveCfg = Release|x64
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|x64.Build.0 = Release|x64
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|x86.ActiveCfg = Release|x86
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

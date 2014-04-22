@@ -57,6 +57,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LapAnalysis\GapsToLeader.cs" />
     <Compile Include="LeaderBoard.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -83,6 +84,7 @@
     <Compile Include="DllImports\Win32\Hooks.cs" />
     <Compile Include="IRacingCapture.cs" />
     <Compile Include="SourceReaderSampleWithBitmap.cs" />
+    <Compile Include="Support\Extensions.cs" />
     <Compile Include="TimingExtension.cs" />
     <Compile Include="Transcoder.cs" />
     <Compile Include="TimingSample.cs" />

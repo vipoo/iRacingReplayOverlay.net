@@ -1,4 +1,4 @@
-// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayOverlay.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingReplayOverlay.net
@@ -18,17 +18,27 @@
 //
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.net.Support
 {
-    static class GraphicsExtension
+    public static class Extensions
     {
-        public static GraphicRect InRectangle(this Graphics g, int x, int y, int w, int h)
+        public static int IndexOf<T>(this IEnumerable<T> self, Func<T, bool> fn)
         {
-            return new GraphicRect(g, new Rectangle(x, y, w, h));
+            int i = 0;
+            foreach (var e in self)
+            {
+                if (fn(e))
+                    return i;
+
+                i++;
+            }
+
+            return -1;
         }
-    }    
+    }
 }
