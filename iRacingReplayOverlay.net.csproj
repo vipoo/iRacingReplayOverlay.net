@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LapAnalysis\GapsToLeader.cs" />
+    <Compile Include="LapAnalysis\PositionChanges.cs" />
     <Compile Include="LeaderBoard.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
