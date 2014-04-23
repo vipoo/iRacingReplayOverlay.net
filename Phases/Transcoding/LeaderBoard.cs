@@ -16,13 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Drawing;
+using iRacingReplayOverlay.Phases.Capturing;
+using iRacingReplayOverlay.Support;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using iRacingReplayOverlay.Drawing;
-using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {

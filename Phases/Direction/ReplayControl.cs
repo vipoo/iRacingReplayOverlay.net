@@ -16,14 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {

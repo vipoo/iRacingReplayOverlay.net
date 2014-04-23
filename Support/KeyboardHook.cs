@@ -16,13 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using Kernel32;
 using System;
-using Win32;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Diagnostics;
-using Kernel32;
+using Win32;
 
 namespace iRacingReplayOverlay.Support
 {

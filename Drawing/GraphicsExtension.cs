@@ -17,10 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 
 namespace iRacingReplayOverlay.Drawing
 {

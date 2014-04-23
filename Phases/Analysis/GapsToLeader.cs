@@ -17,14 +17,12 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using iRacingReplayOverlay.Support;
 using System.Diagnostics;
+using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Analysis
 {

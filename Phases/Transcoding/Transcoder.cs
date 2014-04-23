@@ -17,12 +17,10 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using MediaFoundation;
-using MediaFoundation.Misc;
 using MediaFoundation.Net;
 using MediaFoundation.Transform;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
