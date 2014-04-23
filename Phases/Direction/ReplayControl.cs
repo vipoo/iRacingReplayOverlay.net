@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using iRacingReplayOverlay.net.Support;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Phases.Direction
 {
     public class ReplayControl
     {
