@@ -43,6 +43,10 @@ namespace Tester
 
         public static void GetInterestingCarsByLap()
         {
+
+            //var anlysis = ReplayControlFactory.Analyse();
+
+
             var gapsToLeader = new GapsToLeader();
             var positionChanges = new PositionChanges();
             var lapsToFrameNumbers = new LapsToFrameNumbers();
@@ -63,11 +67,21 @@ namespace Tester
 
 			var replayControl = ReplayControlFactory.CreateFrom(gapsToLeader, positionChanges, lapsToFrameNumbers);
 
-            
             Console.WriteLine("Press any watch race");
             Console.ReadLine();
 
-            replayControl.DirectReplay();
+            iRacing.Replay.MoveToParadeLap();
+
+            replayControl.Start();
+
+            foreach (var data in iRacing.GetDataFeed()
+                .WithCorrectedPercentages()
+                .AtSpeed(4))
+            {
+                replayControl.Process(data);
+            }
+            
+
 
         }
 

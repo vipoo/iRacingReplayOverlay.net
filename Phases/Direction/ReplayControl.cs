@@ -35,6 +35,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         SessionData sessionData;
         List<CameraDetails> directions = new List<CameraDetails>();
+        int lastFrameNumber;
+        List<CameraDetails>.Enumerator nextCamera;
+        bool isMoreCameraChanges;
 
         public ReplayControl(SessionData sessionData)
         {
@@ -49,32 +52,31 @@ namespace iRacingReplayOverlay.Phases.Direction
             directions.Add(new CameraDetails { FrameNumber = frameNumber, CameraGroupNumber = (short)cameraGroup.GroupNum, CarNumber = (short)car.CarNumber });
         }
 
-        public void DirectReplay()
+        public void Start()
         {
-            var lastFrameNumber = -1;
-            var nextCamera = directions.GetEnumerator();
-            var isMoreCameraChanges = nextCamera.MoveNext();
+            nextCamera = directions.GetEnumerator();
+            lastFrameNumber = -1;
+            isMoreCameraChanges = nextCamera.MoveNext();
+        }
 
-            iRacing.Replay.MoveToParadeLap();
+        public void Process(DataSample data)
+        {
+            if (lastFrameNumber == data.Telemetry.ReplayFrameNum)
+                return;
 
-            foreach (var data in iRacing.GetDataFeed()
-                .WithCorrectedPercentages()
-                .AtSpeed(4))
-            {
-                if (lastFrameNumber != data.Telemetry.ReplayFrameNum)
-                {
-                    lastFrameNumber = data.Telemetry.ReplayFrameNum;
+            if (!isMoreCameraChanges)
+                return;
 
-                    if (isMoreCameraChanges && data.Telemetry.ReplayFrameNum >= nextCamera.Current.FrameNumber)
-                    {
-                        var cameraDetails = nextCamera.Current;
-                        Trace.WriteLine("Changing camera to driver number {0}, using camera number {1}".F(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber));
-                        iRacing.Replay.CameraOnDriver(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber);
+            lastFrameNumber = data.Telemetry.ReplayFrameNum;
 
-                        isMoreCameraChanges = nextCamera.MoveNext();
-                    }
-                }
-            }
+            if (lastFrameNumber < nextCamera.Current.FrameNumber)
+                return;
+
+            var cameraDetails = nextCamera.Current;
+            Trace.WriteLine("Changing camera to driver number {0}, using camera number {1}".F(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber));
+            iRacing.Replay.CameraOnDriver(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber);
+
+            isMoreCameraChanges = nextCamera.MoveNext();
         }
     }
 }
