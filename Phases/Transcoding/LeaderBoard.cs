@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using iRacingReplayOverlay.Drawing;
+using iRacingReplayOverlay.Phases.Capturing;
 
 namespace iRacingReplayOverlay.net
 {

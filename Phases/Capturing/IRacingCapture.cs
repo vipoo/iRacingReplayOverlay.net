@@ -22,7 +22,7 @@ using iRacingSDK;
 using System.IO;
 using System.Linq;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Phases.Capturing
 {
 	class IRacingCaptureWorker : IDisposable
 	{

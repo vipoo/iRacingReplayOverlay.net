@@ -25,6 +25,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using iRacingReplayOverlay.Phases.Capturing;
 
 namespace iRacingReplayOverlay.net
 {

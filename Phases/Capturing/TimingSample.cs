@@ -24,7 +24,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Phases.Capturing
 {
 	public class TimingSample
 	{
