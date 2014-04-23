@@ -7,7 +7,7 @@
     <ProjectGuid>{0E523573-2972-4DC0-AECB-C4CF746854BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>iRacingReplayOverlay.net</RootNamespace>
+    <RootNamespace>IRacingReplayOverlay</RootNamespace>
     <AssemblyName>iRacingReplayOverlay.net</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProductVersion>12.0.0</ProductVersion>
@@ -57,17 +57,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LapAnalysis\GapsToLeader.cs" />
-    <Compile Include="LapAnalysis\LapsToFrameNumbers.cs" />
-    <Compile Include="LapAnalysis\PositionChanges.cs" />
-    <Compile Include="LeaderBoard.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReplayControl.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -79,20 +74,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="OverlayWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StreamInfo.cs" />
-    <Compile Include="KeyboardHook.cs" />
     <Compile Include="DllImports\Kernel32\Dll.cs" />
     <Compile Include="DllImports\Win32\Hooks.cs" />
-    <Compile Include="IRacingCapture.cs" />
-    <Compile Include="SourceReaderSampleWithBitmap.cs" />
     <Compile Include="Support\Extensions.cs" />
-    <Compile Include="TimingExtension.cs" />
-    <Compile Include="Transcoder.cs" />
-    <Compile Include="TimingSample.cs" />
-    <Compile Include="GraphicRect.cs" />
-    <Compile Include="GraphicsExtension.cs" />
+    <Compile Include="Process\Analysis\LapsToFrameNumbers.cs" />
+    <Compile Include="Process\Analysis\GapsToLeader.cs" />
+    <Compile Include="Process\Analysis\PositionChanges.cs" />
+    <Compile Include="Drawing\GraphicRect.cs" />
+    <Compile Include="Drawing\GraphicsExtension.cs" />
+    <Compile Include="Process\Capturing\IRacingCapture.cs" />
+    <Compile Include="Support\KeyboardHook.cs" />
+    <Compile Include="Process\Transcoding\LeaderBoard.cs" />
+    <Compile Include="Process\Transcoding\OverlayWorker.cs" />
+    <Compile Include="Process\Direction\ReplayControl.cs" />
+    <Compile Include="Process\Transcoding\SourceReaderSampleWithBitmap.cs" />
+    <Compile Include="Support\TimingExtension.cs" />
+    <Compile Include="Process\Capturing\TimingSample.cs" />
+    <Compile Include="Process\Transcoding\Transcoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -144,4 +143,12 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Process\" />
+    <Folder Include="Process\Analysis\" />
+    <Folder Include="Process\Capturing\" />
+    <Folder Include="Process\Direction\" />
+    <Folder Include="Process\Transcoding\" />
+    <Folder Include="Drawing\" />
+  </ItemGroup>
 </Project>
