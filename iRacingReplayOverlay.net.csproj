@@ -63,7 +63,11 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Phases\AnalyseRace.cs" />
+    <Compile Include="Phases\CaptureRace.cs" />
     <Compile Include="Phases\Capturing\Capture.cs" />
+    <Compile Include="Phases\IRacingReplay.cs" />
+    <Compile Include="Phases\WhenIRacingStarts.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

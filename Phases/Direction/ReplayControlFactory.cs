@@ -23,7 +23,7 @@ using iRacingSDK;
 using System.Diagnostics;
 using System.Linq;
 
-namespace IRacingReplayOverlay.Phases.Direction
+namespace iRacingReplayOverlay.Phases.Direction
 {
 	public static class ReplayControlFactory
 	{

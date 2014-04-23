@@ -15,37 +15,38 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using iRacingReplayOverlay.Phases.Analysis;
-using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
-using IRacingReplayOverlay.Phases;
 using iRacingSDK;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 
-namespace Tester
+namespace IRacingReplayOverlay.Phases
 {
-    class Program
+    public partial class IRacingReplay
     {
-        static void Main(string[] args)
+        ReplayControl replayControl;
+
+        public void _AnalyseRace(bool? requestAbort)
         {
-            bool? requestAbort = false;
+            var gapsToLeader = new GapsToLeader();
+            var positionChanges = new PositionChanges();
+            var lapsToFrameNumbers = new LapsToFrameNumbers();
 
-            var workingFolder = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+            foreach (var data in iRacing.GetDataFeed()
+                .WithCorrectedPercentages()
+                .AtSpeed(16)
+                .RaceOnly()
+                .TakeWhile(d => d.Telemetry.RaceLaps < 4))
+            {
+                gapsToLeader.Process(data);
+                positionChanges.Process(data);
+                lapsToFrameNumbers.Process(data);
+            }
 
-            new IRacingReplay()
-                .WhenIRacingStarts()
-                .AnalyseRace()
-                .CaptureRace(workingFolder)
-                .CloseIRacing()
-                .OverlayRaceDataOntoVideo(progess => { /*update progress bar */})
-                .InTheForeground();
-
-                //.InTheBackground(ref requestAbort)
+            replayControl = ReplayControlFactory.CreateFrom(gapsToLeader, positionChanges, lapsToFrameNumbers);
         }
     }
 }

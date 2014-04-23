@@ -15,37 +15,40 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+//
 
-using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Phases.Direction;
-using IRacingReplayOverlay.Phases;
 using iRacingSDK;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.ComponentModel;
 using System.Linq;
-using System.Threading;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Tester
+namespace IRacingReplayOverlay.Phases
 {
-    class Program
+    public partial class IRacingReplay
     {
-        static void Main(string[] args)
+        void _CaptureRace(string workingFolder)
         {
-            bool? requestAbort = false;
+            var capture = new Capture();
 
-            var workingFolder = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+            iRacing.Replay.MoveToParadeLap();
 
-            new IRacingReplay()
-                .WhenIRacingStarts()
-                .AnalyseRace()
-                .CaptureRace(workingFolder)
-                .CloseIRacing()
-                .OverlayRaceDataOntoVideo(progess => { /*update progress bar */})
-                .InTheForeground();
+            replayControl.Start();
+            capture.Start(workingFolder);
 
-                //.InTheBackground(ref requestAbort)
+            foreach (var data in iRacing.GetDataFeed()
+                .WithCorrectedPercentages()
+                .AtSpeed(4)
+                .TakeWhile(d => d.Telemetry.RaceLaps < 4))
+            {
+                replayControl.Process(data);
+                capture.Process(data);
+            }
+
+            capture.Stop();
         }
     }
 }
