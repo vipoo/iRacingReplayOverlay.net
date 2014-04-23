@@ -58,21 +58,11 @@ namespace iRacingReplayOverlay.Phases.Analysis
             }
             else if (lastIncident.CarIdx != i.CarIdx)
             {
-                Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
-                    lastIncident.CarIdx, lastIncident.LapNumber,
-                    TimeSpan.FromSeconds(lastIncident.StartSessionTime), 
-                    TimeSpan.FromSeconds(lastIncident.EndSessionTime)));
-                incidents.Add(lastIncident);
-                lastIncident = i;
+                AddLastIncident(i);
             }
             else if(lastIncident.EndSessionTime + 15.0 < i.StartSessionTime)
             {
-                Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
-                    lastIncident.CarIdx, lastIncident.LapNumber,
-                    TimeSpan.FromSeconds(lastIncident.StartSessionTime),
-                    TimeSpan.FromSeconds(lastIncident.EndSessionTime)));
-                incidents.Add(lastIncident);
-                lastIncident = i;
+                AddLastIncident(i);
             }
             else
             {
@@ -92,6 +82,16 @@ namespace iRacingReplayOverlay.Phases.Analysis
                     TimeSpan.FromSeconds(lastIncident.EndSessionTime)));
                 incidents.Add(lastIncident);
             }
+        }
+        
+        void AddLastIncident(Incident i)
+        {
+            Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
+                lastIncident.CarIdx, lastIncident.LapNumber,
+                TimeSpan.FromSeconds(lastIncident.StartSessionTime),
+                TimeSpan.FromSeconds(lastIncident.EndSessionTime)));
+            incidents.Add(lastIncident);
+            lastIncident = i;
         }
 
         public IEnumerator<Incidents.Incident> GetEnumerator()

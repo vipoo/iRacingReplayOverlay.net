@@ -34,15 +34,16 @@ namespace iRacingReplayOverlay.Phases.Analysis
             public Dictionary<int, double> GapsByCarIndex;
         }
 
-        int numberOfDrivers;
-        int currentRaceLap;
-        int[] lastLaps = new int[64];
-        Dictionary<int, GapsByLap> gapsOnLaps = new Dictionary<int, GapsByLap>();
-        GapsByLap gapsForCurrentLap;
         DataSample data;
+        int numberOfDrivers;
+        Dictionary<int, GapsByLap> gapsOnLaps = new Dictionary<int, GapsByLap>();
+
+        int currentRaceLap;
         double currentleaderTimeStamp;
         int currentLeader;
-
+        int[] lastLaps = new int[64];
+        Dictionary<int, double> currentGapsByCarIndex;
+ 
         public void Process(DataSample data)
         {
             this.data = data;
@@ -50,7 +51,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
 
             ProcessNewLeaderLap();
 
-            ProcessFollowers(gapsForCurrentLap.GapsByCarIndex);
+            ProcessFollowers();
         }
 
         public IEnumerator<GapsToLeader.GapsByLap> GetEnumerator()
@@ -66,43 +67,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
             }
         }
 
-        private void ProcessFollowers(Dictionary<int, double> gapsByCarIndex)
-        {
-            for (int i = 1; i < numberOfDrivers; i++)
-            {
-                if (i == currentLeader)
-                    continue;
-
-                if (lastLaps[i] != data.Telemetry.CarIdxLap[i])
-                {
-                    if (data.Telemetry.CarIdxLap[i] == currentRaceLap)
-                    {
-                        var gap = data.Telemetry.SessionTime - currentleaderTimeStamp;
-                        if (gapsByCarIndex.ContainsKey(i))
-                            Trace.WriteLine("Driver passed {0} start finished twice - {1}!!".F(i, gap));
-                        else
-                            gapsByCarIndex.Add(i, gap);
-
-                        Trace.WriteLine("Driver {0} cross {1} seconds after leader".F(i, gap));
-                    }
-                    else if( data.Telemetry.CarIdxLap[i] == -1)
-                    {   //Retired
-                        Trace.WriteLine("Driver {0} has retired".F(i));
-                    } 
-                    else
-                    {
-                        Trace.WriteLine("--Adding  {0}".F(data.SessionData.DriverInfo.Drivers[i].UserName));
-
-                        gapsByCarIndex.Add(i, data.Telemetry.CarIdxLap[i] - currentRaceLap);
-                        Trace.WriteLine("Driver {0} is {1} laps down".F(i, data.Telemetry.CarIdxLap[i] - currentRaceLap));
-                    }
-                }
-
-                lastLaps[i] = data.Telemetry.CarIdxLap[i];
-            }
-        }
-
-        private void ProcessNewLeaderLap()
+        void ProcessNewLeaderLap()
         {
             if (currentRaceLap == data.Telemetry.RaceLaps)
                 return;
@@ -120,15 +85,16 @@ namespace iRacingReplayOverlay.Phases.Analysis
 
             currentleaderTimeStamp = data.Telemetry.SessionTime;
 
-            gapsForCurrentLap = new GapsByLap { Lap = currentRaceLap, GapsByCarIndex = new Dictionary<int, double>() };
-            gapsOnLaps.Add(currentRaceLap, gapsForCurrentLap);
+            currentGapsByCarIndex = new Dictionary<int, double>();
+            gapsOnLaps.Add(currentRaceLap, new GapsByLap { Lap = currentRaceLap, GapsByCarIndex = currentGapsByCarIndex });
+
             Trace.WriteLine("Leader {0} crossed line at {1}".F(currentLeader, currentleaderTimeStamp));
 
             if (currentRaceLap == 1)
                 ProcessStartingGrid();
         }
 
-        private void ProcessStartingGrid()
+        void ProcessStartingGrid()
         {
             foreach (var startingPosition in data.Telemetry
                 .CarIdxLapDistPct
@@ -137,10 +103,50 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 .OrderByDescending(l => l.Pct))
             {
                 lastLaps[startingPosition.CarIdx] = 1;
-                gapsForCurrentLap.GapsByCarIndex.Add(startingPosition.CarIdx, 0);
+                currentGapsByCarIndex.Add(startingPosition.CarIdx, 0);
 
                 Trace.WriteLine("Driver {0} starting behind leader".F(startingPosition.CarIdx));
             }
+        }
+
+        void ProcessFollowers()
+        {
+            for (int i = 1; i < numberOfDrivers; i++)
+            {
+                if (i == currentLeader)
+                    continue;
+
+                if (lastLaps[i] == data.Telemetry.CarIdxLap[i])
+                    continue;
+
+                if (data.Telemetry.CarIdxLap[i] == -1)
+                    Trace.WriteLine("Driver {0} has retired".F(i));
+
+                else if (data.Telemetry.CarIdxLap[i] == currentRaceLap)
+                    CaptureTimeToLeader(i);
+
+                else
+                    CaptureLapsToLeader(i);
+
+                lastLaps[i] = data.Telemetry.CarIdxLap[i];
+            }
+        }
+
+        void CaptureTimeToLeader(int i)
+        {
+            var gap = data.Telemetry.SessionTime - currentleaderTimeStamp;
+            if (currentGapsByCarIndex.ContainsKey(i))
+                Trace.WriteLine("Driver passed {0} start finished twice - {1}!!".F(i, gap));
+            else
+                currentGapsByCarIndex.Add(i, gap);
+
+            Trace.WriteLine("Driver {0} cross {1} seconds after leader".F(i, gap));
+        }
+
+        void CaptureLapsToLeader(int i)
+        {
+            currentGapsByCarIndex.Add(i, data.Telemetry.CarIdxLap[i] - currentRaceLap);
+            Trace.WriteLine("Driver {0} is {1} laps down".F(i, data.Telemetry.CarIdxLap[i] - currentRaceLap));
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -149,4 +155,3 @@ namespace iRacingReplayOverlay.Phases.Analysis
         }
     }
 }
-

@@ -35,6 +35,7 @@ namespace IRacingReplayOverlay.Phases
             var incidents = new Incidents();
             foreach( var data in iRacing.GetDataFeed().RaceIncidents() )
                 incidents.Process(data);
+            incidents.Stop();
 
             var gapsToLeader = new GapsToLeader();
             var positionChanges = new PositionChanges();

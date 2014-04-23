@@ -22,33 +22,32 @@ using System.Collections.Generic;
 
 namespace iRacingReplayOverlay.Phases.Analysis
 {
-    public struct LapToFrameNum
+    public class LapsToFrameNumbers : IEnumerable<LapsToFrameNumbers.LapToFrameNum>
     {
-        public LapToFrameNum(int lapNumber, int frameNumber, double sessionTime)
+        public struct LapToFrameNum
         {
-            this.sessionTime = sessionTime;
-            this.LapNumber = lapNumber;
-            this.FrameNumber = frameNumber;
+            public LapToFrameNum(int lapNumber, int frameNumber, double sessionTime)
+            {
+                this.sessionTime = sessionTime;
+                this.LapNumber = lapNumber;
+                this.FrameNumber = frameNumber;
+            }
+
+            public readonly int LapNumber;
+            public readonly int FrameNumber;
+            public readonly double sessionTime;
         }
 
-        public readonly int LapNumber;
-        public readonly int FrameNumber;
-        public readonly double sessionTime;
-    }
-
-    public class LapsToFrameNumbers : IEnumerable<LapToFrameNum>
-    {
         Dictionary<int, LapToFrameNum> frameNumberByLap = new Dictionary<int, LapToFrameNum>();
         int lastRaceLaps = -1;
 
         public void Process(DataSample data)
         {
-            if (lastRaceLaps != data.Telemetry.RaceLaps)
-            {
-                lastRaceLaps = data.Telemetry.RaceLaps;
+            if (lastRaceLaps == data.Telemetry.RaceLaps)
+                return;
 
-                frameNumberByLap.Add(lastRaceLaps, new LapToFrameNum(lastRaceLaps, data.Telemetry.ReplayFrameNum, data.Telemetry.SessionTime));
-            }
+            lastRaceLaps = data.Telemetry.RaceLaps;
+            frameNumberByLap.Add(lastRaceLaps, new LapToFrameNum(lastRaceLaps, data.Telemetry.ReplayFrameNum, data.Telemetry.SessionTime));
         }
 
         public LapToFrameNum this[int lapNumber]

@@ -27,7 +27,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
 {
     public class PositionChanges : IEnumerable<PositionChanges.DeltaLaps>
     {
-        class InterestingLaps
+        class CarDistances
         {
             public int Lap;
             public float[] CarIdxDistance;
@@ -47,66 +47,20 @@ namespace iRacingReplayOverlay.Phases.Analysis
         }
 
         int raceLap = 0;
-        List<InterestingLaps> laps = new List<InterestingLaps>();
+        List<CarDistances> carDistances = new List<CarDistances>();
         int numberOfDrivers;
+        Dictionary<int, DeltaLaps> deltaLaps;
 
         public void Process(DataSample data)
         {
-            if (raceLap != data.Telemetry.RaceLaps)
-            {
-                numberOfDrivers = data.SessionData.DriverInfo.Drivers.Length;
-
-                raceLap = data.Telemetry.RaceLaps;
-
-                laps.Add(new InterestingLaps { Lap = raceLap, CarIdxDistance = data.Telemetry.CarIdxDistance });
-            }
-        }
-
-        Dictionary<int, DeltaLaps> deltaLaps;
-
-        void BuildListOfDeltaLaps()
-        {
-            if( deltaLaps != null)
+            if (raceLap == data.Telemetry.RaceLaps)
                 return;
+            
+            numberOfDrivers = data.SessionData.DriverInfo.Drivers.Length;
 
-            deltaLaps = new Dictionary<int, DeltaLaps>();
+            raceLap = data.Telemetry.RaceLaps;
 
-            for (int i = 1; i < laps.Count; i++)
-            {
-                var lap = laps[i];
-
-                Trace.WriteLine("On Lap {0}".F(lap.Lap));
-                    
-                var previousPositions = laps[i - 1].CarIdxDistance
-                    .Select((p, idx) => new { CarIdx = idx, Distance = p, Lap = (int)p })
-                    .Where(c => c.CarIdx != 0)
-                    .OrderByDescending(c => c.Distance)
-                    .Select((c, p) => new { CarIdx = c.CarIdx, Position = p})
-                    .ToDictionary(kv => kv.CarIdx, kv => kv.Position);
-
-                var positions = lap.CarIdxDistance
-                    .Select((d, idx) => new { CarIdx = idx, Distance = d, Lap = (int)d })
-                    .Where(c => c.CarIdx != 0)
-                    .OrderByDescending(c => c.Distance)
-                    .Select((c, p) => new { CarIdx = c.CarIdx, Position = p });
-
-                var delta = new List<DeltaDetail>();
-
-                foreach (var car in positions)
-                {
-                    int previousPosition;
-                    if (previousPositions.TryGetValue(car.CarIdx, out previousPosition))
-                    {
-                        var d = new DeltaDetail { CarIdx = car.CarIdx, NewPosition = car.Position, Delta = previousPosition - car.Position };
-                        delta.Add(d);
-
-                        Trace.WriteLine("  Car {0} has moved {1} positions to be in position {2}".F(d.CarIdx, d.Delta, d.NewPosition));
-                    }
-                }
-
-                deltaLaps.Add(lap.Lap, new DeltaLaps { DeltaDetails = delta, Lap = lap.Lap });
-            }
-
+            carDistances.Add(new CarDistances { Lap = raceLap, CarIdxDistance = data.Telemetry.CarIdxDistance });
         }
 
         public DeltaLaps this[int lapNumber]
@@ -117,10 +71,54 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 return deltaLaps[lapNumber];    
             }
         }
+
         public IEnumerator<PositionChanges.DeltaLaps> GetEnumerator()
         {
             BuildListOfDeltaLaps();
             return deltaLaps.Values.GetEnumerator();
+        }
+
+        void BuildListOfDeltaLaps()
+        {
+            if (deltaLaps != null)
+                return;
+
+            deltaLaps = new Dictionary<int, DeltaLaps>();
+
+            for (int i = 1; i < carDistances.Count; i++)
+                CalculatePositionChanges(carDistances[i-1], carDistances[i]);
+        }
+
+        private void CalculatePositionChanges(CarDistances previousLap, CarDistances lap)
+        {
+            var previousPositions = previousLap.CarIdxDistance
+                .Select((p, idx) => new { CarIdx = idx, Distance = p, Lap = (int)p })
+                .Where(c => c.CarIdx != 0)
+                .OrderByDescending(c => c.Distance)
+                .Select((c, p) => new { CarIdx = c.CarIdx, Position = p })
+                .ToDictionary(kv => kv.CarIdx, kv => kv.Position);
+
+            var positions = lap.CarIdxDistance
+                .Select((d, idx) => new { CarIdx = idx, Distance = d, Lap = (int)d })
+                .Where(c => c.CarIdx != 0)
+                .OrderByDescending(c => c.Distance)
+                .Select((c, p) => new { CarIdx = c.CarIdx, Position = p });
+
+            var delta = new List<DeltaDetail>();
+
+            foreach (var car in positions)
+            {
+                int previousPosition;
+                if (previousPositions.TryGetValue(car.CarIdx, out previousPosition))
+                {
+                    var d = new DeltaDetail { CarIdx = car.CarIdx, NewPosition = car.Position, Delta = previousPosition - car.Position };
+                    delta.Add(d);
+
+                    Trace.WriteLine("Car {0} has moved {1} positions to be in position {2}".F(d.CarIdx, d.Delta, d.NewPosition));
+                }
+            }
+
+            deltaLaps.Add(lap.Lap, new DeltaLaps { DeltaDetails = delta, Lap = lap.Lap });
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
