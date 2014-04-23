@@ -53,28 +53,25 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             var lastFrameNumber = -1;
             var nextCamera = directions.GetEnumerator();
-            nextCamera.MoveNext();
+            var isMoreCameraChanges = nextCamera.MoveNext();
 
             iRacing.Replay.MoveToParadeLap();
 
-            iRacing.Replay.CameraOnPositon(1, 13, 0);
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(4)
-                .TakeWhile(d => d.Telemetry.RaceLaps < 7))
+                .AtSpeed(4))
             {
                 if (lastFrameNumber != data.Telemetry.ReplayFrameNum)
                 {
                     lastFrameNumber = data.Telemetry.ReplayFrameNum;
 
-                    if (data.Telemetry.ReplayFrameNum >= nextCamera.Current.FrameNumber)
+                    if (isMoreCameraChanges && data.Telemetry.ReplayFrameNum >= nextCamera.Current.FrameNumber)
                     {
                         var cameraDetails = nextCamera.Current;
-                        if (nextCamera.MoveNext())
-                        {
-                            Trace.WriteLine("Changing camera to driver number {0}, using camera number {1}".F(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber));
-                            iRacing.Replay.CameraOnDriver(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber);
-                        }
+                        Trace.WriteLine("Changing camera to driver number {0}, using camera number {1}".F(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber));
+                        iRacing.Replay.CameraOnDriver(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber);
+
+                        isMoreCameraChanges = nextCamera.MoveNext();
                     }
                 }
             }

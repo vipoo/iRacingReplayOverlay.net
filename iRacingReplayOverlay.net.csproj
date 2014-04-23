@@ -92,6 +92,7 @@
     <Compile Include="Phases\Transcoding\SourceReaderSampleWithBitmap.cs" />
     <Compile Include="Phases\Capturing\TimingSample.cs" />
     <Compile Include="Phases\Transcoding\Transcoder.cs" />
+    <Compile Include="Phases\Direction\ReplayControlFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

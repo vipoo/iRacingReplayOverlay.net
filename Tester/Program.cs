@@ -18,6 +18,7 @@
 
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Direction;
+using IRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,6 @@ using System.Linq;
 
 namespace Tester
 {
-
     class Program
     {
         static DataSample sampleData;
@@ -51,7 +51,7 @@ namespace Tester
                 .WithCorrectedPercentages()
                 .AtSpeed(16)
                 .RaceOnly()
-                .TakeWhile( d => d.Telemetry.RaceLaps < 7))
+                .TakeWhile( d => d.Telemetry.RaceLaps < 4))
             {
                 if( sampleData == null )
                     sampleData = data;
@@ -61,33 +61,9 @@ namespace Tester
                 lapsToFrameNumbers.Process(data);
             }
 
-            var result = new Dictionary<int, int>(); //frameNum, CarIdx
+			var replayControl = ReplayControlFactory.CreateFrom(gapsToLeader, positionChanges, lapsToFrameNumbers);
 
-            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
-
-            foreach (var lap in lapsToFrameNumbers.Skip(1))
-            {
-                var change = positionChanges[lap.LapNumber].DeltaDetails.FirstOrDefault(d => d.Delta > 0);
-                if( change != null )
-                {
-                    Console.WriteLine("Watching {0} overtake on lap {1}", DriverNameFor(change.CarIdx), lap.LapNumber);
-
-                    var frameNumber = lapsToFrameNumbers[lap.LapNumber - 1];
-                    replayControl.AddCarChange(frameNumber, change.CarIdx, "TV1");
-                }
-                else
-                {
-                    var gaps = gapsToLeader[lap.LapNumber];
-                    var carIdx = gaps.GapsByCarIndex.OrderBy(g => g.Value).First().Key;
-
-                    var frameNumber = lapsToFrameNumbers[lap.LapNumber - 1];
-
-                    replayControl.AddCarChange(frameNumber, change.CarIdx, "TV1"); 
-
-                    Console.WriteLine("Watching {0} on lap {1}", DriverNameFor(carIdx), lap.LapNumber);
-                }
-            }
-
+            
             Console.WriteLine("Press any watch race");
             Console.ReadLine();
 
