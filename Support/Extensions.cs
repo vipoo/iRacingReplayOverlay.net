@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace iRacingReplayOverlay.net.Support
+namespace iRacingReplayOverlay.Support
 {
     public static class Extensions
     {

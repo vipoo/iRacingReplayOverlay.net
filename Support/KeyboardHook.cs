@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using Kernel32;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Support
 {
 	public delegate void KeyReleasedEvent(Keys keyCode);
 

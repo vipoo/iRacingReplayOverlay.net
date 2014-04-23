@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using System.Linq;
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
+using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay.net
 {

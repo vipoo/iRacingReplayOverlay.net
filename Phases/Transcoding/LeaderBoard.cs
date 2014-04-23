@@ -22,7 +22,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using iRacingReplayOverlay.Drawing;
 using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.net;
+using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {

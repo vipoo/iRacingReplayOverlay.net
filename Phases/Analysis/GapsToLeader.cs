@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using iRacingReplayOverlay.net.Support;
+using iRacingReplayOverlay.Support;
 using System.Diagnostics;
 
 namespace iRacingReplayOverlay.Phases.Analysis
