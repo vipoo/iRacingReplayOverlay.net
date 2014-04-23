@@ -45,12 +45,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\TimingSample.cs">
-      <Link>TimingSample.cs</Link>
-    </Compile>
-    <Compile Include="..\TimingExtension.cs">
-      <Link>TimingExtension.cs</Link>
-    </Compile>
     <Compile Include="..\Drawing\GraphicRect.cs">
       <Link>GraphicRect.cs</Link>
     </Compile>
@@ -59,6 +53,12 @@
     </Compile>
     <Compile Include="..\Process\Transcoding\LeaderBoard.cs">
       <Link>LeaderBoard.cs</Link>
+    </Compile>
+    <Compile Include="..\Support\TimingExtension.cs">
+      <Link>TimingExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Process\Capturing\TimingSample.cs">
+      <Link>TimingSample.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
