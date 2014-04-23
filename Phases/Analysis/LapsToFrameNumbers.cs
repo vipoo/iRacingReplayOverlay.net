@@ -24,14 +24,16 @@ namespace iRacingReplayOverlay.Phases.Analysis
 {
     public struct LapToFrameNum
     {
-        public LapToFrameNum(int lapNumber, int frameNumber)
+        public LapToFrameNum(int lapNumber, int frameNumber, double sessionTime)
         {
+            this.sessionTime = sessionTime;
             this.LapNumber = lapNumber;
             this.FrameNumber = frameNumber;
         }
 
         public readonly int LapNumber;
         public readonly int FrameNumber;
+        public readonly double sessionTime;
     }
 
     public class LapsToFrameNumbers : IEnumerable<LapToFrameNum>
@@ -45,17 +47,18 @@ namespace iRacingReplayOverlay.Phases.Analysis
             {
                 lastRaceLaps = data.Telemetry.RaceLaps;
 
-                frameNumberByLap.Add(lastRaceLaps, new LapToFrameNum(lastRaceLaps, data.Telemetry.ReplayFrameNum));
+                frameNumberByLap.Add(lastRaceLaps, new LapToFrameNum(lastRaceLaps, data.Telemetry.ReplayFrameNum, data.Telemetry.SessionTime));
             }
         }
 
-        public int this[int lapNumber]
+        public LapToFrameNum this[int lapNumber]
         {
             get
             {
-                return frameNumberByLap[lapNumber].FrameNumber ;
+                return frameNumberByLap[lapNumber];
             }
         }
+
         public IEnumerator<LapToFrameNum> GetEnumerator()
         {
             return frameNumberByLap.Values.GetEnumerator();

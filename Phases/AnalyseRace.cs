@@ -22,6 +22,7 @@ using iRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
 using System;
 using System.Linq;
+using System.Threading;
 
 namespace IRacingReplayOverlay.Phases
 {
@@ -31,6 +32,10 @@ namespace IRacingReplayOverlay.Phases
 
         public void _AnalyseRace(bool? requestAbort)
         {
+            var incidents = new Incidents();
+            foreach( var data in iRacing.GetDataFeed().RaceIncidents() )
+                incidents.Process(data);
+
             var gapsToLeader = new GapsToLeader();
             var positionChanges = new PositionChanges();
             var lapsToFrameNumbers = new LapsToFrameNumbers();
@@ -46,7 +51,7 @@ namespace IRacingReplayOverlay.Phases
                 lapsToFrameNumbers.Process(data);
             }
 
-            replayControl = ReplayControlFactory.CreateFrom(gapsToLeader, positionChanges, lapsToFrameNumbers);
+            replayControl = ReplayControlFactory.CreateFrom(incidents, gapsToLeader, positionChanges, lapsToFrameNumbers);
         }
     }
 }

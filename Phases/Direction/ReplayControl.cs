@@ -18,6 +18,7 @@
 
 using iRacingReplayOverlay.Support;
 using iRacingSDK;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -28,14 +29,15 @@ namespace iRacingReplayOverlay.Phases.Direction
     {
         class CameraDetails
         {
-            public int FrameNumber;
+            public double SessionTime;
             public short CarNumber;
             public short CameraGroupNumber;
+            public bool isOverride = false;
         }
 
         SessionData sessionData;
         List<CameraDetails> directions = new List<CameraDetails>();
-        int lastFrameNumber;
+        double lastSessionTime;
         List<CameraDetails>.Enumerator nextCamera;
         bool isMoreCameraChanges;
 
@@ -44,36 +46,55 @@ namespace iRacingReplayOverlay.Phases.Direction
             this.sessionData = sessionData;
         }
 
-        public void AddCarChange(int frameNumber, int carIdx, string cameraGroupName)
+        public void AddCarChange(double sessionTime, int carIdx, string cameraGroupName)
         {
             var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName == cameraGroupName);
             var car = sessionData.DriverInfo.Drivers.First(d => d.CarIdx == carIdx);
 
-            directions.Add(new CameraDetails { FrameNumber = frameNumber, CameraGroupNumber = (short)cameraGroup.GroupNum, CarNumber = (short)car.CarNumber });
+            directions.Add(new CameraDetails { SessionTime = sessionTime, CameraGroupNumber = (short)cameraGroup.GroupNum, CarNumber = (short)car.CarNumber });
+        }
+
+        public void AddShortCarChange(double startTime, double endTime, int carIdx, string cameraGroupName)
+        {
+            var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName == cameraGroupName);
+            var car = sessionData.DriverInfo.Drivers.First(d => d.CarIdx == carIdx);
+
+            var directionJustBefore = directions.Where(d => !d.isOverride).OrderByDescending(d => d.SessionTime).First(d => d.SessionTime <= endTime);
+
+            directions.RemoveAll(d => !d.isOverride && d.SessionTime >= startTime && d.SessionTime <= endTime);
+
+            directions.Add(new CameraDetails { SessionTime = startTime, CarNumber = (short)car.CarNumber, CameraGroupNumber = (short)cameraGroup.GroupNum, isOverride = true });
+            directions.Add(new CameraDetails { SessionTime = endTime, CarNumber = directionJustBefore.CarNumber, CameraGroupNumber = directionJustBefore.CameraGroupNumber, isOverride = true});
         }
 
         public void Start()
         {
+            lastSessionTime = -1;
+
+            directions = directions.OrderBy(d => d.SessionTime).ToList();
             nextCamera = directions.GetEnumerator();
-            lastFrameNumber = -1;
             isMoreCameraChanges = nextCamera.MoveNext();
         }
 
         public void Process(DataSample data)
         {
-            if (lastFrameNumber == data.Telemetry.ReplayFrameNum)
+            if (lastSessionTime == data.Telemetry.SessionTime)
                 return;
+
+            Console.WriteLine("Time is {0}", TimeSpan.FromSeconds(data.Telemetry.SessionTime));
 
             if (!isMoreCameraChanges)
                 return;
 
-            lastFrameNumber = data.Telemetry.ReplayFrameNum;
+            lastSessionTime = data.Telemetry.SessionTime;
 
-            if (lastFrameNumber < nextCamera.Current.FrameNumber)
+            if (lastSessionTime < nextCamera.Current.SessionTime)
                 return;
 
             var cameraDetails = nextCamera.Current;
-            Trace.WriteLine("Changing camera to driver number {0}, using camera number {1}".F(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber));
+            Trace.WriteLine("SesionTime: {0}".F(TimeSpan.FromSeconds(nextCamera.Current.SessionTime)));
+
+            Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastSessionTime), cameraDetails.CarNumber, cameraDetails.CameraGroupNumber));
             iRacing.Replay.CameraOnDriver(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber);
 
             isMoreCameraChanges = nextCamera.MoveNext();

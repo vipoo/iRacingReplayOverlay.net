@@ -64,6 +64,7 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="Phases\AnalyseRace.cs" />
+    <Compile Include="Phases\Analysis\Incident.cs" />
     <Compile Include="Phases\CaptureRace.cs" />
     <Compile Include="Phases\Capturing\Capture.cs" />
     <Compile Include="Phases\IRacingReplay.cs" />

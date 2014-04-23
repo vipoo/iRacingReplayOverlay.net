@@ -27,12 +27,12 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
 	public static class ReplayControlFactory
 	{
-        public static ReplayControl CreateFrom(GapsToLeader gapsToLeader, PositionChanges positionChanges, LapsToFrameNumbers lapsToFrameNumbers)
+        public static ReplayControl CreateFrom(Incidents incidents, GapsToLeader gapsToLeader, PositionChanges positionChanges, LapsToFrameNumbers lapsToFrameNumbers)
         {
             var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
 
             var firstCarIdx = positionChanges.First().DeltaDetails.First().CarIdx;
-            replayControl.AddCarChange(lapsToFrameNumbers[1], firstCarIdx, "TV3");
+            replayControl.AddCarChange(lapsToFrameNumbers[1].sessionTime, firstCarIdx, "TV3");
             foreach (var lap in lapsToFrameNumbers.Skip(2))
             {
                 var change = positionChanges[lap.LapNumber].DeltaDetails.FirstOrDefault(d => d.Delta > 0);
@@ -41,7 +41,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     Trace.WriteLine("Switching to {0} for overtake on lap {1}".F( change.CarIdx, lap.LapNumber));
 
                     var frameNumber = lapsToFrameNumbers[lap.LapNumber - 1];
-                    replayControl.AddCarChange(frameNumber, change.CarIdx, "TV1");
+                    replayControl.AddCarChange(frameNumber.sessionTime, change.CarIdx, "TV1");
                 }
                 else
                 {
@@ -50,11 +50,14 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                     var frameNumber = lapsToFrameNumbers[lap.LapNumber - 1];
 
-                    replayControl.AddCarChange(frameNumber, change.CarIdx, "TV1");
+                    replayControl.AddCarChange(frameNumber.sessionTime, change.CarIdx, "TV1");
 
                     Trace.WriteLine("Switching to {0} on lap {1}".F( carIdx, lap.LapNumber));
                 }
             }
+
+            foreach (var ic in incidents)
+                replayControl.AddShortCarChange(ic.StartSessionTime, ic.EndSessionTime, ic.CarIdx, "TV2");
 
             return replayControl;
         }
