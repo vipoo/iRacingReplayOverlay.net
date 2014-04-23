@@ -44,7 +44,7 @@ namespace IRacingReplayOverlay.Phases
                 .WithCorrectedPercentages()
                 .AtSpeed(16)
                 .RaceOnly()
-                .TakeWhile(d => d.Telemetry.RaceLaps < 4))
+                .TakeWhile(d => d.Telemetry.RaceLaps < 10))
             {
                 gapsToLeader.Process(data);
                 positionChanges.Process(data);

@@ -33,6 +33,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             public short CarNumber;
             public short CameraGroupNumber;
             public bool isOverride = false;
+            public string Reason;
         }
 
         SessionData sessionData;
@@ -46,15 +47,16 @@ namespace iRacingReplayOverlay.Phases.Direction
             this.sessionData = sessionData;
         }
 
-        public void AddCarChange(double sessionTime, int carIdx, string cameraGroupName)
+        public void AddCarChange(double sessionTime, int carIdx, string cameraGroupName, string reason)
         {
             var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName == cameraGroupName);
             var car = sessionData.DriverInfo.Drivers.First(d => d.CarIdx == carIdx);
 
-            directions.Add(new CameraDetails { SessionTime = sessionTime, CameraGroupNumber = (short)cameraGroup.GroupNum, CarNumber = (short)car.CarNumber });
+            directions.Add(new CameraDetails { SessionTime = sessionTime, CameraGroupNumber = (short)cameraGroup.GroupNum, CarNumber = (short)car.CarNumber,
+            Reason = reason});
         }
 
-        public void AddShortCarChange(double startTime, double endTime, int carIdx, string cameraGroupName)
+        public void AddShortCarChange(double startTime, double endTime, int carIdx, string cameraGroupName, string reason)
         {
             var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName == cameraGroupName);
             var car = sessionData.DriverInfo.Drivers.First(d => d.CarIdx == carIdx);
@@ -63,8 +65,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             directions.RemoveAll(d => !d.isOverride && d.SessionTime >= startTime && d.SessionTime <= endTime);
 
-            directions.Add(new CameraDetails { SessionTime = startTime, CarNumber = (short)car.CarNumber, CameraGroupNumber = (short)cameraGroup.GroupNum, isOverride = true });
-            directions.Add(new CameraDetails { SessionTime = endTime, CarNumber = directionJustBefore.CarNumber, CameraGroupNumber = directionJustBefore.CameraGroupNumber, isOverride = true});
+            directions.Add(new CameraDetails { SessionTime = startTime, CarNumber = (short)car.CarNumber, CameraGroupNumber = (short)cameraGroup.GroupNum, isOverride = true, Reason = reason });
+            directions.Add(new CameraDetails { SessionTime = endTime, CarNumber = directionJustBefore.CarNumber, CameraGroupNumber = directionJustBefore.CameraGroupNumber, isOverride = true, Reason = directionJustBefore.Reason });
         }
 
         public void Start()
@@ -81,8 +83,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (lastSessionTime == data.Telemetry.SessionTime)
                 return;
 
-            Console.WriteLine("Time is {0}", TimeSpan.FromSeconds(data.Telemetry.SessionTime));
-
             if (!isMoreCameraChanges)
                 return;
 
@@ -92,9 +92,8 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return;
 
             var cameraDetails = nextCamera.Current;
-            Trace.WriteLine("SesionTime: {0}".F(TimeSpan.FromSeconds(nextCamera.Current.SessionTime)));
 
-            Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastSessionTime), cameraDetails.CarNumber, cameraDetails.CameraGroupNumber));
+            Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} because {3}".F(TimeSpan.FromSeconds(lastSessionTime), cameraDetails.CarNumber, cameraDetails.CameraGroupNumber, cameraDetails.Reason));
             iRacing.Replay.CameraOnDriver(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber);
 
             isMoreCameraChanges = nextCamera.MoveNext();

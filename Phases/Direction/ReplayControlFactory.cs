@@ -32,7 +32,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
 
             var firstCarIdx = positionChanges.First().DeltaDetails.First().CarIdx;
-            replayControl.AddCarChange(lapsToFrameNumbers[1].sessionTime, firstCarIdx, "TV3");
+            replayControl.AddCarChange(lapsToFrameNumbers[1].sessionTime, firstCarIdx, "TV3", "is leader");
             foreach (var lap in lapsToFrameNumbers.Skip(2))
             {
                 var change = positionChanges[lap.LapNumber].DeltaDetails.FirstOrDefault(d => d.Delta > 0);
@@ -41,7 +41,8 @@ namespace iRacingReplayOverlay.Phases.Direction
                     Trace.WriteLine("Switching to {0} for overtake on lap {1}".F( change.CarIdx, lap.LapNumber));
 
                     var frameNumber = lapsToFrameNumbers[lap.LapNumber - 1];
-                    replayControl.AddCarChange(frameNumber.sessionTime, change.CarIdx, "TV1");
+                    var camera = (new System.Random().Next() % 2) == 1 ? "TV1" : "TV2";
+                    replayControl.AddCarChange(frameNumber.sessionTime, change.CarIdx, camera, "is overtaking");
                 }
                 else
                 {
@@ -50,14 +51,16 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                     var frameNumber = lapsToFrameNumbers[lap.LapNumber - 1];
 
-                    replayControl.AddCarChange(frameNumber.sessionTime, change.CarIdx, "TV1");
+                    var camera = (new System.Random().Next() % 2) == 1 ? "Nose" : "Rollbar";
+
+                    replayControl.AddCarChange(frameNumber.sessionTime, carIdx, camera, "is close");
 
                     Trace.WriteLine("Switching to {0} on lap {1}".F( carIdx, lap.LapNumber));
                 }
             }
 
             foreach (var ic in incidents)
-                replayControl.AddShortCarChange(ic.StartSessionTime, ic.EndSessionTime, ic.CarIdx, "TV2");
+                replayControl.AddShortCarChange(ic.StartSessionTime, ic.EndSessionTime, ic.CarIdx, "TV2", "incident");
 
             return replayControl;
         }

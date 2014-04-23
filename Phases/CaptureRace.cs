@@ -41,8 +41,8 @@ namespace IRacingReplayOverlay.Phases
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(2)
-                .TakeWhile(d => d.Telemetry.RaceLaps < 4))
+                .AtSpeed(1)
+                .TakeWhile(d => d.Telemetry.RaceLaps < 10))
             {
                 replayControl.Process(data);
                 capture.Process(data);
