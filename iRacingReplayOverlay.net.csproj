@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LapAnalysis\GapsToLeader.cs" />
+    <Compile Include="LapAnalysis\LapsToFrameNumbers.cs" />
     <Compile Include="LapAnalysis\PositionChanges.cs" />
     <Compile Include="LeaderBoard.cs" />
     <Compile Include="Main.cs">
@@ -66,6 +67,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="ReplayControl.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

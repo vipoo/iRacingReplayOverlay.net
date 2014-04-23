@@ -1,4 +1,23 @@
-﻿using iRacingSDK;
+﻿// This file is part of iRacingReplayOverlay.
+//
+// Copyright 2014 Dean Netherton
+// https://github.com/vipoo/iRacingReplayOverlay.net
+//
+// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+using iRacingSDK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +28,7 @@ using System.Diagnostics;
 
 namespace iRacingReplayOverlay.net.LapAnalysis
 {
-    public class GapsToLeader
+    public class GapsToLeader : IEnumerable<GapsToLeader.GapsByLap>
     {
         public class GapsByLap
         {
@@ -22,16 +41,11 @@ namespace iRacingReplayOverlay.net.LapAnalysis
         double currentleaderTimeStamp;
         int[] lastLaps = new int[64];
 
-        List<GapsByLap> gapsOnLaps = new List<GapsByLap>();
+        Dictionary<int, GapsByLap> gapsOnLaps = new Dictionary<int, GapsByLap>();
         GapsByLap gapsForCurrentLap;
         private int numberOfDrivers;
         private int raceLaps;
         private DataSample data;
-
-        public List<GapsByLap> GapsByLaps
-        {
-            get { return gapsOnLaps; }
-        }
 
         public void Process(DataSample data)
         {
@@ -43,6 +57,20 @@ namespace iRacingReplayOverlay.net.LapAnalysis
                 lastRaceLaps = ProcessNewLeaderLap();
 
             ProcessFollowers(gapsForCurrentLap.GapsByCarIndex);
+        }
+
+
+        public IEnumerator<GapsToLeader.GapsByLap> GetEnumerator()
+        {
+            return gapsOnLaps.Values.GetEnumerator();
+        }
+
+        public GapsByLap this[int lapNumber]
+        {
+            get
+            {
+                return gapsOnLaps[lapNumber];
+            }
         }
 
         private void ProcessFollowers(Dictionary<int, double> gapsByCarIndex)
@@ -94,7 +122,7 @@ namespace iRacingReplayOverlay.net.LapAnalysis
             currentleaderTimeStamp = data.Telemetry.SessionTime;
 
             gapsForCurrentLap = new GapsByLap { Lap = raceLaps, GapsByCarIndex = new Dictionary<int, double>() };
-            gapsOnLaps.Add(gapsForCurrentLap);
+            gapsOnLaps.Add(raceLaps, gapsForCurrentLap);
             Trace.WriteLine("Leader {0} crossed line at {1}".F(currentLeader, currentleaderTimeStamp));
 
             if (raceLaps == 1)
@@ -116,6 +144,11 @@ namespace iRacingReplayOverlay.net.LapAnalysis
 
                 Trace.WriteLine("Driver {0} starting behind leader".F(startingPosition.CarIdx));
             }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
     }
 }
