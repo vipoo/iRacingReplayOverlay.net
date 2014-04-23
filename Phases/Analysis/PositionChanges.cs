@@ -26,7 +26,7 @@ using System.Text;
 using System.Threading.Tasks;
 using iRacingReplayOverlay.net.Support;
 
-namespace iRacingReplayOverlay.net.LapAnalysis
+namespace iRacingReplayOverlay.Phases.Analysis
 {
     public class PositionChanges : IEnumerable<PositionChanges.DeltaLaps>
     {

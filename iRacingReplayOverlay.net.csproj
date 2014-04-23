@@ -78,20 +78,20 @@
     <Compile Include="DllImports\Kernel32\Dll.cs" />
     <Compile Include="DllImports\Win32\Hooks.cs" />
     <Compile Include="Support\Extensions.cs" />
-    <Compile Include="Process\Analysis\LapsToFrameNumbers.cs" />
-    <Compile Include="Process\Analysis\GapsToLeader.cs" />
-    <Compile Include="Process\Analysis\PositionChanges.cs" />
     <Compile Include="Drawing\GraphicRect.cs" />
     <Compile Include="Drawing\GraphicsExtension.cs" />
-    <Compile Include="Process\Capturing\IRacingCapture.cs" />
     <Compile Include="Support\KeyboardHook.cs" />
-    <Compile Include="Process\Transcoding\LeaderBoard.cs" />
-    <Compile Include="Process\Transcoding\OverlayWorker.cs" />
-    <Compile Include="Process\Direction\ReplayControl.cs" />
-    <Compile Include="Process\Transcoding\SourceReaderSampleWithBitmap.cs" />
     <Compile Include="Support\TimingExtension.cs" />
-    <Compile Include="Process\Capturing\TimingSample.cs" />
-    <Compile Include="Process\Transcoding\Transcoder.cs" />
+    <Compile Include="Phases\Analysis\LapsToFrameNumbers.cs" />
+    <Compile Include="Phases\Analysis\GapsToLeader.cs" />
+    <Compile Include="Phases\Analysis\PositionChanges.cs" />
+    <Compile Include="Phases\Capturing\IRacingCapture.cs" />
+    <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
+    <Compile Include="Phases\Transcoding\OverlayWorker.cs" />
+    <Compile Include="Phases\Direction\ReplayControl.cs" />
+    <Compile Include="Phases\Transcoding\SourceReaderSampleWithBitmap.cs" />
+    <Compile Include="Phases\Capturing\TimingSample.cs" />
+    <Compile Include="Phases\Transcoding\Transcoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -144,11 +144,11 @@
   </ProjectExtensions>
   <ItemGroup />
   <ItemGroup>
-    <Folder Include="Process\" />
-    <Folder Include="Process\Analysis\" />
-    <Folder Include="Process\Capturing\" />
-    <Folder Include="Process\Direction\" />
-    <Folder Include="Process\Transcoding\" />
     <Folder Include="Drawing\" />
+    <Folder Include="Phases\" />
+    <Folder Include="Phases\Analysis\" />
+    <Folder Include="Phases\Capturing\" />
+    <Folder Include="Phases\Direction\" />
+    <Folder Include="Phases\Transcoding\" />
   </ItemGroup>
 </Project>

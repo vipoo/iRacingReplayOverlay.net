@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 using iRacingReplayOverlay.net.Support;
 using System.Diagnostics;
 
-namespace iRacingReplayOverlay.net.LapAnalysis
+namespace iRacingReplayOverlay.Phases.Analysis
 {
     public class GapsToLeader : IEnumerable<GapsToLeader.GapsByLap>
     {

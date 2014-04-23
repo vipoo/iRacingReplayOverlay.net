@@ -24,7 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace iRacingReplayOverlay.net.LapAnalysis
+namespace iRacingReplayOverlay.Phases.Analysis
 {
     public struct LapToFrameNum
     {
