@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace iRacingReplayOverlay.net {
+namespace iRacingReplayOverlay {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

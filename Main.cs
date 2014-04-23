@@ -26,7 +26,7 @@ using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay
 {
     public partial class Main : Form
     {

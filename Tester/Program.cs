@@ -1,5 +1,4 @@
-﻿using iRacingReplayOverlay.net;
-using iRacingReplayOverlay.Phases.Analysis;
+﻿using iRacingReplayOverlay.Phases.Analysis;
 using iRacingSDK;
 using System;
 using System.Collections.Generic;

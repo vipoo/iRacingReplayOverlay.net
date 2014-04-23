@@ -51,13 +51,13 @@
     <Compile Include="..\Drawing\GraphicsExtension.cs">
       <Link>GraphicsExtension.cs</Link>
     </Compile>
-    <Compile Include="..\Process\Transcoding\LeaderBoard.cs">
-      <Link>LeaderBoard.cs</Link>
-    </Compile>
     <Compile Include="..\Support\TimingExtension.cs">
       <Link>TimingExtension.cs</Link>
     </Compile>
-    <Compile Include="..\Process\Capturing\TimingSample.cs">
+    <Compile Include="..\Phases\Transcoding\LeaderBoard.cs">
+      <Link>LeaderBoard.cs</Link>
+    </Compile>
+    <Compile Include="..\Phases\Capturing\TimingSample.cs">
       <Link>TimingSample.cs</Link>
     </Compile>
   </ItemGroup>

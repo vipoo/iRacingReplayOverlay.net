@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay
 {
     static class Program
     {
