@@ -17,12 +17,15 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Phases.Analysis;
+using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
 using IRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Tester
 {
@@ -67,22 +70,31 @@ namespace Tester
 
 			var replayControl = ReplayControlFactory.CreateFrom(gapsToLeader, positionChanges, lapsToFrameNumbers);
 
-            Console.WriteLine("Press any watch race");
-            Console.ReadLine();
+            var capture = new Capture();
 
             iRacing.Replay.MoveToParadeLap();
 
             replayControl.Start();
+            var workingFolder = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+            capture.Start(workingFolder);
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(4))
+                .AtSpeed(4)
+                .TakeWhile( d => d.Telemetry.RaceLaps < 4))
             {
                 replayControl.Process(data);
+                capture.Process(data);
             }
-            
 
+            //Simulate video capture
+            if (File.Exists(workingFolder + @"\simulate.mp4"))
+                File.Delete(workingFolder + @"\simulate.mp4");
+            Thread.Sleep(500);
+            File.WriteAllText(workingFolder + @"\simulate.mp4", "File representing a captured video stream");
+            Thread.Sleep(500);
 
+            capture.Stop();
         }
 
         static string DriverNameFor(int index)

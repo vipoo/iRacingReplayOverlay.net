@@ -63,6 +63,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Phases\Capturing\Capture.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -144,12 +145,5 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Drawing\" />
-    <Folder Include="Phases\" />
-    <Folder Include="Phases\Analysis\" />
-    <Folder Include="Phases\Capturing\" />
-    <Folder Include="Phases\Direction\" />
-    <Folder Include="Phases\Transcoding\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
