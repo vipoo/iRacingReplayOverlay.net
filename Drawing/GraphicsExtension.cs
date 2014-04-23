@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Drawing
 {
     static class GraphicsExtension
     {

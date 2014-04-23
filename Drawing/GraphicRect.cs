@@ -25,7 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Drawing
 {
 	public class GraphicRect
     {
