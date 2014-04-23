@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Phases.Transcoding
 {
     class Transcoder
     {

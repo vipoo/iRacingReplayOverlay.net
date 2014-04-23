@@ -27,7 +27,7 @@ using System.Linq;
 using System.Threading;
 using iRacingReplayOverlay.Phases.Capturing;
 
-namespace iRacingReplayOverlay.net
+namespace iRacingReplayOverlay.Phases.Transcoding
 {
 	public class OverlayWorker
     {
