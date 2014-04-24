@@ -45,6 +45,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
 				graphic = Graphics.FromImage(bitmap);
 
+                graphic.ScaleTransform((float)size.Width / 1920.0f, (float)size.Height / 1080.0f);
+
 				return graphic;
             }
         }
