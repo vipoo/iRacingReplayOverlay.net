@@ -20,6 +20,7 @@ using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
 using IRacingReplayOverlay.Phases;
+using IRacingReplayOverlay.Video;
 using MediaFoundation.Net;
 using System;
 using System.IO;
@@ -31,7 +32,6 @@ namespace iRacingReplayOverlay
 {
     public partial class Main : Form
     {
-//		IRacingCaptureWorker iRacingCaptureWorker;
         OverlayWorker overlayWorker;
         System.Windows.Forms.Timer aTimer;
         int guessedProgessedAmount;
@@ -215,33 +215,10 @@ namespace iRacingReplayOverlay
 
             try
             {
-                using (MFSystem.Start())
-                {
-                    var readWriteFactory = new ReadWriteClassFactory();
+                var details = VideoAttributes.For(sourceVideoTextBox.Text);
 
-                    var sourceReader = readWriteFactory.CreateSourceReaderFromURL(sourceVideoTextBox.Text, null);
-
-                    var audioStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
-
-                    var channels = audioStream.NativeMediaType.AudioNumberOfChannels;
-                    var sampleRate = audioStream.NativeMediaType.AudioSamplesPerSecond;
-
-                    var types = MFSystem.TranscodeGetAudioOutputAvailableTypes(MediaFoundation.MFMediaType.WMAudioV9, MediaFoundation.Transform.MFT_EnumFlag.All);
-
-                    foreach (var bitRate in types
-                        .Where(t => t.AudioNumberOfChannels == channels && t.AudioSamplesPerSecond == sampleRate)
-                        .Select(t => t.AudioAverageBytesPerSecond)
-                        .Distinct()
-                        .OrderBy(t => t))
-                    {
-                        audioBitRate.Items.Add(bitRate * 8);
-                    }
-
-                    audioStream.NativeMediaType.Dispose();
-                    readWriteFactory.Dispose();
-                    sourceReader.Dispose();
-                    types.Dispose();
-                }
+                foreach (var d in details.SupportedAudioBitRates)
+                    audioBitRate.Items.Add(d);
 
                 audioBitRate.SelectedItem = Settings.Default.audioBitRate;
             }
