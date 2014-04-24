@@ -48,8 +48,8 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 LapNumber = data.Telemetry.RaceLaps, 
                 CarIdx = data.Telemetry.CamCarIdx, 
                 StartFrameNumber = data.Telemetry.ReplayFrameNum,
-                StartSessionTime = data.Telemetry.SessionTime - 1,
-                EndSessionTime = data.Telemetry.SessionTime + 6
+                StartSessionTime = data.Telemetry.SessionTime - 4,
+                EndSessionTime = data.Telemetry.SessionTime + 7
             };
 
             if( lastIncident == null )

@@ -32,18 +32,14 @@ namespace IRacingReplayOverlay.Phases
 
         public void _AnalyseRace(bool? requestAbort)
         {
-            var incidents = new Incidents();
-            foreach( var data in iRacing.GetDataFeed().RaceIncidents() )
-                incidents.Process(data);
-            incidents.Stop();
-
             var gapsToLeader = new GapsToLeader();
             var positionChanges = new PositionChanges();
             var lapsToFrameNumbers = new LapsToFrameNumbers();
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(16)
+                .AtSpeed(16, d => d.Telemetry.SessionState != SessionState.Racing)
+                .AtSpeed(16, d => d.Telemetry.SessionState == SessionState.Racing)
                 .RaceOnly()
                 .TakeWhile(d => d.Telemetry.RaceLaps < 10))
             {
@@ -51,6 +47,12 @@ namespace IRacingReplayOverlay.Phases
                 positionChanges.Process(data);
                 lapsToFrameNumbers.Process(data);
             }
+
+
+            var incidents = new Incidents();
+            //foreach (var data in iRacing.GetDataFeed().RaceIncidents())
+            //    incidents.Process(data);
+            //incidents.Stop();
 
             replayControl = ReplayControlFactory.CreateFrom(incidents, gapsToLeader, positionChanges, lapsToFrameNumbers);
         }

@@ -20,6 +20,7 @@ using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Direction;
 using iRacingReplayOverlay.Support;
 using iRacingSDK;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -33,10 +34,16 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var firstCarIdx = positionChanges.First().DeltaDetails.First().CarIdx;
             replayControl.AddCarChange(lapsToFrameNumbers[1].sessionTime, firstCarIdx, "TV3", "is leader");
+
+            foreach(var gaps in gapsToLeader)
+            {
+                replayControl.AddCarChange(gaps.TimeStamp, gaps.CarIdx, "TV2", "close by {0}".F(gaps.Gap));
+            }
+            /*
             foreach (var lap in lapsToFrameNumbers.Skip(2))
             {
                 var change = positionChanges[lap.LapNumber].DeltaDetails.FirstOrDefault(d => d.Delta > 0);
-                if (change != null)
+                if (false) //(change != null)
                 {
                     Trace.WriteLine("Switching to {0} for overtake on lap {1}".F( change.CarIdx, lap.LapNumber));
 
@@ -46,21 +53,21 @@ namespace iRacingReplayOverlay.Phases.Direction
                 }
                 else
                 {
-                    var gaps = gapsToLeader[lap.LapNumber];
-                    var carIdx = gaps.GapsByCarIndex.OrderBy(g => g.Value).First().Key;
+                    var gaps = gapsToLeader[LapSector.ForLap(lap.LapNumber)];
+                    var carIdx = gaps.GapsByCarIndex.OrderBy(g => g.Value).Skip(1).First().Key;
 
                     var frameNumber = lapsToFrameNumbers[lap.LapNumber - 1];
 
-                    var camera = (new System.Random().Next() % 2) == 1 ? "Nose" : "Rollbar";
+                    var camera = (new System.Random().Next() % 2) == 1 ? "Nose" : "Roll Bar";
 
-                    replayControl.AddCarChange(frameNumber.sessionTime, carIdx, camera, "is close");
+                    replayControl.AddCarChange(frameNumber.sessionTime, carIdx, "TV1", "is close");
 
                     Trace.WriteLine("Switching to {0} on lap {1}".F( carIdx, lap.LapNumber));
                 }
             }
-
-            foreach (var ic in incidents)
-                replayControl.AddShortCarChange(ic.StartSessionTime, ic.EndSessionTime, ic.CarIdx, "TV2", "incident");
+            */
+            //foreach (var ic in incidents)
+            //    replayControl.AddShortCarChange(ic.StartSessionTime, ic.EndSessionTime, ic.CarIdx, "TV2", "incident");
 
             return replayControl;
         }
