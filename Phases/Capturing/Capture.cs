@@ -32,12 +32,14 @@ namespace iRacingReplayOverlay.Phases.Capturing
     {
         string tempFileName;
         StreamWriter file;
-        FileSystemWatcher fileWatcher;
+        FileSystemWatcher[] fileWatchers;
         string latestCreatedVideoFile;
         DateTime startTime;
+        string workingFolder;
 
         public void Start(string workingFolder)
         {
+            this.workingFolder = workingFolder;
             tempFileName = Path.GetTempFileName();
             Trace.WriteLine("Creating temp file for game data {0}".F(tempFileName));
             file = File.CreateText(tempFileName);
@@ -46,10 +48,15 @@ namespace iRacingReplayOverlay.Phases.Capturing
             TimingSample.WriteCSVHeader(file);
 
             latestCreatedVideoFile = null;
-            fileWatcher = new FileSystemWatcher(workingFolder, "*.mp4");
-            fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime;
-            fileWatcher.Created += OnCreated;
-            fileWatcher.EnableRaisingEvents = true;
+            fileWatchers = new FileSystemWatcher[2];
+            fileWatchers[0] = new FileSystemWatcher(workingFolder, "*.mp4");
+            fileWatchers[1] = new FileSystemWatcher(workingFolder, "*.avi");
+            foreach(var fileWatcher in fileWatchers)
+            {
+                fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime;
+                fileWatcher.Created += OnCreated;
+                fileWatcher.EnableRaisingEvents = true;
+            }
         }
 
         public void Process(DataSample data)
@@ -57,14 +64,37 @@ namespace iRacingReplayOverlay.Phases.Capturing
             WriteNewLeaderBoardRow(data);
         }
 
-        public void Stop()
+        public void Stop(out string latestCreatedVideoFile, out string errors)
         {
+            errors = null;
+            latestCreatedVideoFile = this.latestCreatedVideoFile;
+
             file.Close();
 
             if (latestCreatedVideoFile != null)
                 File.Move(tempFileName, Path.ChangeExtension(latestCreatedVideoFile, ".csv"));
             else
-                Trace.WriteLine("Unable to copy race data file - as no mp4 video file detected during capturing.", "Critical");
+            {
+                Trace.WriteLine("No mp4/avi video file was detected during capturing.", "Critical");
+                errors = "No mp4/avi video file was detected during capturing -- Assuming last created file";
+                var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
+                    .Select(fn => new { FileName = fn, CreationTime = File.GetCreationTime(fn) })
+                    .OrderByDescending(f => f.CreationTime)
+                    .FirstOrDefault();
+
+                if (guessedFileName != null)
+                {
+                    latestCreatedVideoFile = guessedFileName.FileName;
+
+                    if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".csv")))
+                    {
+                        File.Move(tempFileName, Path.ChangeExtension(latestCreatedVideoFile, ".csv"));
+                        return;
+                    }
+                }
+             
+                errors = "Unable to find captured video file in " + workingFolder;
+            }
         }
 
         void WriteNewLeaderBoardRow( DataSample data)

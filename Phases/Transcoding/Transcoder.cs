@@ -93,7 +93,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 streamMapping.Add(sourceStream, sinkStream);
 
                 var mediaType = isAudio
-                    ? new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.Float }
+                    ? new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM }
                     : new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
 
                 sourceStream.CurrentMediaType = mediaType;

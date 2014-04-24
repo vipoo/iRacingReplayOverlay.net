@@ -38,9 +38,9 @@ namespace Tester
             var workingFolder = Path.GetDirectoryName(typeof(Program).Assembly.Location);
 
             new IRacingReplay()
-                .WhenIRacingStarts()
-                .AnalyseRace()
-                .CaptureRace(workingFolder)
+                .WhenIRacingStarts(() => { })
+                .AnalyseRace(() => { })
+                .CaptureRace(workingFolder, (f, e) => { } )
                 .CloseIRacing()
                 .OverlayRaceDataOntoVideo(progess => { /*update progress bar */})
                 .InTheForeground();

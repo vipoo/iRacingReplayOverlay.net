@@ -37,9 +37,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 				if(graphic != null)
 					return graphic;
 
+                var size = sample.Stream.CurrentMediaType.FrameSize;
+
 				buffer = sample.Sample.ConvertToContiguousBuffer();
 				data = buffer.Lock();
-				bitmap = new Bitmap(1920, 1080, 1920 * 4, System.Drawing.Imaging.PixelFormat.Format32bppRgb, data.Buffer);
+				bitmap = new Bitmap(size.Width, size.Height, size.Width * 4, System.Drawing.Imaging.PixelFormat.Format32bppRgb, data.Buffer);
 
 				graphic = Graphics.FromImage(bitmap);
 

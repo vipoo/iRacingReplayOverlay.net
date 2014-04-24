@@ -57,6 +57,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DllImports\Win32\Messages.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,7 +92,6 @@
     <Compile Include="Phases\Analysis\LapsToFrameNumbers.cs" />
     <Compile Include="Phases\Analysis\GapsToLeader.cs" />
     <Compile Include="Phases\Analysis\PositionChanges.cs" />
-    <Compile Include="Phases\Capturing\IRacingCapture.cs" />
     <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
     <Compile Include="Phases\Transcoding\OverlayWorker.cs" />
     <Compile Include="Phases\Direction\ReplayControl.cs" />

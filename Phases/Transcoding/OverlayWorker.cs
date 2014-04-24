@@ -128,6 +128,5 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             Cancel();
         }
-
     }
 }

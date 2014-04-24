@@ -18,21 +18,25 @@
 //
 
 using iRacingSDK;
+using System;
 using System.Linq;
+using System.Threading;
 
 namespace IRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
-        public void _WhenIRacingStarts(bool? requestAbort)
+        public void _WhenIRacingStarts(Action onComplete)
         {
             foreach (var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
             {
-                if (requestAbort.Value)
+                if (requestAbort)
                     return;
 
                 continue;
             }
+
+            onComplete();
         }
     }
 }

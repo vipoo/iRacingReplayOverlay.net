@@ -24,31 +24,53 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
-        void _CaptureRace(string workingFolder)
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+        const int KEYEVENTF_KEYUP = 0x02;
+        const byte VK_MENU = 0x12;
+        const byte VK_F9 = 0x78;
+
+        void _CaptureRace(string workingFolder, Action<string, string> onComplete)
         {
             var capture = new Capture();
 
-            iRacing.Replay.MoveToParadeLap();
+            iRacing.Replay.MoveToFrame(raceStartFrameNumber);
+            iRacing.Replay.SetSpeed(1);
+            Thread.Sleep(1000);
+            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(500);
+            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
 
             replayControl.Start();
             capture.Start(workingFolder);
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(1)
-                .TakeWhile(d => d.Telemetry.RaceLaps < 10))
+                .AtSpeed(4)
+                .TakeWhile(d => d.Telemetry.RaceLaps < 4))
             {
                 replayControl.Process(data);
                 capture.Process(data);
             }
 
-            capture.Stop();
+            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(500);
+            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+
+            string errorMessage;
+            string fileName;
+            capture.Stop(out fileName, out errorMessage);
+
+            onComplete(fileName, errorMessage);
         }
     }
 }

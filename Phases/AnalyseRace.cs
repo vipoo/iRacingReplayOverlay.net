@@ -29,9 +29,14 @@ namespace IRacingReplayOverlay.Phases
     public partial class IRacingReplay
     {
         ReplayControl replayControl;
+        int raceStartFrameNumber = 0;
 
-        public void _AnalyseRace(bool? requestAbort)
+        public void _AnalyseRace(Action onComplete)
         {
+            var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
+            Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_SHOWNORMAL);
+            Thread.Sleep(2000);
+
             var gapsToLeader = new GapsToLeader();
             var positionChanges = new PositionChanges();
             var lapsToFrameNumbers = new LapsToFrameNumbers();
@@ -41,20 +46,27 @@ namespace IRacingReplayOverlay.Phases
                 .AtSpeed(16, d => d.Telemetry.SessionState != SessionState.Racing)
                 .AtSpeed(16, d => d.Telemetry.SessionState == SessionState.Racing)
                 .RaceOnly()
-                .TakeWhile(d => d.Telemetry.RaceLaps < 10))
+                .TakeWhile(d => d.Telemetry.RaceLaps < 3))
             {
+
+                if (raceStartFrameNumber == 0 && data.Telemetry.SessionState == SessionState.Racing)
+                {
+                    raceStartFrameNumber = data.Telemetry.ReplayFrameNum - (60*20);
+                }
+
                 gapsToLeader.Process(data);
                 positionChanges.Process(data);
                 lapsToFrameNumbers.Process(data);
             }
-
-
+            
             var incidents = new Incidents();
             //foreach (var data in iRacing.GetDataFeed().RaceIncidents())
             //    incidents.Process(data);
             //incidents.Stop();
 
             replayControl = ReplayControlFactory.CreateFrom(incidents, gapsToLeader, positionChanges, lapsToFrameNumbers);
+
+            onComplete();
         }
     }
 }

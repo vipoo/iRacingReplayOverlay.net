@@ -19,24 +19,28 @@
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
+using IRacingReplayOverlay.Phases;
 using MediaFoundation.Net;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
     public partial class Main : Form
     {
-		KeyboardHook keyboardHook;
-		IRacingCaptureWorker iRacingCaptureWorker;
+//		IRacingCaptureWorker iRacingCaptureWorker;
         OverlayWorker overlayWorker;
         System.Windows.Forms.Timer aTimer;
         int guessedProgessedAmount;
         const int GuessFinalizationRequiredSeconds = 25;
         System.Windows.Forms.Timer fileWatchTimer;
-        
+
+        int videoBitRateNumber = 15;
+        IRacingReplay iRacingProcess;
+
         enum States {Idle, CapturingGameData, Transcoding};
         States _states = States.Idle;
 
@@ -98,12 +102,6 @@ namespace iRacingReplayOverlay
 
         private void Main_Load(object sender, EventArgs e)
         {
-            keyboardHook = new KeyboardHook();
-            keyboardHook.KeyReleased += GlobalKeyPressed;
-            keyboardHook.Start();
-
-            iRacingCaptureWorker = new IRacingCaptureWorker();
-            iRacingCaptureWorker.NewVideoFileFound += NewVideoFileFound;
             overlayWorker = new OverlayWorker();
             overlayWorker.Progress += OnTranscoderProgress;
             overlayWorker.Completed += OnTranscoderCompleted;
@@ -120,27 +118,15 @@ namespace iRacingReplayOverlay
 
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
             videoBitRate.Text = Settings.Default.videoBitRate.ToString();
+
+            iRacingProcess = new IRacingReplay()
+                .WhenIRacingStarts(() => { BeginProcessButton.Enabled = true; ProcessErrorMessageLabel.Visible = false; WaitingForIRacingLabel.Visible = false; })
+                .InTheBackground(() => { });
         }
 
         void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            keyboardHook.Dispose();
-            iRacingCaptureWorker.Dispose();
             overlayWorker.Dispose();
-        }
-
-//Game Capture
-
-        void GlobalKeyPressed(Keys keyCode)
-        {
-            if (State == States.Transcoding)
-                return;
-
-            if (keyCode != Keys.F9)
-                return;
-
-            captureLabel.Visible = captureLight.Visible = iRacingCaptureWorker.Toogle(workingFolderTextBox.Text);
-            State = captureLight.Visible ? States.CapturingGameData : States.Idle;
         }
 
         void workingFolderButton_Click(object sender, EventArgs e)
@@ -155,12 +141,10 @@ namespace iRacingReplayOverlay
             }
         }
 
-//Transcoding
-
         void sourceVideoButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
-            fbd.Filter = "Mpeg 4|*.mp4|All files (*.*)|*.*";
+            fbd.Filter = "Mpeg 4|*.mp4|AVI Files|*.avi|All files (*.*)|*.*";
             fbd.FileName = sourceVideoTextBox.Text;
 
             if (fbd.ShowDialog() == DialogResult.OK)
@@ -176,6 +160,10 @@ namespace iRacingReplayOverlay
             var destinationFile = Path.ChangeExtension(sourceVideoTextBox.Text, "wmv");
             var sourceGameData = Path.ChangeExtension(sourceVideoTextBox.Text, "csv");
             overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameData, videoBitRateNumber * 1000000, (int)audioBitRate.SelectedItem/8);
+
+            //iRacingProcess
+            //    .OverlayRaceDataOntoVideo(progess => { /*update progress bar */})
+             //   .InTheBackground(() => { });
         }
 
         void OnTranscoderReadFramesCompleted()
@@ -208,22 +196,33 @@ namespace iRacingReplayOverlay
             State = States.Idle;
         }
 
+        System.Windows.Forms.Timer lookForAudioBitRates;
+
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
         {
+            if (lookForAudioBitRates != null )
+            {
+                lookForAudioBitRates.Stop();
+                lookForAudioBitRates.Dispose();
+                lookForAudioBitRates = null;
+            }
+
             OnGameDataFileChanged();
             audioBitRate.Items.Clear();
 
             if (!File.Exists(sourceVideoTextBox.Text))
                 return;
 
-            using( MFSystem.Start())
+            try
             {
+                using (MFSystem.Start())
+                {
                     var readWriteFactory = new ReadWriteClassFactory();
 
                     var sourceReader = readWriteFactory.CreateSourceReaderFromURL(sourceVideoTextBox.Text, null);
-                    
+
                     var audioStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
-                    
+
                     var channels = audioStream.NativeMediaType.AudioNumberOfChannels;
                     var sampleRate = audioStream.NativeMediaType.AudioSamplesPerSecond;
 
@@ -242,14 +241,17 @@ namespace iRacingReplayOverlay
                     readWriteFactory.Dispose();
                     sourceReader.Dispose();
                     types.Dispose();
+                }
+
+                audioBitRate.SelectedItem = Settings.Default.audioBitRate;
             }
-
-            audioBitRate.SelectedItem = Settings.Default.audioBitRate;
-        }
-
-        void NewVideoFileFound(string latestVideoFileName)
-        {
-            this.sourceVideoTextBox.Text = latestVideoFileName;
+            catch(Exception)
+            {
+                lookForAudioBitRates = new System.Windows.Forms.Timer();
+                lookForAudioBitRates.Tick += sourceVideoTextBox_TextChanged;
+                lookForAudioBitRates.Interval = 1000;
+                lookForAudioBitRates.Start();
+            }
         }
 
         bool IsReadyForTranscoding()
@@ -269,22 +271,6 @@ namespace iRacingReplayOverlay
                 transcodeVideoButton.Enabled = IsReadyForTranscoding();
         }
 
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-                    }
-
-        int videoBitRateNumber = 15;
-
         private void videoBitRate_TextChanged(object sender, EventArgs e)
         {
             if(int.TryParse(videoBitRate.Text, out videoBitRateNumber))
@@ -292,6 +278,26 @@ namespace iRacingReplayOverlay
                 Settings.Default.videoBitRate = videoBitRateNumber;
                 Settings.Default.Save();
             }
+        }
+
+        private void BeginProcessButton_Click(object sender, EventArgs e)
+        {
+            BeginProcessButton.Enabled = false;
+            AnalysingRaceLabel.Visible = true;
+            State = States.CapturingGameData;
+
+            iRacingProcess
+                .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
+                .CaptureRace(workingFolderTextBox.Text, (videoFileName, errorMessage) => 
+                {
+                    ProcessErrorMessageLabel.Text = errorMessage;
+                    ProcessErrorMessageLabel.Visible = errorMessage != null;
+                    CapturingRaceLabel.Visible = false;
+                    sourceVideoTextBox.Text = videoFileName;
+                    State = States.Idle;
+                })
+                .CloseIRacing()
+                .InTheBackground(() => BeginProcessButton.Enabled = true);
         }
     }
 }

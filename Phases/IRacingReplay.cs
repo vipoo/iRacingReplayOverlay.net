@@ -23,31 +23,54 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IRacingReplayOverlay.Phases
 {
+    public static class SynchronizationContextExtension
+    {
+        public static void Post(this SynchronizationContext self, Action action)
+        {
+            self.Post((ignored) => action(), null);
+        }
+    }
+
     public partial class IRacingReplay
     {
-        List<Action<bool?>> actions = new List<Action<bool?>>();
+        List<Action> actions = new List<Action>();
 
-        public IRacingReplay WhenIRacingStarts()
+        private void Add(Action<Action> action, Action onComplete)
         {
-            actions.Add(_WhenIRacingStarts);
+            var context = SynchronizationContext.Current;
+
+            actions.Add(() => action(() => context.Post(onComplete)));
+        }
+
+        private void Add(Action<Action<string, string>> action, Action<string, string> onComplete)
+        {
+            var context = SynchronizationContext.Current;
+
+            actions.Add(() => action((a, b) => context.Post(() => onComplete(a, b))));
+        }
+
+        public IRacingReplay WhenIRacingStarts(Action onComplete)
+        {
+            Add(_WhenIRacingStarts, onComplete);
 
             return this;
         }
 
-        public IRacingReplay AnalyseRace()
+        public IRacingReplay AnalyseRace(Action onComplete)
         {
-            actions.Add(_AnalyseRace);
+            Add(_AnalyseRace,  onComplete);
             
             return this;
         }
 
-        public IRacingReplay CaptureRace(string workingFolder)
+        public IRacingReplay CaptureRace(string workingFolder, Action<string, string> onComplete)
         {
-            actions.Add(ra => _CaptureRace(workingFolder));
+            Add((a) => _CaptureRace(workingFolder, a), onComplete);
 
             return this;
         }
@@ -65,21 +88,44 @@ namespace IRacingReplayOverlay.Phases
         public void InTheForeground()
         {
             foreach (var action in actions)
-                action(false);
+                action();
         }
 
-        public void InTheBackground(bool? requestAbort)
+        bool requestAbort = false;
+        Task backgrounTask = null;
+
+        public void RequestAbort()
         {
-            var t = new Task(() => {
+
+        }
+
+        public IRacingReplay InTheBackground(Action onComplete)
+        {
+            var context = SynchronizationContext.Current;
             
-                foreach( var action in actions)
+            backgrounTask = new Task(() => {
+
+                try
                 {
-                    action(requestAbort);
-                    if( requestAbort.Value)
-                        return;
+                    foreach (var action in actions)
+                    {
+                        action();
+                        if (requestAbort)
+                            return;
+                    }
+                }
+                finally
+                {
+                    context.Post(onComplete);
+                    backgrounTask = null;
+                    actions = new List<Action>();
                 }
 
             });
+
+            backgrounTask.Start();
+
+            return this;
         }
     }
 }
