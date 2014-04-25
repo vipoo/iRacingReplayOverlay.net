@@ -17,9 +17,9 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Support;
+using IRacingReplayOverlay;
 using iRacingSDK;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -27,78 +27,100 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class ReplayControl
     {
-        class CameraDetails
-        {
-            public double SessionTime;
-            public short CarNumber;
-            public short CameraGroupNumber;
-            public bool isOverride = false;
-            public string Reason;
-        }
+        readonly SessionData sessionData;
+        readonly Random random;
+        readonly TrackCamera[] trackCameras;
+        readonly TrackCamera TV2;
+        readonly TrackCamera TV3;
 
-        SessionData sessionData;
-        List<CameraDetails> directions = new List<CameraDetails>();
-        double lastSessionTime;
-        List<CameraDetails>.Enumerator nextCamera;
-        bool isMoreCameraChanges;
+        bool hasSwitchToLeader = false;
+        double lastTimeStamp = 0;
 
         public ReplayControl(SessionData sessionData)
         {
             this.sessionData = sessionData;
-        }
 
-        public void AddCarChange(double sessionTime, int carIdx, string cameraGroupName, string reason)
-        {
-            cameraGroupName = cameraGroupName.ToLower();
+            random = new System.Random();
 
-            var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName.ToLower() == cameraGroupName);
-            var car = sessionData.DriverInfo.Drivers.First(d => d.CarIdx == carIdx);
+            trackCameras = Settings.Default.trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
-            directions.Add(new CameraDetails { SessionTime = sessionTime, CameraGroupNumber = (short)cameraGroup.GroupNum, CarNumber = (short)car.CarNumber,
-            Reason = reason});
-        }
+            foreach (var tc in trackCameras)
+                tc.CameraNumber = (short)sessionData.CameraInfo.Groups.First(g => g.GroupName.ToLower() == tc.CameraName.ToLower()).GroupNum;
 
-        public void AddShortCarChange(double startTime, double endTime, int carIdx, string cameraGroupName, string reason)
-        {
-            var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName == cameraGroupName);
-            var car = sessionData.DriverInfo.Drivers.First(d => d.CarIdx == carIdx);
-
-            var directionJustBefore = directions.Where(d => !d.isOverride).OrderByDescending(d => d.SessionTime).First(d => d.SessionTime <= endTime);
-
-            directions.RemoveAll(d => !d.isOverride && d.SessionTime >= startTime && d.SessionTime <= endTime);
-
-            directions.Add(new CameraDetails { SessionTime = startTime, CarNumber = (short)car.CarNumber, CameraGroupNumber = (short)cameraGroup.GroupNum, isOverride = true, Reason = reason });
-            directions.Add(new CameraDetails { SessionTime = endTime, CarNumber = directionJustBefore.CarNumber, CameraGroupNumber = directionJustBefore.CameraGroupNumber, isOverride = true, Reason = directionJustBefore.Reason });
-        }
-
-        public void Start()
-        {
-            lastSessionTime = -1;
-
-            directions = directions.OrderBy(d => d.SessionTime).ToList();
-            nextCamera = directions.GetEnumerator();
-            isMoreCameraChanges = nextCamera.MoveNext();
+            TV2 = trackCameras.First(tc => tc.CameraName == "TV2");
+            TV3 = trackCameras.First(tc => tc.CameraName == "TV3");
         }
 
         public void Process(DataSample data)
         {
-            if (lastSessionTime == data.Telemetry.SessionTime)
+            if( !hasSwitchToLeader)
+            {
+                iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
+                hasSwitchToLeader = true;
+                return;
+            }
+
+            if (IsBeforeFirstLapSector2(data))
                 return;
 
-            if (!isMoreCameraChanges)
+            if (TwentySecondsAfterLastCameraChange(data))
                 return;
 
-            lastSessionTime = data.Telemetry.SessionTime;
+            lastTimeStamp = data.Telemetry.SessionTime;
 
-            if (lastSessionTime < nextCamera.Current.SessionTime)
-                return;
+            var car = FindCarCloseToAnotherCar(data);
 
-            var cameraDetails = nextCamera.Current;
+            var camera = FindACamera();
 
-            Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} because {3}".F(TimeSpan.FromSeconds(lastSessionTime), cameraDetails.CarNumber, cameraDetails.CameraGroupNumber, cameraDetails.Reason));
-            iRacing.Replay.CameraOnDriver(cameraDetails.CarNumber, cameraDetails.CameraGroupNumber);
+            Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName));
+            iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+        }
 
-            isMoreCameraChanges = nextCamera.MoveNext();
+        bool TwentySecondsAfterLastCameraChange(DataSample data)
+        {
+            return lastTimeStamp + 20.0 > data.Telemetry.SessionTime;
+        }
+
+        static bool IsBeforeFirstLapSector2(DataSample data)
+        {
+            return data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
+        }
+
+        SessionData._DriverInfo._Drivers FindCarCloseToAnotherCar(DataSample data)
+        {
+            var distances = data.Telemetry.CarIdxDistance
+                .Select((d, i) => new { CarIdx = i, Distance = d })
+                .OrderBy(d => d.Distance)
+                .ToList();
+
+            var gap = Enumerable.Range(1, distances.Count - 1)
+                .Select(i => new
+                {
+                    CarIdx = distances[i].CarIdx,
+                    Distance = distances[i].Distance - distances[i - 1].Distance
+                })
+                .OrderBy(d => d.Distance)
+                .First();
+            
+            return sessionData.DriverInfo.Drivers[gap.CarIdx];
+        }
+
+        TrackCamera FindACamera()
+        {
+            var rand = random.Next(100);
+            var offset = 0;
+            var camera = TV2;
+
+            foreach (var tc in trackCameras)
+            {
+                if (rand < tc.Ratio + offset)
+                {
+                    camera = tc;
+                    break;
+                }
+                offset += tc.Ratio;
+            }
+            return camera;
         }
     }
 }

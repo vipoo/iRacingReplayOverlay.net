@@ -27,6 +27,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using iRacingReplayOverlay.Support;
+using System.Diagnostics;
 
 namespace IRacingReplayOverlay.Phases
 {
@@ -53,7 +55,6 @@ namespace IRacingReplayOverlay.Phases
             Thread.Sleep(500);
             keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
 
-            replayControl.Start();
             capture.Start(workingFolder);
             fastestLaps.Start();
 

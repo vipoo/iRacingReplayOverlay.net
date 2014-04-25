@@ -90,16 +90,12 @@
     <Compile Include="Drawing\GraphicRect.cs" />
     <Compile Include="Drawing\GraphicsExtension.cs" />
     <Compile Include="Support\TimingExtension.cs" />
-    <Compile Include="Phases\Analysis\LapsToFrameNumbers.cs" />
-    <Compile Include="Phases\Analysis\GapsToLeader.cs" />
-    <Compile Include="Phases\Analysis\PositionChanges.cs" />
     <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
     <Compile Include="Phases\Transcoding\OverlayWorker.cs" />
     <Compile Include="Phases\Direction\ReplayControl.cs" />
     <Compile Include="Phases\Transcoding\SourceReaderSampleWithBitmap.cs" />
-    <Compile Include="Phases\Capturing\TimingSample.cs" />
+    <Compile Include="Phases\Capturing\OverlayData.cs" />
     <Compile Include="Phases\Transcoding\Transcoder.cs" />
-    <Compile Include="Phases\Direction\ReplayControlFactory.cs" />
     <Compile Include="TrackCameraPerferences.cs">
       <SubType>Form</SubType>
     </Compile>

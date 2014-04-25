@@ -15,5 +15,6 @@ namespace IRacingReplayOverlay
         public string TrackName;
         public string CameraName;
         public int Ratio;
+        public short CameraNumber;
     }
 }
