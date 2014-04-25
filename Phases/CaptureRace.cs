@@ -45,7 +45,7 @@ namespace IRacingReplayOverlay.Phases
         {
             var overlayData = new OverlayData();
             
-            var capture = new Capture { OverlayData = overlayData };
+            var capture = new Capture( overlayData, workingFolder );
             var fastestLaps = new RecordFastestLaps { OverlayData = overlayData };
 
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
@@ -55,7 +55,6 @@ namespace IRacingReplayOverlay.Phases
             Thread.Sleep(500);
             keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
 
-            capture.Start(workingFolder);
             fastestLaps.Start();
 
             foreach (var data in iRacing.GetDataFeed()

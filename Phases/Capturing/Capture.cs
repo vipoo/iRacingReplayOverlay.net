@@ -18,26 +18,24 @@
 
 using iRacingSDK;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class Capture
     {
-        FileSystemWatcher[] fileWatchers;
+        readonly String workingFolder;
+        readonly OverlayData overlayData;
+        readonly FileSystemWatcher[] fileWatchers;
+        readonly DateTime startTime;
         string latestCreatedVideoFile;
-        DateTime startTime;
-        string workingFolder;
-        public OverlayData OverlayData;
+        DateTime lastTime;
 
-        public void Start(string workingFolder)
+        public Capture(OverlayData overlayData, string workingFolder)
         {
+            this.overlayData = overlayData;
             this.workingFolder = workingFolder;
 
             startTime = DateTime.Now;
@@ -56,55 +54,14 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void Process(DataSample data)
         {
-            WriteNewLeaderBoardRow(data);
-        }
-
-        public void Stop(out string latestCreatedVideoFile, out string errors)
-        {
-            errors = null;
-            latestCreatedVideoFile = this.latestCreatedVideoFile;
-
-
-            if (latestCreatedVideoFile != null)
-                OverlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
-            else
-            {
-                Trace.WriteLine("No mp4/avi video file was detected during capturing.", "Critical");
-                errors = "No mp4/avi video file was detected during capturing -- Assuming last created file";
-                var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
-                    .Select(fn => new { FileName = fn, CreationTime = File.GetCreationTime(fn) })
-                    .OrderByDescending(f => f.CreationTime)
-                    .FirstOrDefault();
-
-                if (guessedFileName != null)
-                {
-                    latestCreatedVideoFile = guessedFileName.FileName;
-
-                    if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".xml")))
-                    {
-                        OverlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
-                        return;
-                    }
-                }
-             
-                errors = "Unable to find captured video file in " + workingFolder;
-            }
-        }
-
-        DateTime lastTime;
-        void WriteNewLeaderBoardRow( DataSample data)
-        {
             var timeNow = DateTime.Now - startTime;
 
-            if( (DateTime.Now - lastTime).TotalSeconds < 4)
+            if ((DateTime.Now - lastTime).TotalSeconds < 4)
                 return;
 
             lastTime = DateTime.Now;
 
-            var numberOfDrivers = data.SessionData.DriverInfo.Drivers.Length;
-
             var positions = data.Telemetry.Cars
-                .Take(numberOfDrivers)
                 .Where(c => c.Index != 0)
                 .OrderByDescending(c => c.Lap + c.DistancePercentage)
                 .ToArray();
@@ -123,7 +80,38 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 CurrentDriver = GetCurrentDriverDetails(data, positions)
             };
 
-            OverlayData.TimingSamples.Add(timingSample);
+            overlayData.TimingSamples.Add(timingSample);
+        }
+
+        public void Stop(out string latestCreatedVideoFile, out string errors)
+        {
+            errors = null;
+            latestCreatedVideoFile = this.latestCreatedVideoFile;
+
+            if (latestCreatedVideoFile != null)
+                overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
+            else
+            {
+                Trace.WriteLine("No mp4/avi video file was detected during capturing.", "Critical");
+                errors = "No mp4/avi video file was detected during capturing -- Assuming last created file";
+                var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
+                    .Select(fn => new { FileName = fn, CreationTime = File.GetCreationTime(fn) })
+                    .OrderByDescending(f => f.CreationTime)
+                    .FirstOrDefault();
+
+                if (guessedFileName != null)
+                {
+                    latestCreatedVideoFile = guessedFileName.FileName;
+
+                    if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".xml")))
+                    {
+                        overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
+                        return;
+                    }
+                }
+             
+                errors = "Unable to find captured video file in " + workingFolder;
+            }
         }
 
         static OverlayData.Driver GetCurrentDriverDetails(DataSample data, Car[] positions)
