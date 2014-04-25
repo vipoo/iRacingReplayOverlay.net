@@ -84,19 +84,19 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             var distances = data.Telemetry.CarIdxDistance
                 .Select((d, i) => new { CarIdx = i, Distance = d })
-                .OrderBy(d => d.Distance)
+                .Skip(1)
+                .OrderByDescending(d => d.Distance)
                 .ToList();
 
             var gap = Enumerable.Range(1, distances.Count - 1)
                 .Select(i => new
                 {
                     CarIdx = distances[i].CarIdx,
-                    Distance = distances[i].Distance - distances[i - 1].Distance
+                    Distance = distances[i-1].Distance - distances[i].Distance
                 })
-                .OrderBy(d => d.Distance)
-                .First();
+                .OrderBy(d => d.Distance);
             
-            return sessionData.DriverInfo.Drivers[gap.CarIdx];
+            return sessionData.DriverInfo.Drivers[gap.First().CarIdx];
         }
 
         TrackCamera FindACamera()
