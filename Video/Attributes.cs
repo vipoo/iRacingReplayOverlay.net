@@ -56,9 +56,6 @@ namespace IRacingReplayOverlay.Video
 
                 var videoStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsVideo);
 
-                
-                    
-
                 var audioStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
 
                 var channels = audioStream.NativeMediaType.AudioNumberOfChannels;
