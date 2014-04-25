@@ -84,6 +84,11 @@ namespace iRacingReplayOverlay.Drawing
             g.DrawString(text, f, b, rect2, sf);
             return this;
         }
+		internal virtual GraphicRect DrawText(int number, int leftOffset = 0)
+        {
+            return DrawText(number.ToString(), leftOffset);
+        }
+
 
         public GraphicRect AfterText(string str, int i = 0)
         {

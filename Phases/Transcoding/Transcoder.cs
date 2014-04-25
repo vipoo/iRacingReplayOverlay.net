@@ -144,12 +144,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             var availableTypes = MFSystem.TranscodeGetAudioOutputAvailableTypes(TARGET_AUDIO_FORMAT, MFT_EnumFlag.All);
 
-            foreach(var t in availableTypes)
-            {
-                if (t.AudioNumberOfChannels == numberOfChannels && t.AudioSamplesPerSecond == sampleRate)
-                    Console.WriteLine(t.GetInt(MFAttributesClsid.MF_MT_AUDIO_AVG_BYTES_PER_SECOND));
-            }
-
             var type = availableTypes
                 .FirstOrDefault(t => t.AudioNumberOfChannels == numberOfChannels &&
                     t.AudioSamplesPerSecond == sampleRate &&

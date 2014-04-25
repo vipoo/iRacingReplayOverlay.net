@@ -31,21 +31,20 @@ namespace iRacingReplayOverlay.Phases.Capturing
     public class Capture
     {
         string tempFileName;
-        StreamWriter file;
         FileSystemWatcher[] fileWatchers;
         string latestCreatedVideoFile;
         DateTime startTime;
         string workingFolder;
+        TimingSamples timingSamples;
 
         public void Start(string workingFolder)
         {
             this.workingFolder = workingFolder;
             tempFileName = Path.GetTempFileName();
             Trace.WriteLine("Creating temp file for game data {0}".F(tempFileName));
-            file = File.CreateText(tempFileName);
 
             startTime = DateTime.Now;
-            TimingSample.WriteCSVHeader(file);
+            timingSamples = new TimingSamples();
 
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
@@ -69,10 +68,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
             errors = null;
             latestCreatedVideoFile = this.latestCreatedVideoFile;
 
-            file.Close();
 
             if (latestCreatedVideoFile != null)
-                File.Move(tempFileName, Path.ChangeExtension(latestCreatedVideoFile, ".csv"));
+                timingSamples.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
             else
             {
                 Trace.WriteLine("No mp4/avi video file was detected during capturing.", "Critical");
@@ -86,9 +84,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 {
                     latestCreatedVideoFile = guessedFileName.FileName;
 
-                    if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".csv")))
+                    if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".xml")))
                     {
-                        File.Move(tempFileName, Path.ChangeExtension(latestCreatedVideoFile, ".csv"));
+                        timingSamples.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
                         return;
                     }
                 }
@@ -97,9 +95,15 @@ namespace iRacingReplayOverlay.Phases.Capturing
             }
         }
 
+        DateTime lastTime;
         void WriteNewLeaderBoardRow( DataSample data)
         {
             var timeNow = DateTime.Now - startTime;
+
+            if( (DateTime.Now - lastTime).TotalSeconds < 4)
+                return;
+
+            lastTime = DateTime.Now;
 
             var numberOfDrivers = data.SessionData.DriverInfo.Drivers.Length;
 
@@ -118,28 +122,28 @@ namespace iRacingReplayOverlay.Phases.Capturing
             var timingSample = new TimingSample
             {
                 StartTime = (int)timeNow.TotalSeconds,
-                Drivers = positions.Select(c => c.Driver.UserName).ToArray(),
+                Drivers = positions.Select((c,p) => new TimingSample.Driver { Name = c.Driver.UserName, CarNumber = (int)c.Driver.CarNumber, Position = p+1 }).ToArray(),
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
                 CurrentDriver = GetCurrentDriverDetails(data, positions)
             };
 
-            timingSample.WriteCSVRow(file);
+            timingSamples.Add(timingSample);
         }
 
-        static TimingSample._CurrentDriver GetCurrentDriverDetails(DataSample data, Car[] positions)
+        static TimingSample.Driver GetCurrentDriverDetails(DataSample data, Car[] positions)
         {
             var position = positions
                 .Select((p, i) => new { Position = i + 1, Details = p })
                 .FirstOrDefault(p => p.Details.Index == data.Telemetry.CamCarIdx);
 
             if (position == null)
-                return new TimingSample._CurrentDriver();
+                return new TimingSample.Driver();
 
-            return new TimingSample._CurrentDriver
+            return new TimingSample.Driver
             {
                 Indicator = GetOrdinal(position.Position),
-                Position = position.Position.ToString(),
-                CarNumber = data.Telemetry.CamCar.Driver.CarNumber.ToString(),
+                Position = position.Position,
+                CarNumber = (int)data.Telemetry.CamCar.Driver.CarNumber,
                 Name = data.Telemetry.CamCar.Driver.UserName
             };
         }

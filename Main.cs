@@ -158,7 +158,7 @@ namespace iRacingReplayOverlay
 
             State = States.Transcoding;
             var destinationFile = Path.ChangeExtension(sourceVideoTextBox.Text, "wmv");
-            var sourceGameData = Path.ChangeExtension(sourceVideoTextBox.Text, "csv");
+            var sourceGameData = Path.ChangeExtension(sourceVideoTextBox.Text, "xml");
             overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameData, videoBitRateNumber * 1000000, (int)audioBitRate.SelectedItem/8);
 
             //iRacingProcess
@@ -240,7 +240,7 @@ namespace iRacingReplayOverlay
 
             var audioBitRateValid = audioBitRate.SelectedItem != null;
 
-            errorSourceVideoLabel.Visible = !File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".csv"));
+            errorSourceVideoLabel.Visible = !File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".xml"));
             return (!errorSourceVideoLabel.Visible && File.Exists(sourceVideoTextBox.Text)) && audioBitRateValid;
         }
 
