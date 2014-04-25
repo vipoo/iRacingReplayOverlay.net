@@ -80,7 +80,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 var leaderBoard = new LeaderBoard
                 {
-                    TimingSamples = TimingSamples.FromFile(gameDataFile, driverNickNames)
+                    OverlayData = OverlayData.FromFile(gameDataFile, driverNickNames)
                 };
 
                 foreach( var frame in transcoder.Frames())

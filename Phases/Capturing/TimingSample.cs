@@ -25,23 +25,71 @@ using System.Xml.Serialization;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
-    public class TimingSamples : List<TimingSample>
+    public class OverlayData
     {
+    public class TimingSample
+    {
+        public long StartTime;
+        public Driver[] Drivers;
+        public string RacePosition;
+        public Driver CurrentDriver;
+    }
+
+    public class Driver
+    {
+        public int Position;
+        public string Indicator;
+        public int CarNumber;
+        public string Name;
+
+        [XmlIgnore]
+        public Dictionary<string, string> DriverNickNames = new Dictionary<string, string>();
+
+        [XmlIgnore]
+        public string ShortName
+        {
+            get
+            {
+                if (DriverNickNames.ContainsKey(Name))
+                    return DriverNickNames[Name];
+
+                var names = Name.Split(' ');
+                var name = names.First().Substring(0, 1).ToUpper()
+                    + names.Last().Substring(0, 1).ToUpper()
+                    + names.Last().Substring(1, 3);
+
+                DriverNickNames[Name] = name;
+                return name;
+            }
+        }
+    }
+
+    public class FastLap
+    {
+        public Driver Driver;
+        public double Time;
+    }
+
+
+    
+        public List<TimingSample> TimingSamples = new List<TimingSample>();
+        public List<FastLap> FastLaps = new List<FastLap>();
+
         public void SaveTo(string fileName)
         {
-            var writer = new XmlSerializer(typeof(TimingSamples));
+            var writer = new XmlSerializer(typeof(OverlayData));
 
             using(var file = new StreamWriter(fileName) )
                 writer.Serialize(file, this);
         }
 
-        public static TimingSamples FromFile(string fileName, Dictionary<string, string> driverNickNames)
+        public static OverlayData FromFile(string fileName, Dictionary<string, string> driverNickNames)
         {
-            var reader = new XmlSerializer(typeof(TimingSamples));
+            var reader = new XmlSerializer(typeof(OverlayData));
             using (var file = new StreamReader(fileName))
             {
-                var result = (TimingSamples)reader.Deserialize(file);
-                foreach (var timingSample in result)
+                var result = (OverlayData)reader.Deserialize(file);
+                foreach (var timingSample in result.TimingSamples)
                     foreach( var d in timingSample.Drivers)
                         d.DriverNickNames = driverNickNames;
 
@@ -50,40 +98,4 @@ namespace iRacingReplayOverlay.Phases.Capturing
         }
     }
 
-    public class TimingSample
-    {
-        public class Driver
-        {
-            public int Position;
-            public string Indicator;
-            public int CarNumber;
-            public string Name;
-
-            [XmlIgnore]
-            public Dictionary<string, string> DriverNickNames = new Dictionary<string, string>();
-
-            [XmlIgnore]
-            public string ShortName
-            {
-                get
-                {
-                    if (DriverNickNames.ContainsKey(Name))
-                        return DriverNickNames[Name];
-
-                    var names = Name.Split(' ');
-                    var name = names.First().Substring(0, 1).ToUpper()
-                        + names.Last().Substring(0, 1).ToUpper()
-                        + names.Last().Substring(1, 3);
-
-                    DriverNickNames[Name] = name;
-                    return name;
-                }
-            }
-        }
-
-        public long StartTime;
-        public Driver[] Drivers;
-        public string RacePosition;
-        public Driver CurrentDriver;
-    }
 }

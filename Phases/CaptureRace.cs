@@ -42,6 +42,7 @@ namespace IRacingReplayOverlay.Phases
         void _CaptureRace(string workingFolder, Action<string, string> onComplete)
         {
             var capture = new Capture();
+            //var fastestLaps = new RecordFastestLaps();
 
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
             iRacing.Replay.SetSpeed(1);

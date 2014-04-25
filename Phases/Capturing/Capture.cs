@@ -30,21 +30,18 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class Capture
     {
-        string tempFileName;
         FileSystemWatcher[] fileWatchers;
         string latestCreatedVideoFile;
         DateTime startTime;
         string workingFolder;
-        TimingSamples timingSamples;
+        OverlayData overlayData;
 
         public void Start(string workingFolder)
         {
             this.workingFolder = workingFolder;
-            tempFileName = Path.GetTempFileName();
-            Trace.WriteLine("Creating temp file for game data {0}".F(tempFileName));
 
             startTime = DateTime.Now;
-            timingSamples = new TimingSamples();
+            overlayData = new OverlayData();
 
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
@@ -70,7 +67,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
 
             if (latestCreatedVideoFile != null)
-                timingSamples.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
+                overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
             else
             {
                 Trace.WriteLine("No mp4/avi video file was detected during capturing.", "Critical");
@@ -86,7 +83,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                     if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".xml")))
                     {
-                        timingSamples.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
+                        overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
                         return;
                     }
                 }
@@ -119,27 +116,27 @@ namespace iRacingReplayOverlay.Phases.Capturing
             var raceLapsPosition = string.Format("Lap {0}/{1}", session._SessionLaps - data.Telemetry.SessionLapsRemain, session.SessionLaps);
             var raceTimePosition = string.Format("{0:00}:{1:00}", timespan.Minutes, timespan.Seconds);
 
-            var timingSample = new TimingSample
+            var timingSample = new OverlayData.TimingSample
             {
                 StartTime = (int)timeNow.TotalSeconds,
-                Drivers = positions.Select((c,p) => new TimingSample.Driver { Name = c.Driver.UserName, CarNumber = (int)c.Driver.CarNumber, Position = p+1 }).ToArray(),
+                Drivers = positions.Select((c, p) => new OverlayData.Driver { Name = c.Driver.UserName, CarNumber = (int)c.Driver.CarNumber, Position = p + 1 }).ToArray(),
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
                 CurrentDriver = GetCurrentDriverDetails(data, positions)
             };
 
-            timingSamples.Add(timingSample);
+            overlayData.TimingSamples.Add(timingSample);
         }
 
-        static TimingSample.Driver GetCurrentDriverDetails(DataSample data, Car[] positions)
+        static OverlayData.Driver GetCurrentDriverDetails(DataSample data, Car[] positions)
         {
             var position = positions
                 .Select((p, i) => new { Position = i + 1, Details = p })
                 .FirstOrDefault(p => p.Details.Index == data.Telemetry.CamCarIdx);
 
             if (position == null)
-                return new TimingSample.Driver();
+                return new OverlayData.Driver();
 
-            return new TimingSample.Driver
+            return new OverlayData.Driver
             {
                 Indicator = GetOrdinal(position.Position),
                 Position = position.Position,

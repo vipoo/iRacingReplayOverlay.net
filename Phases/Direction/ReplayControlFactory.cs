@@ -37,7 +37,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             var firstLapTime = lapsToFrameNumbers[1].sessionTime;
 
             var firstCarIdx = positionChanges.First().DeltaDetails.First().CarIdx;
-            replayControl.AddCarChange(lapsToFrameNumbers[1].sessionTime, firstCarIdx, "TV3", "is leader");
+            replayControl.AddCarChange(0, firstCarIdx, "TV3", "is leader");
 
             var trackCameras = Settings.Default.trackCameras.Where( tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName);
 

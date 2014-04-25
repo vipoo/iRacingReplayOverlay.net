@@ -28,7 +28,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 {
     class LeaderBoard
     {
-        public TimingSamples TimingSamples;
+        public OverlayData OverlayData;
 
         internal void Overlay(Graphics graphics, long timestamp)
         {
@@ -37,7 +37,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            var sample = TimingSamples.LastOrDefault(s => s.StartTime <= timestamp);
+            var sample = OverlayData.TimingSamples.LastOrDefault(s => s.StartTime <= timestamp);
 
             if (sample == null)
                 return;
@@ -67,7 +67,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     .WithStringFormat(StringAlignment.Center);
         }
 
-		private void DrawLeaderboard(Graphics g, TimingSample sample)
+		private void DrawLeaderboard(Graphics g, OverlayData.TimingSample sample)
         {
             var r = g.InRectangle(80, 80, 210, 40)
                 .With(SimpleWhiteBox)
@@ -89,7 +89,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-		private void DrawCurrentDriverRow(Graphics g, TimingSample.Driver p)
+		private void DrawCurrentDriverRow(Graphics g, OverlayData.Driver p)
         {
             g.InRectangle(1920/2-420/2, 980, 70, 40)
                 .WithBrush(Styles.Brushes.Yellow)
