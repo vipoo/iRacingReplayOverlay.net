@@ -29,7 +29,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
     public class RecordFastestLaps
     {
         readonly OverlayData overlayData;
-        readonly DateTime startTime;
 
         public int[] lastDriverLaps = new int[64];
         public double[] driverLapStartTime = new double[64];
@@ -59,9 +58,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 .Skip(1)
                 .Take(data.SessionData.DriverInfo.Drivers.Length-1))
             {
-                if( lap.Lap != lastDriverLaps[lap.CarIdx])
+                if (lap.Lap == -1)
+                    continue;
+
+                if( lap.Lap == lastDriverLaps[lap.CarIdx]+1)
                 {
                     var lapTime = data.Telemetry.SessionTime - driverLapStartTime[lap.CarIdx];
+
                     driverLapStartTime[lap.CarIdx] = data.Telemetry.SessionTime;
                     lastDriverLaps[lap.CarIdx] = lap.Lap;
 

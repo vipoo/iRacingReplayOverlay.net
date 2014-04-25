@@ -85,6 +85,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             var distances = data.Telemetry.CarIdxDistance
                 .Select((d, i) => new { CarIdx = i, Distance = d })
                 .Skip(1)
+                .Where(d => d.Distance > 0)
                 .OrderByDescending(d => d.Distance)
                 .ToList();
 

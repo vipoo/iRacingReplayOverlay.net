@@ -53,8 +53,7 @@ namespace IRacingReplayOverlay.Phases
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(1)
-                .TakeWhile(d => d.Telemetry.RaceLaps < 6))
+                .AtSpeed(1))
             {
                 var relativeTime = DateTime.Now - startTime;
 
