@@ -93,7 +93,7 @@
             this.cameraList.TabIndex = 2;
             this.cameraList.UseCompatibleStateImageBehavior = false;
             this.cameraList.View = System.Windows.Forms.View.Details;
-            this.cameraList.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.cameraList.SelectedIndexChanged += new System.EventHandler(this.cameraList_SelectedIndexChanged);
             // 
             // CameraName
             // 
@@ -112,7 +112,7 @@
             this.ratioTextBox.Size = new System.Drawing.Size(30, 22);
             this.ratioTextBox.TabIndex = 3;
             this.ratioTextBox.Text = "3";
-            this.ratioTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.ratioTextBox.TextChanged += new System.EventHandler(this.ratioTextBox_TextChanged);
             // 
             // ratioLabel
             // 
