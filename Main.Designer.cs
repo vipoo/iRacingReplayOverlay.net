@@ -67,6 +67,7 @@ namespace iRacingReplayOverlay
             this.CapturingRaceLabel = new System.Windows.Forms.Label();
             this.ProcessErrorMessageLabel = new System.Windows.Forms.Label();
             this.WaitingForIRacingLabel = new System.Windows.Forms.Label();
+            this.VideoDetailLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,7 +85,7 @@ namespace iRacingReplayOverlay
             // 
             // transcodeProgressBar
             // 
-            this.transcodeProgressBar.Location = new System.Drawing.Point(45, 400);
+            this.transcodeProgressBar.Location = new System.Drawing.Point(47, 424);
             this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4);
             this.transcodeProgressBar.Maximum = 10000;
             this.transcodeProgressBar.Name = "transcodeProgressBar";
@@ -170,9 +171,9 @@ namespace iRacingReplayOverlay
             // errorSourceVideoLabel
             // 
             this.errorSourceVideoLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.errorSourceVideoLabel.Location = new System.Drawing.Point(155, 349);
+            this.errorSourceVideoLabel.Location = new System.Drawing.Point(155, 374);
             this.errorSourceVideoLabel.Name = "errorSourceVideoLabel";
-            this.errorSourceVideoLabel.Size = new System.Drawing.Size(467, 47);
+            this.errorSourceVideoLabel.Size = new System.Drawing.Size(467, 41);
             this.errorSourceVideoLabel.TabIndex = 16;
             this.errorSourceVideoLabel.Text = "*Unable to transcode this video, as there is no associated captured game data (cs" +
     "v file name based on the name of the source input video)";
@@ -275,11 +276,20 @@ namespace iRacingReplayOverlay
             this.WaitingForIRacingLabel.TabIndex = 27;
             this.WaitingForIRacingLabel.Text = "Waiting for iRacing to start ...";
             // 
+            // VideoDetailLabel
+            // 
+            this.VideoDetailLabel.ForeColor = System.Drawing.Color.DarkRed;
+            this.VideoDetailLabel.Location = new System.Drawing.Point(158, 349);
+            this.VideoDetailLabel.Name = "VideoDetailLabel";
+            this.VideoDetailLabel.Size = new System.Drawing.Size(464, 21);
+            this.VideoDetailLabel.TabIndex = 28;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(729, 473);
+            this.Controls.Add(this.VideoDetailLabel);
             this.Controls.Add(this.WaitingForIRacingLabel);
             this.Controls.Add(this.ProcessErrorMessageLabel);
             this.Controls.Add(this.CapturingRaceLabel);
@@ -339,5 +349,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label CapturingRaceLabel;
         private System.Windows.Forms.Label ProcessErrorMessageLabel;
         private System.Windows.Forms.Label WaitingForIRacingLabel;
+        private System.Windows.Forms.Label VideoDetailLabel;
     }
 }

@@ -221,6 +221,8 @@ namespace iRacingReplayOverlay
                     audioBitRate.Items.Add(d);
 
                 audioBitRate.SelectedItem = Settings.Default.audioBitRate;
+
+                VideoDetailLabel.Text = "Frame Rate: {0}, Frame Size: {1}x{2}, Bit Rate: {3}Mb".F(details.FrameRate, details.FrameSize.Width, details.FrameSize.Height, details.BitRate == 0 ? "-- " : details.BitRate.ToString());
             }
             catch(Exception)
             {

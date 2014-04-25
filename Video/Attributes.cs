@@ -19,6 +19,7 @@
 using MediaFoundation.Net;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,10 +31,16 @@ namespace IRacingReplayOverlay.Video
         public class VideoDetails
         {
             public readonly int[] SupportedAudioBitRates;
+            public readonly int BitRate;
+            public readonly Size FrameSize;
+            public readonly int FrameRate;
          
-            public VideoDetails(int[] supportedAudioBitRates)
+            public VideoDetails(int[] supportedAudioBitRates, int frameRate, Size frameSize, int bitRate)
             {
                 this.SupportedAudioBitRates = supportedAudioBitRates;
+                this.FrameRate = frameRate;
+                this.FrameSize = frameSize;
+                this.BitRate = bitRate;
             }
         }
 
@@ -46,6 +53,11 @@ namespace IRacingReplayOverlay.Video
                 var readWriteFactory = new ReadWriteClassFactory();
 
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(videoFileName, null);
+
+                var videoStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsVideo);
+
+                
+                    
 
                 var audioStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
 
@@ -62,9 +74,12 @@ namespace IRacingReplayOverlay.Video
                 {
                     supportedAudioBitRates.Add(bitRate * 8);
                 }
-            }
 
-            return new VideoDetails(supportedAudioBitRates.ToArray());
+                int videoBitRate = 0;
+                videoStream.NativeMediaType.TryGetBitRate(out videoBitRate);
+
+                return new VideoDetails(supportedAudioBitRates.ToArray(), videoStream.NativeMediaType.FrameRate.ToInt(), videoStream.NativeMediaType.FrameSize, videoBitRate / 1000000);
+            }
         }
     }
 }
