@@ -35,12 +35,6 @@ namespace iRacingReplayOverlay.Phases.Analysis
             public float Gap; //In percentage of lap
         }
 
-        class DriverGaps
-        {
-            public int CarIdx;
-            public float Distance;
-        }
-
         List<ClosestGapAtTimeStamp> gaps = new List<ClosestGapAtTimeStamp>();
 
         double lastTimeStamp = 0;
@@ -60,12 +54,12 @@ namespace iRacingReplayOverlay.Phases.Analysis
             g.TimeStamp = data.Telemetry.SessionTime;
 
             var distances = data.Telemetry.CarIdxDistance
-                .Select((d, i) => new DriverGaps { CarIdx = i, Distance = d })
+                .Select((d, i) => new  { CarIdx = i, Distance = d })
                 .OrderBy(d => d.Distance)
                 .ToList();
 
             var gap = Enumerable.Range(1, distances.Count-1)
-                .Select(i => new DriverGaps
+                .Select(i => new 
                         {
                             CarIdx = distances[i].CarIdx,
                             Distance = distances[i].Distance - distances[i - 1].Distance
