@@ -46,7 +46,7 @@ namespace IRacingReplayOverlay.Phases
                 .AtSpeed(16, d => d.Telemetry.SessionState != SessionState.Racing)
                 .AtSpeed(16, d => d.Telemetry.SessionState == SessionState.Racing)
                 .RaceOnly()
-                .TakeWhile(d => d.Telemetry.RaceLaps < 3))
+                .TakeWhile(d => d.Telemetry.RaceLaps < 6))
             {
 
                 if (raceStartFrameNumber == 0 && data.Telemetry.SessionState == SessionState.Racing)

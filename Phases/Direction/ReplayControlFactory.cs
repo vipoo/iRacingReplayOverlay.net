@@ -41,9 +41,11 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var trackCameras = Settings.Default.trackCameras.Where( tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName);
 
+            var random = new System.Random();
+
             foreach(var gaps in gapsToLeader.Where(g => g.TimeStamp > firstLapTime))
             {
-                var rand = new System.Random().Next(100);
+                var rand = random.Next(100);
                 var offset = 0;
                 var camera = "TV2";
                 

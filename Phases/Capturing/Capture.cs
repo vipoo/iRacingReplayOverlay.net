@@ -34,14 +34,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
         string latestCreatedVideoFile;
         DateTime startTime;
         string workingFolder;
-        OverlayData overlayData;
+        public OverlayData OverlayData;
 
         public void Start(string workingFolder)
         {
             this.workingFolder = workingFolder;
 
             startTime = DateTime.Now;
-            overlayData = new OverlayData();
 
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
@@ -67,7 +66,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
 
             if (latestCreatedVideoFile != null)
-                overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
+                OverlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
             else
             {
                 Trace.WriteLine("No mp4/avi video file was detected during capturing.", "Critical");
@@ -83,7 +82,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                     if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".xml")))
                     {
-                        overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
+                        OverlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
                         return;
                     }
                 }
@@ -118,13 +117,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             var timingSample = new OverlayData.TimingSample
             {
-                StartTime = (int)timeNow.TotalSeconds,
+                StartTime = (long)timeNow.TotalSeconds,
                 Drivers = positions.Select((c, p) => new OverlayData.Driver { Name = c.Driver.UserName, CarNumber = (int)c.Driver.CarNumber, Position = p + 1 }).ToArray(),
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
                 CurrentDriver = GetCurrentDriverDetails(data, positions)
             };
 
-            overlayData.TimingSamples.Add(timingSample);
+            OverlayData.TimingSamples.Add(timingSample);
         }
 
         static OverlayData.Driver GetCurrentDriverDetails(DataSample data, Car[] positions)
