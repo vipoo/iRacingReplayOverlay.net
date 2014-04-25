@@ -153,46 +153,4 @@ namespace iRacingReplayOverlay.Drawing
 			return this;
 		}
     }
-    
-	public class CenterGraphicRect : GraphicRect
-	{
-		readonly int left;
-		readonly int right;
-
-		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
-			: base( g, r, b, p, f, sf)
-		{
-			this.left = int.MaxValue;
-			this.right = int.MinValue;
-		}
-
-		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int left, int right)
-			: base( g, r, b, p, f, sf)
-		{
-			this.left = left;
-			this.right = right;
-		}
-
-		protected override GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
-		{
-			return new CenterGraphicRect(g, r, b, p, f, sf, left, right);
-		}
-
-        internal int Width { get { return right-left; } }
-		
-		internal override GraphicRect DrawText(string text, int leftOffset = 0)
-		{
-            var size = TextRenderer.MeasureText(g, text, f, r.Size, TextFormatFlags.NoPadding);
-
-			var newleft = Math.Min(r.Left + leftOffset, left);
-			var newRight = Math.Max(right, r.Left + leftOffset + (int)size.Width);
-
-			return new CenterGraphicRect(g, r, b, p, f, sf, newleft, newRight);
-		}
-
-        internal override GraphicRect DrawRectangleWithBorder()
-        {
-            return this;
-        }
-	}
 }
