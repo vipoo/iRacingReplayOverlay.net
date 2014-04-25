@@ -85,12 +85,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DllImports\Kernel32\Dll.cs" />
-    <Compile Include="DllImports\Win32\Hooks.cs" />
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Drawing\GraphicRect.cs" />
     <Compile Include="Drawing\GraphicsExtension.cs" />
-    <Compile Include="Support\KeyboardHook.cs" />
     <Compile Include="Support\TimingExtension.cs" />
     <Compile Include="Phases\Analysis\LapsToFrameNumbers.cs" />
     <Compile Include="Phases\Analysis\GapsToLeader.cs" />
