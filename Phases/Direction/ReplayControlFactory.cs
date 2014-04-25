@@ -19,6 +19,7 @@
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Direction;
 using iRacingReplayOverlay.Support;
+using IRacingReplayOverlay;
 using iRacingSDK;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,24 +31,31 @@ namespace iRacingReplayOverlay.Phases.Direction
 	{
         public static ReplayControl CreateFrom(Incidents incidents, GapsToLeader gapsToLeader, PositionChanges positionChanges, LapsToFrameNumbers lapsToFrameNumbers)
         {
-            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
+            var sessionData = iRacing.GetDataFeed().First().SessionData;
+            var replayControl = new ReplayControl(sessionData);
 
             var firstLapTime = lapsToFrameNumbers[1].sessionTime;
 
             var firstCarIdx = positionChanges.First().DeltaDetails.First().CarIdx;
             replayControl.AddCarChange(lapsToFrameNumbers[1].sessionTime, firstCarIdx, "TV3", "is leader");
 
+            var trackCameras = Settings.Default.trackCameras.Where( tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName);
 
             foreach(var gaps in gapsToLeader.Where(g => g.TimeStamp > firstLapTime))
             {
-                var rand = new System.Random().Next() % 10;
+                var rand = new System.Random().Next(100);
+                var offset = 0;
                 var camera = "TV2";
-                if (rand >= 3 && rand < 6)
-                    camera = "TV1";
-                else if (rand >= 6 && rand < 8)
-                    camera = "Nose";
-                else
-                    camera = "Roll bar";
+                
+                foreach( var tc in trackCameras)
+                {
+                    if(rand < tc.Ratio + offset)
+                    {
+                        camera = tc.CameraName;
+                        break;
+                    }
+                    offset += tc.Ratio;
+                }
 
                 replayControl.AddCarChange(gaps.TimeStamp, gaps.CarIdx, camera, "close by {0}".F(gaps.Gap));
             }
