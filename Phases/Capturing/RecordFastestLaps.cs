@@ -28,31 +28,28 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class RecordFastestLaps
     {
-        public OverlayData OverlayData;
+        readonly OverlayData overlayData;
+        readonly DateTime startTime;
 
         public int[] lastDriverLaps = new int[64];
         public double[] driverLapStartTime = new double[64];
 
         public double fastestLapTime = double.MaxValue;
-
         public double? timeToNoteFastestLap = null;
-        private Capturing.OverlayData.FastLap lastFastLap;
-        DateTime startTime;
+        OverlayData.FastLap lastFastLap;
 
-        public void Start()
+        public RecordFastestLaps(OverlayData overlayData)
         {
-            startTime = DateTime.Now;
+            this.overlayData = overlayData;
         }
 
-        public void Process(iRacingSDK.DataSample data)
+        public void Process(iRacingSDK.DataSample data, TimeSpan relativeTime)
         {
-            var timeNow = DateTime.Now - startTime;
-
             if (timeToNoteFastestLap != null && timeToNoteFastestLap.Value < data.Telemetry.SessionTime)
             {
                 Trace.WriteLine("Showing Driver {0} recorded a new fast lap of {1}".F(lastFastLap.Driver.Name, lastFastLap.Time));
 
-                OverlayData.FastestLaps.Add(lastFastLap);
+                overlayData.FastestLaps.Add(lastFastLap);
                 timeToNoteFastestLap = null;
             }
 
@@ -75,7 +72,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         lastFastLap = new OverlayData.FastLap
                         {
                             Time = lapTime,
-                            StartTime = (int)timeNow.TotalSeconds,
+                            StartTime = (int)relativeTime.TotalSeconds,
                             Driver = new OverlayData.Driver
                             {
                                 Name = data.SessionData.DriverInfo.Drivers[lap.CarIdx].UserName,

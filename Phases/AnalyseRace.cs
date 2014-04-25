@@ -28,7 +28,6 @@ namespace IRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
-        ReplayControl replayControl;
         int raceStartFrameNumber = 0;
 
         public void _AnalyseRace(Action onComplete)
@@ -37,7 +36,6 @@ namespace IRacingReplayOverlay.Phases
             Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_SHOWNORMAL);
             Thread.Sleep(2000);
 
-            replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()

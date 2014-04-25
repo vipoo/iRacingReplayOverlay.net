@@ -33,7 +33,6 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly TrackCamera TV2;
         readonly TrackCamera TV3;
 
-        bool hasSwitchToLeader = false;
         double lastTimeStamp = 0;
 
         public ReplayControl(SessionData sessionData)
@@ -49,17 +48,12 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TV2 = trackCameras.First(tc => tc.CameraName == "TV2");
             TV3 = trackCameras.First(tc => tc.CameraName == "TV3");
+
+            iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
         }
 
         public void Process(DataSample data)
         {
-            if( !hasSwitchToLeader)
-            {
-                iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
-                hasSwitchToLeader = true;
-                return;
-            }
-
             if (IsBeforeFirstLapSector2(data))
                 return;
 

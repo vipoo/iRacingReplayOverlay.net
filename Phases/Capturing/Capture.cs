@@ -29,7 +29,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
         readonly String workingFolder;
         readonly OverlayData overlayData;
         readonly FileSystemWatcher[] fileWatchers;
-        readonly DateTime startTime;
         string latestCreatedVideoFile;
         DateTime lastTime;
 
@@ -37,8 +36,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             this.overlayData = overlayData;
             this.workingFolder = workingFolder;
-
-            startTime = DateTime.Now;
 
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
@@ -52,10 +49,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
             }
         }
 
-        public void Process(DataSample data)
+        public void Process(DataSample data, TimeSpan relativeTime)
         {
-            var timeNow = DateTime.Now - startTime;
-
             if ((DateTime.Now - lastTime).TotalSeconds < 4)
                 return;
 
@@ -74,7 +69,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             var timingSample = new OverlayData.TimingSample
             {
-                StartTime = (long)timeNow.TotalSeconds,
+                StartTime = (long)relativeTime.TotalSeconds,
                 Drivers = positions.Select((c, p) => new OverlayData.Driver { Name = c.Driver.UserName, CarNumber = (int)c.Driver.CarNumber, Position = p + 1 }).ToArray(),
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
                 CurrentDriver = GetCurrentDriverDetails(data, positions)

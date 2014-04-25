@@ -18,17 +18,11 @@
 //
 
 using iRacingReplayOverlay.Phases.Capturing;
+using iRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using iRacingReplayOverlay.Support;
-using System.Diagnostics;
 
 namespace IRacingReplayOverlay.Phases
 {
@@ -45,26 +39,32 @@ namespace IRacingReplayOverlay.Phases
         {
             var overlayData = new OverlayData();
             
-            var capture = new Capture( overlayData, workingFolder );
-            var fastestLaps = new RecordFastestLaps { OverlayData = overlayData };
-
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
-            iRacing.Replay.SetSpeed(1);
             Thread.Sleep(1000);
+            iRacing.Replay.SetSpeed(1);
+            System.Diagnostics.Trace.WriteLine("Running now...");
+
+            var capture = new Capture(overlayData, workingFolder);
+            var fastestLaps = new RecordFastestLaps(overlayData);
+            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
+            
+            Thread.Sleep(4000);
             keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
             Thread.Sleep(500);
             keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-
-            fastestLaps.Start();
+            var startTime = DateTime.Now;
+            System.Diagnostics.Trace.WriteLine("Starting now...");
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
                 .AtSpeed(1)
                 .TakeWhile(d => d.Telemetry.RaceLaps < 6))
             {
+                var relativeTime = DateTime.Now - startTime;
+
                 replayControl.Process(data);
-                capture.Process(data);
-                fastestLaps.Process(data);
+                capture.Process(data, relativeTime);
+                fastestLaps.Process(data, relativeTime);
             }
 
             keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
