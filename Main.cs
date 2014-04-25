@@ -19,10 +19,12 @@
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
+using IRacingReplayOverlay;
 using IRacingReplayOverlay.Phases;
 using IRacingReplayOverlay.Video;
 using MediaFoundation.Net;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -277,6 +279,12 @@ namespace iRacingReplayOverlay
                 })
                 .CloseIRacing()
                 .InTheBackground(() => BeginProcessButton.Enabled = true);
+        }
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            var settings = new TrackCameraPerferences();
+            settings.ShowDialog();
         }
     }
 }

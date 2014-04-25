@@ -58,6 +58,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TrackCameras.cs" />
     <Compile Include="DllImports\Win32\Messages.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -100,6 +101,12 @@
     <Compile Include="Phases\Capturing\TimingSample.cs" />
     <Compile Include="Phases\Transcoding\Transcoder.cs" />
     <Compile Include="Phases\Direction\ReplayControlFactory.cs" />
+    <Compile Include="TrackCameraPerferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrackCameraPerferences.Designer.cs">
+      <DependentUpon>TrackCameraPerferences.cs</DependentUpon>
+    </Compile>
     <Compile Include="Video\Attributes.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +147,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrackCameraPerferences.resx">
+      <DependentUpon>TrackCameraPerferences.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ProjectExtensions>

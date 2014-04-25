@@ -49,7 +49,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public void AddCarChange(double sessionTime, int carIdx, string cameraGroupName, string reason)
         {
-            var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName == cameraGroupName);
+            cameraGroupName = cameraGroupName.ToLower();
+
+            var cameraGroup = sessionData.CameraInfo.Groups.First(g => g.GroupName.ToLower() == cameraGroupName);
             var car = sessionData.DriverInfo.Drivers.First(d => d.CarIdx == carIdx);
 
             directions.Add(new CameraDetails { SessionTime = sessionTime, CameraGroupNumber = (short)cameraGroup.GroupNum, CarNumber = (short)car.CarNumber,

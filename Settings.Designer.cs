@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace iRacingReplayOverlay {
+namespace IRacingReplayOverlay {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -56,6 +56,29 @@ namespace iRacingReplayOverlay {
             }
             set {
                 this["audioBitRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::IRacingReplayOverlay.TrackCameras trackCameras {
+            get {
+                return ((global::IRacingReplayOverlay.TrackCameras)(this["trackCameras"]));
+            }
+            set {
+                this["trackCameras"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lastSelectedTrackName {
+            get {
+                return ((string)(this["lastSelectedTrackName"]));
+            }
+            set {
+                this["lastSelectedTrackName"] = value;
             }
         }
     }

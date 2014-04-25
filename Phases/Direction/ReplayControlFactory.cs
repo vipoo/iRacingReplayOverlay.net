@@ -32,12 +32,24 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
 
+            var firstLapTime = lapsToFrameNumbers[1].sessionTime;
+
             var firstCarIdx = positionChanges.First().DeltaDetails.First().CarIdx;
             replayControl.AddCarChange(lapsToFrameNumbers[1].sessionTime, firstCarIdx, "TV3", "is leader");
 
-            foreach(var gaps in gapsToLeader)
+
+            foreach(var gaps in gapsToLeader.Where(g => g.TimeStamp > firstLapTime))
             {
-                replayControl.AddCarChange(gaps.TimeStamp, gaps.CarIdx, "TV2", "close by {0}".F(gaps.Gap));
+                var rand = new System.Random().Next() % 10;
+                var camera = "TV2";
+                if (rand >= 3 && rand < 6)
+                    camera = "TV1";
+                else if (rand >= 6 && rand < 8)
+                    camera = "Nose";
+                else
+                    camera = "Roll bar";
+
+                replayControl.AddCarChange(gaps.TimeStamp, gaps.CarIdx, camera, "close by {0}".F(gaps.Gap));
             }
             /*
             foreach (var lap in lapsToFrameNumbers.Skip(2))

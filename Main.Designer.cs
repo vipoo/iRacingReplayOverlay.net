@@ -68,13 +68,16 @@ namespace iRacingReplayOverlay
             this.ProcessErrorMessageLabel = new System.Windows.Forms.Label();
             this.WaitingForIRacingLabel = new System.Windows.Forms.Label();
             this.VideoDetailLabel = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.SettingsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // transcodeVideoButton
             // 
             this.transcodeVideoButton.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.transcodeVideoButton.Location = new System.Drawing.Point(28, 231);
+            this.transcodeVideoButton.Location = new System.Drawing.Point(28, 288);
             this.transcodeVideoButton.Margin = new System.Windows.Forms.Padding(4);
             this.transcodeVideoButton.Name = "transcodeVideoButton";
             this.transcodeVideoButton.Size = new System.Drawing.Size(163, 64);
@@ -85,7 +88,7 @@ namespace iRacingReplayOverlay
             // 
             // transcodeProgressBar
             // 
-            this.transcodeProgressBar.Location = new System.Drawing.Point(47, 424);
+            this.transcodeProgressBar.Location = new System.Drawing.Point(47, 481);
             this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4);
             this.transcodeProgressBar.Maximum = 10000;
             this.transcodeProgressBar.Name = "transcodeProgressBar";
@@ -95,7 +98,7 @@ namespace iRacingReplayOverlay
             // transcodeCancelButton
             // 
             this.transcodeCancelButton.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.transcodeCancelButton.Location = new System.Drawing.Point(199, 231);
+            this.transcodeCancelButton.Location = new System.Drawing.Point(199, 288);
             this.transcodeCancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.transcodeCancelButton.Name = "transcodeCancelButton";
             this.transcodeCancelButton.Size = new System.Drawing.Size(163, 64);
@@ -108,7 +111,7 @@ namespace iRacingReplayOverlay
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 202);
+            this.pictureBox1.Location = new System.Drawing.Point(13, 259);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(680, 4);
@@ -117,7 +120,7 @@ namespace iRacingReplayOverlay
             // 
             // sourceVideoTextBox
             // 
-            this.sourceVideoTextBox.Location = new System.Drawing.Point(158, 320);
+            this.sourceVideoTextBox.Location = new System.Drawing.Point(158, 377);
             this.sourceVideoTextBox.Name = "sourceVideoTextBox";
             this.sourceVideoTextBox.Size = new System.Drawing.Size(464, 26);
             this.sourceVideoTextBox.TabIndex = 7;
@@ -126,7 +129,7 @@ namespace iRacingReplayOverlay
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 320);
+            this.label3.Location = new System.Drawing.Point(28, 377);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(94, 18);
             this.label3.TabIndex = 8;
@@ -134,14 +137,14 @@ namespace iRacingReplayOverlay
             // 
             // workingFolderTextBox
             // 
-            this.workingFolderTextBox.Location = new System.Drawing.Point(134, 23);
+            this.workingFolderTextBox.Location = new System.Drawing.Point(134, 80);
             this.workingFolderTextBox.Name = "workingFolderTextBox";
             this.workingFolderTextBox.Size = new System.Drawing.Size(488, 26);
             this.workingFolderTextBox.TabIndex = 13;
             // 
             // sourceVideoButton
             // 
-            this.sourceVideoButton.Location = new System.Drawing.Point(628, 320);
+            this.sourceVideoButton.Location = new System.Drawing.Point(628, 377);
             this.sourceVideoButton.Name = "sourceVideoButton";
             this.sourceVideoButton.Size = new System.Drawing.Size(64, 26);
             this.sourceVideoButton.TabIndex = 9;
@@ -152,7 +155,7 @@ namespace iRacingReplayOverlay
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(28, 23);
+            this.label5.Location = new System.Drawing.Point(28, 80);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 18);
             this.label5.TabIndex = 14;
@@ -160,7 +163,7 @@ namespace iRacingReplayOverlay
             // 
             // workingFolderButton
             // 
-            this.workingFolderButton.Location = new System.Drawing.Point(628, 23);
+            this.workingFolderButton.Location = new System.Drawing.Point(628, 80);
             this.workingFolderButton.Name = "workingFolderButton";
             this.workingFolderButton.Size = new System.Drawing.Size(64, 26);
             this.workingFolderButton.TabIndex = 15;
@@ -171,7 +174,7 @@ namespace iRacingReplayOverlay
             // errorSourceVideoLabel
             // 
             this.errorSourceVideoLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.errorSourceVideoLabel.Location = new System.Drawing.Point(155, 374);
+            this.errorSourceVideoLabel.Location = new System.Drawing.Point(155, 431);
             this.errorSourceVideoLabel.Name = "errorSourceVideoLabel";
             this.errorSourceVideoLabel.Size = new System.Drawing.Size(467, 41);
             this.errorSourceVideoLabel.TabIndex = 16;
@@ -182,7 +185,7 @@ namespace iRacingReplayOverlay
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(380, 231);
+            this.label1.Location = new System.Drawing.Point(380, 288);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(133, 18);
             this.label1.TabIndex = 17;
@@ -190,7 +193,7 @@ namespace iRacingReplayOverlay
             // 
             // videoBitRate
             // 
-            this.videoBitRate.Location = new System.Drawing.Point(519, 231);
+            this.videoBitRate.Location = new System.Drawing.Point(519, 288);
             this.videoBitRate.Name = "videoBitRate";
             this.videoBitRate.Size = new System.Drawing.Size(43, 26);
             this.videoBitRate.TabIndex = 18;
@@ -200,7 +203,7 @@ namespace iRacingReplayOverlay
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(380, 263);
+            this.label4.Location = new System.Drawing.Point(380, 320);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(123, 18);
             this.label4.TabIndex = 19;
@@ -210,7 +213,7 @@ namespace iRacingReplayOverlay
             // 
             this.audioBitRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.audioBitRate.FormattingEnabled = true;
-            this.audioBitRate.Location = new System.Drawing.Point(519, 263);
+            this.audioBitRate.Location = new System.Drawing.Point(519, 320);
             this.audioBitRate.Name = "audioBitRate";
             this.audioBitRate.Size = new System.Drawing.Size(173, 26);
             this.audioBitRate.TabIndex = 20;
@@ -219,7 +222,7 @@ namespace iRacingReplayOverlay
             // 
             this.BeginProcessButton.Enabled = false;
             this.BeginProcessButton.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BeginProcessButton.Location = new System.Drawing.Point(31, 114);
+            this.BeginProcessButton.Location = new System.Drawing.Point(31, 171);
             this.BeginProcessButton.Margin = new System.Windows.Forms.Padding(4);
             this.BeginProcessButton.Name = "BeginProcessButton";
             this.BeginProcessButton.Size = new System.Drawing.Size(163, 64);
@@ -230,7 +233,7 @@ namespace iRacingReplayOverlay
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(28, 62);
+            this.label2.Location = new System.Drawing.Point(28, 119);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(594, 52);
             this.label2.TabIndex = 22;
@@ -240,7 +243,7 @@ namespace iRacingReplayOverlay
             // AnalysingRaceLabel
             // 
             this.AnalysingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.AnalysingRaceLabel.Location = new System.Drawing.Point(216, 114);
+            this.AnalysingRaceLabel.Location = new System.Drawing.Point(216, 171);
             this.AnalysingRaceLabel.Name = "AnalysingRaceLabel";
             this.AnalysingRaceLabel.Size = new System.Drawing.Size(323, 64);
             this.AnalysingRaceLabel.TabIndex = 24;
@@ -250,7 +253,7 @@ namespace iRacingReplayOverlay
             // CapturingRaceLabel
             // 
             this.CapturingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.CapturingRaceLabel.Location = new System.Drawing.Point(216, 114);
+            this.CapturingRaceLabel.Location = new System.Drawing.Point(216, 171);
             this.CapturingRaceLabel.Name = "CapturingRaceLabel";
             this.CapturingRaceLabel.Size = new System.Drawing.Size(323, 64);
             this.CapturingRaceLabel.TabIndex = 25;
@@ -260,7 +263,7 @@ namespace iRacingReplayOverlay
             // ProcessErrorMessageLabel
             // 
             this.ProcessErrorMessageLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.ProcessErrorMessageLabel.Location = new System.Drawing.Point(216, 114);
+            this.ProcessErrorMessageLabel.Location = new System.Drawing.Point(216, 171);
             this.ProcessErrorMessageLabel.Name = "ProcessErrorMessageLabel";
             this.ProcessErrorMessageLabel.Size = new System.Drawing.Size(467, 47);
             this.ProcessErrorMessageLabel.TabIndex = 26;
@@ -270,7 +273,7 @@ namespace iRacingReplayOverlay
             // WaitingForIRacingLabel
             // 
             this.WaitingForIRacingLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.WaitingForIRacingLabel.Location = new System.Drawing.Point(216, 114);
+            this.WaitingForIRacingLabel.Location = new System.Drawing.Point(216, 171);
             this.WaitingForIRacingLabel.Name = "WaitingForIRacingLabel";
             this.WaitingForIRacingLabel.Size = new System.Drawing.Size(323, 64);
             this.WaitingForIRacingLabel.TabIndex = 27;
@@ -279,16 +282,38 @@ namespace iRacingReplayOverlay
             // VideoDetailLabel
             // 
             this.VideoDetailLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.VideoDetailLabel.Location = new System.Drawing.Point(158, 349);
+            this.VideoDetailLabel.Location = new System.Drawing.Point(158, 406);
             this.VideoDetailLabel.Name = "VideoDetailLabel";
             this.VideoDetailLabel.Size = new System.Drawing.Size(464, 21);
             this.VideoDetailLabel.TabIndex = 28;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.pictureBox2.Location = new System.Drawing.Point(13, 59);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(680, 4);
+            this.pictureBox2.TabIndex = 29;
+            this.pictureBox2.TabStop = false;
+            // 
+            // SettingsButton
+            // 
+            this.SettingsButton.Location = new System.Drawing.Point(628, 12);
+            this.SettingsButton.Name = "SettingsButton";
+            this.SettingsButton.Size = new System.Drawing.Size(64, 26);
+            this.SettingsButton.TabIndex = 30;
+            this.SettingsButton.Text = "Settings";
+            this.SettingsButton.UseVisualStyleBackColor = true;
+            this.SettingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 473);
+            this.ClientSize = new System.Drawing.Size(729, 521);
+            this.Controls.Add(this.SettingsButton);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.VideoDetailLabel);
             this.Controls.Add(this.WaitingForIRacingLabel);
             this.Controls.Add(this.ProcessErrorMessageLabel);
@@ -321,6 +346,7 @@ namespace iRacingReplayOverlay
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -350,5 +376,7 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label ProcessErrorMessageLabel;
         private System.Windows.Forms.Label WaitingForIRacingLabel;
         private System.Windows.Forms.Label VideoDetailLabel;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Button SettingsButton;
     }
 }
