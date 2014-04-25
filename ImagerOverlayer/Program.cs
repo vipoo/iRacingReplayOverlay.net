@@ -18,8 +18,10 @@
 
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using iRacingReplayOverlay.Support;
 
 namespace ImagerOverlayer
 {
@@ -36,6 +38,15 @@ namespace ImagerOverlayer
             {
                 OverlayData = new OverlayData
                 {
+                    FastestLaps = new List<OverlayData.FastLap>()
+                    {
+                        new OverlayData.FastLap() 
+                        {
+                            StartTime = 10,
+                            Driver = new OverlayData.Driver { CarNumber = 13, Name = "Dean Netherton" },
+                            Time = TimeSpan.FromSeconds(65.345).TotalSeconds
+                        }
+                    },
                     TimingSamples = new List<OverlayData.TimingSample>() 
                     {
                         new OverlayData.TimingSample
@@ -53,7 +64,7 @@ namespace ImagerOverlayer
                 }
             };
 
-			leaderboard.Overlay(g, 05000000);
+            leaderboard.Overlay(g, 20.FromSecondsToNano());
 
 			g.Flush();
 

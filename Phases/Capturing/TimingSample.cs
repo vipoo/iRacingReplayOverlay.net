@@ -27,59 +27,58 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class OverlayData
     {
-    public class TimingSample
-    {
-        public long StartTime;
-        public Driver[] Drivers;
-        public string RacePosition;
-        public Driver CurrentDriver;
-    }
-
-    public class Driver
-    {
-        public int Position;
-        public string Indicator;
-        public int CarNumber;
-        public string Name;
-
-        [XmlIgnore]
-        public Dictionary<string, string> DriverNickNames = new Dictionary<string, string>();
-
-        [XmlIgnore]
-        public string ShortName
+        public class TimingSample
         {
-            get
+            public long StartTime;
+            public Driver[] Drivers;
+            public string RacePosition;
+            public Driver CurrentDriver;
+        }
+
+        public class Driver
+        {
+            public int Position;
+            public string Indicator;
+            public int CarNumber;
+            public string Name;
+
+            [XmlIgnore]
+            public Dictionary<string, string> DriverNickNames = new Dictionary<string, string>();
+
+            [XmlIgnore]
+            public string ShortName
             {
-                if (DriverNickNames.ContainsKey(Name))
-                    return DriverNickNames[Name];
+                get
+                {
+                    if (DriverNickNames.ContainsKey(Name))
+                        return DriverNickNames[Name];
 
-                var names = Name.Split(' ');
-                var name = names.First().Substring(0, 1).ToUpper()
-                    + names.Last().Substring(0, 1).ToUpper()
-                    + names.Last().Substring(1, 3);
+                    var names = Name.Split(' ');
+                    var name = names.First().Substring(0, 1).ToUpper()
+                        + names.Last().Substring(0, 1).ToUpper()
+                        + names.Last().Substring(1, 3);
 
-                DriverNickNames[Name] = name;
-                return name;
+                    DriverNickNames[Name] = name;
+                    return name;
+                }
             }
         }
-    }
 
-    public class FastLap
-    {
-        public Driver Driver;
-        public double Time;
-    }
+        public class FastLap
+        {
+            public long StartTime;
+            public Driver Driver;
+            public double Time;
+        }
 
-
-    
         public List<TimingSample> TimingSamples = new List<TimingSample>();
-        public List<FastLap> FastLaps = new List<FastLap>();
+        public List<FastLap> FastestLaps = new List<FastLap>();
 
         public void SaveTo(string fileName)
         {
             var writer = new XmlSerializer(typeof(OverlayData));
 
-            using(var file = new StreamWriter(fileName) )
+            using (var file = new StreamWriter(fileName))
                 writer.Serialize(file, this);
         }
 
@@ -90,7 +89,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             {
                 var result = (OverlayData)reader.Deserialize(file);
                 foreach (var timingSample in result.TimingSamples)
-                    foreach( var d in timingSample.Drivers)
+                    foreach (var d in timingSample.Drivers)
                         d.DriverNickNames = driverNickNames;
 
                 return result;

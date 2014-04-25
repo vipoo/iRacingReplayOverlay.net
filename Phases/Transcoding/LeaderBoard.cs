@@ -39,17 +39,47 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             var sample = OverlayData.TimingSamples.LastOrDefault(s => s.StartTime <= timestamp);
 
-            if (sample == null)
-                return;
+            if (sample != null)
+            {
+                DrawLeaderboard(graphics, sample);
 
-			DrawLeaderboard(graphics, sample);
+                DrawCurrentDriverRow(graphics, sample.CurrentDriver);
+            }
 
-            DrawCurrentDriverRow(graphics, sample.CurrentDriver);
+            var fastestLap = OverlayData.FastestLaps.LastOrDefault(s => s.StartTime <= timestamp && s.StartTime + 15 > timestamp);
+            if (fastestLap != null)
+            {
+                DrawFastestLap(graphics, fastestLap);
+            }
+        }
+
+        private void DrawFastestLap(Graphics g, Capturing.OverlayData.FastLap fastestLap)
+        {
+            Func<GraphicRect, GraphicRect> whiteBox = rr =>
+               rr.WithBrush(Styles.Brushes.TransparentLightBlue)
+               .WithPen(Styles.Pens.Black)
+               .DrawRectangleWithBorder()
+               .WithBrush(Styles.Brushes.Black)
+               .WithFont("Calibri", 20, FontStyle.Bold)
+               .WithStringFormat(StringAlignment.Center);
+
+            g.InRectangle(1920 - 80 - 450, 900, 450, 34)
+                .With(whiteBox)
+                .DrawText("New Fast Lap")
+                .ToBelow(width: 50)
+                .With(whiteBox)
+                .DrawText(fastestLap.Driver.CarNumber)
+                .ToRight(width: 250)
+                .With(whiteBox)
+                .DrawText(fastestLap.Driver.Name)
+                .ToRight(width: 150)
+                .With(whiteBox)
+                .DrawText(TimeSpan.FromSeconds(fastestLap.Time).ToString(@"mm\:ss\.fff"));
         }
 
 
         static Func<GraphicRect, GraphicRect> SimpleWhiteBox = rr =>
-               rr.WithLinearGradientBrush(Styles.WhiteSmoke, Styles.White, LinearGradientMode.Horizontal)
+               rr.WithLinearGradientBrush(Styles.WhiteSmoke, Styles.White, LinearGradientMode.BackwardDiagonal)
                .WithPen(Styles.Pens.Black)
                .DrawRectangleWithBorder()
                .WithBrush(Styles.Brushes.Black)
@@ -107,14 +137,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 )
 
                 .ToRight(50)
-                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.Horizontal)
+                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
                 .WithBrush(Styles.Brushes.Black)
                 .DrawText(p.CarNumber)
 
                 .ToRight(300)
-                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.Horizontal)
+                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
                 .WithBrush(Styles.Brushes.Black)
@@ -128,6 +158,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             public readonly static Color WhiteSmoke = Color.FromArgb(AlphaLevel, Color.WhiteSmoke);
             public readonly static Color Black = Color.FromArgb(AlphaLevel, Color.Black);
             public readonly static Color LightYellow = Color.FromArgb(AlphaLevel, Color.LightYellow);
+            public readonly static Color Yellow = Color.FromArgb(AlphaLevel, 150, 150, 0);
 
             public static class Pens
             {
@@ -143,7 +174,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             {
                 public readonly static Brush Black = new SolidBrush(Color.Black);
 				public readonly static Brush Yellow = new SolidBrush(Color.Yellow);
-
+                public readonly static Brush TransparentLightBlue = new SolidBrush(Color.FromArgb(AlphaLevel, Color.LightBlue));
             }
         }
     }
