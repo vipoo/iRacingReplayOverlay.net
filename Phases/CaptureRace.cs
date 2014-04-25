@@ -42,18 +42,14 @@ namespace IRacingReplayOverlay.Phases
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
             Thread.Sleep(1000);
             iRacing.Replay.SetSpeed(1);
-            System.Diagnostics.Trace.WriteLine("Running now...");
 
             var capture = new Capture(overlayData, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);
             var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
             
-            Thread.Sleep(4000);
-            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(500);
-            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            Thread.Sleep(2000);
+            ActivateExternalVideoCapture();
             var startTime = DateTime.Now;
-            System.Diagnostics.Trace.WriteLine("Starting now...");
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
@@ -67,15 +63,27 @@ namespace IRacingReplayOverlay.Phases
                 fastestLaps.Process(data, relativeTime);
             }
 
-            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(500);
-            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            DeactivateVideoCapture();
 
             string errorMessage;
             string fileName;
             capture.Stop(out fileName, out errorMessage);
 
             onComplete(fileName, errorMessage);
+        }
+
+        private static void DeactivateVideoCapture()
+        {
+            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(500);
+            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+        }
+
+        private static void ActivateExternalVideoCapture()
+        {
+            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(500);
+            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
     }
 }
