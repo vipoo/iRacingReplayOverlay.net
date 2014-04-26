@@ -51,12 +51,20 @@ namespace IRacingReplayOverlay.Phases
             ActivateExternalVideoCapture();
             var startTime = DateTime.Now;
 
+            var coolDownTime = 0d;
+
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(1)
-                .TakeWhile(d => d.Telemetry.RaceLaps < 500))
+                .AtSpeed(16, d => d.Telemetry.SessionState != SessionState.Checkered)
+                .AtSpeed(1, d => d.Telemetry.SessionState == SessionState.Checkered))
             {
                 var relativeTime = DateTime.Now - startTime;
+
+                if( data.Telemetry.SessionState == SessionState.CoolDown && coolDownTime == 0)
+                        coolDownTime = data.Telemetry.SessionTime + 10;
+
+                if (data.Telemetry.SessionTime > coolDownTime && coolDownTime != 0)
+                    break;
 
                 replayControl.Process(data);
                 capture.Process(data, relativeTime);
@@ -69,6 +77,9 @@ namespace IRacingReplayOverlay.Phases
             string fileName;
             capture.Stop(out fileName, out errorMessage);
 
+            var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
+            Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_FORCEMINIMIZE);
+            
             onComplete(fileName, errorMessage);
         }
 

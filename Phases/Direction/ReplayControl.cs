@@ -59,6 +59,12 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (IsBeforeFirstLapSector2(data))
                 return;
 
+            if( OnLastLap(data) )
+            {
+                SwitchToFinishingDrivers(data);
+                return;
+            }
+
             if (TwentySecondsAfterLastCameraChange(data))
                 return;
 
@@ -80,6 +86,26 @@ namespace iRacingReplayOverlay.Phases.Direction
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
+        private void SwitchToFinishingDrivers(DataSample data)
+        {
+            var ordered = data.Telemetry.CarIdxDistance
+                .Select((d, i) => new { CarIdx = i, Distance = d })
+                .Skip(1)
+                .Where(d => d.Distance > 0)
+                .OrderByDescending(d => d.Distance)
+                .Where(d => d.Distance <= data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete + 1.01);
+
+            var next = ordered.FirstOrDefault();
+
+            if (next == null)
+                return;
+
+            var number = data.SessionData.DriverInfo.Drivers[next.CarIdx].CarNumber;
+
+            iRacing.Replay.CameraOnDriver((short)number, TV3.CameraNumber);
+
+        }
+
         bool TwentySecondsAfterLastCameraChange(DataSample data)
         {
             return lastTimeStamp + 20.0 > data.Telemetry.SessionTime;
@@ -88,6 +114,11 @@ namespace iRacingReplayOverlay.Phases.Direction
         static bool IsBeforeFirstLapSector2(DataSample data)
         {
             return data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
+        }
+
+        bool OnLastLap(DataSample data)
+        {
+            return data.Telemetry.RaceLaps >= data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
         }
 
         SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)
