@@ -36,17 +36,14 @@ namespace IRacingReplayOverlay.Phases
             Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_SHOWNORMAL);
             Thread.Sleep(2000);
 
-            foreach (var data in iRacing.GetDataFeed()
+            var data = iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
                 .AtSpeed(16)
-                .RaceOnly())
-            {
-                if (raceStartFrameNumber == 0 && data.Telemetry.SessionState == SessionState.Racing)
-                {
-                    raceStartFrameNumber = data.Telemetry.ReplayFrameNum - (60*20);
-                    break;
-                }
-            }
+                .RaceOnly()
+                .First( d => d.Telemetry.SessionState == SessionState.Racing);
+            
+            raceStartFrameNumber = data.Telemetry.ReplayFrameNum - (60*20);
+            
             onComplete();
         }
     }

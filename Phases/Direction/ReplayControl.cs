@@ -32,6 +32,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly TrackCamera[] trackCameras;
         readonly TrackCamera TV2;
         readonly TrackCamera TV3;
+        readonly Random randomDriverNumber;
 
         double lastTimeStamp = 0;
 
@@ -40,6 +41,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             this.sessionData = sessionData;
 
             random = new System.Random();
+            randomDriverNumber = new Random();
 
             trackCameras = Settings.Default.trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
@@ -62,11 +64,20 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             lastTimeStamp = data.Telemetry.SessionTime;
 
-            var car = FindCarCloseToAnotherCar(data);
-
             var camera = FindACamera();
 
-            Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName));
+            //var car = FindCarCloseToAnotherCar(data);
+            var car = FindCarWithin1Second(data);
+            if (car != null)
+            {
+                Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName));
+            }
+            else
+            {
+                car = FindARandomDriver(data);
+                Trace.WriteLine("{0} - Changing camera to random driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName));
+            }
+
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
@@ -80,6 +91,50 @@ namespace iRacingReplayOverlay.Phases.Direction
             return data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
         }
 
+
+        SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)
+        {
+            var activeDrivers = data.Telemetry.CarIdxLap.Select((c, i) => new { CarIdx = i, Lap = c }).Where(d => d.Lap >= 1).ToList();
+
+            var next = randomDriverNumber.Next(activeDrivers.Count);
+
+            return sessionData.DriverInfo.Drivers[activeDrivers[next].CarIdx];
+        }
+
+        SessionData._DriverInfo._Drivers FindCarWithin1Second(DataSample data)
+        {
+            var distances = data.Telemetry.CarIdxDistance
+                .Select((d, i) => new { CarIdx = i, Distance = d })
+                .Skip(1)
+                .Where(d => d.Distance > 0)
+                .OrderByDescending(d => d.Distance)
+                .ToList();
+
+            var gap = Enumerable.Range(1, distances.Count - 1)
+                .Select(i => new
+                {
+                    CarIdx = distances[i].CarIdx,
+                    Distance = distances[i - 1].Distance - distances[i].Distance,
+                    Position = i
+                });
+            
+            var timeGap = gap.Select(g => new
+                {
+                    CarIdx = g.CarIdx,
+                    Time = g.Distance * data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsAverageLapTime,
+                    Position = g.Position
+                })
+                .Where( d => d.Time <= 1)
+                .OrderBy(d => d.Position);
+
+            var closest = timeGap.FirstOrDefault();
+
+            if (closest != null)
+                return sessionData.DriverInfo.Drivers[closest.CarIdx];
+
+            return null;
+
+        }
         SessionData._DriverInfo._Drivers FindCarCloseToAnotherCar(DataSample data)
         {
             var distances = data.Telemetry.CarIdxDistance
