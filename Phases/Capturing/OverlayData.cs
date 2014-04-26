@@ -34,6 +34,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public string RacePosition;
 			public string LapCounter; //optional
             public Driver CurrentDriver;
+
+            public TimingSample Clone()
+            {
+                return (TimingSample)base.MemberwiseClone();
+            }
         }
 
         public class Driver
@@ -42,6 +47,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public string Indicator;
             public int CarNumber;
             public string Name;
+
+            [XmlIgnore]
+            public int CarIdx;
 
             [XmlIgnore]
             public Dictionary<string, string> DriverNickNames = new Dictionary<string, string>();
@@ -62,6 +70,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     DriverNickNames[Name] = name;
                     return name;
                 }
+            }
+
+            public Driver Clone()
+            {
+                return (Driver)base.MemberwiseClone();
             }
         }
 

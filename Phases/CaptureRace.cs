@@ -61,7 +61,7 @@ namespace IRacingReplayOverlay.Phases
                 var relativeTime = DateTime.Now - startTime;
 
                 if( data.Telemetry.SessionState == SessionState.CoolDown && coolDownTime == 0)
-                        coolDownTime = data.Telemetry.SessionTime + 10;
+                    coolDownTime = data.Telemetry.SessionTime + 10;
 
                 if (data.Telemetry.SessionTime > coolDownTime && coolDownTime != 0)
                     break;

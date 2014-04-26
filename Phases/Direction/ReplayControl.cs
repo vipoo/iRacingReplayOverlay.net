@@ -88,12 +88,14 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         private void SwitchToFinishingDrivers(DataSample data)
         {
+            var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
+
             var ordered = data.Telemetry.CarIdxDistance
                 .Select((d, i) => new { CarIdx = i, Distance = d })
                 .Skip(1)
                 .Where(d => d.Distance > 0)
                 .OrderByDescending(d => d.Distance)
-                .Where(d => d.Distance <= data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete + 1.01);
+                .Where(d => d.Distance <= session.ResultsLapsComplete + 1.025);
 
             var next = ordered.FirstOrDefault();
 
