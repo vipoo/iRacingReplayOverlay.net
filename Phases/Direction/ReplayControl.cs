@@ -66,7 +66,6 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var camera = FindACamera();
 
-            //var car = FindCarCloseToAnotherCar(data);
             var car = FindCarWithin1Second(data);
             if (car != null)
             {
@@ -90,7 +89,6 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             return data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
         }
-
 
         SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)
         {
@@ -133,26 +131,6 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return sessionData.DriverInfo.Drivers[closest.CarIdx];
 
             return null;
-
-        }
-        SessionData._DriverInfo._Drivers FindCarCloseToAnotherCar(DataSample data)
-        {
-            var distances = data.Telemetry.CarIdxDistance
-                .Select((d, i) => new { CarIdx = i, Distance = d })
-                .Skip(1)
-                .Where(d => d.Distance > 0)
-                .OrderByDescending(d => d.Distance)
-                .ToList();
-
-            var gap = Enumerable.Range(1, distances.Count - 1)
-                .Select(i => new
-                {
-                    CarIdx = distances[i].CarIdx,
-                    Distance = distances[i-1].Distance - distances[i].Distance
-                })
-                .OrderBy(d => d.Distance);
-            
-            return sessionData.DriverInfo.Drivers[gap.First().CarIdx];
         }
 
         TrackCamera FindACamera()
