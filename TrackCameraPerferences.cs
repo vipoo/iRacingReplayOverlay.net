@@ -95,7 +95,13 @@ namespace IRacingReplayOverlay
         private void TrackCameraPerferences_Load(object sender, EventArgs e)
         {
             trackCameras = Settings.Default.trackCameras;
-
+            if( trackCameras == null)
+            {
+                trackCameras = new TrackCameras();
+                Settings.Default.trackCameras = trackCameras;
+                Settings.Default.Save();
+            }
+            
             DiscoverAnyNewTrackCameras();
 
             InitialiseDropDownListOfTracks();

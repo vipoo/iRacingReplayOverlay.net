@@ -32,6 +32,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public long StartTime;
             public Driver[] Drivers;
             public string RacePosition;
+			public string LapCounter; //optional
             public Driver CurrentDriver;
         }
 

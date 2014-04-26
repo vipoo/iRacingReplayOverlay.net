@@ -85,7 +85,7 @@ Global
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Tester\Tester.csproj
+		StartupItem = ImagerOverlayer\ImagerOverlayer.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -68,6 +68,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
             var raceLapsPosition = string.Format("Lap {0}/{1}", session._SessionLaps - data.Telemetry.SessionLapsRemain, session.SessionLaps);
             var raceTimePosition = string.Format("{0:00}:{1:00}", timespan.Minutes, timespan.Seconds);
 
+			var raceLapCounter = string.Format("Lap {0}", data.Telemetry.RaceLaps);
+
             var drivers = positions.Select((c, p) => new OverlayData.Driver { Name = c.Driver.UserName, CarNumber = (int)c.Driver.CarNumber, Position = p + 1 }).ToArray();
 
             var timingSample = new OverlayData.TimingSample
@@ -75,7 +77,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 StartTime = (long)relativeTime.TotalSeconds,
                 Drivers = drivers,
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
-                CurrentDriver = GetCurrentDriverDetails(data, positions)
+				CurrentDriver = GetCurrentDriverDetails(data, positions),
+				LapCounter = session.IsLimitedSessionLaps ? null : raceLapCounter 
             };
 
             overlayData.TimingSamples.Add(timingSample);

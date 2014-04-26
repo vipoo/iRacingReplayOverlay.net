@@ -51,13 +51,14 @@ namespace ImagerOverlayer
                     {
                         new OverlayData.TimingSample
                         {
+                            LapCounter = "Lap 2",
                             StartTime = 0, 
                             Drivers = new [] {
                                 new OverlayData.Driver { CarNumber = 12, Name = "Dean Netherton", Position = 1, DriverNickNames = driverNickNames },
                                 new OverlayData.Driver { CarNumber = 13, Name = "Matty", Position = 2, DriverNickNames = driverNickNames },
                                 new OverlayData.Driver { CarNumber = 3, Name = "Fred", Position = 3, DriverNickNames = driverNickNames }
                             },
-                            RacePosition = "Lap 12/40",
+                            RacePosition = "39:34",
                             CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 29, Name = "Somebody" },
                         }
                     }

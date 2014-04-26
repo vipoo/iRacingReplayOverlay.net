@@ -99,9 +99,17 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
 		private void DrawLeaderboard(Graphics g, OverlayData.TimingSample sample)
         {
+
             var r = g.InRectangle(80, 80, 210, 40)
                 .With(SimpleWhiteBox)
-                .DrawText(sample.RacePosition.ToString());
+                .DrawText(sample.RacePosition);
+
+			if(sample.LapCounter != null)
+			{
+				r = r.ToBelow()
+					.With(SimpleWhiteBox)
+					.DrawText(sample.LapCounter);
+			}
 
             foreach( var d in sample.Drivers.Take(20))
             { 
