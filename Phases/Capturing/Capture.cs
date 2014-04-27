@@ -16,13 +16,12 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using iRacingReplayOverlay.Support;
-using System.Collections.Generic;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
@@ -31,12 +30,15 @@ namespace iRacingReplayOverlay.Phases.Capturing
         readonly String workingFolder;
         readonly OverlayData overlayData;
         readonly FileSystemWatcher[] fileWatchers;
+        readonly CommentaryMessages commentaryMessages;
+
         string latestCreatedVideoFile;
         DateTime lastTime;
         OverlayData.TimingSample timingSample;
-
-        CommentaryMessages commentaryMessages;
-
+        int[] lastLaps = new int[64];
+        OverlayData.Driver[] lastDrivers;
+        int leaderBoardUpdateRate = 0;
+        
         public Capture(OverlayData overlayData, string workingFolder)
         {
             this.overlayData = overlayData;
@@ -54,8 +56,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 fileWatcher.EnableRaisingEvents = true;
             }
         }
-
-        int leaderBoardUpdateRate = 0;
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
@@ -75,43 +75,44 @@ namespace iRacingReplayOverlay.Phases.Capturing
             else
             {
                 leaderBoardUpdateRate = 0;
-
-                var positions = data.Telemetry.Cars
-                    .Where(c => c.Index != 0)
-                    .OrderByDescending(c => c.Lap + c.DistancePercentage)
-                    .ToArray();
-
-                var drivers = positions.Select((c, p) => new OverlayData.Driver
-                {
-                    Name = c.Driver.UserName,
-                    CarNumber = (int)c.Driver.CarNumber,
-                    Position = p + 1,
-                    CarIdx = (int)c.Driver.CarIdx
-                }).ToArray();
-
-                timingSample = CreateTimingSample(data, relativeTime, drivers);
-
-                if( lastDrivers != null )
-                {
-                    foreach( var d in drivers)
-                    {
-                        var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
-                        if( lastPosition != null && lastPosition.Position != d.Position)
-                        {
-                            var msg = "Driver {0} now in {1}{2}".F(d.Name, d.Position, GetOrdinal(d.Position));
-                            Trace.WriteLine("Adding Message {0}".F(msg));
-                            commentaryMessages.Add(msg, relativeTime.TotalSeconds);                            
-                        }
-                    }
-                }
-
-                lastDrivers = drivers;
+                ProcessLatestRunningOrder(data, relativeTime);
             }
 
             overlayData.TimingSamples.Add(timingSample);
         }
 
-        private OverlayData.TimingSample CreateTimingSample(DataSample data, TimeSpan relativeTime, OverlayData.Driver[] drivers)
+        void ProcessLatestRunningOrder(DataSample data, TimeSpan relativeTime)
+        {
+            var positions = data.Telemetry.Cars
+                .Where(c => c.Index != 0)
+                .OrderByDescending(c => c.Lap + c.DistancePercentage);
+
+            var drivers = positions.Select((c, p) => new OverlayData.Driver
+            {
+                Name = c.Driver.UserName,
+                CarNumber = (int)c.Driver.CarNumber,
+                Position = p + 1,
+                CarIdx = (int)c.Driver.CarIdx
+            }).ToArray();
+
+            timingSample = CreateTimingSample(data, relativeTime, drivers);
+
+            if (lastDrivers != null)
+                foreach (var d in drivers)
+                {
+                    var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
+                    if (lastPosition != null && lastPosition.Position != d.Position)
+                    {
+                        var msg = "Driver {0} now in {1}{2}".F(d.Name, d.Position, GetOrdinal(d.Position));
+                        Trace.WriteLine("Adding Message {0}".F(msg));
+                        commentaryMessages.Add(msg, relativeTime.TotalSeconds);
+                    }
+                }
+
+            lastDrivers = drivers;
+        }
+
+        OverlayData.TimingSample CreateTimingSample(DataSample data, TimeSpan relativeTime, OverlayData.Driver[] drivers)
         {
             var session = data.SessionData.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
 
@@ -142,22 +143,19 @@ namespace iRacingReplayOverlay.Phases.Capturing
             };
         }
 
-        int[] lastLaps = new int[64];
-        private OverlayData.Driver[] lastDrivers;
-
-        private bool ProcessForLastLap(DataSample data, TimeSpan relativeTime)
+        bool ProcessForLastLap(DataSample data, TimeSpan relativeTime)
         {
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 
             if (data.Telemetry.RaceLaps <= session.ResultsLapsComplete)
             {
-                for (int i = 0; i < 64; i++)
+                for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
                     lastLaps[i] = data.Telemetry.CarIdxLap[i];
 
                 return false;
             }
 
-            for (int i = 0; i < 64; i++)
+            for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
             {
                 if (lastLaps[i] != data.Telemetry.CarIdxLap[i])
                 {
@@ -187,11 +185,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 }
             }
 
-
             overlayData.TimingSamples.Add(timingSample);
 
             return true;
-
         }
 
         public void Stop(out string latestCreatedVideoFile, out string errors)

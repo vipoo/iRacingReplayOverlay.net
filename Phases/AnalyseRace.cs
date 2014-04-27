@@ -18,10 +18,8 @@
 //
 
 using iRacingReplayOverlay.Phases.Analysis;
-using iRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
@@ -30,6 +28,7 @@ namespace IRacingReplayOverlay.Phases
     public partial class IRacingReplay
     {
         int raceStartFrameNumber = 0;
+        Incidents incidents;
 
         public void _AnalyseRace(Action onComplete)
         {
@@ -50,11 +49,10 @@ namespace IRacingReplayOverlay.Phases
             onComplete();
         }
 
-        Incidents incidents;
         void AnalyseIncidents()
         {
             incidents = new Incidents();
-            foreach (var data in iRacing.GetDataFeed().RaceIncidents().TakeWhile(d => d.Telemetry.RaceLaps < 5))
+            foreach (var data in iRacing.GetDataFeed().RaceIncidents())
                 incidents.Process(data);
             incidents.Stop();
         }

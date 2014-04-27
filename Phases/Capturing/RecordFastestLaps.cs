@@ -29,13 +29,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
     public class RecordFastestLaps
     {
         readonly OverlayData overlayData;
+        OverlayData.FastLap lastFastLap;
 
         public int[] lastDriverLaps = new int[64];
         public double[] driverLapStartTime = new double[64];
 
         public double fastestLapTime = double.MaxValue;
         public double? timeToNoteFastestLap = null;
-        OverlayData.FastLap lastFastLap;
 
         public RecordFastestLaps(OverlayData overlayData)
         {
