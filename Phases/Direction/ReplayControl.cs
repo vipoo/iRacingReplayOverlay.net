@@ -16,12 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Support;
 using IRacingReplayOverlay;
 using iRacingSDK;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
@@ -35,8 +38,12 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly Random randomDriverNumber;
 
         double lastTimeStamp = 0;
+        IEnumerator<Incidents.Incident> nextIncident;
+        private int incidentResumePoint;
+        private bool isShowingIncident;
+        double incidentResumeTime;
 
-        public ReplayControl(SessionData sessionData)
+        public ReplayControl(SessionData sessionData, Incidents incidents)
         {
             this.sessionData = sessionData;
 
@@ -52,24 +59,69 @@ namespace iRacingReplayOverlay.Phases.Direction
             TV3 = trackCameras.First(tc => tc.CameraName == "TV3");
 
             iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
+
+            nextIncident = incidents.GetEnumerator();
+            nextIncident.MoveNext();
         }
 
         public void Process(DataSample data)
         {
-            if (IsBeforeFirstLapSector2(data))
-                return;
-
             if( OnLastLap(data) )
             {
                 SwitchToFinishingDrivers(data);
                 return;
             }
 
-            if (TwentySecondsAfterLastCameraChange(data))
+            if (isShowingIncident)
+            {
+                if (nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime)
+                {
+                    Trace.WriteLine("Replaying!!!! {0}, {1}".F(data.Telemetry.SessionTime, nextIncident.Current.EndSessionTime));
+                    return;
+                }
+
+                Trace.WriteLine("Finishing incident from {0}".F(nextIncident.Current.StartSessionTime));
+   
+                isShowingIncident = false;
+                Trace.WriteLine("Should be resuming to {0}".F(incidentResumeTime));
+                nextIncident.MoveNext();
+
+            }
+            else
+                if (TwentySecondsAfterLastCameraChange(data))
+                    return;
+
+            if (IsBeforeFirstLapSector2(data))
                 return;
 
             lastTimeStamp = data.Telemetry.SessionTime;
 
+            //Incidents replays needs to captured into seperate files.
+
+            /*while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
+            {
+                Trace.WriteLine("Skipping incident at time {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)));
+                nextIncident.MoveNext();
+            }
+
+            if( nextIncident.Current != null && (nextIncident.Current.StartSessionTime) < data.Telemetry.SessionTime)
+            {
+                Trace.WriteLine("Showing incident from {0}".F(nextIncident.Current.StartSessionTime));
+    //            iRacing.Replay.MoveToFrame(nextIncident.Current.StartFrameNumber);
+                //iRacing.Replay.SetSpeed(1);
+
+                incidentResumePoint = (int)(data.Telemetry.ReplayFrameNum + (60 * (nextIncident.Current.EndSessionTime - nextIncident.Current.StartSessionTime)));
+                incidentResumeTime = data.Telemetry.SessionTime + (nextIncident.Current.EndSessionTime - nextIncident.Current.StartSessionTime);
+                Trace.WriteLine("Expecint to resume live at {0}".F(incidentResumeTime));
+                isShowingIncident = true;
+
+                var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
+
+                iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
+                return;
+                //Replay incident
+            }
+            */
             var camera = FindACamera();
 
             var car = FindCarWithin1Second(data);

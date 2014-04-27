@@ -34,7 +34,6 @@ namespace iRacingReplayOverlay.Phases.Analysis
             public double StartSessionTime;
             public double EndSessionTime;
             public int StartFrameNumber;
-            public int EndFrameNumber;
             public int CarIdx;
         }
 
@@ -48,8 +47,8 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 LapNumber = data.Telemetry.RaceLaps, 
                 CarIdx = data.Telemetry.CamCarIdx, 
                 StartFrameNumber = data.Telemetry.ReplayFrameNum,
-                StartSessionTime = data.Telemetry.SessionTime - 4,
-                EndSessionTime = data.Telemetry.SessionTime + 7
+                StartSessionTime = data.Telemetry.SessionTime - 1,
+                EndSessionTime = data.Telemetry.SessionTime + 9
             };
 
             if( lastIncident == null )
@@ -68,8 +67,6 @@ namespace iRacingReplayOverlay.Phases.Analysis
             {
                 lastIncident.EndSessionTime = i.EndSessionTime;
             }
-
-            Trace.WriteLine(" Noted incident on lap {0}, with driver {1}, at time of {2}".F(i.LapNumber, i.CarIdx, TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
         }
 
         public void Stop()

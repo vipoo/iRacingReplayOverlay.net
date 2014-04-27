@@ -96,9 +96,20 @@ namespace iRacingReplayOverlay.Phases.Capturing
             var session = data.SessionData.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
 
             var timespan = TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain);
-            var raceLapsPosition = string.Format("Lap {0}/{1}", session._SessionLaps - data.Telemetry.SessionLapsRemain, session.SessionLaps);
+            var raceLapsPosition = string.Format("Lap {0}/{1}", data.Telemetry.RaceLaps, session.SessionLaps);
             var raceTimePosition = string.Format("{0:00}:{1:00}", timespan.Minutes, timespan.Seconds);
             var raceLapCounter = string.Format("Lap {0}", data.Telemetry.RaceLaps);
+
+            if( data.Telemetry.RaceLaps == session._SessionLaps)
+            {
+                raceLapsPosition = "Final Lap";
+                raceLapCounter = "Final Lap";
+            }
+            if( data.Telemetry.RaceLaps > session._SessionLaps)
+            {
+                raceLapsPosition = "Results";
+                raceLapCounter = null;
+            }
 
             return new OverlayData.TimingSample
             {

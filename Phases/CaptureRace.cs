@@ -45,7 +45,7 @@ namespace IRacingReplayOverlay.Phases
 
             var capture = new Capture(overlayData, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);
-            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData);
+            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData, incidents);
             
             Thread.Sleep(2000);
             ActivateExternalVideoCapture();
@@ -55,7 +55,7 @@ namespace IRacingReplayOverlay.Phases
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(16, d => d.Telemetry.SessionState != SessionState.Checkered)
+                .AtSpeed(2, d => d.Telemetry.SessionState != SessionState.Checkered)
                 .AtSpeed(1, d => d.Telemetry.SessionState == SessionState.Checkered))
             {
                 var relativeTime = DateTime.Now - startTime;
