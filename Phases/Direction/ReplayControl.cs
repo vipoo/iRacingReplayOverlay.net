@@ -36,12 +36,10 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly TrackCamera TV2;
         readonly TrackCamera TV3;
         readonly Random randomDriverNumber;
+        readonly IEnumerator<Incidents.Incident> nextIncident;
 
         double lastTimeStamp = 0;
-        IEnumerator<Incidents.Incident> nextIncident;
-        private int incidentResumePoint;
-        private bool isShowingIncident;
-        double incidentResumeTime;
+        bool isShowingIncident;
 
         public ReplayControl(SessionData sessionData, Incidents incidents)
         {
@@ -76,29 +74,20 @@ namespace iRacingReplayOverlay.Phases.Direction
             {
                 if (nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime)
                 {
-                    Trace.WriteLine("Replaying!!!! {0}, {1}".F(data.Telemetry.SessionTime, nextIncident.Current.EndSessionTime));
+                    Trace.WriteLine("Showing incident {0}, {1}".F(data.Telemetry.SessionTime, nextIncident.Current.EndSessionTime));
                     return;
                 }
 
                 Trace.WriteLine("Finishing incident from {0}".F(nextIncident.Current.StartSessionTime));
    
                 isShowingIncident = false;
-                Trace.WriteLine("Should be resuming to {0}".F(incidentResumeTime));
                 nextIncident.MoveNext();
-
             }
-            else
-                if (TwentySecondsAfterLastCameraChange(data))
-                    return;
 
             if (IsBeforeFirstLapSector2(data))
                 return;
 
-            lastTimeStamp = data.Telemetry.SessionTime;
-
-            //Incidents replays needs to captured into seperate files.
-
-            /*while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
+            while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
             {
                 Trace.WriteLine("Skipping incident at time {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)));
                 nextIncident.MoveNext();
@@ -107,21 +96,20 @@ namespace iRacingReplayOverlay.Phases.Direction
             if( nextIncident.Current != null && (nextIncident.Current.StartSessionTime) < data.Telemetry.SessionTime)
             {
                 Trace.WriteLine("Showing incident from {0}".F(nextIncident.Current.StartSessionTime));
-    //            iRacing.Replay.MoveToFrame(nextIncident.Current.StartFrameNumber);
-                //iRacing.Replay.SetSpeed(1);
 
-                incidentResumePoint = (int)(data.Telemetry.ReplayFrameNum + (60 * (nextIncident.Current.EndSessionTime - nextIncident.Current.StartSessionTime)));
-                incidentResumeTime = data.Telemetry.SessionTime + (nextIncident.Current.EndSessionTime - nextIncident.Current.StartSessionTime);
-                Trace.WriteLine("Expecint to resume live at {0}".F(incidentResumeTime));
                 isShowingIncident = true;
 
                 var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
 
                 iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
                 return;
-                //Replay incident
             }
-            */
+
+            if (TwentySecondsAfterLastCameraChange(data))
+                return;
+
+            lastTimeStamp = data.Telemetry.SessionTime;
+
             var camera = FindACamera();
 
             var car = FindCarWithin1Second(data);
