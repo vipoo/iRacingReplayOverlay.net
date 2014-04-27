@@ -73,10 +73,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (isShowingIncident)
             {
                 if (nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime)
-                {
-                    Trace.WriteLine("Showing incident {0}, {1}".F(data.Telemetry.SessionTime, nextIncident.Current.EndSessionTime));
                     return;
-                }
 
                 Trace.WriteLine("Finishing incident from {0}".F(nextIncident.Current.StartSessionTime));
    
@@ -95,8 +92,6 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             if( nextIncident.Current != null && (nextIncident.Current.StartSessionTime) < data.Telemetry.SessionTime)
             {
-                Trace.WriteLine("Showing incident from {0}".F(nextIncident.Current.StartSessionTime));
-
                 isShowingIncident = true;
 
                 var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];

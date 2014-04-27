@@ -32,30 +32,66 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         internal void Overlay(Graphics graphics, long timestamp)
         {
-            timestamp = timestamp.FromNanoToSeconds();
+            var timeInSeconds = timestamp.FromNanoToSeconds();
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            var sample = OverlayData.TimingSamples.LastOrDefault(s => s.StartTime <= timestamp);
+            var sample = OverlayData.TimingSamples.LastOrDefault(s => s.StartTime <= timeInSeconds);
 
             if (sample != null)
             {
                 DrawLeaderboard(graphics, sample);
-
                 DrawCurrentDriverRow(graphics, sample.CurrentDriver);
             }
 
-            var fastestLap = OverlayData.FastestLaps.LastOrDefault(s => s.StartTime <= timestamp && s.StartTime + 15 > timestamp);
+            var fastestLap = OverlayData.FastestLaps.LastOrDefault(s => s.StartTime <= timeInSeconds && s.StartTime + 15 > timeInSeconds);
             if (fastestLap != null)
-            {
                 DrawFastestLap(graphics, fastestLap);
+
+            if( sample.MessageState != null)
+                DrawRaceMessages(graphics, timeInSeconds);
+        }
+
+        private void DrawRaceMessages(Graphics g, double timeInSeconds)
+        {
+            var sample = OverlayData.TimingSamples.LastOrDefault(s => s.MessageState != null && s.MessageState.Time <= timeInSeconds);
+            if (sample == null)
+                return;
+
+            Func<GraphicRect, GraphicRect> blueBox = rr =>
+               rr.WithBrush(Styles.Brushes.TransparentLightBlue)
+               .WithPen(Styles.Pens.Black)
+               .DrawRectangleWithBorder()
+               .WithBrush(Styles.Brushes.Black)
+               .WithFont("Calibri", 20, FontStyle.Bold)
+               .WithStringFormat(StringAlignment.Near);
+
+            var shiftFactor = (double)Math.Min(timeInSeconds - sample.MessageState.Time, 1d);
+            var offset = (int)(34 * shiftFactor);
+
+            offset = offset + (sample.MessageState.Messages.Length - 1) * 34;
+
+            var row4Top = 900 + 34 * 3;
+            offset = row4Top - offset;
+
+            var r = g.InRectangle(80, offset, 450, 34);
+
+            g.SetClip(new Rectangle(80, 900, 450, 34+34+34));
+
+            foreach (var msg in sample.MessageState.Messages)
+            {
+                r = r.With(blueBox)
+                    .DrawText(" " + msg)
+                    .ToBelow();
             }
+
+            g.ResetClip();
         }
 
         private void DrawFastestLap(Graphics g, Capturing.OverlayData.FastLap fastestLap)
         {
-            Func<GraphicRect, GraphicRect> whiteBox = rr =>
+            Func<GraphicRect, GraphicRect> blueBox = rr =>
                rr.WithBrush(Styles.Brushes.TransparentLightBlue)
                .WithPen(Styles.Pens.Black)
                .DrawRectangleWithBorder()
@@ -64,16 +100,16 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                .WithStringFormat(StringAlignment.Center);
 
             g.InRectangle(1920 - 80 - 450, 900, 450, 34)
-                .With(whiteBox)
+                .With(blueBox)
                 .DrawText("New Fast Lap")
                 .ToBelow(width: 50)
-                .With(whiteBox)
+                .With(blueBox)
                 .DrawText(fastestLap.Driver.CarNumber)
                 .ToRight(width: 250)
-                .With(whiteBox)
+                .With(blueBox)
                 .DrawText(fastestLap.Driver.Name)
                 .ToRight(width: 150)
-                .With(whiteBox)
+                .With(blueBox)
                 .DrawText(TimeSpan.FromSeconds(fastestLap.Time).ToString(@"mm\:ss\.fff"));
         }
 
@@ -99,17 +135,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
 		private void DrawLeaderboard(Graphics g, OverlayData.TimingSample sample)
         {
-
             var r = g.InRectangle(80, 80, 210, 40)
                 .With(SimpleWhiteBox)
                 .DrawText(sample.RacePosition);
 
 			if(sample.LapCounter != null)
-			{
 				r = r.ToBelow()
 					.With(SimpleWhiteBox)
 					.DrawText(sample.LapCounter);
-			}
 
             foreach( var d in sample.Drivers.Take(20))
             { 

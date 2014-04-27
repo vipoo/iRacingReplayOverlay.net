@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using iRacingReplayOverlay.Support;
+using System.Collections.Generic;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
@@ -34,11 +35,14 @@ namespace iRacingReplayOverlay.Phases.Capturing
         DateTime lastTime;
         OverlayData.TimingSample timingSample;
 
+        CommentaryMessages commentaryMessages;
+
         public Capture(OverlayData overlayData, string workingFolder)
         {
             this.overlayData = overlayData;
             this.workingFolder = workingFolder;
 
+            this.commentaryMessages = new CommentaryMessages();
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
             fileWatchers[0] = new FileSystemWatcher(workingFolder, "*.mp4");
@@ -86,6 +90,22 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 }).ToArray();
 
                 timingSample = CreateTimingSample(data, relativeTime, drivers);
+
+                if( lastDrivers != null )
+                {
+                    foreach( var d in drivers)
+                    {
+                        var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
+                        if( lastPosition != null && lastPosition.Position != d.Position)
+                        {
+                            var msg = "Driver {0} now in {1}{2}".F(d.Name, d.Position, GetOrdinal(d.Position));
+                            Trace.WriteLine("Adding Message {0}".F(msg));
+                            commentaryMessages.Add(msg, relativeTime.TotalSeconds);                            
+                        }
+                    }
+                }
+
+                lastDrivers = drivers;
             }
 
             overlayData.TimingSamples.Add(timingSample);
@@ -113,6 +133,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             return new OverlayData.TimingSample
             {
+                MessageState = commentaryMessages.Messages(relativeTime.TotalSeconds),
                 StartTime = (long)relativeTime.TotalSeconds,
                 Drivers = drivers,
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
@@ -122,6 +143,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         }
 
         int[] lastLaps = new int[64];
+        private OverlayData.Driver[] lastDrivers;
 
         private bool ProcessForLastLap(DataSample data, TimeSpan relativeTime)
         {

@@ -55,8 +55,9 @@ namespace IRacingReplayOverlay.Phases
 
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .AtSpeed(2, d => d.Telemetry.SessionState != SessionState.Checkered)
-                .AtSpeed(1, d => d.Telemetry.SessionState == SessionState.Checkered))
+                .AtSpeed(1, d => d.Telemetry.SessionState != SessionState.Checkered)
+                .AtSpeed(1, d => d.Telemetry.SessionState == SessionState.Checkered)
+                .TakeWhile( d=> d.Telemetry.RaceLaps < 6))
             {
                 var relativeTime = DateTime.Now - startTime;
 

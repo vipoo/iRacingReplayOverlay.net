@@ -27,6 +27,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class OverlayData
     {
+        public class MessageState
+        {
+            public string[] Messages;
+            public double Time;
+        }
+
         public class TimingSample
         {
             public long StartTime;
@@ -34,6 +40,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public string RacePosition;
 			public string LapCounter; //optional
             public Driver CurrentDriver;
+
+            public MessageState MessageState;
 
             public TimingSample Clone()
             {

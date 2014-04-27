@@ -22,23 +22,55 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using iRacingReplayOverlay.Support;
+using System.Threading;
 
 namespace ImagerOverlayer
 {
 	class MainClass
 	{
-		public static void Main(string[] args)
-		{
-            var driverNickNames = new Dictionary<string, string>();
-			var bitmap = (Bitmap)Bitmap.FromFile(@"c:\users\dean\documents\image.bmp");
-
-			var g = Graphics.FromImage(bitmap);
-
-            var leaderboard = new LeaderBoard
+        public static void Main(string[] args)
+        {
+            for (var i = 24.5; i < 30.0; i += 1.0/59.9)
             {
-                OverlayData = new OverlayData
+                var driverNickNames = new Dictionary<string, string>();
+                var bitmap = (Bitmap)Bitmap.FromFile(@"c:\users\dean\documents\image.bmp");
+
+                var g = Graphics.FromImage(bitmap);
+
+                double messageTime = double.MaxValue;
+                string[] messages = null;
+
+                if( i >= 20.0 && i < 21.0)
                 {
-                    FastestLaps = new List<OverlayData.FastLap>()
+                    messageTime = 20d;
+                    messages = new[] { "Message1" };
+                }
+                else if( i >=21.0 && i < 23.0)
+                {
+                    messageTime = 21;
+                    messages = new [] {"Message1", "Message 2" };
+                }
+                else if (i >= 24.0 && i < 25.432454699999997)
+                {
+                    messageTime = 24;
+                    messages = new[] { "Message1", "Message 2", "Messages 3" };
+                }
+                else if (i >= 25.432454699999997 && i < 27.0)
+                {
+                    messageTime = 25.432454699999997;
+                    messages = new[] { "Message1", "Message 2", "Messages 3", "Messages 4" };
+                }
+                else if (i >= 27.0 && i < 28.0)
+                {
+                    messageTime = 27;
+                    messages = new[] { "Message 2", "Messages 3", "Messages 4", "Message 5" };
+                }
+
+                var leaderboard = new LeaderBoard
+                {
+                    OverlayData = new OverlayData
+                    {
+                        FastestLaps = new List<OverlayData.FastLap>()
                     {
                         new OverlayData.FastLap() 
                         {
@@ -47,10 +79,11 @@ namespace ImagerOverlayer
                             Time = TimeSpan.FromSeconds(65.345).TotalSeconds
                         }
                     },
-                    TimingSamples = new List<OverlayData.TimingSample>() 
+                        TimingSamples = new List<OverlayData.TimingSample>() 
                     {
                         new OverlayData.TimingSample
                         {
+                            MessageState = new OverlayData.MessageState { Messages = messages, Time = messageTime},
                             LapCounter = "Lap 2",
                             StartTime = 0, 
                             Drivers = new [] {
@@ -62,14 +95,16 @@ namespace ImagerOverlayer
                             CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 29, Name = "Somebody" },
                         }
                     }
-                }
-            };
+                    }
+                };
 
-            leaderboard.Overlay(g, 20.FromSecondsToNano());
+                Console.WriteLine("time is {0}", i);
+                leaderboard.Overlay(g, i.FromSecondsToNano());
+                g.Flush();
+                bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
+                Thread.Sleep(1000);
+            }
 
-			g.Flush();
-
-			bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
-		}
+        }
 	}
 }
