@@ -52,21 +52,16 @@ namespace iRacingReplayOverlay.Phases.Analysis
             };
 
             if( lastIncident == null )
-            {
                 lastIncident = i;
-            }
+           
             else if (lastIncident.CarIdx != i.CarIdx)
-            {
                 AddLastIncident(i);
-            }
+            
             else if(lastIncident.EndSessionTime + 15.0 < i.StartSessionTime)
-            {
                 AddLastIncident(i);
-            }
+            
             else
-            {
                 lastIncident.EndSessionTime = i.EndSessionTime;
-            }
         }
 
         public void Stop()

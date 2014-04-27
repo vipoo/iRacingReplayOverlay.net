@@ -152,9 +152,22 @@ namespace iRacingReplayOverlay.Phases.Direction
             return lastTimeStamp + 20.0 > data.Telemetry.SessionTime;
         }
 
-        static bool IsBeforeFirstLapSector2(DataSample data)
+        DateTime lastTimeLeaderWasSelected = DateTime.Now;
+
+        bool IsBeforeFirstLapSector2(DataSample data)
         {
-            return data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
+            var result = data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
+            if (result)
+            {
+                if ((DateTime.Now - lastTimeLeaderWasSelected).TotalSeconds > 5)
+                {
+                    iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
+
+                    lastTimeLeaderWasSelected = DateTime.Now;
+                }
+            }
+
+            return result;
         }
 
         bool OnLastLap(DataSample data)
