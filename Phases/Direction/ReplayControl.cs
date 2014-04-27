@@ -144,8 +144,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var number = data.SessionData.DriverInfo.Drivers[next.CarIdx].CarNumber;
 
-            iRacing.Replay.CameraOnDriver((short)number, TV3.CameraNumber);
-
+            iRacing.Replay.CameraOnDriver((short)number, TV2.CameraNumber);
         }
 
         bool TwentySecondsAfterLastCameraChange(DataSample data)
