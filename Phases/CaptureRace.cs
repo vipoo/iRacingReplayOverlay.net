@@ -28,13 +28,6 @@ namespace IRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-
-        const int KEYEVENTF_KEYUP = 0x02;
-        const byte VK_MENU = 0x12;
-        const byte VK_F9 = 0x78;
-
         void _CaptureRace(string workingFolder, Action<string, string> onComplete)
         {
             var overlayData = new OverlayData();
@@ -43,12 +36,13 @@ namespace IRacingReplayOverlay.Phases
             Thread.Sleep(1000);
             iRacing.Replay.SetSpeed(1);
 
+            var videoCapture = new VideoCapture();
             var capture = new Capture(overlayData, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);
             var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData, incidents);
             
             Thread.Sleep(2000);
-            ActivateExternalVideoCapture();
+            videoCapture.Activate();
             var startTime = DateTime.Now;
 
             var coolDownTime = 0d;
@@ -70,7 +64,7 @@ namespace IRacingReplayOverlay.Phases
                 fastestLaps.Process(data, relativeTime);
             }
 
-            DeactivateVideoCapture();
+            videoCapture.Deactivate();
 
             string errorMessage;
             string fileName;
@@ -80,20 +74,6 @@ namespace IRacingReplayOverlay.Phases
             Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_FORCEMINIMIZE);
             
             onComplete(fileName, errorMessage);
-        }
-
-        private static void DeactivateVideoCapture()
-        {
-            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(500);
-            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-        }
-
-        private static void ActivateExternalVideoCapture()
-        {
-            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(500);
-            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
     }
 }

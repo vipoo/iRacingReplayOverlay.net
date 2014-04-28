@@ -283,8 +283,13 @@ namespace iRacingReplayOverlay
 
         private void SettingsButton_Click(object sender, EventArgs e)
         {
-            var settings = new TrackCameraPerferences();
+            var settings = new ConfigureTrackCameras();
             settings.ShowDialog();
+        }
+
+        private void configureVideoCaptureButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

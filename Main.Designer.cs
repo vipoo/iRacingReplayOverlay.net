@@ -70,6 +70,7 @@ namespace iRacingReplayOverlay
             this.VideoDetailLabel = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.SettingsButton = new System.Windows.Forms.Button();
+            this.configureVideoCaptureButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -299,19 +300,30 @@ namespace iRacingReplayOverlay
             // 
             // SettingsButton
             // 
-            this.SettingsButton.Location = new System.Drawing.Point(628, 12);
+            this.SettingsButton.Location = new System.Drawing.Point(511, 12);
             this.SettingsButton.Name = "SettingsButton";
-            this.SettingsButton.Size = new System.Drawing.Size(64, 26);
+            this.SettingsButton.Size = new System.Drawing.Size(181, 26);
             this.SettingsButton.TabIndex = 30;
-            this.SettingsButton.Text = "Settings";
+            this.SettingsButton.Text = "Configure Track Cameras";
             this.SettingsButton.UseVisualStyleBackColor = true;
             this.SettingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
+            // 
+            // configureVideoCaptureButton
+            // 
+            this.configureVideoCaptureButton.Location = new System.Drawing.Point(313, 12);
+            this.configureVideoCaptureButton.Name = "configureVideoCaptureButton";
+            this.configureVideoCaptureButton.Size = new System.Drawing.Size(181, 26);
+            this.configureVideoCaptureButton.TabIndex = 31;
+            this.configureVideoCaptureButton.Text = "Configure Video Capture";
+            this.configureVideoCaptureButton.UseVisualStyleBackColor = true;
+            this.configureVideoCaptureButton.Click += new System.EventHandler(this.configureVideoCaptureButton_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(729, 521);
+            this.Controls.Add(this.configureVideoCaptureButton);
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.VideoDetailLabel);
@@ -378,5 +390,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label VideoDetailLabel;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button SettingsButton;
+        private System.Windows.Forms.Button configureVideoCaptureButton;
     }
 }

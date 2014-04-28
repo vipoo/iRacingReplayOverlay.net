@@ -24,11 +24,11 @@ using System.Windows.Forms;
 
 namespace IRacingReplayOverlay
 {
-    public partial class TrackCameraPerferences : Form
+    public partial class ConfigureTrackCameras : Form
     {
         private TrackCameras trackCameras;
 
-        public TrackCameraPerferences()
+        public ConfigureTrackCameras()
         {
             InitializeComponent();
         }

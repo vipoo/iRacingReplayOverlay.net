@@ -61,6 +61,7 @@
     <Compile Include="Drawing\CenterGraphicRect.cs" />
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
+    <Compile Include="Phases\Direction\VideoCapture.cs" />
     <Compile Include="TrackCameras.cs" />
     <Compile Include="DllImports\Win32\Messages.cs" />
     <Compile Include="Main.cs">
@@ -97,11 +98,11 @@
     <Compile Include="Phases\Transcoding\SourceReaderSampleWithBitmap.cs" />
     <Compile Include="Phases\Capturing\OverlayData.cs" />
     <Compile Include="Phases\Transcoding\Transcoder.cs" />
-    <Compile Include="TrackCameraPerferences.cs">
+    <Compile Include="ConfigureTrackCameras.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TrackCameraPerferences.Designer.cs">
-      <DependentUpon>TrackCameraPerferences.cs</DependentUpon>
+    <Compile Include="ConfigureTrackCameras.Designer.cs">
+      <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
     </Compile>
     <Compile Include="Video\Attributes.cs" />
   </ItemGroup>
@@ -144,8 +145,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrackCameraPerferences.resx">
-      <DependentUpon>TrackCameraPerferences.cs</DependentUpon>
+    <EmbeddedResource Include="ConfigureTrackCameras.resx">
+      <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ProjectExtensions>
