@@ -98,7 +98,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             timingSample = CreateTimingSample(data, relativeTime, drivers);
 
             if (lastDrivers != null)
-                foreach (var d in drivers)
+                foreach (var d in drivers.OrderByDescending(d => d.Position))
                 {
                     var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
                     if (lastPosition != null && lastPosition.Position != d.Position)
@@ -117,16 +117,16 @@ namespace iRacingReplayOverlay.Phases.Capturing
             var session = data.SessionData.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
 
             var timespan = TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain);
-            var raceLapsPosition = string.Format("Lap {0}/{1}", data.Telemetry.RaceLaps, session.SessionLaps);
+            var raceLapsPosition = string.Format("Lap {0}/{1}", data.Telemetry.RaceLaps, session.ResultsLapsComplete);
             var raceTimePosition = string.Format("{0:00}:{1:00}", timespan.Minutes, timespan.Seconds);
             var raceLapCounter = string.Format("Lap {0}", data.Telemetry.RaceLaps);
 
-            if( data.Telemetry.RaceLaps == session._SessionLaps)
+            if (data.Telemetry.RaceLaps == session.ResultsLapsComplete)
             {
                 raceLapsPosition = "Final Lap";
                 raceLapCounter = "Final Lap";
             }
-            if( data.Telemetry.RaceLaps > session._SessionLaps)
+            if (data.Telemetry.RaceLaps > session.ResultsLapsComplete)
             {
                 raceLapsPosition = "Results";
                 raceLapCounter = null;
