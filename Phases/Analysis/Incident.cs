@@ -71,7 +71,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
                     lastIncident.CarIdx, lastIncident.LapNumber,
                     TimeSpan.FromSeconds(lastIncident.StartSessionTime),
-                    TimeSpan.FromSeconds(lastIncident.EndSessionTime)));
+                    TimeSpan.FromSeconds(lastIncident.EndSessionTime)), "INFO");
                 incidents.Add(lastIncident);
             }
         }
@@ -81,7 +81,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
             Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
                 lastIncident.CarIdx, lastIncident.LapNumber,
                 TimeSpan.FromSeconds(lastIncident.StartSessionTime),
-                TimeSpan.FromSeconds(lastIncident.EndSessionTime)));
+                TimeSpan.FromSeconds(lastIncident.EndSessionTime)), "INFO");
             incidents.Add(lastIncident);
             lastIncident = i;
         }

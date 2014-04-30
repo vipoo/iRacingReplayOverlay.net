@@ -1,4 +1,5 @@
 ﻿// This file is part of iRacingReplayOverlay.
+
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingReplayOverlay.net
@@ -25,6 +26,7 @@ using IRacingReplayOverlay.Video;
 using MediaFoundation.Net;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -32,8 +34,10 @@ using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
+
     public partial class Main : Form
     {
+            
         OverlayWorker overlayWorker;
         System.Windows.Forms.Timer aTimer;
         int guessedProgessedAmount;
@@ -104,6 +108,9 @@ namespace iRacingReplayOverlay
 
         private void Main_Load(object sender, EventArgs e)
         {
+            logMessagges = new LogMessages();
+            Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
+
             overlayWorker = new OverlayWorker();
             overlayWorker.Progress += OnTranscoderProgress;
             overlayWorker.Completed += OnTranscoderCompleted;
@@ -199,6 +206,7 @@ namespace iRacingReplayOverlay
         }
 
         System.Windows.Forms.Timer lookForAudioBitRates;
+        private LogMessages logMessagges;
 
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -289,7 +297,13 @@ namespace iRacingReplayOverlay
 
         private void configureVideoCaptureButton_Click(object sender, EventArgs e)
         {
+            var settings = new ConfigureVideoCapture();
+            settings.ShowDialog();
+        }
 
+        private void logMessagesButton_Click(object sender, EventArgs e)
+        {
+            logMessagges.Show();
         }
     }
 }

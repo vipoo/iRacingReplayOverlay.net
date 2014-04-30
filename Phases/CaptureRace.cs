@@ -21,8 +21,10 @@ using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using iRacingReplayOverlay.Support;
 
 namespace IRacingReplayOverlay.Phases
 {
@@ -31,15 +33,17 @@ namespace IRacingReplayOverlay.Phases
         void _CaptureRace(string workingFolder, Action<string, string> onComplete)
         {
             var overlayData = new OverlayData();
-            
+
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
+
             Thread.Sleep(1000);
             iRacing.Replay.SetSpeed(1);
 
+            var commentaryMessages = new CommentaryMessages();
             var videoCapture = new VideoCapture();
-            var capture = new Capture(overlayData, workingFolder);
+            var capture = new Capture(overlayData, commentaryMessages, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);
-            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData, incidents);
+            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData, incidents, commentaryMessages);
             
             Thread.Sleep(2000);
             videoCapture.Activate();
@@ -59,7 +63,7 @@ namespace IRacingReplayOverlay.Phases
                 if (data.Telemetry.SessionTime > coolDownTime && coolDownTime != 0)
                     break;
 
-                replayControl.Process(data);
+                replayControl.Process(data, relativeTime);
                 capture.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
             }

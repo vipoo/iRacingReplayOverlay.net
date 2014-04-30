@@ -16,8 +16,10 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Support;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -41,6 +43,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public void Activate()
         {
+            Trace.WriteLine("Sending key event ALT+F9", "INFO");
+
             keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
             Thread.Sleep(10);
             keybd_event(VK_F9, 0, 0, UIntPtr.Zero);

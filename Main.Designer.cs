@@ -71,6 +71,7 @@ namespace iRacingReplayOverlay
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.SettingsButton = new System.Windows.Forms.Button();
             this.configureVideoCaptureButton = new System.Windows.Forms.Button();
+            this.logMessagesButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -300,7 +301,7 @@ namespace iRacingReplayOverlay
             // 
             // SettingsButton
             // 
-            this.SettingsButton.Location = new System.Drawing.Point(511, 12);
+            this.SettingsButton.Location = new System.Drawing.Point(210, 12);
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(181, 26);
             this.SettingsButton.TabIndex = 30;
@@ -310,7 +311,7 @@ namespace iRacingReplayOverlay
             // 
             // configureVideoCaptureButton
             // 
-            this.configureVideoCaptureButton.Location = new System.Drawing.Point(313, 12);
+            this.configureVideoCaptureButton.Location = new System.Drawing.Point(13, 12);
             this.configureVideoCaptureButton.Name = "configureVideoCaptureButton";
             this.configureVideoCaptureButton.Size = new System.Drawing.Size(181, 26);
             this.configureVideoCaptureButton.TabIndex = 31;
@@ -318,11 +319,22 @@ namespace iRacingReplayOverlay
             this.configureVideoCaptureButton.UseVisualStyleBackColor = true;
             this.configureVideoCaptureButton.Click += new System.EventHandler(this.configureVideoCaptureButton_Click);
             // 
+            // logMessagesButton
+            // 
+            this.logMessagesButton.Location = new System.Drawing.Point(512, 12);
+            this.logMessagesButton.Name = "logMessagesButton";
+            this.logMessagesButton.Size = new System.Drawing.Size(181, 26);
+            this.logMessagesButton.TabIndex = 32;
+            this.logMessagesButton.Text = "Log Messages";
+            this.logMessagesButton.UseVisualStyleBackColor = true;
+            this.logMessagesButton.Click += new System.EventHandler(this.logMessagesButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 521);
+            this.ClientSize = new System.Drawing.Size(718, 535);
+            this.Controls.Add(this.logMessagesButton);
             this.Controls.Add(this.configureVideoCaptureButton);
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.pictureBox2);
@@ -391,5 +403,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button SettingsButton;
         private System.Windows.Forms.Button configureVideoCaptureButton;
+        private System.Windows.Forms.Button logMessagesButton;
     }
 }

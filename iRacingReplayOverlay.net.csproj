@@ -58,10 +58,23 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigureVideoCapture.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigureVideoCapture.Designer.cs">
+      <DependentUpon>ConfigureVideoCapture.cs</DependentUpon>
+    </Compile>
     <Compile Include="Drawing\CenterGraphicRect.cs" />
+    <Compile Include="LogMessages.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogMessages.Designer.cs">
+      <DependentUpon>LogMessages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
     <Compile Include="Phases\Direction\VideoCapture.cs" />
+    <Compile Include="Support\Messages.cs" />
     <Compile Include="TrackCameras.cs" />
     <Compile Include="DllImports\Win32\Messages.cs" />
     <Compile Include="Main.cs">
@@ -138,6 +151,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ConfigureVideoCapture.resx">
+      <DependentUpon>ConfigureVideoCapture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogMessages.resx">
+      <DependentUpon>LogMessages.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

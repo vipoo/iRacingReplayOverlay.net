@@ -38,13 +38,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
         int[] lastLaps = new int[64];
         OverlayData.Driver[] lastDrivers;
         int leaderBoardUpdateRate = 0;
-        
-        public Capture(OverlayData overlayData, string workingFolder)
+
+        public Capture(OverlayData overlayData, CommentaryMessages commentaryMessages, string workingFolder)
         {
             this.overlayData = overlayData;
             this.workingFolder = workingFolder;
 
-            this.commentaryMessages = new CommentaryMessages();
+            this.commentaryMessages = commentaryMessages;
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
             fileWatchers[0] = new FileSystemWatcher(workingFolder, "*.mp4");
@@ -98,13 +98,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
             timingSample = CreateTimingSample(data, relativeTime, drivers);
 
             if (lastDrivers != null)
-                foreach (var d in drivers.OrderByDescending(d => d.Position))
+                foreach (var d in drivers.OrderBy(d => d.Position))
                 {
                     var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
                     if (lastPosition != null && lastPosition.Position != d.Position)
                     {
-                        var msg = "Driver {0} now in {1}{2}".F(d.Name, d.Position, GetOrdinal(d.Position));
-                        Trace.WriteLine("Adding Message {0}".F(msg));
+                        var msg = "Driver {0} now in {1}{2}".F(d.Name, d.Position, d.Position.Ordinal());
+                        Trace.WriteLine(msg, "INFO");
                         commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                     }
                 }
@@ -112,20 +112,30 @@ namespace iRacingReplayOverlay.Phases.Capturing
             lastDrivers = drivers;
         }
 
+        double raceStartTimeOffset = 0;
+
         OverlayData.TimingSample CreateTimingSample(DataSample data, TimeSpan relativeTime, OverlayData.Driver[] drivers)
         {
+            if( raceStartTimeOffset == 0 && data.Telemetry.SessionState == SessionState.Racing)
+                raceStartTimeOffset = data.Telemetry.SessionTime;
+
             var session = data.SessionData.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
 
-            var timespan = TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain);
+            var timespan = raceStartTimeOffset == 0 ? TimeSpan.FromSeconds(session._SessionTime) : TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain + raceStartTimeOffset);
             var raceLapsPosition = string.Format("Lap {0}/{1}", data.Telemetry.RaceLaps, session.ResultsLapsComplete);
-            var raceTimePosition = string.Format("{0:00}:{1:00}", timespan.Minutes, timespan.Seconds);
+            var raceTimePosition = (timespan.TotalSeconds <= 0 ? TimeSpan.FromSeconds(session._SessionTime) : timespan).ToString(@"mm\:ss");
             var raceLapCounter = string.Format("Lap {0}", data.Telemetry.RaceLaps);
 
+            if( data.Telemetry.RaceLaps <= 0)
+            {
+                raceLapCounter = null;
+                raceLapsPosition = "";
+            } else
             if (data.Telemetry.RaceLaps == session.ResultsLapsComplete)
             {
                 raceLapsPosition = "Final Lap";
                 raceLapCounter = "Final Lap";
-            }
+            } else
             if (data.Telemetry.RaceLaps > session.ResultsLapsComplete)
             {
                 raceLapsPosition = "Results";
@@ -181,7 +191,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                     timingSample = CreateTimingSample(data, relativeTime, drivers.ToArray());
 
-                    Trace.WriteLine(string.Format("Driver {0} Cross line in position {1}", driver.UserName, position));
+                    Trace.WriteLine(string.Format("Driver {0} Cross line in position {1}", driver.UserName, position), "INFO");
                 }
             }
 
@@ -199,7 +209,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
             else
             {
-                Trace.WriteLine("No mp4/avi video file was detected during capturing.", "Critical");
+                Trace.WriteLine("No mp4/avi video file was detected during capturing.", "DEBUG");
                 errors = "No mp4/avi video file was detected during capturing -- Assuming last created file";
                 var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
                     .Select(fn => new { FileName = fn, CreationTime = File.GetCreationTime(fn) })
@@ -227,32 +237,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (driver == null)
                 return new OverlayData.Driver();
 
-            driver.Indicator = GetOrdinal(driver.Position);
+            driver.Indicator = driver.Position.Ordinal();
 
             return driver;
-        }
-
-        static string GetOrdinal(int num)
-        {
-            switch (num % 100)
-            {
-                case 11:
-                case 12:
-                case 13:
-                    return "th";
-            }
-
-            switch (num % 10)
-            {
-                case 1:
-                    return "st";
-                case 2:
-                    return "nd";
-                case 3:
-                    return "rd";
-                default:
-                    return "th";
-            }
         }
 
         void OnCreated(object sender, FileSystemEventArgs e)
