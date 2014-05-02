@@ -65,18 +65,15 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident.MoveNext();
         }
 
-        public void Process(DataSample data, TimeSpan relativeTime)
+        public bool Process(DataSample data, TimeSpan relativeTime)
         {
             if( OnLastLap(data) )
-            {
-                SwitchToFinishingDrivers(data, relativeTime);
-                return;
-            }
+                return SwitchToFinishingDrivers(data, relativeTime);
 
             if (isShowingIncident)
             {
                 if (nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime)
-                    return;
+                    return false;
 
                 Trace.WriteLine("Finishing incident from {0}".F(nextIncident.Current.StartSessionTime), "INFO");
    
@@ -85,7 +82,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
 
             if (IsBeforeFirstLapSector2(data))
-                return;
+                return false;
 
             while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
             {
@@ -100,11 +97,11 @@ namespace iRacingReplayOverlay.Phases.Direction
                 var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
 
                 iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
-                return;
+                return false;
             }
 
             if (TwentySecondsAfterLastCameraChange(data))
-                return;
+                return false;
 
             lastTimeStamp = data.Telemetry.SessionTime;
 
@@ -122,50 +119,51 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
 
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+
+            return false;
         }
 
         double timeOfFinisher = 0;
         int lastPosition = -1;
         int lastFinisherCarIdx = -1;
 
-        private void SwitchToFinishingDrivers(DataSample data, TimeSpan relativeTime)
+        private bool SwitchToFinishingDrivers(DataSample data, TimeSpan relativeTime)
         {
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 
-            if (lastFinisherCarIdx  != -1)
+            if (lastFinisherCarIdx != -1 && !data.Telemetry.Cars[lastFinisherCarIdx].HasSeenCheckeredFlag)
             {
-                if (data.Telemetry.CarIdxDistance[lastFinisherCarIdx] != session.ResultsLapsComplete)
-                {
-                    timeOfFinisher = data.Telemetry.SessionTime + 5;
-                    return;
-                }
+                timeOfFinisher = data.Telemetry.SessionTime + 2;
+                return false;
             }
 
             if (timeOfFinisher > data.Telemetry.SessionTime)
-                return;
+                return false;
 
-            var nextFinisher = data.Telemetry.CarIdxDistance
-                .Select((d, i) => new { CarIdx = i, Distance = d })
-                .Skip(1)
-                .Where(d => d.Distance > 0)
-                .OrderByDescending(d => d.Distance)
-                .Select((d, i) => new { CarIdx = d.CarIdx, Distance = d.Distance, Position = i })
-                .FirstOrDefault(d => d.Position > lastPosition && d.Distance < session.ResultsLapsComplete);
+            var nextFinisher = data.Telemetry.Cars
+                .Where(c => c.TotalDistance > 0)
+                .Where( c=> !c.HasSeenCheckeredFlag)
+                .Where( c => c.CarIdx != 0)
+                .OrderBy( c=> c.Position)
+                .FirstOrDefault(c => c.Position > lastPosition);
 
             if (nextFinisher == null)
-                return;
+                return true;
+
+            if (nextFinisher.Lap + 1 < session.ResultsLapsComplete)
+                return true;
+
+            Trace.WriteLine("Found {0} in position {1} from {2}".F(nextFinisher.UserName, nextFinisher.Position, lastPosition));
 
             lastPosition = nextFinisher.Position;
             timeOfFinisher = data.Telemetry.SessionTime;
             lastFinisherCarIdx = nextFinisher.CarIdx;
 
-            var driver = data.SessionData.DriverInfo.Drivers[nextFinisher.CarIdx];
-            var number = driver.CarNumber;
+            Trace.WriteLine("Switching camera to {0} as they cross finishing line in position {1}.".F(nextFinisher.UserName, nextFinisher.Position));
 
-            var msg = string.Format("{0} crossed line in position {1}{2}", driver.UserName, lastPosition, lastPosition.Ordinal());
-            Trace.WriteLine(msg);
-            commentaryMessages.Add(msg, relativeTime.TotalSeconds);
-            iRacing.Replay.CameraOnDriver((short)number, TV2.CameraNumber);
+            iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, TV2.CameraNumber);
+            
+            return false;
         }
 
         bool TwentySecondsAfterLastCameraChange(DataSample data)
@@ -193,7 +191,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         bool OnLastLap(DataSample data)
         {
-            return data.Telemetry.RaceLaps >= data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
+            var totalLaps = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
+            return data.Telemetry.RaceLapSector >= new LapSector((int)totalLaps, 1);
         }
 
         SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)

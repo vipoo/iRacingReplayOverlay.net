@@ -35,9 +35,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
         string latestCreatedVideoFile;
         DateTime lastTime;
         OverlayData.TimingSample timingSample;
-        int[] lastLaps = new int[64];
         OverlayData.Driver[] lastDrivers;
         int leaderBoardUpdateRate = 0;
+        double raceStartTimeOffset = 0;
 
         public Capture(OverlayData overlayData, CommentaryMessages commentaryMessages, string workingFolder)
         {
@@ -83,16 +83,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         void ProcessLatestRunningOrder(DataSample data, TimeSpan relativeTime)
         {
-            var positions = data.Telemetry.Cars
-                .Where(c => c.Index != 0)
-                .OrderByDescending(c => c.Lap + c.DistancePercentage);
-
-            var drivers = positions.Select((c, p) => new OverlayData.Driver
+            var drivers = data.Telemetry.Cars.Select(c => new OverlayData.Driver
             {
-                Name = c.Driver.UserName,
-                CarNumber = (int)c.Driver.CarNumber,
-                Position = p + 1,
-                CarIdx = (int)c.Driver.CarIdx
+                Name = c.UserName,
+                CarNumber = c.CarNumber,
+                Position = c.Position,
+                CarIdx = c.CarIdx
             }).ToArray();
 
             timingSample = CreateTimingSample(data, relativeTime, drivers);
@@ -111,8 +107,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             lastDrivers = drivers;
         }
-
-        double raceStartTimeOffset = 0;
 
         OverlayData.TimingSample CreateTimingSample(DataSample data, TimeSpan relativeTime, OverlayData.Driver[] drivers)
         {
@@ -153,27 +147,28 @@ namespace iRacingReplayOverlay.Phases.Capturing
             };
         }
 
+        bool[] haveNotedCheckerdFlag = new bool[64];
+
         bool ProcessForLastLap(DataSample data, TimeSpan relativeTime)
         {
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 
-            if (data.Telemetry.RaceLaps <= session.ResultsLapsComplete)
-            {
-                for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-                    lastLaps[i] = data.Telemetry.CarIdxLap[i];
-
+            if (!data.Telemetry.LeaderHasFinished)
                 return false;
-            }
+
+            if (data.LastSample == null)
+                return false;
 
             for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
             {
-                if (lastLaps[i] != data.Telemetry.CarIdxLap[i])
+                if (data.LastSample.Telemetry.Cars[i].HasSeenCheckeredFlag && !haveNotedCheckerdFlag[i])
                 {
-                    lastLaps[i] = data.Telemetry.CarIdxLap[i];
+                    haveNotedCheckerdFlag[i] = true;
+
                     var driver = data.SessionData.DriverInfo.Drivers[i];
                     var position = (int)session.ResultsPositions.First(r => r.CarIdx == i).Position;
 
-                    var drivers = timingSample.Drivers.Where(d => d.CarIdx != driver.CarIdx)
+                    var drivers = timingSample.Drivers.Where(d => d.CarIdx != i)
                         .Select(d => d.Clone())
                         .ToList();
 
@@ -182,7 +177,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         CarNumber = (int)driver.CarNumber,
                         Name = driver.UserName,
                         Position = position,
-                        CarIdx = (int)driver.CarIdx
+                        CarIdx = i
                     });
 
                     var p = 1;
@@ -191,7 +186,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                     timingSample = CreateTimingSample(data, relativeTime, drivers.ToArray());
 
-                    Trace.WriteLine(string.Format("Driver {0} Cross line in position {1}", driver.UserName, position), "INFO");
+                    var msg = string.Format("{0} crossed line in position {1}{2}", driver.UserName, position, position.Ordinal());
+                    Trace.WriteLine(msg, "INFO");
+                    commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                 }
             }
 
