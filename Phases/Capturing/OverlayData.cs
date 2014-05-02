@@ -71,9 +71,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         return DriverNickNames[Name];
 
                     var names = Name.Split(' ');
-                    var name = names.First().Substring(0, 1).ToUpper()
-                        + names.Last().Substring(0, 1).ToUpper()
-                        + names.Last().Substring(1, 3);
+                    var firstName = names.First();
+                    var lastName = names.Last();
+
+                    var name = firstName.Substring(0, 1).ToUpper()
+                        + lastName.Substring(0, 1).ToUpper()
+                        + lastName.Substring(1, Math.Min(3, lastName.Length-1));
 
                     DriverNickNames[Name] = name;
                     return name;

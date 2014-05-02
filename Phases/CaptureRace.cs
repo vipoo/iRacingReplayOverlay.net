@@ -36,7 +36,7 @@ namespace IRacingReplayOverlay.Phases
 
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             iRacing.Replay.SetSpeed(1);
 
             var commentaryMessages = new CommentaryMessages();
