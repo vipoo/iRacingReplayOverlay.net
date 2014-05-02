@@ -39,6 +39,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         public void Deactivate()
         {
             Activate();
+            Thread.Sleep(2000);
         }
 
         public void Activate()

@@ -49,24 +49,12 @@ namespace IRacingReplayOverlay.Phases
             videoCapture.Activate();
             var startTime = DateTime.Now;
 
-            var coolDownTime = 0d;
-
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
-                .WithFinishingStatus()
-                .AtSpeed(16, d => d.Telemetry.RaceLaps <= 76)
-                .AtSpeed(1, d => d.Telemetry.RaceLaps > 77))
+                .WithFinishingStatus())
             {
                 var relativeTime = DateTime.Now - startTime;
-
-
-
-                //if( data.Telemetry.SessionState == SessionState.CoolDown && coolDownTime == 0)
-                //    coolDownTime = data.Telemetry.SessionTime + 10;
-
-                //if (data.Telemetry.SessionTime > coolDownTime && coolDownTime != 0)
-                 //   break;
 
                 capture.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
@@ -75,6 +63,8 @@ namespace IRacingReplayOverlay.Phases
             }
 
             videoCapture.Deactivate();
+
+            iRacing.Replay.SetSpeed(0);
 
             string errorMessage;
             string fileName;
