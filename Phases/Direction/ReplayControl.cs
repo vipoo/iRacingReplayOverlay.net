@@ -100,14 +100,26 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return false;
             }
 
+            TrackCamera camera;
+            SessionData._DriverInfo._Drivers car;
+
+            /*if( !data.Telemetry.CamCar.HasData)
+            {
+                camera = FindACamera();
+                car = FindARandomDriver(data);
+                Trace.WriteLine("{0} - Changing camera to random driver number {1}, using camera number {2} as previous car has drop out".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+                iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+                return false;
+            }*/
+
             if (TwentySecondsAfterLastCameraChange(data))
                 return false;
 
             lastTimeStamp = data.Telemetry.SessionTime;
 
-            var camera = FindACamera();
+            camera = FindACamera();
 
-            var car = FindCarWithin1Second(data);
+            car = FindCarWithin1Second(data);
             if (car != null)
             {
                 Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
@@ -197,7 +209,10 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)
         {
-            var activeDrivers = data.Telemetry.CarIdxLap.Select((c, i) => new { CarIdx = i, Lap = c }).Where(d => d.Lap >= 1).ToList();
+            var activeDrivers = data.Telemetry.Cars
+                .Where(c => !c.IsPaceCar)
+                .Where(c => c.HasData)
+                .ToList();
 
             var next = randomDriverNumber.Next(activeDrivers.Count);
 
