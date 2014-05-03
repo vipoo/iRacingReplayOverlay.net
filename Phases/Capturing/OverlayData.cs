@@ -35,7 +35,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public class TimingSample
         {
-            public long StartTime;
+            public double StartTime;
             public Driver[] Drivers;
             public string RacePosition;
 			public string LapCounter; //optional

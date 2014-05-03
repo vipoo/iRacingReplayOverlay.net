@@ -65,10 +65,10 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident.MoveNext();
         }
 
-        public bool Process(DataSample data, TimeSpan relativeTime)
+        public bool Process(DataSample data)
         {
             if( OnLastLap(data) )
-                return SwitchToFinishingDrivers(data, relativeTime);
+                return SwitchToFinishingDrivers(data);
 
             if (isShowingIncident)
             {
@@ -127,7 +127,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         int lastPosition = -1;
         int lastFinisherCarIdx = -1;
 
-        private bool SwitchToFinishingDrivers(DataSample data, TimeSpan relativeTime)
+        private bool SwitchToFinishingDrivers(DataSample data)
         {
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 
@@ -143,7 +143,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             var nextFinisher = data.Telemetry.Cars
                 .Where(c => c.TotalDistance > 0)
                 .Where( c=> !c.HasSeenCheckeredFlag)
-                .Where( c => c.CarIdx != 0)
+                .Where( c => !c.IsPaceCar)
                 .OrderBy( c=> c.Position)
                 .FirstOrDefault(c => c.Position > lastPosition);
 

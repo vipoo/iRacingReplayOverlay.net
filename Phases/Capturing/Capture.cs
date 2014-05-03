@@ -83,7 +83,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         void ProcessLatestRunningOrder(DataSample data, TimeSpan relativeTime)
         {
-            var drivers = data.Telemetry.Cars.Select(c => new OverlayData.Driver
+            var drivers = data.Telemetry.Cars.Where(c => !c.IsPaceCar ).Select(c => new OverlayData.Driver
             {
                 Name = c.UserName,
                 CarNumber = c.CarNumber,
@@ -99,7 +99,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
                     if (lastPosition != null && lastPosition.Position != d.Position)
                     {
-                        var msg = "Driver {0} now in {1}{2}".F(d.Name, d.Position, d.Position.Ordinal());
+                        var msg = "{0} in {1}{2}".F(d.Name, d.Position, d.Position.Ordinal());
                         Trace.WriteLine(msg, "INFO");
                         commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                     }
@@ -117,29 +117,36 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             var timespan = raceStartTimeOffset == 0 ? TimeSpan.FromSeconds(session._SessionTime) : TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain + raceStartTimeOffset);
             var raceLapsPosition = string.Format("Lap {0}/{1}", data.Telemetry.RaceLaps, session.ResultsLapsComplete);
-            var raceTimePosition = (timespan.TotalSeconds <= 0 ? TimeSpan.FromSeconds(session._SessionTime) : timespan).ToString(@"mm\:ss");
+            var raceTimePosition = (timespan.TotalSeconds <= 0 ? TimeSpan.FromSeconds(0) : timespan).ToString(@"mm\:ss");
             var raceLapCounter = string.Format("Lap {0}", data.Telemetry.RaceLaps);
 
             if( data.Telemetry.RaceLaps <= 0)
             {
                 raceLapCounter = null;
                 raceLapsPosition = "";
-            } else
-            if (data.Telemetry.RaceLaps == session.ResultsLapsComplete)
-            {
-                raceLapsPosition = "Final Lap";
-                raceLapCounter = "Final Lap";
-            } else
-            if (data.Telemetry.RaceLaps > session.ResultsLapsComplete)
-            {
-                raceLapsPosition = "Results";
-                raceLapCounter = null;
-            }
+            } 
+            else
+                if (data.Telemetry.RaceLaps < session.ResultsLapsComplete)
+                {
+
+                }
+                else
+                    if (data.Telemetry.RaceLaps == session.ResultsLapsComplete)
+                    {
+                        raceLapsPosition = "Final Lap";
+                        raceLapCounter = "Final Lap";
+                    }
+                    else
+                    //if (data.Telemetry.RaceLaps > session.ResultsLapsComplete)
+                    {
+                        raceLapsPosition = "Results";
+                        raceLapCounter = "Results";
+                    }
 
             return new OverlayData.TimingSample
             {
                 MessageState = commentaryMessages.Messages(relativeTime.TotalSeconds),
-                StartTime = (long)relativeTime.TotalSeconds,
+                StartTime = relativeTime.TotalSeconds,
                 Drivers = drivers,
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,
                 CurrentDriver = GetCurrentDriverDetails(data, drivers),
@@ -159,7 +166,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (data.LastSample == null)
                 return false;
 
-            for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+            for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
             {
                 if (data.LastSample.Telemetry.Cars[i].HasSeenCheckeredFlag && !haveNotedCheckerdFlag[i])
                 {
@@ -186,7 +193,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                     timingSample = CreateTimingSample(data, relativeTime, drivers.ToArray());
 
-                    var msg = string.Format("{0} crossed line in position {1}{2}", driver.UserName, position, position.Ordinal());
+                    var msg = string.Format("{0} finished in {1}{2}", driver.UserName, position, position.Ordinal());
                     Trace.WriteLine(msg, "INFO");
                     commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                 }

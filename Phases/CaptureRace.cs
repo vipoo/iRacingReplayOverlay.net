@@ -52,13 +52,16 @@ namespace IRacingReplayOverlay.Phases
             foreach (var data in iRacing.GetDataFeed()
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
-                .WithFinishingStatus())
-            {
+                .WithFinishingStatus()
+//                .AtSpeed(1, d => d.Telemetry.RaceLaps < 3)
+//                .AtSpeed(16, d => d.Telemetry.RaceLaps >=3 && d.Telemetry.RaceLaps <= 76)
+//                .AtSpeed(1, d => d.Telemetry.RaceLaps > 77)
+)            {
                 var relativeTime = DateTime.Now - startTime;
 
                 capture.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
-                if (replayControl.Process(data, relativeTime))
+                if (replayControl.Process(data))
                     break;
             }
 
