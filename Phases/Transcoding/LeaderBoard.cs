@@ -43,14 +43,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             {
                 DrawLeaderboard(graphics, sample);
                 DrawCurrentDriverRow(graphics, sample.CurrentDriver);
+
+                if (sample.MessageState != null)
+                    DrawRaceMessages(graphics, timeInSeconds);
             }
 
             var fastestLap = OverlayData.FastestLaps.LastOrDefault(s => s.StartTime <= timeInSeconds && s.StartTime + 15 > timeInSeconds);
             if (fastestLap != null)
                 DrawFastestLap(graphics, fastestLap);
-
-            if( sample.MessageState != null)
-                DrawRaceMessages(graphics, timeInSeconds);
         }
 
         private void DrawRaceMessages(Graphics g, double timeInSeconds)

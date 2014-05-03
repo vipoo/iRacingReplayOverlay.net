@@ -89,7 +89,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 CarNumber = c.CarNumber,
                 Position = c.Position,
                 CarIdx = c.CarIdx
-            }).ToArray();
+            })
+            .OrderBy( c => c.Position)
+            .ToArray();
 
             timingSample = CreateTimingSample(data, relativeTime, drivers);
 
