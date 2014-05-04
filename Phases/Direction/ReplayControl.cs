@@ -144,7 +144,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             return false;
         }
 
-        double timeOfFinisher = 0;
+        DateTime timeOfFinisher = DateTime.Now;
         int lastFinisherCarIdx = -1;
 
         private bool SwitchToFinishingDrivers(DataSample data)
@@ -155,11 +155,11 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             if (lastFinisherCarIdx != -1 && !data.Telemetry.Cars[lastFinisherCarIdx].HasSeenCheckeredFlag)
             {
-                timeOfFinisher = data.Telemetry.SessionTime + 2;
+                timeOfFinisher = DateTime.Now.AddSeconds(2);
                 return false;
             }
 
-            if (timeOfFinisher > data.Telemetry.SessionTime)
+            if (timeOfFinisher > DateTime.Now)
                 return false;
 
             Car nextFinisher;
@@ -171,6 +171,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     .Where(c => c.TotalDistance > 0)
                     .Where( c=> !c.HasSeenCheckeredFlag)
                     .Where( c => !c.IsPaceCar)
+                    .Where( c => c.HasData)
                     .OrderByDescending( c=> c.DistancePercentage)
                     .FirstOrDefault();
 
@@ -179,7 +180,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             Trace.WriteLine("Found {0} in position {1}".F(nextFinisher.UserName, nextFinisher.Position), "DEBUG");
 
-            timeOfFinisher = data.Telemetry.SessionTime;
+            timeOfFinisher = DateTime.Now;
             lastFinisherCarIdx = nextFinisher.CarIdx;
 
             Trace.WriteLine("Switching camera to {0} as they cross finishing line in position {1}.".F(nextFinisher.UserName, nextFinisher.Position));
