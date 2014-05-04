@@ -118,6 +118,7 @@ namespace IRacingReplayOverlay.Phases
                 catch(Exception e)
                 {
                     Debug.WriteLine(e.Message);
+                    Debug.WriteLine(e.StackTrace);
                     Debug.WriteLine("Process aborted");
                 }
                 finally

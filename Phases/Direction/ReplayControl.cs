@@ -53,6 +53,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             trackCameras = Settings.Default.trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
+            Trace.WriteLineIf(trackCameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName), "INFO");
+            Debug.Assert(trackCameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName));
+
             foreach (var tc in trackCameras)
                 tc.CameraNumber = (short)sessionData.CameraInfo.Groups.First(g => g.GroupName.ToLower() == tc.CameraName.ToLower()).GroupNum;
 
