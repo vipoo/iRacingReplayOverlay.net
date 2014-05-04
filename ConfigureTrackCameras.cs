@@ -20,6 +20,8 @@ using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IRacingReplayOverlay
@@ -40,6 +42,8 @@ namespace IRacingReplayOverlay
             {
                 ratioTextBox.Text = cameraList.SelectedItems[0].SubItems[1].Text;
                 ratioLabel.Text = "{0} has a".F(cameraList.SelectedItems[0].Text);
+                var context = SynchronizationContext.Current;
+                new Task(() => { Thread.Sleep(200); context.Post(i => ratioTextBox.Focus(), null); }).Start();
             }
             else
             {
