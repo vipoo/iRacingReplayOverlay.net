@@ -52,9 +52,9 @@ namespace IRacingReplayOverlay.Phases
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
                 .WithFinishingStatus()
-//                .AtSpeed(1, d => d.Telemetry.RaceLaps < 3)
-//                .AtSpeed(16, d => d.Telemetry.RaceLaps >=3 && d.Telemetry.RaceLaps <= 76)
-//                .AtSpeed(1, d => d.Telemetry.RaceLaps > 77)
+                //.AtSpeed(4, d => d.Telemetry.RaceLaps < 3)
+                .AtSpeed(16, d => d.Telemetry.RaceLaps >=0 && d.Telemetry.RaceLaps < 19)
+                .AtSpeed(3, d => d.Telemetry.RaceLaps >=19 )
 )            {
                 var relativeTime = DateTime.Now - startTime;
 

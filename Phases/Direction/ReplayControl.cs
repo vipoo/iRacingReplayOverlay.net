@@ -139,7 +139,6 @@ namespace iRacingReplayOverlay.Phases.Direction
         }
 
         double timeOfFinisher = 0;
-        int lastPosition = -1;
         int lastFinisherCarIdx = -1;
 
         private bool SwitchToFinishingDrivers(DataSample data)
@@ -155,22 +154,23 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (timeOfFinisher > data.Telemetry.SessionTime)
                 return false;
 
-            var nextFinisher = data.Telemetry.Cars
-                .Where(c => c.TotalDistance > 0)
-                .Where( c=> !c.HasSeenCheckeredFlag)
-                .Where( c => !c.IsPaceCar)
-                .OrderBy( c=> c.Position)
-                .FirstOrDefault(c => c.Position > lastPosition);
+            Car nextFinisher;
+
+            if( !data.Telemetry.LeaderHasFinished)
+                nextFinisher = data.Telemetry.Cars.First( c=> c.Position == 1);
+            else
+                nextFinisher = data.Telemetry.Cars
+                    .Where(c => c.TotalDistance > 0)
+                    .Where( c=> !c.HasSeenCheckeredFlag)
+                    .Where( c => !c.IsPaceCar)
+                    .OrderByDescending( c=> c.DistancePercentage)
+                    .FirstOrDefault();
 
             if (nextFinisher == null)
                 return true;
 
-            if (nextFinisher.Lap + 1 < session.ResultsLapsComplete)
-                return true;
+            Trace.WriteLine("Found {0} in position {1}".F(nextFinisher.UserName, nextFinisher.Position));
 
-            Trace.WriteLine("Found {0} in position {1} from {2}".F(nextFinisher.UserName, nextFinisher.Position, lastPosition));
-
-            lastPosition = nextFinisher.Position;
             timeOfFinisher = data.Telemetry.SessionTime;
             lastFinisherCarIdx = nextFinisher.CarIdx;
 
