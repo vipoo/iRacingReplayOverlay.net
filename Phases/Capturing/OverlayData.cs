@@ -27,6 +27,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class OverlayData
     {
+        public class BoringBit
+        {
+            public double StartTime;
+            public double EndTime;
+        }
+
         public class MessageState
         {
             public string[] Messages;
@@ -97,6 +103,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public List<TimingSample> TimingSamples = new List<TimingSample>();
         public List<FastLap> FastestLaps = new List<FastLap>();
         public List<MessageState> MessageStates = new List<MessageState>();
+        public List<BoringBit> BoringLap = new List<BoringBit>();
 
         public void SaveTo(string fileName)
         {

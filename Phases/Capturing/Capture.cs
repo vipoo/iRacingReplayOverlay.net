@@ -31,6 +31,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         readonly OverlayData overlayData;
         readonly FileSystemWatcher[] fileWatchers;
         readonly CommentaryMessages commentaryMessages;
+        readonly RemovalEdits removalEdits;
 
         string latestCreatedVideoFile;
         DateTime lastTime;
@@ -39,12 +40,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
         int leaderBoardUpdateRate = 0;
         double raceStartTimeOffset = 0;
 
-        public Capture(OverlayData overlayData, CommentaryMessages commentaryMessages, string workingFolder)
+        public Capture(OverlayData overlayData, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, string workingFolder)
         {
             this.overlayData = overlayData;
             this.workingFolder = workingFolder;
             this.commentaryMessages = commentaryMessages;
-            
+            this.removalEdits = removalEdits;
+    
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
             fileWatchers[0] = new FileSystemWatcher(workingFolder, "*.mp4");
@@ -101,6 +103,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
                     if (lastPosition != null && lastPosition.Position != d.Position)
                     {
+                        removalEdits.InterestingThingHappend();
                         var msg = "{0} in {1}{2}".F(d.Name, d.Position, d.Position.Ordinal());
                         Trace.WriteLine(msg, "INFO");
                         commentaryMessages.Add(msg, relativeTime.TotalSeconds);
@@ -139,7 +142,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         raceLapCounter = "Final Lap";
                     }
                     else
-                    //if (data.Telemetry.RaceLaps > session.ResultsLapsComplete)
                     {
                         raceLapsPosition = "Results";
                         raceLapCounter = "Results";
@@ -147,7 +149,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             return new OverlayData.TimingSample
             {
-                //MessageState = commentaryMessages.Messages(relativeTime.TotalSeconds),
                 StartTime = relativeTime.TotalSeconds,
                 Drivers = drivers,
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,

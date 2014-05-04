@@ -38,12 +38,13 @@ namespace IRacingReplayOverlay.Phases
             iRacing.Replay.SetSpeed(1);
 
             var overlayData = new OverlayData();
+            var removalEdits = new RemovalEdits(overlayData);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
-            var capture = new Capture(overlayData, commentaryMessages, workingFolder);
+            var capture = new Capture(overlayData, commentaryMessages, removalEdits, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);
-            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData, incidents, commentaryMessages);
-            
+            var replayControl = new ReplayControl(iRacing.GetDataFeed().First().SessionData, incidents, commentaryMessages, removalEdits);
+
             Thread.Sleep(2000);
             videoCapture.Activate();
             var startTime = DateTime.Now;
@@ -62,7 +63,10 @@ namespace IRacingReplayOverlay.Phases
                 fastestLaps.Process(data, relativeTime);
                 if (replayControl.Process(data))
                     break;
+                removalEdits.Process(data, relativeTime);
             }
+
+            removalEdits.Stop();
 
             videoCapture.Deactivate();
 

@@ -39,21 +39,23 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly Random randomDriverNumber;
         readonly IEnumerator<Incidents.Incident> nextIncident;
         readonly CommentaryMessages commentaryMessages;
+        readonly RemovalEdits removalEdits;
 
         double lastTimeStamp = 0;
         bool isShowingIncident;
 
-        public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages)
+        public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits)
         {
             this.sessionData = sessionData;
             this.commentaryMessages = commentaryMessages;
+            this.removalEdits = removalEdits;
 
             random = new System.Random();
             randomDriverNumber = new Random();
 
             trackCameras = Settings.Default.trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
-            Trace.WriteLineIf(trackCameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName), "INFO");
+            Trace.WriteLineIf(trackCameras.Count() <= 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName), "INFO");
             Debug.Assert(trackCameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName));
 
             foreach (var tc in trackCameras)
@@ -78,6 +80,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 if (nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime)
                     return false;
 
+                removalEdits.InterestingThingHappend();
                 Trace.WriteLine("Finishing incident from {0}".F(nextIncident.Current.StartSessionTime), "INFO");
    
                 isShowingIncident = false;
@@ -99,6 +102,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                 var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
 
+                removalEdits.InterestingThingHappend();
                 iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
                 return false;
             }
@@ -125,6 +129,8 @@ namespace iRacingReplayOverlay.Phases.Direction
             car = FindCarWithin1Second(data);
             if (car != null)
             {
+                removalEdits.InterestingThingHappend();
+
                 Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }
             else
@@ -143,6 +149,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         private bool SwitchToFinishingDrivers(DataSample data)
         {
+            removalEdits.InterestingThingHappend();
+
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 
             if (lastFinisherCarIdx != -1 && !data.Telemetry.Cars[lastFinisherCarIdx].HasSeenCheckeredFlag)
@@ -193,6 +201,8 @@ namespace iRacingReplayOverlay.Phases.Direction
             var result = data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
             if (result)
             {
+                removalEdits.InterestingThingHappend();
+
                 if ((DateTime.Now - lastTimeLeaderWasSelected).TotalSeconds > 5)
                 {
                     iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);

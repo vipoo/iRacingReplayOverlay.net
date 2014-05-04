@@ -71,6 +71,7 @@
     <Compile Include="LogMessages.Designer.cs">
       <DependentUpon>LogMessages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Phases\Capturing\RemovalEdits.cs" />
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
     <Compile Include="Phases\Direction\VideoCapture.cs" />
