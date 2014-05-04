@@ -24,7 +24,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class CommentaryMessages
     {
-        List<OverlayData.MessageState> messageStates = new List<OverlayData.MessageState>();
+        readonly List<OverlayData.MessageState> messageStates;
+
+        public CommentaryMessages(OverlayData overlayData)
+        {
+            this.messageStates = overlayData.MessageStates;
+        }
 
         public void Add(string message, double time)
         {

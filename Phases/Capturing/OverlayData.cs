@@ -41,8 +41,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
 			public string LapCounter; //optional
             public Driver CurrentDriver;
 
-            public MessageState MessageState;
-
             public TimingSample Clone()
             {
                 return (TimingSample)base.MemberwiseClone();
@@ -98,6 +96,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public List<TimingSample> TimingSamples = new List<TimingSample>();
         public List<FastLap> FastestLaps = new List<FastLap>();
+        public List<MessageState> MessageStates = new List<MessageState>();
 
         public void SaveTo(string fileName)
         {
@@ -121,5 +120,4 @@ namespace iRacingReplayOverlay.Phases.Capturing
             }
         }
     }
-
 }

@@ -32,14 +32,13 @@ namespace IRacingReplayOverlay.Phases
     {
         void _CaptureRace(string workingFolder, Action<string, string> onComplete)
         {
-            var overlayData = new OverlayData();
-
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
             Thread.Sleep(2000);
             iRacing.Replay.SetSpeed(1);
 
-            var commentaryMessages = new CommentaryMessages();
+            var overlayData = new OverlayData();
+            var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
             var capture = new Capture(overlayData, commentaryMessages, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);

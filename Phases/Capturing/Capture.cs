@@ -13,7 +13,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
+// You should have received a copy of the GNU General Public License333
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Support;
@@ -43,8 +43,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             this.overlayData = overlayData;
             this.workingFolder = workingFolder;
-
             this.commentaryMessages = commentaryMessages;
+            
             latestCreatedVideoFile = null;
             fileWatchers = new FileSystemWatcher[2];
             fileWatchers[0] = new FileSystemWatcher(workingFolder, "*.mp4");
@@ -147,7 +147,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             return new OverlayData.TimingSample
             {
-                MessageState = commentaryMessages.Messages(relativeTime.TotalSeconds),
+                //MessageState = commentaryMessages.Messages(relativeTime.TotalSeconds),
                 StartTime = relativeTime.TotalSeconds,
                 Drivers = drivers,
                 RacePosition = session.IsLimitedSessionLaps ? raceLapsPosition : raceTimePosition,

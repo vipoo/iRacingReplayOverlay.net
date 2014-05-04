@@ -43,22 +43,19 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             {
                 DrawLeaderboard(graphics, sample);
                 DrawCurrentDriverRow(graphics, sample.CurrentDriver);
-
-                if (sample.MessageState != null)
-                    DrawRaceMessages(graphics, timeInSeconds);
             }
+
+            var messageState = OverlayData.MessageStates.LastOrDefault(s => s.Time <= timeInSeconds);
+            if (messageState != null)
+                DrawRaceMessages(graphics, timeInSeconds, messageState);
 
             var fastestLap = OverlayData.FastestLaps.LastOrDefault(s => s.StartTime <= timeInSeconds && s.StartTime + 15 > timeInSeconds);
             if (fastestLap != null)
                 DrawFastestLap(graphics, fastestLap);
         }
 
-        private void DrawRaceMessages(Graphics g, double timeInSeconds)
+        private void DrawRaceMessages(Graphics g, double timeInSeconds, OverlayData.MessageState messageState)
         {
-            var sample = OverlayData.TimingSamples.LastOrDefault(s => s.MessageState != null && s.MessageState.Time <= timeInSeconds);
-            if (sample == null)
-                return;
-
             Func<GraphicRect, GraphicRect> blueBox = rr =>
                rr.WithBrush(Styles.Brushes.TransparentLightBlue)
                .WithPen(Styles.Pens.Black)
@@ -67,10 +64,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                .WithFont("Calibri", 20, FontStyle.Bold)
                .WithStringFormat(StringAlignment.Near);
 
-            var shiftFactor = (double)Math.Min(timeInSeconds - sample.MessageState.Time, 1d);
+            var shiftFactor = (double)Math.Min(timeInSeconds - messageState.Time, 1d);
             var offset = (int)(34 * shiftFactor);
 
-            offset = offset + (sample.MessageState.Messages.Length - 1) * 34;
+            offset = offset + (messageState.Messages.Length - 1) * 34;
 
             var row4Top = 900 + 34 * 3;
             offset = row4Top - offset;
@@ -79,12 +76,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             g.SetClip(new Rectangle(80, 900, 450, 34+34+34));
 
-            foreach (var msg in sample.MessageState.Messages)
-            {
+            foreach (var msg in messageState.Messages)
                 r = r.With(blueBox)
                     .DrawText(" " + msg)
                     .ToBelow();
-            }
 
             g.ResetClip();
         }
