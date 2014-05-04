@@ -54,7 +54,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 		public readonly long Timestamp;
 		public readonly long Duration;
         public readonly SourceReaderSampleFlags Flags;
-        readonly SourceReaderSample sample;
+        public readonly SourceReaderSample sample;
 
         public SourceReaderSampleWithBitmap(SourceReaderSample sample)
         {
@@ -78,5 +78,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 			if(buffer != null)
 				buffer.Dispose();
 		}
+
+        internal void SetSampleTime(long p)
+        {
+            this.sample.SetSampleTime(p);
+        }
     }    
 }

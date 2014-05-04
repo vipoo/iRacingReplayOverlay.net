@@ -103,7 +103,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public List<TimingSample> TimingSamples = new List<TimingSample>();
         public List<FastLap> FastestLaps = new List<FastLap>();
         public List<MessageState> MessageStates = new List<MessageState>();
-        public List<BoringBit> BoringLap = new List<BoringBit>();
+        public List<BoringBit> EditCuts = new List<BoringBit>();
 
         public void SaveTo(string fileName)
         {

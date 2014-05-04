@@ -31,7 +31,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public RemovalEdits(OverlayData overlayData)
         {
-            this.boringBits = overlayData.BoringLap;
+            this.boringBits = overlayData.EditCuts;
         }
 
         public void InterestingThingHappend()

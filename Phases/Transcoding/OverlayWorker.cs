@@ -63,24 +63,21 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 		{
 			try
 			{
+                var driverNickNames = new Dictionary<string, string>();
+
+                var leaderBoard = new LeaderBoard
+                {
+                    OverlayData = OverlayData.FromFile(gameDataFile, driverNickNames)
+                };
+
                 var transcoder = new Transcoder
                 {
                     SourceFile = sourceFile,
                     DestinationFile = destinationFile,
                     VideoBitRate = videoBitRate,
-                    AudioBitRate = audioBitRate
+                    AudioBitRate = audioBitRate,
+                    EditCuts = leaderBoard.OverlayData.EditCuts
 
-                };
-
-                var driverNickNames = new Dictionary<string, string>
-                {
-                    {"Dean Netherton", "Dino"},
-                    {"Paul Tarjavaara", "Tarj"}
-                };
-
-                var leaderBoard = new LeaderBoard
-                {
-                    OverlayData = OverlayData.FromFile(gameDataFile, driverNickNames)
                 };
 
                 foreach( var frame in transcoder.Frames())
