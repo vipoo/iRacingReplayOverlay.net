@@ -39,9 +39,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             var sample = OverlayData.TimingSamples.LastOrDefault(s => s.StartTime <= timeInSeconds);
 
-            if (sample != null && sample.Drivers != null)
-                sample.Drivers = sample.Drivers.OrderBy(d => d.Position).ToArray();
-
             if (sample != null)
             {
                 DrawLeaderboard(graphics, sample);
