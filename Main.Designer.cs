@@ -229,7 +229,7 @@ namespace iRacingReplayOverlay
             this.BeginProcessButton.Name = "BeginProcessButton";
             this.BeginProcessButton.Size = new System.Drawing.Size(163, 64);
             this.BeginProcessButton.TabIndex = 21;
-            this.BeginProcessButton.Text = "Begin Process";
+            this.BeginProcessButton.Text = "Begin Capture";
             this.BeginProcessButton.UseVisualStyleBackColor = true;
             this.BeginProcessButton.Click += new System.EventHandler(this.BeginProcessButton_Click);
             // 
