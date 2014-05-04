@@ -25,16 +25,16 @@ namespace iRacingReplayOverlay.Support
         public override void Write(string message, string category)
         {
             if (category == INFO)
-                Write(message);
+                WriteInfo(message);
         }
 
         public override void WriteLine(string message, string category)
         {
             if (category == INFO)
-                WriteLine(message);
+                WriteInfoLine(message);
         }
 
-        public override void Write(string message)
+        public void WriteInfo(string message)
         {
             context.Post(ignore =>
             {
@@ -44,10 +44,18 @@ namespace iRacingReplayOverlay.Support
             }, null);
         }
 
+        public void WriteInfoLine(string message)
+        {
+            WriteInfo(message);
+            WriteInfo("\r\n");
+        }
+
+        public override void Write(string message)
+        {
+        }
+
         public override void WriteLine(string message)
         {
-            Write(message);
-            Write("\r\n");
         }
     }
 }

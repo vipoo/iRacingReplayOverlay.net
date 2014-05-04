@@ -177,7 +177,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (nextFinisher == null)
                 return true;
 
-            Trace.WriteLine("Found {0} in position {1}".F(nextFinisher.UserName, nextFinisher.Position));
+            Trace.WriteLine("Found {0} in position {1}".F(nextFinisher.UserName, nextFinisher.Position), "DEBUG");
 
             timeOfFinisher = data.Telemetry.SessionTime;
             lastFinisherCarIdx = nextFinisher.CarIdx;
