@@ -7,8 +7,8 @@
     <ProjectGuid>{0E523573-2972-4DC0-AECB-C4CF746854BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IRacingReplayOverlay</RootNamespace>
-    <AssemblyName>iRacingReplayOverlay.net</AssemblyName>
+    <RootNamespace>iRacingReplayOverlay</RootNamespace>
+    <AssemblyName>iRacingReplayOverlay</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>

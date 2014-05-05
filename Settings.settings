@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="IRacingReplayOverlay" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="iRacingReplayOverlay" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="WorkingFolder" Type="System.String" Scope="User">
@@ -11,7 +11,7 @@
     <Setting Name="audioBitRate" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">48000</Value>
     </Setting>
-    <Setting Name="trackCameras" Type="IRacingReplayOverlay.TrackCameras" Scope="User">
+    <Setting Name="trackCameras" Type="iRacingReplayOverlay.TrackCameras" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="lastSelectedTrackName" Type="System.String" Scope="User">

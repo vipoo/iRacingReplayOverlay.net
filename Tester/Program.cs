@@ -19,7 +19,7 @@
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
-using IRacingReplayOverlay.Phases;
+using iRacingReplayOverlay.Phases;
 using iRacingSDK;
 using System;
 using System.Collections.Generic;

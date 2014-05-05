@@ -22,7 +22,7 @@ using System;
 using System.Linq;
 using System.Threading;
 
-namespace IRacingReplayOverlay.Phases
+namespace iRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {

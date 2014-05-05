@@ -27,7 +27,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace IRacingReplayOverlay.Phases
+namespace iRacingReplayOverlay.Phases
 {
     public static class SynchronizationContextExtension
     {

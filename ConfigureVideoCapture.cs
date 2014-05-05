@@ -22,7 +22,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace IRacingReplayOverlay
+namespace iRacingReplayOverlay
 {
     public partial class ConfigureVideoCapture : Form
     {

@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace IRacingReplayOverlay
+namespace iRacingReplayOverlay
 {
     public partial class LogMessages : Form
     {

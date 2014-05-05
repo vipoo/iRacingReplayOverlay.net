@@ -1,4 +1,4 @@
-﻿namespace IRacingReplayOverlay
+﻿namespace iRacingReplayOverlay
 {
     partial class LogMessages
     {

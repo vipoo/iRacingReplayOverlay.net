@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IRacingReplayOverlay {
+namespace iRacingReplayOverlay {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -61,9 +61,9 @@ namespace IRacingReplayOverlay {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::IRacingReplayOverlay.TrackCameras trackCameras {
+        public global::iRacingReplayOverlay.TrackCameras trackCameras {
             get {
-                return ((global::IRacingReplayOverlay.TrackCameras)(this["trackCameras"]));
+                return ((global::iRacingReplayOverlay.TrackCameras)(this["trackCameras"]));
             }
             set {
                 this["trackCameras"] = value;

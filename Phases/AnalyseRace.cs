@@ -25,7 +25,7 @@ using System.Linq;
 using System.Threading;
 using iRacingReplayOverlay.Support;
 
-namespace IRacingReplayOverlay.Phases
+namespace iRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
