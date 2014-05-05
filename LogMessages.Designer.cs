@@ -58,7 +58,6 @@
             this.TraceMessageTextBox.Size = new System.Drawing.Size(927, 540);
             this.TraceMessageTextBox.TabIndex = 1;
             this.TraceMessageTextBox.TabStop = false;
-            this.TraceMessageTextBox.Text = "";
             this.TraceMessageTextBox.WordWrap = false;
             // 
             // LogMessages
@@ -72,6 +71,7 @@
             this.DoubleBuffered = true;
             this.Name = "LogMessages";
             this.Text = "LogMessages";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LogMessages_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

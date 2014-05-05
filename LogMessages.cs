@@ -26,6 +26,11 @@ namespace IRacingReplayOverlay
                 return this.TraceMessageTextBox;
             }
         }
-    }
 
+        private void LogMessages_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+    }
 }
