@@ -20,5 +20,8 @@
     <Setting Name="lastVideoFile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="MaxTimeForIncidents" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">00:00:10</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

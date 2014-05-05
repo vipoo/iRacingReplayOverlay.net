@@ -1,6 +1,6 @@
 ﻿namespace iRacingReplayOverlay
 {
-    partial class ConfigureVideoCapture
+    partial class ConfigureGeneralSettings
     {
         /// <summary>
         /// Required designer variable.

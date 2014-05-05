@@ -301,7 +301,7 @@ namespace iRacingReplayOverlay
 
         private void configureVideoCaptureButton_Click(object sender, EventArgs e)
         {
-            var settings = new ConfigureVideoCapture();
+            var settings = new ConfigureGeneralSettings();
             settings.ShowDialog();
         }
 

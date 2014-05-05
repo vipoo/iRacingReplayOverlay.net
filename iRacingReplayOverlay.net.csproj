@@ -59,11 +59,11 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigureVideoCapture.cs">
+    <Compile Include="ConfigureGeneralSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfigureVideoCapture.Designer.cs">
-      <DependentUpon>ConfigureVideoCapture.cs</DependentUpon>
+    <Compile Include="ConfigureGeneralSettings.Designer.cs">
+      <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Drawing\CenterGraphicRect.cs" />
     <Compile Include="LogMessages.cs">
@@ -154,8 +154,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigureVideoCapture.resx">
-      <DependentUpon>ConfigureVideoCapture.cs</DependentUpon>
+    <EmbeddedResource Include="ConfigureGeneralSettings.resx">
+      <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LogMessages.resx">
       <DependentUpon>LogMessages.cs</DependentUpon>

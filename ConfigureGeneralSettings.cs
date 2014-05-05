@@ -24,9 +24,9 @@ using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
-    public partial class ConfigureVideoCapture : Form
+    public partial class ConfigureGeneralSettings : Form
     {
-        public ConfigureVideoCapture()
+        public ConfigureGeneralSettings()
         {
             InitializeComponent();
         }
