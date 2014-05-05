@@ -76,6 +76,7 @@
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
     <Compile Include="Phases\Direction\VideoCapture.cs" />
+    <Compile Include="Phases\Transcoding\Editor.cs" />
     <Compile Include="Support\Messages.cs" />
     <Compile Include="TrackCameras.cs" />
     <Compile Include="DllImports\Win32\Messages.cs" />

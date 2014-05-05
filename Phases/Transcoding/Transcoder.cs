@@ -26,6 +26,7 @@ using System.Runtime.InteropServices;
 using iRacingReplayOverlay.Support;
 using System.Drawing;
 using System.Diagnostics;
+using iRacingReplayOverlay.Phases.Transcoding;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
@@ -74,144 +75,19 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-        IEnumerable<SourceReaderSample> ProcessEdits(SourceReader sourceReader, IEnumerable<SourceReaderSample> source)
-        {
-            long skippingFrom = 0;
-            bool justSkipped = false;
-            Capturing.OverlayData.BoringBit currentSkip = null;
-            bool isFadingOut = false;
-            long fadingOutFrom = 0;
-            var isFadingIn = false;
-            long fadingInFrom = 0;
-
-            foreach( var sample in source)
-            {
-                if( sample.Flags.EndOfStream)
-                {
-                    yield return sample;
-                    continue;
-                }
-
-                if (justSkipped)
-                {
-                    if (sample.Timestamp + 0.5.FromSecondsToNano() < currentSkip.EndTime.FromSecondsToNano())
-                        continue;
-                }
-
-                if (sample.Stream.CurrentMediaType.IsAudio)
-                {
-                    if( isFadingOut)
-                    {
-                        var fadeOut = (sample.Timestamp - fadingOutFrom).FromNanoToSeconds();
-                        FadeAudio(sample, fadeOut);
-                    }
-
-                    yield return sample;
-                    continue;
-                }
-
-                var videoSample = new SourceReaderSampleWithBitmap(sample);
-
-                if( isFadingIn)
-                {
-                    var fadeIn = Math.Min(255, 255 - ((sample.Timestamp - fadingInFrom).FromNanoToSeconds() * 255));
-                    fadeIn = Math.Max(0, fadeIn);
-
-                    videoSample.Graphic.FillRectangle(new SolidBrush(Color.FromArgb((int)fadeIn, Color.Black)), 0, 0, 1920, 1080);
-
-                    if (fadingOutFrom + 1.FromSecondsToNano() >= sample.Timestamp)
-                        isFadingIn = false;
-                }
-
-                if (isFadingOut)
-                {
-                    var fadeOut = Math.Min(255, (sample.Timestamp - fadingOutFrom).FromNanoToSeconds() * 255);
-                    fadeOut = Math.Max(0, fadeOut);
-
-                    videoSample.Graphic.FillRectangle(new SolidBrush(Color.FromArgb((int)fadeOut, Color.Black)), 0, 0, 1920, 1080);
-
-                    if (fadingOutFrom + 1.FromSecondsToNano() < sample.Timestamp)
-                    {
-                        Trace.WriteLine("Finished fading out at {0}".F(TimeSpan.FromSeconds(sample.Timestamp.FromNanoToSeconds())));
-                        isFadingOut = false;
-                        currentSkip = nextCut.Current;
-                        skippingFrom = sample.Timestamp;
-                        justSkipped = true;
-                        nextCut.MoveNext();
-
-                        Trace.WriteLine("Skipping to {0}".F(TimeSpan.FromSeconds(currentSkip.EndTime)));
-
-                        sourceReader.SetCurrentPosition(currentSkip.EndTime.FromSecondsToNano());
-                        continue;
-                    }
-                }
-                else
-                {
-                    if (nextCut.Current != null && sample.Timestamp >= nextCut.Current.StartTime.FromSecondsToNano())
-                    {
-                        Trace.WriteLine("Starting fading out at {0}".F(TimeSpan.FromSeconds(sample.Timestamp.FromNanoToSeconds())));
-
-                        isFadingOut = true;
-                        fadingOutFrom = sample.Timestamp;
-                    }
-                }
-                if (justSkipped)
-                {
-                    justSkipped = false;
-                    offset += (sample.Timestamp - skippingFrom);
-                    isFadingIn = true;
-                    fadingInFrom = sample.Timestamp;
-
-                    Trace.WriteLine("Adjusted timestamp is {0}".F(TimeSpan.FromSeconds(sample.Timestamp.FromNanoToSeconds())));
-                    Trace.WriteLine("Offset is now {0}".F(TimeSpan.FromSeconds(offset.FromNanoToSeconds())));
-                }
-
-                yield return sample;
-            }
-        }
-
         IEnumerable<SourceReaderSampleWithBitmap> ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
         {
             using (sinkWriter.BeginWriting())
-                foreach (var sample in ProcessEdits(sourceReader, sourceReader.Samples()))
+                foreach (var sample in sourceReader.SamplesAfterEditing(EditCuts))
                 {
                     var sinkStream = ProcessIncoming(sample);
 
                     if (sample.Stream.CurrentMediaType.IsVideo)
                         using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                        {
                             yield return sampleWithBitmap;
-                        }
-
-                    //Trace.WriteLine("{0} {1}".F(sample.Stream.CurrentMediaType.IsAudio, TimeSpan.FromSeconds(sample.Timestamp.FromNanoToSeconds())));
-
-                    if (offset != 0 && !sample.Flags.EndOfStream)
-                        sample.SetSampleTime(sample.Timestamp - offset);
 
                     WriteSample(sinkStream, sample);
                 }
-        }
-
-        private void FadeAudio(SourceReaderSample sample, double fadeout)
-        {
-            var buffer = sample.Sample.ConvertToContiguousBuffer();
-            var data = buffer.Lock();
-
-            fadeout = Math.Max(1, fadeout);
-            fadeout = 1 - fadeout;
-            unsafe
-            {
-                var pData = (short*)data.Buffer.ToPointer();
-
-                int length;
-                buffer.instance.GetMaxLength(out length);
-
-                for( int i = 0; i < length/2; i++)
-                    pData[i] = (short)((double)pData[i] * fadeout);
-            }
-
-            data.Dispose();
-            buffer.Dispose();
         }
 
         void ConnectSourceToSink(SourceReader sourceReader, SinkWriter sinkWriter)
