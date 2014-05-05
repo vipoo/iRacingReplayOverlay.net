@@ -127,6 +127,7 @@ namespace iRacingReplayOverlay
 
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
             videoBitRate.Text = Settings.Default.videoBitRate.ToString();
+            sourceVideoTextBox.Text = Settings.Default.lastVideoFile;
 
             iRacingProcess = new IRacingReplay()
                 .WhenIRacingStarts(() => { BeginProcessButton.Enabled = true; ProcessErrorMessageLabel.Visible = false; WaitingForIRacingLabel.Visible = false; })
@@ -210,6 +211,9 @@ namespace iRacingReplayOverlay
 
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
         {
+            Settings.Default.lastVideoFile = sourceVideoTextBox.Text;
+            Settings.Default.Save();
+
             if (lookForAudioBitRates != null )
             {
                 lookForAudioBitRates.Stop();

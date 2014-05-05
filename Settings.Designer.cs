@@ -81,5 +81,17 @@ namespace IRacingReplayOverlay {
                 this["lastSelectedTrackName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lastVideoFile {
+            get {
+                return ((string)(this["lastVideoFile"]));
+            }
+            set {
+                this["lastVideoFile"] = value;
+            }
+        }
     }
 }
