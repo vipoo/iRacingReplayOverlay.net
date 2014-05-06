@@ -70,42 +70,58 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident.MoveNext();
         }
 
+        double incidentPitBoxStartTime = 0;
+
+        bool IsShowingIncident(DataSample data)
+        {
+            if( !(isShowingIncident && nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime))
+                return false;
+
+            if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall && incidentPitBoxStartTime == 0)
+            {
+                Trace.WriteLine("Incident car is in pit stall {0}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
+                incidentPitBoxStartTime = data.Telemetry.SessionTime;
+            }
+
+            if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall && incidentPitBoxStartTime + 2 < data.Telemetry.SessionTime)
+            {
+                Trace.WriteLine("Finishing showing incident as car is in pit stall {0}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsFinishedShowingIncident(DataSample data)
+        {
+            if (!isShowingIncident)
+                return false;
+
+            removalEdits.InterestingThingHappend(data);
+            Trace.WriteLine("Finishing incident from {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)), "INFO");
+
+            isShowingIncident = false;
+            nextIncident.MoveNext();
+            return true;
+        }
+
         public bool Process(DataSample data)
         {
             if( OnLastLap(data) )
                 return SwitchToFinishingDrivers(data);
 
-            if (isShowingIncident)
-            {
-                if (nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime)
-                    return false;
-
-                removalEdits.InterestingThingHappend();
-                Trace.WriteLine("Finishing incident from {0}".F(nextIncident.Current.StartSessionTime), "INFO");
-   
-                isShowingIncident = false;
-                nextIncident.MoveNext();
-            }
-
             if (IsBeforeFirstLapSector2(data))
                 return false;
 
-            while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
-            {
-                Trace.WriteLine("Skipping incident at time {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)), "INFO");
-                nextIncident.MoveNext();
-            }
-
-            if( nextIncident.Current != null && (nextIncident.Current.StartSessionTime) < data.Telemetry.SessionTime)
-            {
-                isShowingIncident = true;
-
-                var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
-
-                removalEdits.InterestingThingHappend();
-                iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
+            if (IsShowingIncident(data))
                 return false;
-            }
+            
+            var finishedShowingIncident = IsFinishedShowingIncident(data);
+
+            SkipOverlappingIncidents(data);
+
+            if (SwitchToIncident(data))
+                return false;
 
             TrackCamera camera;
             SessionData._DriverInfo._Drivers car;
@@ -119,7 +135,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return false;
             }*/
 
-            if (TwentySecondsAfterLastCameraChange(data))
+            if (!finishedShowingIncident && !TwentySecondsAfterLastCameraChange(data))
                 return false;
 
             lastTimeStamp = data.Telemetry.SessionTime;
@@ -129,7 +145,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             car = FindCarWithin1Second(data);
             if (car != null)
             {
-                removalEdits.InterestingThingHappend();
+                removalEdits.InterestingThingHappend(data);
 
                 Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }
@@ -144,12 +160,40 @@ namespace iRacingReplayOverlay.Phases.Direction
             return false;
         }
 
+        private bool SwitchToIncident(DataSample data)
+        {
+            if (nextIncident.Current != null && (nextIncident.Current.StartSessionTime) < data.Telemetry.SessionTime)
+            {
+                isShowingIncident = true;
+                incidentPitBoxStartTime = 0;
+
+                var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
+
+                Trace.WriteLine("Showing incident with {0} at {1}".F(incidentCar.UserName, TimeSpan.FromSeconds(data.Telemetry.SessionTime)), "INFO");
+
+                removalEdits.InterestingThingHappend(data);
+                iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void SkipOverlappingIncidents(DataSample data)
+        {
+            while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
+            {
+                Trace.WriteLine("Skipping incident at time {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)), "INFO");
+                nextIncident.MoveNext();
+            }
+        }
+
         DateTime timeOfFinisher = DateTime.Now;
         int lastFinisherCarIdx = -1;
 
         private bool SwitchToFinishingDrivers(DataSample data)
         {
-            removalEdits.InterestingThingHappend();
+            removalEdits.InterestingThingHappend(data);
 
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 
@@ -192,7 +236,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         bool TwentySecondsAfterLastCameraChange(DataSample data)
         {
-            return lastTimeStamp + 20.0 > data.Telemetry.SessionTime;
+            return lastTimeStamp + 20.0 <= data.Telemetry.SessionTime;
         }
 
         DateTime lastTimeLeaderWasSelected = DateTime.Now;
@@ -202,7 +246,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             var result = data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
             if (result)
             {
-                removalEdits.InterestingThingHappend();
+                removalEdits.InterestingThingHappend(data);
 
                 if ((DateTime.Now - lastTimeLeaderWasSelected).TotalSeconds > 5)
                 {

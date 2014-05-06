@@ -42,13 +42,21 @@ namespace iRacingReplayOverlay.Phases.Analysis
 
         public void Process(DataSample data)
         {
+            if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall ||
+                data.Telemetry.CamCar.TrackSurface == TrackLocation.NotInWorld ||
+                data.Telemetry.CamCar.TrackSurface == TrackLocation.AproachingPits)
+            {
+                Trace.WriteLine("{0} Ignoring incident in the pits on lap {1}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime), data.Telemetry.RaceLaps));
+                return;
+            }
+
             var i = new Incident 
             {
                 LapNumber = data.Telemetry.RaceLaps, 
                 CarIdx = data.Telemetry.CamCarIdx, 
                 StartFrameNumber = data.Telemetry.ReplayFrameNum,
                 StartSessionTime = data.Telemetry.SessionTime - 1,
-                EndSessionTime = data.Telemetry.SessionTime + 9
+                EndSessionTime = data.Telemetry.SessionTime + 8
             };
 
             if( lastIncident == null )

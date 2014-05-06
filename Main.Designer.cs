@@ -70,7 +70,7 @@ namespace iRacingReplayOverlay
             this.VideoDetailLabel = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.SettingsButton = new System.Windows.Forms.Button();
-            this.configureVideoCaptureButton = new System.Windows.Forms.Button();
+            this.configureGeneralSettingsButton = new System.Windows.Forms.Button();
             this.logMessagesButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -309,15 +309,15 @@ namespace iRacingReplayOverlay
             this.SettingsButton.UseVisualStyleBackColor = true;
             this.SettingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
             // 
-            // configureVideoCaptureButton
+            // configureGeneralSettingsButton
             // 
-            this.configureVideoCaptureButton.Location = new System.Drawing.Point(13, 12);
-            this.configureVideoCaptureButton.Name = "configureVideoCaptureButton";
-            this.configureVideoCaptureButton.Size = new System.Drawing.Size(181, 26);
-            this.configureVideoCaptureButton.TabIndex = 31;
-            this.configureVideoCaptureButton.Text = "Configure Video Capture";
-            this.configureVideoCaptureButton.UseVisualStyleBackColor = true;
-            this.configureVideoCaptureButton.Click += new System.EventHandler(this.configureVideoCaptureButton_Click);
+            this.configureGeneralSettingsButton.Location = new System.Drawing.Point(13, 12);
+            this.configureGeneralSettingsButton.Name = "configureGeneralSettingsButton";
+            this.configureGeneralSettingsButton.Size = new System.Drawing.Size(181, 26);
+            this.configureGeneralSettingsButton.TabIndex = 31;
+            this.configureGeneralSettingsButton.Text = "Configure General Settings";
+            this.configureGeneralSettingsButton.UseVisualStyleBackColor = true;
+            this.configureGeneralSettingsButton.Click += new System.EventHandler(this.configureVideoCaptureButton_Click);
             // 
             // logMessagesButton
             // 
@@ -335,7 +335,7 @@ namespace iRacingReplayOverlay
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 535);
             this.Controls.Add(this.logMessagesButton);
-            this.Controls.Add(this.configureVideoCaptureButton);
+            this.Controls.Add(this.configureGeneralSettingsButton);
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.VideoDetailLabel);
@@ -402,7 +402,7 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label VideoDetailLabel;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button SettingsButton;
-        private System.Windows.Forms.Button configureVideoCaptureButton;
+        private System.Windows.Forms.Button configureGeneralSettingsButton;
         private System.Windows.Forms.Button logMessagesButton;
     }
 }

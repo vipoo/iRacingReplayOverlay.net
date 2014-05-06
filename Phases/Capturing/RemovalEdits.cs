@@ -28,82 +28,60 @@ namespace iRacingReplayOverlay.Phases.Capturing
     public class RemovalEdits
     {
         readonly List<OverlayData.BoringBit> boringBits;
+        OverlayData.BoringBit lastBoringBit = null;
+        double lastInterestingTime = 0;
 
         public RemovalEdits(OverlayData overlayData)
         {
             this.boringBits = overlayData.EditCuts;
         }
 
-        public void InterestingThingHappend()
+        public void InterestingThingHappend(DataSample data)
         {
-            Trace.WriteLineIf(!somethingInterestingHappened, "Marking {0} as interesting".F(sectorStartTime), "INFO");
-            somethingInterestingHappened = true;
+            AddPreviouslyMarkedBoringBit();
+         
+            lastInterestingTime = data.Telemetry.SessionTime;
         }
-
-        bool somethingInterestingHappened = false;
-        TimeSpan sectorStartTime;
-        OverlayData.BoringBit lastBoringBit = null;
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
             if (data.LastSample == null)
                 return;
 
-            if (data.LastSample.Telemetry.RaceLapSector == data.Telemetry.RaceLapSector)
+            if (lastInterestingTime + 30 > data.Telemetry.SessionTime)
                 return;
 
-            Trace.WriteLine("{0} {1} {2}".F(relativeTime, data.Telemetry.RaceLapSector.LapNumber, data.Telemetry.RaceLapSector.Sector), "DEBUG");
-
-            if (!somethingInterestingHappened)
-                AddBoringBitsToEdits(relativeTime);
-            else
-                AddPreviouslyMarkedBoringBit();
-
-            somethingInterestingHappened = false;
-            sectorStartTime = relativeTime;
-        }
-
-        void AddBoringBitsToEdits(TimeSpan relativeTime)
-        {
             if (lastBoringBit == null)
             {
-                lastBoringBit = new OverlayData.BoringBit { StartTime = sectorStartTime.TotalSeconds, EndTime = relativeTime.TotalSeconds };
-                Trace.WriteLine("Marking from {0} to {1}".F(TimeSpan.FromSeconds(lastBoringBit.StartTime), TimeSpan.FromSeconds(lastBoringBit.EndTime)), "DEBUG");
-
-                return;
+                Trace.WriteLine("{0} Marking start of a cut".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
+                lastBoringBit = new OverlayData.BoringBit { StartTime = data.Telemetry.SessionTime };
             }
 
-            if (Math.Abs(lastBoringBit.EndTime - sectorStartTime.TotalSeconds) > 5)
-            {
-                AddLastBoringBit();
-                lastBoringBit = new OverlayData.BoringBit { StartTime = sectorStartTime.TotalSeconds, EndTime = relativeTime.TotalSeconds };
-                Trace.WriteLine("Marking from {0} to {1}".F(TimeSpan.FromSeconds(lastBoringBit.StartTime), TimeSpan.FromSeconds(lastBoringBit.EndTime)), "DEBUG");
-                return;
-            }
-
-            Trace.WriteLine("Extending cut from {0} to {1}".F(TimeSpan.FromSeconds(lastBoringBit.EndTime), relativeTime), "DEBUG");
-            lastBoringBit.EndTime = relativeTime.TotalSeconds;
+            lastBoringBit.EndTime = data.Telemetry.SessionTime;
         }
 
         void AddPreviouslyMarkedBoringBit()
         {
-            if (lastBoringBit == null)
-                return;
-
             AddLastBoringBit();
+
             lastBoringBit = null;
         }
 
         private void AddLastBoringBit()
         {
+            if (lastBoringBit == null)
+                return;
+
+            if (lastBoringBit.Duration < 30)
+                return;
+
             Trace.WriteLine("Cutting from {0} to {1}".F(TimeSpan.FromSeconds(lastBoringBit.StartTime), TimeSpan.FromSeconds(lastBoringBit.EndTime)), "INFO");
             boringBits.Add(lastBoringBit);
         }
 
         public void Stop()
         {
-            if( lastBoringBit != null)
-                boringBits.Add(lastBoringBit);
+            boringBits.Add(lastBoringBit);
 
             var totalTimeCut = boringBits.Sum(b => b.EndTime - b.StartTime);
             Trace.WriteLine("Total cut time is {0}".F(TimeSpan.FromSeconds(totalTimeCut)), "INFO");

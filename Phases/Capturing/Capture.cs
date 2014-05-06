@@ -103,7 +103,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
                     if (lastPosition != null && lastPosition.Position != d.Position)
                     {
-                        removalEdits.InterestingThingHappend();
+                        removalEdits.InterestingThingHappend(data);
                         var msg = "{0} in {1}{2}".F(d.Name, d.Position, d.Position.Ordinal());
                         Trace.WriteLine(msg, "INFO");
                         commentaryMessages.Add(msg, relativeTime.TotalSeconds);

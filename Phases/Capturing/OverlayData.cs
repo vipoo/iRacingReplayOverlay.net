@@ -31,6 +31,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             public double StartTime;
             public double EndTime;
+            public double Duration { get { return EndTime - StartTime; } }
         }
 
         public class MessageState

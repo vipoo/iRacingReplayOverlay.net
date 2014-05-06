@@ -31,5 +31,23 @@ namespace iRacingReplayOverlay
             InitializeComponent();
         }
 
+        private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
+        {
+            MaxTimeForIncidentsTextBox.Text = ((int)Settings.Default.MaxTimeForIncidents.TotalSeconds).ToString();
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void MaxTimeForIncidentsTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var newSeconds = 0;
+            if( int.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds) )
+            {
+                Settings.Default.MaxTimeForIncidents = TimeSpan.FromSeconds(newSeconds);
+                Settings.Default.Save();
+            }
+        }
     }
 }
