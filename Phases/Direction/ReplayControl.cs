@@ -140,14 +140,15 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             lastTimeStamp = data.Telemetry.SessionTime;
 
-            camera = FindACamera();
-
             car = FindCarWithin1Second(data);
+            camera = FindACamera();
+            car = ChangeCarForCamera(data, camera, car);
             if (car != null)
             {
                 removalEdits.InterestingThingHappend(data);
 
                 Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+
             }
             else
             {
@@ -326,7 +327,26 @@ namespace iRacingReplayOverlay.Phases.Direction
                 }
                 offset += tc.Ratio;
             }
+         
             return camera;
+        }
+
+        SessionData._DriverInfo._Drivers ChangeCarForCamera(DataSample data, TrackCamera camera, SessionData._DriverInfo._Drivers driver)
+        {
+            if (driver == null)
+                return null;
+
+            var car = data.Telemetry.Cars[driver.CarIdx];
+
+            if (camera.CameraName == "Gearbox" )
+            {
+                Trace.WriteLine("Changing to forward car, with reverse camera");
+                car =  data.Telemetry.Cars.First(c => c.Position == car.Position - 1);
+                return data.SessionData.DriverInfo.Drivers[car.CarIdx];
+            }
+                   
+
+            return driver;
         }
     }
 }
