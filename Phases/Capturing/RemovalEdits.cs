@@ -27,9 +27,17 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class RemovalEdits
     {
+        public enum InterestStates
+        {
+            WaitingForInterestToFade, // + 15sconds
+            BeginingPotentialBoringBit, // + 30seconds
+            BoringBitActivate //until interesting thing happens - 4 seconds
+        }
+
         readonly List<OverlayData.BoringBit> boringBits;
         OverlayData.BoringBit lastBoringBit = null;
         double lastInterestingTime = 0;
+        InterestStates interestState = InterestStates.WaitingForInterestToFade;
 
         public RemovalEdits(OverlayData overlayData)
         {
@@ -41,6 +49,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             AddPreviouslyMarkedBoringBit();
          
             lastInterestingTime = data.Telemetry.SessionTime;
+            interestState = InterestStates.WaitingForInterestToFade;
         }
 
         public void Process(DataSample data, TimeSpan relativeTime)
@@ -48,40 +57,33 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (data.LastSample == null)
                 return;
 
-            if (lastInterestingTime + 30 > data.Telemetry.SessionTime)
-                return;
-
-            if (lastBoringBit == null)
+            if (interestState == InterestStates.WaitingForInterestToFade && lastInterestingTime + 15 <= data.Telemetry.SessionTime)
             {
-                Trace.WriteLine("{0} Marking start of a cut".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
+                interestState = InterestStates.BeginingPotentialBoringBit;
                 lastBoringBit = new OverlayData.BoringBit { StartTime = data.Telemetry.SessionTime };
+                Trace.WriteLine("{0} Marking start of a cut".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
             }
 
-            lastBoringBit.EndTime = data.Telemetry.SessionTime;
+            if( interestState == InterestStates.BeginingPotentialBoringBit && lastBoringBit.StartTime + 30 <= data.Telemetry.SessionTime)
+                interestState = InterestStates.BoringBitActivate;
+
+            if( interestState == InterestStates.BoringBitActivate)
+                lastBoringBit.EndTime = data.Telemetry.SessionTime;
         }
 
         void AddPreviouslyMarkedBoringBit()
         {
-            AddLastBoringBit();
-
-            lastBoringBit = null;
-        }
-
-        private void AddLastBoringBit()
-        {
-            if (lastBoringBit == null)
-                return;
-
-            if (lastBoringBit.Duration < 30)
+            if (interestState != InterestStates.BoringBitActivate)
                 return;
 
             Trace.WriteLine("Cutting from {0} to {1}".F(TimeSpan.FromSeconds(lastBoringBit.StartTime), TimeSpan.FromSeconds(lastBoringBit.EndTime)), "INFO");
+            
             boringBits.Add(lastBoringBit);
         }
 
         public void Stop()
         {
-            boringBits.Add(lastBoringBit);
+            AddPreviouslyMarkedBoringBit();
 
             var totalTimeCut = boringBits.Sum(b => b.EndTime - b.StartTime);
             Trace.WriteLine("Total cut time is {0}".F(TimeSpan.FromSeconds(totalTimeCut)), "INFO");
