@@ -146,9 +146,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (car != null)
             {
                 removalEdits.InterestingThingHappend(data);
-
                 Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
-
             }
             else
             {

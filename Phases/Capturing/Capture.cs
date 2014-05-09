@@ -169,6 +169,10 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (data.LastSample == null)
                 return false;
 
+            removalEdits.InterestingThingHappend(data);
+
+            timingSample = CreateTimingSample(data, relativeTime, timingSample.Drivers);
+
             for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
             {
                 if (data.LastSample.Telemetry.Cars[i].HasSeenCheckeredFlag && !haveNotedCheckerdFlag[i])
@@ -240,11 +244,18 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         static OverlayData.Driver GetCurrentDriverDetails(DataSample data, OverlayData.Driver[] drivers)
         {
-            var driver = drivers.FirstOrDefault(d => d.CarIdx == data.Telemetry.CamCarIdx);
-            if (driver == null)
-                return new OverlayData.Driver();
+            var car = data.Telemetry.CamCar;
+            if (car == null)
+                return null;
 
-            driver.Indicator = driver.Position.Ordinal();
+            var driver = new OverlayData.Driver
+            {
+                CarIdx = car.CarIdx,
+                CarNumber = car.CarNumber,
+                Indicator = car.Position.Ordinal(),
+                Name = car.UserName,
+                Position = car.Position
+            };
 
             return driver;
         }

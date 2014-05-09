@@ -23,6 +23,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG;TRACE;</DefineConstants>
     <LangVersion>5</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Optimize>false</Optimize>
