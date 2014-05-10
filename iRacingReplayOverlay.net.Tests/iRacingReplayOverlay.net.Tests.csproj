@@ -41,6 +41,7 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyBinder.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Main.cs" />
   </ItemGroup>

@@ -41,6 +41,7 @@ namespace iRacingReplayOverlay.net.Tests
 		IEnumerable<DataSample> GetTestData()
 		{
 			var formatter = new BinaryFormatter();
+            formatter.Binder = new MyBinder(formatter.Binder);
 			using(var stream = new FileStream("Support/SampleRaceStream.bin", FileMode.Open, FileAccess.Read, FileShare.Read))
 			{
 				while(stream.Position < stream.Length)

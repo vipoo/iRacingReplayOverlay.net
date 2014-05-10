@@ -2,3 +2,5 @@
 *.userprefs
 **/bin/*
 **/obj/*
+**/SampleRaceStream.bin
+
