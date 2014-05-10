@@ -154,7 +154,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             {
                 camera = FindACamera();
                 car = FindARandomDriver(data);
-                Trace.WriteLine("{0} - Changing camera to random driver number {1}, using camera number {2} as previous car has drop out".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+                Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera number {2} as previous car has drop out".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
                 iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
                 return false;
             }*/
@@ -175,13 +175,13 @@ namespace iRacingReplayOverlay.Phases.Direction
             {
 				currentlyViewing= ViewType.CloseBattle;
                 removalEdits.InterestingThingHappend(data);
-                Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+                Trace.WriteLine("{0} Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }
             else
             {
 				currentlyViewing = ViewType.RandomCar;
                 car = FindARandomDriver(data);
-                Trace.WriteLine("{0} - Changing camera to random driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+                Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }
 
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
@@ -198,7 +198,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                 var incidentCar = sessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
 
-                Trace.WriteLine("Showing incident with {0} at {1}".F(incidentCar.UserName, TimeSpan.FromSeconds(data.Telemetry.SessionTime)), "INFO");
+                Trace.WriteLine("{0} Showing incident with {1}".F(data.Telemetry.SessionTimeSpan, incidentCar.UserName), "INFO");
 
                 removalEdits.InterestingThingHappend(data);
                 iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
@@ -256,7 +256,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             timeOfFinisher = DateTime.Now;
             lastFinisherCarIdx = nextFinisher.CarIdx;
 
-            Trace.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}.".F(data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position));
+            Trace.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}".F(data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position), "INFO");
 
             iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, TV2.CameraNumber);
             

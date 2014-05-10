@@ -46,7 +46,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             if (timeToNoteFastestLap != null && timeToNoteFastestLap.Value < data.Telemetry.SessionTime)
             {
-                Trace.WriteLine("{0} Showing Driver {1} recorded a new fast lap of {2}".F(data.Telemetry.SessionTimeSpan, lastFastLap.Driver.Name, lastFastLap.Time), "INFO");
+                Trace.WriteLine("{0} Showing Driver {1} recorded a new fast lap of {2:0.00}".F(data.Telemetry.SessionTimeSpan, lastFastLap.Driver.Name, lastFastLap.Time), "INFO");
 
                 overlayData.FastestLaps.Add(lastFastLap);
                 timeToNoteFastestLap = null;
@@ -85,7 +85,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                         if (timeToNoteFastestLap == null)
                             timeToNoteFastestLap = data.Telemetry.SessionTime + 20;
-                        Trace.WriteLine("{0} Driver {1} recorded a new fast lap of {2}".F(data.Telemetry.SessionTimeSpan, lastFastLap.Driver.Name, lastFastLap.Time), "INFO");
+                        Trace.WriteLine("{0} Driver {1} recorded a new fast lap of {2:0.00}".F(data.Telemetry.SessionTimeSpan, lastFastLap.Driver.Name, lastFastLap.Time), "INFO");
                     }
                 }
             }

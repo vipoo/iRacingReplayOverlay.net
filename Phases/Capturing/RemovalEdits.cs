@@ -61,7 +61,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             {
                 interestState = InterestStates.BeginingPotentialBoringBit;
                 lastBoringBit = new OverlayData.BoringBit { StartTime = data.Telemetry.SessionTime };
-                Trace.WriteLine("{0} Marking start of a cut".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
+                Trace.WriteLine("{0} Marking start of a cut".F(data.Telemetry.SessionTimeSpan), "INFO");
             }
 
             if( interestState == InterestStates.BeginingPotentialBoringBit && lastBoringBit.StartTime + 15 <= data.Telemetry.SessionTime)
