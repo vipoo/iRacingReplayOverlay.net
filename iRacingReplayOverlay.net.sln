@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDataModels", "..\iRacingSDK.Net\GenerateDataModels\GenerateDataModels.csproj", "{90126FE7-C20E-43EC-93AF-77AA5268E860}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK.Net.Tests", "..\iRacingSDK.Net\iRacingSDK.Net.Tests\iRacingSDK.Net.Tests.csproj", "{947BD2B6-FFF4-4762-8C0E-718112CDA72E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -76,6 +78,14 @@ Global
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x64.Build.0 = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x86.ActiveCfg = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x86.Build.0 = Release|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x64.Build.0 = Debug|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x86.Build.0 = Debug|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x64.ActiveCfg = Release|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x64.Build.0 = Release|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x86.ActiveCfg = Release|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x86.Build.0 = Release|Any CPU
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.ActiveCfg = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.Build.0 = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x86.ActiveCfg = Debug|x86
@@ -85,7 +95,7 @@ Global
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ImagerOverlayer\ImagerOverlayer.csproj
+		StartupItem = iRacingReplayOverlay.net.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

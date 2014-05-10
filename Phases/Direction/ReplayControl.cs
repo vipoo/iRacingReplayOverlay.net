@@ -89,6 +89,8 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return false;
             }
 
+			removalEdits.InterestingThingHappend(data);
+
             return true;
         }
 
@@ -105,23 +107,45 @@ namespace iRacingReplayOverlay.Phases.Direction
             return true;
         }
 
+		public enum ViewType
+		{
+			Incident,
+			CloseBattle,
+			RandomCar,
+			FirstLap,
+			LastLap
+		}
+
+		ViewType currentlyViewing;
         public bool Process(DataSample data)
         {
-            if( OnLastLap(data) )
-                return SwitchToFinishingDrivers(data);
+			if(OnLastLap(data))
+			{
+				currentlyViewing = ViewType.LastLap;
+				return SwitchToFinishingDrivers(data);
+			}
 
-            if (IsBeforeFirstLapSector2(data))
-                return false;
+			if(IsBeforeFirstLapSector2(data))
+			{
+				currentlyViewing = ViewType.FirstLap;
+				return false;
+			}
 
             if (IsShowingIncident(data))
+			{
+				currentlyViewing = ViewType.Incident;
                 return false;
+			}
             
             var finishedShowingIncident = IsFinishedShowingIncident(data);
 
             SkipOverlappingIncidents(data);
 
             if (SwitchToIncident(data))
+			{
+				currentlyViewing = ViewType.Incident;
                 return false;
+			}
 
             TrackCamera camera;
             SessionData._DriverInfo._Drivers car;
@@ -135,8 +159,12 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return false;
             }*/
 
-            if (!finishedShowingIncident && !TwentySecondsAfterLastCameraChange(data))
-                return false;
+			if(!finishedShowingIncident && !TwentySecondsAfterLastCameraChange(data))
+			{
+				if( currentlyViewing != ViewType.RandomCar)
+					removalEdits.InterestingThingHappend(data);
+				return false;
+			}
 
             lastTimeStamp = data.Telemetry.SessionTime;
 
@@ -145,11 +173,13 @@ namespace iRacingReplayOverlay.Phases.Direction
             car = ChangeCarForCamera(data, camera, car);
             if (car != null)
             {
+				currentlyViewing= ViewType.CloseBattle;
                 removalEdits.InterestingThingHappend(data);
                 Trace.WriteLine("{0} - Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }
             else
             {
+				currentlyViewing = ViewType.RandomCar;
                 car = FindARandomDriver(data);
                 Trace.WriteLine("{0} - Changing camera to random driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }

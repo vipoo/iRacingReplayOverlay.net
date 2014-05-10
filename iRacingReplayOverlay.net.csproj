@@ -10,7 +10,7 @@
     <RootNamespace>iRacingReplayOverlay</RootNamespace>
     <AssemblyName>iRacingReplayOverlay</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkProfile />
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>

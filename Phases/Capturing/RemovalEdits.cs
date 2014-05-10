@@ -46,7 +46,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void InterestingThingHappend(DataSample data)
         {
-            AddPreviouslyMarkedBoringBit();
+			AddPreviouslyMarkedBoringBit();
          
             lastInterestingTime = data.Telemetry.SessionTime;
             interestState = InterestStates.WaitingForInterestToFade;
