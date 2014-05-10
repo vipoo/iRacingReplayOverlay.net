@@ -6,38 +6,56 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.InteropServices;
 
 namespace iRacingReplayOverlay.net.Tests
 {
-	public class Support
-	{
-		public static void Main()
-		{
-			new Test().TestCase();
+    [Serializable]
+    public struct TestDataSample
+    {
+        public string YamlSessionData;
+        public string[] TelemetryKeys;
+        public object[] TelemetryValues;
+    }
 
-			//CaptureAFullReplay();
-		}
+    public class Support
+    {
+        public static void Main()
+        {
+            new Test().TestCase();
 
-		static void CaptureAFullReplay()
-		{
-			var samples = new List<DataSample>();
+            //CaptureAFullReplay();
+        }
 
-			iRacing.Replay.MoveToStartOfRace();//.MoveToFrame(79466);
-			iRacing.Replay.SetSpeed(16);
 
-			var formatter = new BinaryFormatter();
-			using( var  stream = new FileStream("SampleRaceStream.bin", FileMode.Create, FileAccess.Write, FileShare.None) )
+        static void CaptureAFullReplay()
+        {
+            var samples = new List<DataSample>();
 
-				foreach(var data in iRacing.GetDataFeed().AtSpeed(16).TakeWhile( d => d.Telemetry.ReplayFrameNumEnd > 0 ))
-				{
-					if(data.LastSample != null && data.Telemetry.Lap != data.LastSample.Telemetry.Lap)
-						Console.WriteLine("Capturing Lap {0}", data.Telemetry.Lap);
+            iRacing.Replay.MoveToStartOfRace();
+            iRacing.Replay.SetSpeed(16);
 
-					formatter.Serialize(stream, data);
-				}
+            var formatter = new BinaryFormatter();
+            var firstSampleDone = false;
 
-			Console.WriteLine("Done!");
-		}
-	}
+            using (var stream = new FileStream("./SampleRaceStream.bin", FileMode.Create, FileAccess.Write, FileShare.None))
+                foreach (var data in iRacing.GetDataFeed().AtSpeed(16).TakeWhile(d => d.Telemetry.ReplayFrameNumEnd > 40))
+                {
+                    if (data.LastSample != null && data.Telemetry.Lap != data.LastSample.Telemetry.Lap)
+                        Console.WriteLine("Capturing Lap {0}", data.Telemetry.Lap);
+
+                    if( !firstSampleDone)
+                    {
+                        firstSampleDone = true;
+                        formatter.Serialize(stream, data.SessionData.Raw);
+                        formatter.Serialize(stream, data.Telemetry.Select(kv => kv.Key).ToArray());
+                    }
+                    
+                    formatter.Serialize(stream, data.Telemetry.Select(kv => kv.Value).ToArray());
+                }
+
+            Console.WriteLine("Done!");
+        }
+    }
 }
 

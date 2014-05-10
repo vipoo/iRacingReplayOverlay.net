@@ -34,7 +34,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         readonly RemovalEdits removalEdits;
 
         string latestCreatedVideoFile;
-        DateTime lastTime;
+        TimeSpan lastTime;
         OverlayData.TimingSample timingSample;
         OverlayData.Driver[] lastDrivers;
         int leaderBoardUpdateRate = 0;
@@ -61,10 +61,10 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
-            if ((DateTime.Now - lastTime).TotalSeconds < 0.5)
+            if (data.Telemetry.SessionTimeSpan.Subtract( lastTime).TotalSeconds < 0.5)
                 return;
 
-            lastTime = DateTime.Now;
+            lastTime = data.Telemetry.SessionTimeSpan;
 
             if (ProcessForLastLap(data, relativeTime))
                 return;
@@ -200,7 +200,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                     timingSample = CreateTimingSample(data, relativeTime, drivers.ToArray());
 
-                    var msg = string.Format("{0} finished in {1}{2}", driver.UserName, position, position.Ordinal());
+                    var msg = string.Format("{0} {1} finished in {2}{3}", data.Telemetry.SessionTimeSpan, driver.UserName, position, position.Ordinal());
                     Trace.WriteLine(msg, "INFO");
                     commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                 }

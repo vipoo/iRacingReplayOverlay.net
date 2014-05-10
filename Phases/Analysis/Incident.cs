@@ -46,7 +46,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 data.Telemetry.CamCar.TrackSurface == TrackLocation.NotInWorld ||
                 data.Telemetry.CamCar.TrackSurface == TrackLocation.AproachingPits)
             {
-                Trace.WriteLine("{0} Ignoring incident in the pits on lap {1}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime), data.Telemetry.RaceLaps));
+                Trace.WriteLine("{0} Ignoring incident in the pits on lap {1}".F(data.Telemetry.SessionTimeSpan, data.Telemetry.RaceLaps));
                 return;
             }
 

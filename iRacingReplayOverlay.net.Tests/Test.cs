@@ -6,6 +6,9 @@ using System.IO;
 using iRacingSDK;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
+using iRacingReplayOverlay.Phases.Capturing;
+using YamlDotNet.Serialization;
 
 namespace iRacingReplayOverlay.net.Tests
 {
@@ -35,6 +38,14 @@ namespace iRacingReplayOverlay.net.Tests
 			}, GetTestData());
 
 			Assert.IsTrue(File.Exists("./dummy.xml"));
+
+            var reader = new XmlSerializer(typeof(OverlayData));
+            using (var file = new StreamReader("./dummy.xml"))
+            {
+                var result = (OverlayData)reader.Deserialize(file);
+
+                //result.MessageStates.First(d => d.Messages.First() == "Dean ").Time;
+            }
 		}
 
 
@@ -44,15 +55,47 @@ namespace iRacingReplayOverlay.net.Tests
             formatter.Binder = new MyBinder(formatter.Binder);
 			using(var stream = new FileStream("Support/SampleRaceStream.bin", FileMode.Open, FileAccess.Read, FileShare.Read))
 			{
+                var rawSessionData = (string)formatter.Deserialize(stream);
+                var telemetryKeys = (string[])formatter.Deserialize(stream);
+                var sessionData = BuildSessionData(rawSessionData);
+                DataSample lastDataSample = null;
+
 				while(stream.Position < stream.Length)
 				{
-					var sample = (DataSample)formatter.Deserialize(stream);
-                    sample.Telemetry.SessionData = sample.SessionData;
+					var telemetryValues = (object[])formatter.Deserialize(stream);
+
+                    var telemetry = new Telemetry();
+                    for(int i = 0; i < telemetryKeys.Length; i++)
+                        telemetry.Add(telemetryKeys[i], telemetryValues[i]);
+                    telemetry.SessionData = sessionData;
+
+                    var sample = new DataSample
+                    {
+                        Telemetry = telemetry,
+                        SessionData = sessionData,
+                        LastSample = lastDataSample
+                    };
+
+                    lastDataSample = sample;
                    
 					yield return sample;
+
+                    sample.LastSample = null;
 				}
 			}
 		}
+
+        private SessionData BuildSessionData(string rawSessionData)
+        {
+            var input = new StringReader(rawSessionData);
+
+            var deserializer = new Deserializer(ignoreUnmatched: true);
+
+            var result = (SessionData)deserializer.Deserialize(input, typeof(SessionData));
+            result.Raw = rawSessionData;
+
+            return result;
+        }
 	}
 }
 

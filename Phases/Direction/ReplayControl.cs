@@ -251,12 +251,12 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (nextFinisher == null)
                 return true;
 
-            Trace.WriteLine("Found {0} in position {1}".F(nextFinisher.UserName, nextFinisher.Position), "DEBUG");
+            Trace.WriteLine("{0} Found {1} in position {2}".F(data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position), "DEBUG");
 
             timeOfFinisher = DateTime.Now;
             lastFinisherCarIdx = nextFinisher.CarIdx;
 
-            Trace.WriteLine("Switching camera to {0} as they cross finishing line in position {1}.".F(nextFinisher.UserName, nextFinisher.Position));
+            Trace.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}.".F(data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position));
 
             iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, TV2.CameraNumber);
             
