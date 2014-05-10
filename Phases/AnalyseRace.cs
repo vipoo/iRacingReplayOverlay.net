@@ -30,7 +30,7 @@ namespace iRacingReplayOverlay.Phases
     public partial class IRacingReplay
     {
         int raceStartFrameNumber = 0;
-        Incidents incidents;
+		internal Incidents incidents;
 
         public void _AnalyseRace(Action onComplete)
         {
@@ -56,8 +56,8 @@ namespace iRacingReplayOverlay.Phases
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
             incidents = new Incidents();
-            foreach (var data in iRacing.GetDataFeed().RaceIncidents())
-                incidents.Process(data);
+			foreach (var data in iRacing.GetDataFeed().RaceIncidents())
+			    incidents.Process(data);
             incidents.Stop();
         }
     }

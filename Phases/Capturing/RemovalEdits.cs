@@ -57,14 +57,14 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (data.LastSample == null)
                 return;
 
-            if (interestState == InterestStates.WaitingForInterestToFade && lastInterestingTime + 15 <= data.Telemetry.SessionTime)
+            if (interestState == InterestStates.WaitingForInterestToFade && lastInterestingTime + 7 <= data.Telemetry.SessionTime)
             {
                 interestState = InterestStates.BeginingPotentialBoringBit;
                 lastBoringBit = new OverlayData.BoringBit { StartTime = data.Telemetry.SessionTime };
                 Trace.WriteLine("{0} Marking start of a cut".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
             }
 
-            if( interestState == InterestStates.BeginingPotentialBoringBit && lastBoringBit.StartTime + 30 <= data.Telemetry.SessionTime)
+            if( interestState == InterestStates.BeginingPotentialBoringBit && lastBoringBit.StartTime + 15 <= data.Telemetry.SessionTime)
                 interestState = InterestStates.BoringBitActivate;
 
             if( interestState == InterestStates.BoringBitActivate)

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDataModels", "..\iR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK.Net.Tests", "..\iRacingSDK.Net\iRacingSDK.Net.Tests\iRacingSDK.Net.Tests.csproj", "{947BD2B6-FFF4-4762-8C0E-718112CDA72E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net.Tests", "iRacingReplayOverlay.net.Tests\iRacingReplayOverlay.net.Tests.csproj", "{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -93,9 +95,17 @@ Global
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.ActiveCfg = Release|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.Build.0 = Release|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x86.ActiveCfg = Release|x64
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|x64.Build.0 = Debug|Any CPU
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|x64.ActiveCfg = Release|Any CPU
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|x64.Build.0 = Release|Any CPU
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = iRacingReplayOverlay.net.csproj
+		StartupItem = iRacingReplayOverlay.net.Tests\iRacingReplayOverlay.net.Tests.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

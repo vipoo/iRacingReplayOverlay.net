@@ -25,14 +25,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using iRacingReplayOverlay.Support;
+using System.Collections.Generic;
 
 namespace iRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
         void _CaptureRace(string workingFolder, Action<string, string> onComplete)
-        {
-            iRacing.Replay.MoveToFrame(raceStartFrameNumber);
+		{
+			_CaptureRaceTest(workingFolder, onComplete, iRacing.GetDataFeed());
+		}
+
+		internal void _CaptureRaceTest(string workingFolder, Action<string, string> onComplete, IEnumerable<DataSample> samples)
+		{
+			iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
             Thread.Sleep(2000);
             iRacing.Replay.SetSpeed(1);
@@ -49,7 +55,7 @@ namespace iRacingReplayOverlay.Phases
             videoCapture.Activate();
             var startTime = DateTime.Now;
 
-            foreach (var data in iRacing.GetDataFeed()
+			foreach (var data in samples
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
                 .WithFinishingStatus()
