@@ -105,7 +105,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     {
                         removalEdits.InterestingThingHappend(data);
                         var msg = "{0} in {1}{2}".F(d.Name, d.Position, d.Position.Ordinal());
-                        Trace.WriteLine(msg, "INFO");
+                        Trace.WriteLine("{0} {1}".F(data.Telemetry.SessionTimeSpan, msg), "INFO");
                         commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                     }
                 }
@@ -201,7 +201,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     timingSample = CreateTimingSample(data, relativeTime, drivers.ToArray());
 
                     var msg = string.Format("{0} {1} finished in {2}{3}", data.Telemetry.SessionTimeSpan, driver.UserName, position, position.Ordinal());
-                    Trace.WriteLine(msg, "INFO");
+                    Trace.WriteLine("{0} {1}".F(data.Telemetry.SessionTimeSpan, msg), "INFO");
                     commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                 }
             }
