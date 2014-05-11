@@ -37,19 +37,15 @@ namespace iRacingReplayOverlay.Phases
             iRacing.Replay.MoveToFrame(f + 60 * 4);
             iRacing.Replay.SetSpeed(1);
 
-            var cameras = data.SessionData.CameraInfo.Groups.First( c => c.GroupName == "Scenic");
+            var scenicCameras = data.SessionData.CameraInfo.Groups.First( c => c.GroupName == "Scenic").GroupNum;
             var aCar = data.SessionData.DriverInfo.Drivers[1].CarNumber;
+            iRacing.Replay.CameraOnDriver((short)aCar, (short)scenicCameras);
 
             var videoCapture = new VideoCapture();
 
             videoCapture.Activate();
 
-            foreach (var c in cameras.Cameras)
-            {
-                Trace.WriteLine(string.Format("{0} - {1} - {2}", cameras.GroupNum, c.CameraNum, aCar));
-                iRacing.Replay.CameraOnDriver((short)aCar, (short)cameras.GroupNum, (short)c.CameraNum);
-                Thread.Sleep(4000);
-            }
+            Thread.Sleep(4000);
 
             videoCapture.Deactivate();
         }
