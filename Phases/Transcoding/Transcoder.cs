@@ -22,11 +22,6 @@ using MediaFoundation.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using iRacingReplayOverlay.Support;
-using System.Drawing;
-using System.Diagnostics;
-using iRacingReplayOverlay.Phases.Transcoding;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {

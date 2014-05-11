@@ -34,8 +34,6 @@ namespace Tester
     {
         static void Main(string[] args)
         {
-            bool? requestAbort = false;
-
             var workingFolder = Path.GetDirectoryName(typeof(Program).Assembly.Location);
 
             var trackCameras = InitCameras();
@@ -45,9 +43,10 @@ namespace Tester
                 .WhenIRacingStarts(() => { })
                 .AnalyseRace(() => { })
                 .CaptureOpeningScenes()
-                .CaptureRace(workingFolder, (f, e) => { } )
+                .CaptureRace(workingFolder, (f, e) => { })
                 .CloseIRacing()
-                .OverlayRaceDataOntoVideo(progess => { /*update progress bar */})
+                .WithEncodingOf(videoBitRate: 5000000, audioBitRate: 48000/8)
+                .OverlayRaceDataOntoVideo((c, d) => { }, () => { }, () => { })
                 .InTheForeground();
 
                 //.InTheBackground(ref requestAbort)

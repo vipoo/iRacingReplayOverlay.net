@@ -78,6 +78,7 @@
     <Compile Include="LogMessages.Designer.cs">
       <DependentUpon>LogMessages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Phases\Transcode.cs" />
     <Compile Include="Phases\CaptureOpeningScenes.cs" />
     <Compile Include="Phases\Capturing\RemovalEdits.cs" />
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Drawing\GraphicsExtension.cs" />
     <Compile Include="Support\TimingExtension.cs" />
     <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
-    <Compile Include="Phases\Transcoding\OverlayWorker.cs" />
     <Compile Include="Phases\Direction\ReplayControl.cs" />
     <Compile Include="Phases\Transcoding\SourceReaderSampleWithBitmap.cs" />
     <Compile Include="Phases\Capturing\OverlayData.cs" />

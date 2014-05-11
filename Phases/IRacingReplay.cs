@@ -90,8 +90,31 @@ namespace iRacingReplayOverlay.Phases
             return this;
         }
 
-        public IRacingReplay OverlayRaceDataOntoVideo(Action<int> progressFunction)
+        public IRacingReplay WithEncodingOf(int videoBitRate, int audioBitRate)
         {
+            _WithEncodingOf(videoBitRate, audioBitRate);
+            return this;
+        }
+
+        public IRacingReplay WithFiles(string sourceFile)
+        {
+            _WithFiles(sourceFile);
+
+            return this;
+        }
+
+        public IRacingReplay OverlayRaceDataOntoVideo(_Progress progress, Action completed, Action readFramesCompleted)
+        {
+            var context = SynchronizationContext.Current;
+
+            actions.Add(
+                () => _OverlayRaceDataOntoVideo(
+                    (c, d) => context.Post(() => progress(c, d)),
+                    () => context.Post(completed),
+                    () => context.Post(readFramesCompleted)
+                )
+            );
+            
             return this;
         }
 
@@ -106,11 +129,12 @@ namespace iRacingReplayOverlay.Phases
 
         public void RequestAbort()
         {
-
+            requestAbort = true;
         }
 
         public IRacingReplay InTheBackground(Action onComplete)
         {
+            requestAbort = false;
             var context = SynchronizationContext.Current;
             
             backgrounTask = new Task(() => {

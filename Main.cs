@@ -37,8 +37,6 @@ namespace iRacingReplayOverlay
 
     public partial class Main : Form
     {
-            
-        OverlayWorker overlayWorker;
         System.Windows.Forms.Timer aTimer;
         int guessedProgessedAmount;
         const int GuessFinalizationRequiredSeconds = 25;
@@ -111,11 +109,6 @@ namespace iRacingReplayOverlay
             logMessagges = new LogMessages();
             Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
 
-            overlayWorker = new OverlayWorker();
-            overlayWorker.Progress += OnTranscoderProgress;
-            overlayWorker.Completed += OnTranscoderCompleted;
-            overlayWorker.ReadFramesCompleted += OnTranscoderReadFramesCompleted;
-
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
             fileWatchTimer.Tick += (s, a) => OnGameDataFileChanged();
@@ -132,11 +125,6 @@ namespace iRacingReplayOverlay
             iRacingProcess = new IRacingReplay()
                 .WhenIRacingStarts(() => { BeginProcessButton.Enabled = true; ProcessErrorMessageLabel.Visible = false; WaitingForIRacingLabel.Visible = false; })
                 .InTheBackground(() => { });
-        }
-
-        void Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            overlayWorker.Dispose();
         }
 
         void workingFolderButton_Click(object sender, EventArgs e)
@@ -167,13 +155,12 @@ namespace iRacingReplayOverlay
             Settings.Default.Save();
 
             State = States.Transcoding;
-            var destinationFile = Path.ChangeExtension(sourceVideoTextBox.Text, "wmv");
-            var sourceGameData = Path.ChangeExtension(sourceVideoTextBox.Text, "xml");
-            overlayWorker.TranscodeVideo(sourceVideoTextBox.Text, destinationFile, sourceGameData, videoBitRateNumber * 1000000, (int)audioBitRate.SelectedItem/8);
 
-            //iRacingProcess
-            //    .OverlayRaceDataOntoVideo(progess => { /*update progress bar */})
-             //   .InTheBackground(() => { });
+            iRacingProcess
+                .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
+                .WithFiles(sourceFile: sourceVideoTextBox.Text)
+                .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, OnTranscoderReadFramesCompleted)
+                .InTheBackground(() => { });
         }
 
         void OnTranscoderReadFramesCompleted()
@@ -202,7 +189,7 @@ namespace iRacingReplayOverlay
 
         void transcodeCancel_Click(object sender, EventArgs e)
         {
-            overlayWorker.Cancel();
+            iRacingProcess.RequestAbort();
             State = States.Idle;
         }
 
