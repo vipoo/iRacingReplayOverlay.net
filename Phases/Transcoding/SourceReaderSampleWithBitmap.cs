@@ -55,6 +55,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 		public readonly long Duration;
         public readonly SourceReaderSampleFlags Flags;
         public readonly SourceReaderSample sample;
+        public bool IsIntroduction;
 
         public SourceReaderSampleWithBitmap(SourceReaderSample sample)
         {

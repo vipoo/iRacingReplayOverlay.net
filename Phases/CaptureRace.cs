@@ -26,6 +26,7 @@ using System.Linq;
 using System.Threading;
 using iRacingReplayOverlay.Support;
 using System.Collections.Generic;
+using System.IO;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -73,7 +74,8 @@ namespace iRacingReplayOverlay.Phases
                 .WithCorrectedDistances()
                 .WithFinishingStatus()
                 //.AtSpeed(3)
-                //.AtSpeed(4, d => d.Telemetry.RaceLaps < 3)
+                .AtSpeed(4)
+                .TakeWhile(d => d.Telemetry.RaceLaps < 2)
                 //.AtSpeed(16, d => d.Telemetry.RaceLaps >=0 && d.Telemetry.RaceLaps < 19)
                 //.AtSpeed(6, d => d.Telemetry.RaceLaps >=19 )
 )            {
@@ -90,6 +92,8 @@ namespace iRacingReplayOverlay.Phases
 
             var fileName = videoCapture.Deactivate();
 
+            SaveOverlayData(overlayData, fileName);
+
             iRacing.Replay.SetSpeed(0);
 
             var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
@@ -102,6 +106,16 @@ namespace iRacingReplayOverlay.Phases
                 errorMessage = "Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder);
 
             onComplete(fileName, errorMessage);
+        }
+
+        private void SaveOverlayData(OverlayData overlayData, string fileName)
+        {
+            if (fileName == null)
+                fileName = workingFolder + "/unknown_capture-{0}".F(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+
+            fileName = Path.ChangeExtension(fileName, ".xml");
+            Trace.WriteLine("Saving overlay data to {0}".F(fileName));
+            overlayData.SaveTo(fileName);
         }
     }
 }

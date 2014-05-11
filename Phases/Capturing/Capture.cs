@@ -29,11 +29,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
     {
         readonly String workingFolder;
         readonly OverlayData overlayData;
-        readonly FileSystemWatcher[] fileWatchers;
         readonly CommentaryMessages commentaryMessages;
         readonly RemovalEdits removalEdits;
 
-        string latestCreatedVideoFile;
         TimeSpan lastTime;
         OverlayData.TimingSample timingSample;
         OverlayData.Driver[] lastDrivers;
@@ -46,17 +44,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.workingFolder = workingFolder;
             this.commentaryMessages = commentaryMessages;
             this.removalEdits = removalEdits;
-    
-            latestCreatedVideoFile = null;
-            fileWatchers = new FileSystemWatcher[2];
-            fileWatchers[0] = new FileSystemWatcher(workingFolder, "*.mp4");
-            fileWatchers[1] = new FileSystemWatcher(workingFolder, "*.avi");
-            foreach(var fileWatcher in fileWatchers)
-            {
-                fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime;
-                fileWatcher.Created += OnCreated;
-                fileWatcher.EnableRaisingEvents = true;
-            }
         }
 
         public void Process(DataSample data, TimeSpan relativeTime)
@@ -227,11 +214,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
             };
 
             return driver;
-        }
-
-        void OnCreated(object sender, FileSystemEventArgs e)
-        {
-            latestCreatedVideoFile = e.FullPath;
         }
     }
 }

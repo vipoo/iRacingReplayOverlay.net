@@ -1,4 +1,5 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿
+// This file is part of iRacingReplayOverlay.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingReplayOverlay.net
@@ -27,6 +28,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 {
     class Transcoder
     {
+        public string IntroVideoFile;
         public string SourceFile { get; set; }
         public string DestinationFile { get; set; }
         public int AudioBitRate;
@@ -57,58 +59,83 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     SourceReaderEnableVideoProcessing = true
                 };
 
+                var introSourceReader = readWriteFactory.CreateSourceReaderFromURL(IntroVideoFile, attributes);
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(SourceFile, attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);
 
-                ConnectSourceToSink(sourceReader, sinkWriter);
+                ConnectSourceToSink(introSourceReader, sourceReader, sinkWriter);
 
-                foreach (var sample in ProcessSamples(sourceReader, sinkWriter))
+                using (sinkWriter.BeginWriting())
                 {
-                    yield return sample;
+                    foreach (var sample in ProcessSamples(introSourceReader, sinkWriter))
+                    {
+                        sample.IsIntroduction = true;
+                        
+                        if (!sample.Flags.EndOfStream)
+                            yield return sample;
 
+                        if (sample.Timestamp > offset)
+                            offset = sample.Timestamp;
+                    }
+
+                    foreach (var sample in ProcessSamples(sourceReader, sinkWriter, offset))
+                    {
+                        sample.IsIntroduction = false;
+                        
+                        yield return sample;
+                    }
                 }
             }
         }
 
-        IEnumerable<SourceReaderSampleWithBitmap> ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter)
+        IEnumerable<SourceReaderSampleWithBitmap> ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter, long offset = 0)
         {
-            using (sinkWriter.BeginWriting())
-                foreach (var sample in sourceReader.SamplesAfterEditing(EditCuts))
-                {
-                    var sinkStream = ProcessIncoming(sample);
+            foreach (var sample in sourceReader.SamplesAfterEditing(EditCuts, -offset))
+            {
+                var sinkStream = ProcessIncoming(sample);
 
-                    if (sample.Stream.CurrentMediaType.IsVideo)
-                        using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                            yield return sampleWithBitmap;
+                if (!sample.Flags.EndOfStream)
+                    sample.SetSampleTime(sample.Timestamp + offset);
 
-                    WriteSample(sinkStream, sample);
-                }
+                if (sample.Stream.CurrentMediaType.IsVideo)
+                    using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
+                        yield return sampleWithBitmap;
+
+                WriteSample(sinkStream, sample);
+            }
         }
 
-        void ConnectSourceToSink(SourceReader sourceReader, SinkWriter sinkWriter)
+        void ConnectSourceToSink(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
         {
-            foreach (var stream in sourceReader.Streams.Where(s => s.IsSelected))
+            var introSourceStreams = introSourceReader.Streams
+                .Where(s => s.IsSelected)
+                .Select(s => new { Stream = s, NativeMediaType = s.NativeMediaType })
+                .ToList();
+            
+            foreach (var ss in sourceReader.Streams.Where(s => s.IsSelected))
             {
-                var sourceStream = stream;
+                var sourceStream = ss;
 
-                var nativeMediaType = sourceStream.NativeMediaType;
-
-                var isVideo = nativeMediaType.IsVideo;
-                var isAudio = nativeMediaType.IsAudio;
+                var isVideo = sourceStream.NativeMediaType.IsVideo;
+                var isAudio = sourceStream.NativeMediaType.IsAudio;
 
                 if (!isAudio && !isVideo)
                     throw new Exception("Unknown stream type");
 
-                var targetType = isAudio ? CreateTargetAudioMediaType(nativeMediaType) : CreateTargetVideoMediaType(nativeMediaType);
-
+                var targetType = isAudio ? CreateTargetAudioMediaType(sourceStream.NativeMediaType) : CreateTargetVideoMediaType(sourceStream.NativeMediaType);
                 var sinkStream = sinkWriter.AddStream(targetType);
+
+                var introStream = introSourceStreams.First(s => s.NativeMediaType.IsAudio == isAudio && s.NativeMediaType.IsVideo == isVideo);
                 streamMapping.Add(sourceStream, sinkStream);
+                streamMapping.Add(introStream.Stream, sinkStream);
 
                 var mediaType = isAudio
                     ? new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM }
                     : new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
 
                 sourceStream.CurrentMediaType = mediaType;
+                var introSt = introStream.Stream;
+                introSt.CurrentMediaType = mediaType;
                 sinkStream.InputMediaType = sourceStream.CurrentMediaType;
             }
         }

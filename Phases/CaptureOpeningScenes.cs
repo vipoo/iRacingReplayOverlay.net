@@ -18,6 +18,7 @@
 //
 
 using iRacingReplayOverlay.Phases.Direction;
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
 using System.Diagnostics;
@@ -45,10 +46,11 @@ namespace iRacingReplayOverlay.Phases
 
             videoCapture.Activate(workingFolder);
 
-            Thread.Sleep(4000);
+            Thread.Sleep(8000);
 
             var fileName = videoCapture.Deactivate();
 
+            Trace.WriteLine("Captured intro video into file {0}".F(fileName), "INFO");
             _WithIntroVideo(fileName);
         }
     }

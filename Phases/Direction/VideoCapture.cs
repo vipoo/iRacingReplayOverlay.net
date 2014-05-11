@@ -39,22 +39,15 @@ namespace iRacingReplayOverlay.Phases.Direction
         public void Activate(string workingFolder)
         {
             this.workingFolder = workingFolder;
-            this.started = DateTime.Now;
+            this.started = DateTime.Now; //.Subtract(TimeSpan.FromSeconds(30));
 
-            Trace.WriteLine("Sending key event ALT+F9", "INFO");
-
-            keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(10);
-            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(10);
-            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-            Thread.Sleep(10);
-            keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            SendKeyStroke();
         }
 
         public string Deactivate()
         {
-            Activate(workingFolder);
+            SendKeyStroke();
+
             Thread.Sleep(2000);
 
             var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
@@ -67,5 +60,19 @@ namespace iRacingReplayOverlay.Phases.Direction
             Trace.WriteLineIf(guessedFileName == null, "Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder), "INFO");
             return guessedFileName == null ? null : guessedFileName.FileName;
         }
+
+        private static void SendKeyStroke()
+        {
+            Trace.WriteLine("Sending key event ALT+F9", "INFO");
+
+            keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(10);
+            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(10);
+            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            Thread.Sleep(10);
+            keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+        }
+
     }
 }

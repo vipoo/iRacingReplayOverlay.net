@@ -33,7 +33,7 @@ namespace iRacingReplayOverlay.Phases.Direction
     {
         readonly SessionData sessionData;
         readonly Random random;
-        readonly TrackCamera[] trackCameras;
+        readonly TrackCamera[] cameras;
         readonly TrackCamera TV2;
         readonly TrackCamera TV3;
         readonly Random randomDriverNumber;
@@ -53,7 +53,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             random = new System.Random();
             randomDriverNumber = new Random();
 
-            var cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
+            cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
             Trace.WriteLineIf(cameras.Count() <= 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName), "INFO");
             Debug.Assert(cameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName));
@@ -346,7 +346,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             var offset = 0;
             var camera = TV2;
 
-            foreach (var tc in trackCameras)
+            foreach (var tc in cameras)
             {
                 if (rand < tc.Ratio + offset)
                 {

@@ -59,6 +59,7 @@ namespace iRacingReplayOverlay.Phases
 
             var transcoder = new Transcoder
             {
+                IntroVideoFile = leaderBoard.OverlayData.IntroVideoFileName,
                 SourceFile = sourceFile,
                 DestinationFile = destinationFile,
                 VideoBitRate = videoBitRate,
@@ -68,6 +69,9 @@ namespace iRacingReplayOverlay.Phases
 
             foreach (var frame in transcoder.Frames())
             {
+                if (frame.IsIntroduction)
+                    continue;
+
                 if (frame.Flags.EndOfStream)
                     readFramesCompleted();
                 else

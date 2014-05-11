@@ -28,7 +28,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 {
     public static class SourceReaderExtension
     {
-        public static IEnumerable<SourceReaderSample> SamplesAfterEditing(this SourceReader sourceReader, List<OverlayData.BoringBit> edits)
+        public static IEnumerable<SourceReaderSample> SamplesAfterEditing(this SourceReader sourceReader, List<OverlayData.BoringBit> edits, long offset = 0)
         {
             long skippingFrom = 0;
             bool justSkipped = false;
@@ -37,7 +37,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             long fadingOutFrom = 0;
             var isFadingIn = false;
             long fadingInFrom = 0;
-            long offset = 0;
 
             var nextCut = edits.GetEnumerator();
             nextCut.MoveNext();
