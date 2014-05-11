@@ -43,11 +43,13 @@ namespace iRacingReplayOverlay.Phases
 
             var videoCapture = new VideoCapture();
 
-            videoCapture.Activate();
+            videoCapture.Activate(workingFolder);
 
             Thread.Sleep(4000);
 
-            videoCapture.Deactivate();
+            var fileName = videoCapture.Deactivate();
+
+            _WithIntroVideo(fileName);
         }
     }
 }

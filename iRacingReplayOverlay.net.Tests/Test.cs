@@ -33,9 +33,9 @@ namespace iRacingReplayOverlay.net.Tests
 			var ir = new IRacingReplay();
 			ir.incidents = new iRacingReplayOverlay.Phases.Analysis.Incidents();
 
-			ir._CaptureRaceTest("./", (a, b) =>
-			{
-			}, GetTestData());
+            ir = ir.WithWorkingFolder("./");
+
+			ir._CaptureRaceTest( (a, b) => {}, GetTestData());
 
 			Assert.IsTrue(File.Exists("./dummy.xml"));
 

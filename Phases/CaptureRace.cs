@@ -31,19 +31,32 @@ namespace iRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
-        void _CaptureRace(string workingFolder, Action<string, string> onComplete)
+        string workingFolder;
+        string introVideoFileName;
+        
+        void _WithWorkingFolder(string workingFolder)
+        {
+            this.workingFolder = workingFolder;
+        }
+
+        void _WithIntroVideo(string fileName)
+        {
+            this.introVideoFileName = fileName;
+        }
+
+        void _CaptureRace(Action<string, string> onComplete)
 		{
-			_CaptureRaceTest(workingFolder, onComplete, iRacing.GetDataFeed());
+			_CaptureRaceTest(onComplete, iRacing.GetDataFeed());
 		}
 
-		internal void _CaptureRaceTest(string workingFolder, Action<string, string> onComplete, IEnumerable<DataSample> samples)
+		internal void _CaptureRaceTest(Action<string, string> onComplete, IEnumerable<DataSample> samples)
 		{
 			iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
             Thread.Sleep(2000);
             iRacing.Replay.SetSpeed(1);
 
-            var overlayData = new OverlayData();
+            var overlayData = new OverlayData { IntroVideoFileName = introVideoFileName };
             var removalEdits = new RemovalEdits(overlayData);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
@@ -52,7 +65,7 @@ namespace iRacingReplayOverlay.Phases
             var replayControl = new ReplayControl(samples.First().SessionData, incidents, commentaryMessages, removalEdits, TrackCameras);
 
             Thread.Sleep(2000);
-            videoCapture.Activate();
+            videoCapture.Activate(workingFolder);
             var startTime = DateTime.Now;
 
 			foreach (var data in samples
@@ -75,18 +88,18 @@ namespace iRacingReplayOverlay.Phases
 
             removalEdits.Stop();
 
-            videoCapture.Deactivate();
+            var fileName = videoCapture.Deactivate();
 
             iRacing.Replay.SetSpeed(0);
-
-            string errorMessage;
-            string fileName;
-            capture.Stop(out fileName, out errorMessage);
 
             var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
             Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_FORCEMINIMIZE);
             
             _WithFiles(fileName);
+
+            string errorMessage = null;
+            if(fileName == null)
+                errorMessage = "Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder);
 
             onComplete(fileName, errorMessage);
         }

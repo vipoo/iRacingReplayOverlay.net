@@ -101,6 +101,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double Time;
         }
 
+        public string IntroVideoFileName;
         public List<TimingSample> TimingSamples = new List<TimingSample>();
         public List<FastLap> FastestLaps = new List<FastLap>();
         public List<MessageState> MessageStates = new List<MessageState>();

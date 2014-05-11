@@ -267,9 +267,10 @@ namespace iRacingReplayOverlay
             State = States.CapturingGameData;
 
             iRacingProcess
+                .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()
-                .CaptureRace(workingFolderTextBox.Text, (videoFileName, errorMessage) => 
+                .CaptureRace((videoFileName, errorMessage) => 
                 {
                     ProcessErrorMessageLabel.Text = errorMessage;
                     ProcessErrorMessageLabel.Visible = errorMessage != null;

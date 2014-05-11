@@ -211,37 +211,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
             return true;
         }
 
-        public void Stop(out string latestCreatedVideoFile, out string errors)
-        {
-            errors = null;
-            latestCreatedVideoFile = this.latestCreatedVideoFile;
-
-            if (latestCreatedVideoFile != null)
-                overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
-            else
-            {
-                Trace.WriteLine("No mp4/avi video file was detected during capturing.", "DEBUG");
-                errors = "No mp4/avi video file was detected during capturing -- Assuming last created file";
-                var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
-                    .Select(fn => new { FileName = fn, CreationTime = File.GetCreationTime(fn) })
-                    .OrderByDescending(f => f.CreationTime)
-                    .FirstOrDefault();
-
-                if (guessedFileName != null)
-                {
-                    latestCreatedVideoFile = guessedFileName.FileName;
-
-                    if (!File.Exists(Path.ChangeExtension(latestCreatedVideoFile, ".xml")))
-                    {
-                        overlayData.SaveTo(Path.ChangeExtension(latestCreatedVideoFile, ".xml"));
-                        return;
-                    }
-                }
-             
-                errors = "Unable to find captured video file in " + workingFolder;
-            }
-        }
-
         static OverlayData.Driver GetCurrentDriverDetails(DataSample data, OverlayData.Driver[] drivers)
         {
             var car = data.Telemetry.CamCar;

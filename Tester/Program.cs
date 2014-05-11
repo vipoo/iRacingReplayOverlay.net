@@ -42,14 +42,13 @@ namespace Tester
                 .WithCameras(trackCameras)
                 .WhenIRacingStarts(() => { })
                 .AnalyseRace(() => { })
+                .WithWorkingFolder(workingFolder)
                 .CaptureOpeningScenes()
-                .CaptureRace(workingFolder, (f, e) => { })
+                .CaptureRace((f, e) => { })
                 .CloseIRacing()
                 .WithEncodingOf(videoBitRate: 5000000, audioBitRate: 48000/8)
                 .OverlayRaceDataOntoVideo((c, d) => { }, () => { }, () => { })
                 .InTheForeground();
-
-                //.InTheBackground(ref requestAbort)
         }
 
         private static TrackCameras InitCameras()

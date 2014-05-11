@@ -78,9 +78,15 @@ namespace iRacingReplayOverlay.Phases
             return this;
         }
 
-        public IRacingReplay CaptureRace(string workingFolder, Action<string, string> onComplete)
+        public IRacingReplay WithWorkingFolder(string workingFolder)
         {
-            Add((a) => _CaptureRace(workingFolder, a), onComplete);
+            _WithWorkingFolder(workingFolder);
+            return this;
+        }
+
+        public IRacingReplay CaptureRace(Action<string, string> onComplete)
+        {
+            Add((a) => _CaptureRace(a), onComplete);
 
             return this;
         }
@@ -99,7 +105,6 @@ namespace iRacingReplayOverlay.Phases
         public IRacingReplay WithFiles(string sourceFile)
         {
             _WithFiles(sourceFile);
-
             return this;
         }
 
