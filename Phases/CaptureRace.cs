@@ -49,7 +49,7 @@ namespace iRacingReplayOverlay.Phases
             var videoCapture = new VideoCapture();
             var capture = new Capture(overlayData, commentaryMessages, removalEdits, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);
-            var replayControl = new ReplayControl(samples.First().SessionData, incidents, commentaryMessages, removalEdits);
+            var replayControl = new ReplayControl(samples.First().SessionData, incidents, commentaryMessages, removalEdits, TrackCameras);
 
             Thread.Sleep(2000);
             videoCapture.Activate();

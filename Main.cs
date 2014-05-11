@@ -281,6 +281,7 @@ namespace iRacingReplayOverlay
 
             iRacingProcess
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
+                .CaptureOpeningScenes()
                 .CaptureRace(workingFolderTextBox.Text, (videoFileName, errorMessage) => 
                 {
                     ProcessErrorMessageLabel.Text = errorMessage;

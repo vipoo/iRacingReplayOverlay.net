@@ -44,7 +44,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         double lastTimeStamp = 0;
         bool isShowingIncident;
 
-        public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits)
+        public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, TrackCameras trackCameras)
         {
             this.sessionData = sessionData;
             this.commentaryMessages = commentaryMessages;
@@ -53,16 +53,16 @@ namespace iRacingReplayOverlay.Phases.Direction
             random = new System.Random();
             randomDriverNumber = new Random();
 
-            trackCameras = Settings.Default.trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
+            var cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
-            Trace.WriteLineIf(trackCameras.Count() <= 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName), "INFO");
-            Debug.Assert(trackCameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName));
+            Trace.WriteLineIf(cameras.Count() <= 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName), "INFO");
+            Debug.Assert(cameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName));
 
-            foreach (var tc in trackCameras)
+            foreach (var tc in cameras)
                 tc.CameraNumber = (short)sessionData.CameraInfo.Groups.First(g => g.GroupName.ToLower() == tc.CameraName.ToLower()).GroupNum;
 
-            TV2 = trackCameras.First(tc => tc.CameraName == "TV2");
-            TV3 = trackCameras.First(tc => tc.CameraName == "TV3");
+            TV2 = cameras.First(tc => tc.CameraName == "TV2");
+            TV3 = cameras.First(tc => tc.CameraName == "TV3");
 
             iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
 

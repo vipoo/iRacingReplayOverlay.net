@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using iRacingReplayOverlay;
 
 namespace Tester
 {
@@ -37,15 +38,36 @@ namespace Tester
 
             var workingFolder = Path.GetDirectoryName(typeof(Program).Assembly.Location);
 
+            var trackCameras = InitCameras();
+
             new IRacingReplay()
+                .WithCameras(trackCameras)
                 .WhenIRacingStarts(() => { })
                 .AnalyseRace(() => { })
+                .CaptureOpeningScenes()
                 .CaptureRace(workingFolder, (f, e) => { } )
                 .CloseIRacing()
                 .OverlayRaceDataOntoVideo(progess => { /*update progress bar */})
                 .InTheForeground();
 
                 //.InTheBackground(ref requestAbort)
+        }
+
+        private static TrackCameras InitCameras()
+        {
+            var data = iRacing.GetDataFeed().First();
+            var trackName = data.SessionData.WeekendInfo.TrackDisplayName;
+
+            var trackCameras = new TrackCameras();
+
+            foreach (var camera in data.SessionData.CameraInfo.Groups)
+                trackCameras.Add(new TrackCamera
+                {
+                    TrackName = trackName,
+                    CameraName = camera.GroupName
+                });
+
+            return trackCameras;
         }
     }
 }

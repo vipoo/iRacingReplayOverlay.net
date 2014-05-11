@@ -44,8 +44,10 @@ namespace iRacingReplayOverlay.Phases
         private void Add(Action<Action> action, Action onComplete)
         {
             var context = SynchronizationContext.Current;
-
-            actions.Add(() => action(() => context.Post(onComplete)));
+            if( context != null)
+                actions.Add(() => action(() => context.Post(onComplete)));
+            else
+                actions.Add(() => action(onComplete));
         }
 
         private void Add(Action<Action<string, string>> action, Action<string, string> onComplete)
@@ -66,6 +68,13 @@ namespace iRacingReplayOverlay.Phases
         {
             Add(_AnalyseRace,  onComplete);
             
+            return this;
+        }
+
+        public IRacingReplay CaptureOpeningScenes()
+        {
+            Add(_CaptureOpeningScenes, () => { });
+
             return this;
         }
 

@@ -26,6 +26,22 @@ namespace iRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
+        TrackCameras trackCameras;
+        public TrackCameras TrackCameras
+        {
+            get
+            {
+                return trackCameras ?? Settings.Default.trackCameras;
+            }
+        }
+
+        public IRacingReplay WithCameras(TrackCameras trackCameras)
+        {
+            this.trackCameras = trackCameras;
+
+            return this;
+        }
+        
         public void _WhenIRacingStarts(Action onComplete)
         {
             foreach (var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
