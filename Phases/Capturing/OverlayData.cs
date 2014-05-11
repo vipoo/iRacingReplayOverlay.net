@@ -65,15 +65,15 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public int CarIdx;
 
             [XmlIgnore]
-            public Dictionary<string, string> DriverNickNames = new Dictionary<string, string>();
+            private Dictionary<string, string> driverNickNames = new Dictionary<string, string>();
 
             [XmlIgnore]
             public string ShortName
             {
                 get
                 {
-                    if (DriverNickNames.ContainsKey(Name))
-                        return DriverNickNames[Name];
+                    if (driverNickNames.ContainsKey(Name))
+                        return driverNickNames[Name];
 
                     var names = Name.Split(' ');
                     var firstName = names.First();
@@ -83,7 +83,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         + lastName.Substring(0, 1).ToUpper()
                         + lastName.Substring(1, Math.Min(3, lastName.Length-1));
 
-                    DriverNickNames[Name] = name;
+                    driverNickNames.Add(Name, name);
                     return name;
                 }
             }
@@ -114,17 +114,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 writer.Serialize(file, this);
         }
 
-        public static OverlayData FromFile(string fileName, Dictionary<string, string> driverNickNames)
+        public static OverlayData FromFile(string fileName)
         {
             var reader = new XmlSerializer(typeof(OverlayData));
             using (var file = new StreamReader(fileName))
             {
-                var result = (OverlayData)reader.Deserialize(file);
-                foreach (var timingSample in result.TimingSamples)
-                    foreach (var d in timingSample.Drivers)
-                        d.DriverNickNames = driverNickNames;
-
-                return result;
+                return (OverlayData)reader.Deserialize(file);
             }
         }
     }

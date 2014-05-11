@@ -31,7 +31,6 @@ namespace ImagerOverlayer
         static OverlayData BuildData()
         {
             var result = new OverlayData();
-            var driverNickNames = new Dictionary<string, string>();
 
             for (var i = 24.5; i < 30.0; i += 1.0 / 59.9)
             {
@@ -74,9 +73,9 @@ namespace ImagerOverlayer
                                 LapCounter = "Lap 2",
                                 StartTime = 0, 
                                 Drivers = new [] {
-                                    new OverlayData.Driver { CarNumber = 12, Name = "Dean Netherton", Position = 1, DriverNickNames = driverNickNames },
-                                    new OverlayData.Driver { CarNumber = 13, Name = "Matty", Position = 2, DriverNickNames = driverNickNames },
-                                    new OverlayData.Driver { CarNumber = 3, Name = "Fred", Position = 3, DriverNickNames = driverNickNames }
+                                    new OverlayData.Driver { CarNumber = 12, Name = "Dean Netherton", Position = 1},
+                                    new OverlayData.Driver { CarNumber = 13, Name = "Matty", Position = 2 },
+                                    new OverlayData.Driver { CarNumber = 3, Name = "Fred", Position = 3 }
                                 },
                                 RacePosition = "39:34",
                                 CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 29, Name = "Somebody" },
