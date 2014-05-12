@@ -44,13 +44,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         internal void Frames(Func<SourceReaderSampleWithBitmap, bool> sampleFn)
         {
-            foreach (var f in Frames())
-                if (!sampleFn(f))
-                    break;
-        }
-
-        internal IEnumerable<SourceReaderSampleWithBitmap> Frames()
-        {
             streamMapping = new Dictionary<SourceStream, SinkStream>();
 
             nextCut = EditCuts.GetEnumerator();
@@ -77,9 +70,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     foreach (var sample in ProcessSamples(introSourceReader, sinkWriter))
                     {
                         sample.IsIntroduction = true;
-                        
+
                         if (!sample.Flags.EndOfStream)
-                            yield return sample;
+                            if (!sampleFn(sample))
+                                break;
 
                         if (sample.Timestamp > offset)
                             offset = sample.Timestamp;
@@ -88,8 +82,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     foreach (var sample in ProcessSamples(sourceReader, sinkWriter, offset))
                     {
                         sample.IsIntroduction = false;
-                        
-                        yield return sample;
+
+                        if (!sampleFn(sample))
+                            break;
                     }
                 }
             }
