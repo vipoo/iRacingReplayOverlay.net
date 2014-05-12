@@ -67,10 +67,10 @@ namespace iRacingReplayOverlay.Phases
                 EditCuts = leaderBoard.OverlayData.EditCuts
             };
 
-            foreach (var frame in transcoder.Frames())
+            transcoder.Frames(frame => 
             {
                 if (frame.IsIntroduction)
-                    continue;
+                    return true;
 
                 if (frame.Flags.EndOfStream)
                     readFramesCompleted();
@@ -82,9 +82,8 @@ namespace iRacingReplayOverlay.Phases
                         progress(frame.Timestamp, frame.Duration);
                 }
 
-                if (requestAbort)
-                    break;
-            }
+                return !requestAbort;
+            });
 
             completed();
         }

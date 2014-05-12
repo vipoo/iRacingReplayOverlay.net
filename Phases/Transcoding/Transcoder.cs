@@ -42,6 +42,13 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         List<Capturing.OverlayData.BoringBit>.Enumerator nextCut;
         long offset = 0;
 
+        internal void Frames(Func<SourceReaderSampleWithBitmap, bool> sampleFn)
+        {
+            foreach (var f in Frames())
+                if (!sampleFn(f))
+                    break;
+        }
+
         internal IEnumerable<SourceReaderSampleWithBitmap> Frames()
         {
             streamMapping = new Dictionary<SourceStream, SinkStream>();
