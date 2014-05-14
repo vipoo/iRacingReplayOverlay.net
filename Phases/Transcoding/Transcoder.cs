@@ -64,7 +64,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 using (sinkWriter.BeginWriting())
                 {
                     Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
-                        Process.SeperateAudioVideo(next, OverlayRaceData(sampleFn, next)));
+                        Process.SeperateAudioVideo(next, OverlayRaceData(sampleFn, Process.VideoFadeIn(next))));
 
                     Process.Concat(introSourceReader.Samples, mainFeed, writeToSink);
                 }

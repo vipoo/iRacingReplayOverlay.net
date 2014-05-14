@@ -116,7 +116,6 @@
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Drawing\GraphicRect.cs" />
     <Compile Include="Drawing\GraphicsExtension.cs" />
-    <Compile Include="Support\TimingExtension.cs" />
     <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
     <Compile Include="Phases\Direction\ReplayControl.cs" />
     <Compile Include="Phases\Transcoding\SourceReaderSampleWithBitmap.cs" />
@@ -133,6 +132,7 @@
     <Compile Include="Video\FromFile.cs" />
     <Compile Include="Video\MediaTypeChange.cs" />
     <Compile Include="Video\Concat.cs" />
+    <Compile Include="Video\FadeIn.cs" />
     <Compile Include="Video\Process.cs" />
     <Compile Include="Video\SaveTo.cs" />
     <Compile Include="Video\SeperateAudioVideo.cs" />
