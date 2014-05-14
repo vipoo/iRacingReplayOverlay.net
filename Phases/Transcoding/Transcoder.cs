@@ -67,39 +67,41 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 using (sinkWriter.BeginWriting())
                 {
-                    long offset = 0;
-        
-                    ProcessSample(introSourceReader, sinkWriter, 0, sample => 
+                    Action<ProcessSample> mainFeed = (next) =>
                     {
-                        sample.IsIntroduction = true;
+                        ProcessSample overlayFn = sample => {
 
-                        if (sample.Timestamp > offset)
-                            offset = sample.Timestamp;
-                        
-                        if (!sample.Flags.EndOfStream)
-                            return sampleFn(sample);
+                            if (sample.Stream.CurrentMediaType.IsVideo)
+                                using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
+                                    sampleFn(sampleWithBitmap);
 
-                        return true;
-                    });
+                            return next(sample);
+                        };
 
-                    ProcessSample(sourceReader, sinkWriter, offset, sample =>
-                    {
-                        sample.IsIntroduction = false;
+                        sourceReader.Samples(overlayFn);
+                    };
 
-                        return sampleFn(sample);
-                    });
+                    Process.Concat((sFn) => introSourceReader.Samples(sFn), mainFeed, processSample );
                 }
             }
         }
 
+        ProcessSample ApplyOffset(long offset, ProcessSample next)
+        {
+            return sample =>
+                {
+                    if (!sample.Flags.EndOfStream)
+                        sample.SetSampleTime(sample.Timestamp + offset);
+
+                    return next(sample);
+                };
+        }
+
         //    SamplesAfterEditing(EditCuts, -offset))
         
-        void ProcessSample(SourceReader sourceReader, SinkWriter sinkWriter, long offset, Func<SourceReaderSampleWithBitmap, bool> next)
+        void ProcessSample(SourceReader sourceReader, Func<SourceReaderSampleWithBitmap, bool> next)
         {
             sourceReader.Samples((sample) => {
-
-                if (!sample.Flags.EndOfStream)
-                    sample.SetSampleTime(sample.Timestamp + offset);
 
                 if (sample.Stream.CurrentMediaType.IsVideo)
                     using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))

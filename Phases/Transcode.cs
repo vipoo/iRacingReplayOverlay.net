@@ -69,14 +69,14 @@ namespace iRacingReplayOverlay.Phases
 
             transcoder.Frames(frame => 
             {
-                if (frame.IsIntroduction)
-                    return true;
+                //if (frame.IsIntroduction)
+                  //  return true;
 
                 if (frame.Flags.EndOfStream)
                     readFramesCompleted();
                 else
                 {
-                    //leaderBoard.Overlay(frame.Graphic, frame.Timestamp);
+                    leaderBoard.Overlay(frame.Graphic, frame.Timestamp);
 
                     if (frame.Timestamp != 0)
                         progress(frame.Timestamp, frame.Duration);
