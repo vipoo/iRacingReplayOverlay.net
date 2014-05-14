@@ -17,6 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Video;
 using MediaFoundation;
 using MediaFoundation.Net;
 using MediaFoundation.Transform;
@@ -42,6 +43,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         List<Capturing.OverlayData.BoringBit>.Enumerator nextCut;
         long offset = 0;
 
+        ProcessSample seperateAudioVideo;
+        ProcessSample processSample;
+
         internal void Frames(Func<SourceReaderSampleWithBitmap, bool> sampleFn)
         {
             streamMapping = new Dictionary<SourceStream, SinkStream>();
@@ -64,6 +68,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);
 
                 ConnectSourceToSink(introSourceReader, sourceReader, sinkWriter);
+                processSample = seperateAudioVideo;
 
                 using (sinkWriter.BeginWriting())
                 {
@@ -103,7 +108,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
                         yield return sampleWithBitmap;
 
-                WriteSample(sinkStream, sample);
+                processSample(sample);
             }
         }
 
@@ -113,7 +118,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .Where(s => s.IsSelected)
                 .Select(s => new { Stream = s, NativeMediaType = s.NativeMediaType })
                 .ToList();
-            
+
+            ProcessSample saveAudio = null;
+            ProcessSample saveVideo = null;
             foreach (var ss in sourceReader.Streams.Where(s => s.IsSelected))
             {
                 var sourceStream = ss;
@@ -139,7 +146,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var introSt = introStream.Stream;
                 introSt.CurrentMediaType = mediaType;
                 sinkStream.InputMediaType = sourceStream.CurrentMediaType;
+                if (isAudio)
+                    saveAudio = Process.SaveTo(sinkStream);
+                else
+                    saveVideo = Process.SaveTo(sinkStream);
             }
+
+            seperateAudioVideo = Process.SeperateAudioVideo(saveAudio, saveVideo);
+
         }
 
         SinkStream ProcessIncoming(SourceReaderSample sample)
@@ -150,29 +164,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
 
             return sinkStream;
-        }
-
-        void WriteSample(SinkStream sinkStream, SourceReaderSample sample)
-        {
-            WriteStream(sinkStream, sample);
-            SendStreamTick(sinkStream, sample);
-        }
-
-        void WriteStream(SinkStream sinkStream, SourceReaderSample sample)
-        {
-            if (sample.Sample == null)
-                return;
-
-            if (sample.Count == 0)
-                sample.Sample.Discontinuity = true;
-
-            sinkStream.WriteSample(sample.Sample);
-        }
-
-        void SendStreamTick(SinkStream sinkStream, SourceReaderSample sample)
-        {
-            if (sample.Flags.StreamTick)
-                sinkStream.SendStreamTick(sample.Timestamp - offset);
         }
 
         MediaType CreateTargetAudioMediaType(MediaType nativeMediaType)

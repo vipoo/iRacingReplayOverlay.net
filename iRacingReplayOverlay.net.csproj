@@ -78,6 +78,7 @@
     <Compile Include="LogMessages.Designer.cs">
       <DependentUpon>LogMessages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Phases\TranscoderSpike.cs" />
     <Compile Include="Phases\Transcode.cs" />
     <Compile Include="Phases\CaptureOpeningScenes.cs" />
     <Compile Include="Phases\Capturing\RemovalEdits.cs" />
@@ -128,6 +129,9 @@
       <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
     </Compile>
     <Compile Include="Video\Attributes.cs" />
+    <Compile Include="Video\Process.cs" />
+    <Compile Include="Video\SaveTo.cs" />
+    <Compile Include="Video\SeperateAudioVideo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

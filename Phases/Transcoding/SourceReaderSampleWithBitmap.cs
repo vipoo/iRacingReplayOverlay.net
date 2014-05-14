@@ -23,7 +23,7 @@ using System.Drawing;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
-	class SourceReaderSampleWithBitmap : IDisposable
+	public class SourceReaderSampleWithBitmap : IDisposable
     {
 		Graphics graphic;
 		MFMediaBuffer buffer;
