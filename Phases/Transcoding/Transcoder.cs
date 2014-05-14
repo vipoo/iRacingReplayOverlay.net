@@ -67,48 +67,25 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 using (sinkWriter.BeginWriting())
                 {
-                    Action<ProcessSample> mainFeed = (next) =>
-                    {
-                        ProcessSample overlayFn = sample => {
+                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(OverlayRaceData(sampleFn, next));
 
-                            if (sample.Stream.CurrentMediaType.IsVideo)
-                                using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                                    sampleFn(sampleWithBitmap);
-
-                            return next(sample);
-                        };
-
-                        sourceReader.Samples(overlayFn);
-                    };
-
-                    Process.Concat((sFn) => introSourceReader.Samples(sFn), mainFeed, processSample );
+                    Process.Concat(introSourceReader.Samples, mainFeed, processSample );
                 }
             }
         }
 
-        ProcessSample ApplyOffset(long offset, ProcessSample next)
-        {
-            return sample =>
-                {
-                    if (!sample.Flags.EndOfStream)
-                        sample.SetSampleTime(sample.Timestamp + offset);
-
-                    return next(sample);
-                };
-        }
-
         //    SamplesAfterEditing(EditCuts, -offset))
         
-        void ProcessSample(SourceReader sourceReader, Func<SourceReaderSampleWithBitmap, bool> next)
+        public ProcessSample OverlayRaceData(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
         {
-            sourceReader.Samples((sample) => {
-
+            return sample => 
+            {
                 if (sample.Stream.CurrentMediaType.IsVideo)
                     using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                        next(sampleWithBitmap);
+                        sampleFn(sampleWithBitmap);
 
-                return processSample(sample);
-            });
+                return next(sample);
+            };
         }
 
         void ConnectSourceToSink(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)

@@ -69,9 +69,6 @@ namespace iRacingReplayOverlay.Phases
 
             transcoder.Frames(frame => 
             {
-                //if (frame.IsIntroduction)
-                  //  return true;
-
                 if (frame.Flags.EndOfStream)
                     readFramesCompleted();
                 else

@@ -51,8 +51,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-        public bool IsIntroduction;
-
         public SourceReaderSampleWithBitmap(SourceReaderSample sample)
             :base (sample.Stream, sample.Flags, sample.Timestamp, sample.Duration, sample.Sample, sample.Count)
         {
