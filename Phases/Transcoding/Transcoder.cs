@@ -99,7 +99,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             foreach (var sample in sourceReader.SamplesAfterEditing(EditCuts, -offset))
             {
-                var sinkStream = ProcessIncoming(sample);
+                //var sinkStream = ProcessIncoming(sample);
 
                 if (!sample.Flags.EndOfStream)
                     sample.SetSampleTime(sample.Timestamp + offset);
@@ -147,23 +147,12 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 introSt.CurrentMediaType = mediaType;
                 sinkStream.InputMediaType = sourceStream.CurrentMediaType;
                 if (isAudio)
-                    saveAudio = Process.SaveTo(sinkStream);
+                    saveAudio = Process.MediaTypeChange(sinkStream, Process.SaveTo(sinkStream));
                 else
-                    saveVideo = Process.SaveTo(sinkStream);
+                    saveVideo = Process.MediaTypeChange(sinkStream, Process.SaveTo(sinkStream));
             }
 
             seperateAudioVideo = Process.SeperateAudioVideo(saveAudio, saveVideo);
-
-        }
-
-        SinkStream ProcessIncoming(SourceReaderSample sample)
-        {
-            var sinkStream = streamMapping[sample.Stream];
-
-            if (sample.Flags.CurrentMediaTypeChanged)
-                sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
-
-            return sinkStream;
         }
 
         MediaType CreateTargetAudioMediaType(MediaType nativeMediaType)
