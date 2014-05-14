@@ -36,8 +36,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         public int VideoBitRate;
         public List<Capturing.OverlayData.BoringBit> EditCuts;
 
-        Dictionary<SourceStream, SinkStream> streamMapping;
-
         static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
         static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
         List<Capturing.OverlayData.BoringBit>.Enumerator nextCut;
@@ -48,8 +46,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         internal void Frames(Func<SourceReaderSampleWithBitmap, bool> sampleFn)
         {
-            streamMapping = new Dictionary<SourceStream, SinkStream>();
-
             nextCut = EditCuts.GetEnumerator();
             nextCut.MoveNext();
 
@@ -99,8 +95,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             foreach (var sample in sourceReader.SamplesAfterEditing(EditCuts, -offset))
             {
-                //var sinkStream = ProcessIncoming(sample);
-
                 if (!sample.Flags.EndOfStream)
                     sample.SetSampleTime(sample.Timestamp + offset);
 
@@ -135,8 +129,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var sinkStream = sinkWriter.AddStream(targetType);
 
                 var introStream = introSourceStreams.First(s => s.NativeMediaType.IsAudio == isAudio && s.NativeMediaType.IsVideo == isVideo);
-                streamMapping.Add(sourceStream, sinkStream);
-                streamMapping.Add(introStream.Stream, sinkStream);
 
                 var mediaType = isAudio
                     ? new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM }
