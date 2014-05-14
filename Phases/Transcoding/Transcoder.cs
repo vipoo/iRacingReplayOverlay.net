@@ -40,9 +40,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
         List<Capturing.OverlayData.BoringBit>.Enumerator nextCut;
 
-        ProcessSample seperateAudioVideo;
-        ProcessSample processSample;
-
         internal void Frames(Func<SourceReaderSampleWithBitmap, bool> sampleFn)
         {
             nextCut = EditCuts.GetEnumerator();
@@ -62,16 +59,32 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(SourceFile, attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);
 
-                ConnectSourceToSink(introSourceReader, sourceReader, sinkWriter);
-                processSample = seperateAudioVideo;
+                var writeToSink = ConnectStreams(introSourceReader, sourceReader, sinkWriter);
 
                 using (sinkWriter.BeginWriting())
                 {
-                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(OverlayRaceData(sampleFn, next));
+                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
+                        Process.SeperateAudioVideo(next, OverlayRaceData(sampleFn, next)));
 
-                    Process.Concat(introSourceReader.Samples, mainFeed, processSample );
+                    Process.Concat(introSourceReader.Samples, mainFeed, writeToSink);
                 }
             }
+        }
+
+        private ProcessSample ConnectStreams(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
+        {
+            var sourceAudioStream = SetAudioMediaType(introSourceReader);
+            var sourceVideoStream = SetVideoMediaType(introSourceReader);
+            SetAudioMediaType(sourceReader);
+            SetVideoMediaType(sourceReader);
+
+            var sinkAudioStream = AddStream(sinkWriter, sourceAudioStream.CurrentMediaType, CreateTargetAudioMediaType(sourceAudioStream.NativeMediaType));
+            var sinkVideoStream = AddStream(sinkWriter, sourceVideoStream.CurrentMediaType, CreateTargetVideoMediaType(sourceVideoStream.NativeMediaType));
+
+            var saveAudio = Process.MediaTypeChange(sinkAudioStream, Process.SaveTo(sinkAudioStream));
+            var saveVideo = Process.MediaTypeChange(sinkVideoStream, Process.SaveTo(sinkVideoStream));
+
+            return Process.SeperateAudioVideo(saveAudio, saveVideo);
         }
 
         //    SamplesAfterEditing(EditCuts, -offset))
@@ -80,53 +93,36 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             return sample => 
             {
-                if (sample.Stream.CurrentMediaType.IsVideo)
-                    using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                        sampleFn(sampleWithBitmap);
+                using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
+                    sampleFn(sampleWithBitmap);
 
                 return next(sample);
             };
         }
 
-        void ConnectSourceToSink(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
+        SourceStream SetAudioMediaType(SourceReader sourceReader)
         {
-            var introSourceStreams = introSourceReader.Streams
-                .Where(s => s.IsSelected)
-                .Select(s => new { Stream = s, NativeMediaType = s.NativeMediaType })
-                .ToList();
+            var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
 
-            ProcessSample saveAudio = null;
-            ProcessSample saveVideo = null;
-            foreach (var ss in sourceReader.Streams.Where(s => s.IsSelected))
-            {
-                var sourceStream = ss;
+            sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM };
 
-                var isVideo = sourceStream.NativeMediaType.IsVideo;
-                var isAudio = sourceStream.NativeMediaType.IsAudio;
+            return sourceStream;
+        }
 
-                if (!isAudio && !isVideo)
-                    throw new Exception("Unknown stream type");
+        SourceStream SetVideoMediaType(SourceReader sourceReader)
+        {
+            var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsVideo);
 
-                var targetType = isAudio ? CreateTargetAudioMediaType(sourceStream.NativeMediaType) : CreateTargetVideoMediaType(sourceStream.NativeMediaType);
-                var sinkStream = sinkWriter.AddStream(targetType);
+            sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
 
-                var introStream = introSourceStreams.First(s => s.NativeMediaType.IsAudio == isAudio && s.NativeMediaType.IsVideo == isVideo);
+            return sourceStream;
+        }
 
-                var mediaType = isAudio
-                    ? new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM }
-                    : new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
-
-                sourceStream.CurrentMediaType = mediaType;
-                var introSt = introStream.Stream;
-                introSt.CurrentMediaType = mediaType;
-                sinkStream.InputMediaType = sourceStream.CurrentMediaType;
-                if (isAudio)
-                    saveAudio = Process.MediaTypeChange(sinkStream, Process.SaveTo(sinkStream));
-                else
-                    saveVideo = Process.MediaTypeChange(sinkStream, Process.SaveTo(sinkStream));
-            }
-
-            seperateAudioVideo = Process.SeperateAudioVideo(saveAudio, saveVideo);
+        SinkStream AddStream(SinkWriter sinkWriter, MediaType input, MediaType encoding)
+        {
+            var sinkStream = sinkWriter.AddStream(encoding);
+            sinkStream.InputMediaType = input;
+            return sinkStream;
         }
 
         MediaType CreateTargetAudioMediaType(MediaType nativeMediaType)
