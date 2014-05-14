@@ -18,7 +18,6 @@
 
 using iRacingReplayOverlay.Drawing;
 using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Support;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;

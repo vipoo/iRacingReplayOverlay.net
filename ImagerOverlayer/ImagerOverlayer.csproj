@@ -44,15 +44,18 @@
     <Compile Include="..\Drawing\GraphicsExtension.cs">
       <Link>GraphicsExtension.cs</Link>
     </Compile>
-    <Compile Include="..\Support\TimingExtension.cs">
-      <Link>TimingExtension.cs</Link>
-    </Compile>
     <Compile Include="..\Phases\Transcoding\LeaderBoard.cs">
       <Link>LeaderBoard.cs</Link>
     </Compile>
     <Compile Include="..\Phases\Capturing\OverlayData.cs">
       <Link>OverlayData.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SuperMFLib\SuperMFLib\SuperMFLib.csproj">
+      <Project>{59d2b4b5-2852-4396-a0d9-9ca546ac3c09}</Project>
+      <Name>SuperMFLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

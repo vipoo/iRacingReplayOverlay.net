@@ -21,8 +21,8 @@ using iRacingReplayOverlay.Phases.Transcoding;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using iRacingReplayOverlay.Support;
 using System.Threading;
+using MediaFoundation.Net;
 
 namespace ImagerOverlayer
 {

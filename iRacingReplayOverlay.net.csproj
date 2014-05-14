@@ -128,6 +128,7 @@
       <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
     </Compile>
     <Compile Include="Video\Attributes.cs" />
+    <Compile Include="Video\FadeOut.cs" />
     <Compile Include="Video\OverlayRaceData.cs" />
     <Compile Include="Video\FromFile.cs" />
     <Compile Include="Video\MediaTypeChange.cs" />

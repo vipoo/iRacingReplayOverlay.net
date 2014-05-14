@@ -66,7 +66,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
                         Process.SeperateAudioVideo(next, OverlayRaceData(sampleFn, Process.VideoFadeIn(next))));
 
-                    Process.Concat(introSourceReader.Samples, mainFeed, writeToSink);
+                    Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
+                        Process.SeperateAudioVideo(next, Process.VideoFadeOut(introSourceReader.MediaSource, next))
+                        );
+
+                    Process.Concat(introFeed, mainFeed, writeToSink);
                 }
             }
         }
