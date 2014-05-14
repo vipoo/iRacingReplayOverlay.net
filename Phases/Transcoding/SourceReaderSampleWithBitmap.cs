@@ -23,7 +23,7 @@ using System.Drawing;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
-	public class SourceReaderSampleWithBitmap : IDisposable
+    public class SourceReaderSampleWithBitmap : SourceReaderSample, IDisposable
     {
 		Graphics graphic;
 		MFMediaBuffer buffer;
@@ -37,9 +37,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 				if(graphic != null)
 					return graphic;
 
-                var size = sample.Stream.CurrentMediaType.FrameSize;
+                var size = Stream.CurrentMediaType.FrameSize;
 
-				buffer = sample.Sample.ConvertToContiguousBuffer();
+				buffer = Sample.ConvertToContiguousBuffer();
 				data = buffer.Lock();
 				bitmap = new Bitmap(size.Width, size.Height, size.Width * 4, System.Drawing.Imaging.PixelFormat.Format32bppRgb, data.Buffer);
 
@@ -51,18 +51,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-		public readonly long Timestamp;
-		public readonly long Duration;
-        public readonly SourceReaderSampleFlags Flags;
-        public readonly SourceReaderSample sample;
         public bool IsIntroduction;
 
         public SourceReaderSampleWithBitmap(SourceReaderSample sample)
+            :base (sample.Stream, sample.Flags, sample.Timestamp, sample.Duration, sample.Sample, sample.Count)
         {
-			this.Timestamp = sample.Timestamp;
-			this.Duration = sample.Duration;
-            this.sample = sample;
-            this.Flags = sample.Flags;
         }
 
 		public void Dispose()
@@ -79,10 +72,5 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 			if(buffer != null)
 				buffer.Dispose();
 		}
-
-        internal void SetSampleTime(long p)
-        {
-            this.sample.SetSampleTime(p);
-        }
     }    
 }

@@ -26,7 +26,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
-    class LeaderBoard
+    public class LeaderBoard
     {
         public OverlayData OverlayData;
 

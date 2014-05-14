@@ -39,7 +39,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
         static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
         List<Capturing.OverlayData.BoringBit>.Enumerator nextCut;
-        long offset = 0;
 
         ProcessSample seperateAudioVideo;
         ProcessSample processSample;
@@ -68,42 +67,46 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 using (sinkWriter.BeginWriting())
                 {
-                    foreach (var sample in ProcessSamples(introSourceReader, sinkWriter))
+                    long offset = 0;
+        
+                    ProcessSample(introSourceReader, sinkWriter, 0, sample => 
                     {
                         sample.IsIntroduction = true;
 
-                        if (!sample.Flags.EndOfStream)
-                            if (!sampleFn(sample))
-                                break;
-
                         if (sample.Timestamp > offset)
                             offset = sample.Timestamp;
-                    }
+                        
+                        if (!sample.Flags.EndOfStream)
+                            return sampleFn(sample);
 
-                    foreach (var sample in ProcessSamples(sourceReader, sinkWriter, offset))
+                        return true;
+                    });
+
+                    ProcessSample(sourceReader, sinkWriter, offset, sample =>
                     {
                         sample.IsIntroduction = false;
 
-                        if (!sampleFn(sample))
-                            break;
-                    }
+                        return sampleFn(sample);
+                    });
                 }
             }
         }
 
-        IEnumerable<SourceReaderSampleWithBitmap> ProcessSamples(SourceReader sourceReader, SinkWriter sinkWriter, long offset = 0)
+        //    SamplesAfterEditing(EditCuts, -offset))
+        
+        void ProcessSample(SourceReader sourceReader, SinkWriter sinkWriter, long offset, Func<SourceReaderSampleWithBitmap, bool> next)
         {
-            foreach (var sample in sourceReader.SamplesAfterEditing(EditCuts, -offset))
-            {
+            sourceReader.Samples((sample) => {
+
                 if (!sample.Flags.EndOfStream)
                     sample.SetSampleTime(sample.Timestamp + offset);
 
                 if (sample.Stream.CurrentMediaType.IsVideo)
                     using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                        yield return sampleWithBitmap;
+                        next(sampleWithBitmap);
 
-                processSample(sample);
-            }
+                return processSample(sample);
+            });
         }
 
         void ConnectSourceToSink(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
