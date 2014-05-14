@@ -63,16 +63,27 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 using (sinkWriter.BeginWriting())
                 {
-                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
-                        Process.SeperateAudioVideo(next, OverlayRaceData(sampleFn, Process.VideoFadeIn(next))));
+                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(NewMethod(sampleFn, next));
 
                     Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
-                        Process.SeperateAudioVideo(next, Process.VideoFadeOut(introSourceReader.MediaSource, next))
-                        );
+                        Process.FadeOut(introSourceReader.MediaSource, next));
 
                     Process.Concat(introFeed, mainFeed, writeToSink);
                 }
             }
+        }
+
+        private ProcessSample NewMethod(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
+        {
+            var cut = Process.ApplyEdit(5.FromSecondsToNano(), 23.FromSecondsToNano(),
+                            Process.FadeOut(4.FromSecondsToNano(), 1.FromSecondsToNano(), next),
+                            Process.FadeIn(next));
+
+            var overlays = OverlayRaceData(sampleFn, Process.FadeIn(cut));
+
+            var seperates = Process.SeperateAudioVideo(cut, overlays);
+
+            return seperates;
         }
 
         private ProcessSample ConnectStreams(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)

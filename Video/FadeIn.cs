@@ -11,6 +11,11 @@ namespace iRacingReplayOverlay.Video
 {
     public partial class Process
     {
+        public static ProcessSample FadeIn(ProcessSample next)
+        {
+            return Process.SeperateAudioVideo(next, VideoFadeIn(next));
+        }
+
         public static ProcessSample VideoFadeIn(ProcessSample next)
         {
             long fadingInFrom = -1;

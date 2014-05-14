@@ -27,7 +27,7 @@ namespace iRacingReplayOverlay.Video
             second(sample =>
                 {
                     if (!sample.Flags.EndOfStream)
-                        sample.SetSampleTime(sample.Timestamp + offset);
+                        sample.SetSampleTime(sample.GetSampleTime() + offset);
 
                     return next(sample);
                 });
