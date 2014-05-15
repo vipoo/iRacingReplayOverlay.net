@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using MediaFoundation.Net;
+using iRacingSDK;
 
 namespace ImagerOverlayer
 {
@@ -31,6 +32,75 @@ namespace ImagerOverlayer
         static OverlayData BuildData()
         {
             var result = new OverlayData();
+
+            result.SessionData = new SessionData
+            {
+                DriverInfo = new SessionData._DriverInfo
+                {
+                    Drivers = new [] 
+                    {
+                        new SessionData._DriverInfo._Drivers 
+                        {
+                            CarIdx = 0,
+                            UserName = "Pace Car"
+                        },
+                        new SessionData._DriverInfo._Drivers 
+                        {
+                            CarIdx = 1,
+                            UserName = "Dean Netherton"
+                        },
+                        new SessionData._DriverInfo._Drivers 
+                        {
+                            CarIdx = 2,
+                            UserName = "Mark Webber"
+                        },
+                        new SessionData._DriverInfo._Drivers 
+                        {
+                            CarIdx = 2,
+                            UserName = "bla lbha lbh"
+                        }
+                    }
+                },
+                WeekendInfo = new SessionData._WeekendInfo
+                {
+                    TrackDisplayName = "Mount Panorama Circuit",
+                    TrackCity = "Bathurst",
+                    TrackCountry = "Australia"
+                },
+                SessionInfo = new SessionData._SessionInfo
+                {
+                    Sessions = new[] 
+                    { 
+                        new iRacingSDK.SessionData._SessionInfo._Sessions 
+                        {
+                             SessionType = "Open Qualify",
+                             ResultsPositions = new [] 
+                             {
+                                new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
+                                {
+                                     FastestTime = 127.02,
+                                     Position = 1,
+                                     CarIdx = 1,
+                                },
+                                
+                                new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
+                                {
+                                     FastestTime = 128.995,
+                                     Position = 2,
+                                     CarIdx = 3,
+                                },
+                                
+                                new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
+                                {
+                                     FastestTime = 134.47,
+                                     Position = 3,
+                                     CarIdx = 2
+                                },
+                             }
+                        }
+                    }
+                }
+            };
 
             for (var i = 24.5; i < 30.0; i += 1.0 / 59.9)
             {
@@ -85,6 +155,30 @@ namespace ImagerOverlayer
         }
 
         public static void Main(string[] args)
+        {
+            //TestRaceDataOverlay();
+            TestIntroOverlay();
+        }
+
+        private static void TestIntroOverlay()
+        {
+            var leaderboard = new LeaderBoard
+            {
+                OverlayData = BuildData()
+            };
+
+            int i = 1;
+            using (var bitmap = (Bitmap)Bitmap.FromFile(@"c:\users\dean\documents\image.bmp"))
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                Console.WriteLine("time is {0}", i);
+                leaderboard.Intro(g, i.FromSecondsToNano());
+                g.Flush();
+                bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
+            }
+        }
+
+        public static void TestRaceDataOverlay()
         {
             var leaderboard = new LeaderBoard
             {

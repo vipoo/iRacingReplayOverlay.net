@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using iRacingSDK;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -106,6 +107,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public List<FastLap> FastestLaps = new List<FastLap>();
         public List<MessageState> MessageStates = new List<MessageState>();
         public List<BoringBit> EditCuts = new List<BoringBit>();
+        public SessionData SessionData;
 
         public void SaveTo(string fileName)
         {

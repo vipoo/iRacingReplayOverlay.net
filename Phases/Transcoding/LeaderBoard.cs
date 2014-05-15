@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using MediaFoundation.Net;
+using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
@@ -30,7 +31,77 @@ namespace iRacingReplayOverlay.Phases.Transcoding
     {
         public OverlayData OverlayData;
 
-        internal void Overlay(Graphics graphics, long timestamp)
+        public void Intro(Graphics graphics, long timestamp)
+        {
+            var timeInSeconds = timestamp.FromNanoToSeconds();
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            var totalWidth = 900;
+            var left = (1920 / 2) - totalWidth / 2;
+            var r = graphics.InRectangle(left, 100, totalWidth, 1080-200);
+
+            r
+                .WithBrush(new SolidBrush(Color.FromArgb(180, Color.LightBlue)))
+                .WithPen(Styles.Pens.Black)
+                .DrawRectangleWithBorder()
+                .WithPen(Styles.Pens.Black)
+                .WithBrush(Styles.Brushes.Black)
+                .WithFont("Calibri", 40, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Center)
+                .DrawText(OverlayData.SessionData.WeekendInfo.TrackDisplayName + "\n" + 
+                OverlayData.SessionData.WeekendInfo.TrackCity + ", " + OverlayData.SessionData.WeekendInfo.TrackCountry);
+            
+            graphics.InRectangle(left, 240, totalWidth, 400)
+                .WithPen(Styles.Pens.Black)
+                .WithBrush(Styles.Brushes.Black)
+                .WithFont("Calibri", 30, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Center)
+                .DrawText("Qualifying Results");
+
+            r = graphics.InRectangle(left + 30, 330, 60, 40)
+                .WithPen(Styles.Pens.Black)
+                .WithBrush(Styles.Brushes.Black)
+                .WithFont("Calibri", 20, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Near);
+
+            var qsession = OverlayData.SessionData.SessionInfo.Sessions.First(s => s.SessionType.ToLower().Contains("qualify"));
+
+            var offset = 5;
+            var pen = new Pen(Styles.Black, 2);
+            graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
+                .WithPen(pen)
+                .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
+
+            foreach( var qualifier in qsession.ResultsPositions)
+            {
+                var driver = OverlayData.SessionData.DriverInfo.Drivers[qualifier.CarIdx];
+                r
+                    .Center(cg => cg
+                            .DrawText(qualifier.Position.ToString())
+                            .AfterText(qualifier.Position.ToString())
+                            .MoveRight(1)
+                            .WithFont("Calibri", 16, FontStyle.Bold)
+                            .DrawText(qualifier.Position.Ordinal())
+                    )
+
+                    .ToRight(width: 120)
+                    .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
+                    .ToRight(width: 60)
+                    .DrawText(driver.CarNumber.ToString())
+                    .ToRight(width: 300)
+                    .DrawText(driver.UserName);
+
+                r = r.ToBelow();
+
+                graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
+                    .WithPen(pen)
+                    .DrawLine(left, r.Rectangle.Top-offset, left + totalWidth, r.Rectangle.Top-offset);
+            }
+        }
+
+        public void Overlay(Graphics graphics, long timestamp)
         {
             var timeInSeconds = timestamp.FromNanoToSeconds();
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -199,6 +270,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             public static class Pens
             {
                 public readonly static Pen Black = new Pen(Styles.Black);
+ 
             }
 
             public static class Fonts

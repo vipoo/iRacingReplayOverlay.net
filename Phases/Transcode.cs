@@ -74,7 +74,7 @@ namespace iRacingReplayOverlay.Phases
             transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
             {
                 Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
-                    AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next)));
+                        ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
 
                 Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
                     MonitorProgress(progress, readFramesCompleted, 
@@ -84,6 +84,22 @@ namespace iRacingReplayOverlay.Phases
             });
 
             completed();
+        }
+
+        private ProcessSample ApplyIntroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        {
+            return AVOperation.SeperateAudioVideo(next, AVOperation.DataSamplesOnly(IntroTitles(leaderBoard, next), next));
+        }
+
+        private ProcessSample IntroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        {
+            return sample =>
+                {
+                    using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
+                        leaderBoard.Intro(sampleWithBitmap.Graphic, sampleWithBitmap.Timestamp);
+
+                    return next(sample);
+                };
         }
 
         private ProcessSample MonitorProgress(_Progress progress, Action readFramesCompleted, ProcessSample next)

@@ -64,6 +64,7 @@ namespace iRacingReplayOverlay.Phases
             var capture = new Capture(overlayData, commentaryMessages, removalEdits, workingFolder);
             var fastestLaps = new RecordFastestLaps(overlayData);
             var replayControl = new ReplayControl(samples.First().SessionData, incidents, commentaryMessages, removalEdits, TrackCameras);
+            var sessionDataCapture = new SessionDataCapture(overlayData);
 
             Thread.Sleep(2000);
             videoCapture.Activate(workingFolder);
@@ -81,6 +82,7 @@ namespace iRacingReplayOverlay.Phases
 )            {
                 var relativeTime = DateTime.Now - startTime;
 
+                sessionDataCapture.Process(data);
                 capture.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
                 if (replayControl.Process(data))

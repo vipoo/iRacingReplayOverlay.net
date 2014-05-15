@@ -26,6 +26,10 @@ namespace iRacingReplayOverlay.Support
     {
         public static string Ordinal(this int num)
         {
+            return Ordinal((long)num);
+        }
+        public static string Ordinal(this long num)
+        {
             switch (num % 100)
             {
                 case 11:

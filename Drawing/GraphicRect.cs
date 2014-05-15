@@ -49,6 +49,8 @@ namespace iRacingReplayOverlay.Drawing
             this.sf = sf;
         }
 
+        public Rectangle Rectangle { get { return r; } }
+
 		protected virtual GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
 		{
 			return new GraphicRect(g, r, b, p, f, sf);
@@ -78,17 +80,17 @@ namespace iRacingReplayOverlay.Drawing
 
         const int TEXT_LEFT_OFFSET_MAGIC = -4;
         const int TEXT_RIGHT_PADDING_MAGIC = 10;
-		internal virtual GraphicRect DrawText(string text, int leftOffset = 0)
+		public virtual GraphicRect DrawText(string text, int leftOffset = 0)
         {
             var rect2 = new Rectangle(r.Left + leftOffset + TEXT_LEFT_OFFSET_MAGIC, r.Top, r.Width + TEXT_RIGHT_PADDING_MAGIC, r.Height);
             g.DrawString(text, f, b, rect2, sf);
             return this;
         }
-		internal virtual GraphicRect DrawText(int number, int leftOffset = 0)
+
+		public virtual GraphicRect DrawText(int number, int leftOffset = 0)
         {
             return DrawText(number.ToString(), leftOffset);
         }
-
 
         public GraphicRect AfterText(string str, int i = 0)
         {
@@ -133,6 +135,12 @@ namespace iRacingReplayOverlay.Drawing
         {
             var sf = new StringFormat { Alignment = alignment, LineAlignment = lineAlignment };
 			return New(g, r, b, p, f, sf);
+        }
+
+        public GraphicRect DrawLine(float x1, float y1, float x2, float y2)
+        {
+            g.DrawLine(p, x1, y1, x2, y2);
+            return this;
         }
 
 		public GraphicRect Center(Func<GraphicRect, GraphicRect> operation)
