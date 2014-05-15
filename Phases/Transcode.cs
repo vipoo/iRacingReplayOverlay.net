@@ -55,14 +55,16 @@ namespace iRacingReplayOverlay.Phases
 
         public void _OverlayRaceDataOntoVideo(_Progress progress, Action completed, Action readFramesCompleted)
         {
+            var overlayData = OverlayData.FromFile(gameDataFile);
+
             var leaderBoard = new LeaderBoard
             {
-                OverlayData = OverlayData.FromFile(gameDataFile)
+                OverlayData = overlayData
             };
 
             var transcoder = new Transcoder
             {
-                IntroVideoFile = leaderBoard.OverlayData.IntroVideoFileName,
+                IntroVideoFile = overlayData.IntroVideoFileName,
                 SourceFile = sourceFile,
                 DestinationFile = destinationFile,
                 VideoBitRate = videoBitRate,
@@ -71,11 +73,12 @@ namespace iRacingReplayOverlay.Phases
 
             transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
             {
-                Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
-                   NewMethod(ApplyOverlay(leaderBoard, progress, readFramesCompleted), leaderBoard.OverlayData.EditCuts, next));
-
                 Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
-                    AVOperation.FadeOut(introSourceReader.MediaSource, next));
+                    AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next)));
+
+                Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
+                    MonitorProgress(progress, readFramesCompleted, 
+                        RaceHightlights(leaderBoard, next)));
 
                 AVOperation.Concat(introFeed, mainFeed, saveToSink);
             });
@@ -83,42 +86,40 @@ namespace iRacingReplayOverlay.Phases
             completed();
         }
 
-        private Func<SourceReaderSampleWithBitmap, bool> ApplyOverlay(LeaderBoard leaderBoard, _Progress progress, Action readFramesCompleted)
+        private ProcessSample MonitorProgress(_Progress progress, Action readFramesCompleted, ProcessSample next)
         {
-            return frame =>
+            return sample =>
             {
-                if (frame.Flags.EndOfStream)
+                if (sample.Flags.EndOfStream)
                     readFramesCompleted();
                 else
                 {
-                    leaderBoard.Overlay(frame.Graphic, frame.Timestamp);
-
-                    if (frame.Timestamp != 0)
-                        progress(frame.Timestamp, frame.Duration);
+                    if (sample.Timestamp != 0)
+                        progress(sample.Timestamp, sample.Duration);
                 }
 
-                return !requestAbort;
+                return !requestAbort && next(sample);
             };
         }
 
-        private ProcessSample NewMethod(Func<SourceReaderSampleWithBitmap, bool> sampleFn, List<iRacingReplayOverlay.Phases.Capturing.OverlayData.BoringBit> editCuts, ProcessSample next)
+        private ProcessSample RaceHightlights(LeaderBoard leaderBoard, ProcessSample next)
         {
             ProcessSample cut = next;
 
-            foreach (var editCut in editCuts)
+            foreach (var editCut in leaderBoard.OverlayData.EditCuts)
                 cut = AVOperation.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
 
-            var overlays = OverlayRaceData(sampleFn, AVOperation.FadeIn(cut));
+            var overlays = AVOperation.DataSamplesOnly(OverlayRaceData(leaderBoard, AVOperation.FadeIn(cut)), cut);
 
             return AVOperation.SeperateAudioVideo(cut, overlays);
         }
 
-        public ProcessSample OverlayRaceData(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
+        public ProcessSample OverlayRaceData(LeaderBoard leaderBoard, ProcessSample next)
         {
             return sample =>
             {
                 using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                    sampleFn(sampleWithBitmap);
+                    leaderBoard.Overlay(sampleWithBitmap.Graphic, sampleWithBitmap.Timestamp);
 
                 return next(sample);
             };
