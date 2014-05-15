@@ -17,12 +17,9 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using MediaFoundation.Net;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay.Video
 {

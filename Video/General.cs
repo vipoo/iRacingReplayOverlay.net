@@ -18,19 +18,25 @@
 //
 
 using MediaFoundation.Net;
+using System;
 
 namespace iRacingReplayOverlay.Video
 {
     public partial class Process
     {
-        public static ProcessSample MediaTypeChange(SinkStream sinkStream, ProcessSample next)
+        public static ProcessSample DataSamplesOnly(ProcessSample dataSamples, ProcessSample next)
+        {
+            return If(s => s.Sample != null, dataSamples, next);
+        }
+
+        public static ProcessSample If(Func<SourceReaderSample, bool> selector, ProcessSample trueSamples, ProcessSample falseSamples)
         {
             return sample =>
                 {
-                    if (sample.Flags.CurrentMediaTypeChanged)
-                        sinkStream.InputMediaType = sample.Stream.CurrentMediaType;
+                    if (selector(sample))
+                        return trueSamples(sample);
 
-                    return next(sample);
+                    return falseSamples(sample);
                 };
         }
     }

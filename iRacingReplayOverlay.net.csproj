@@ -135,6 +135,7 @@
     <Compile Include="Video\MediaTypeChange.cs" />
     <Compile Include="Video\Concat.cs" />
     <Compile Include="Video\FadeIn.cs" />
+    <Compile Include="Video\General.cs" />
     <Compile Include="Video\Process.cs" />
     <Compile Include="Video\SaveTo.cs" />
     <Compile Include="Video\SeperateAudioVideo.cs" />
