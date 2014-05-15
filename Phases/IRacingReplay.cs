@@ -137,7 +137,7 @@ namespace iRacingReplayOverlay.Phases
             requestAbort = true;
         }
 
-        public IRacingReplay InTheBackground(Action onComplete)
+        public IRacingReplay InTheBackground(Action<string> onComplete)
         {
             requestAbort = false;
             var context = SynchronizationContext.Current;
@@ -150,18 +150,21 @@ namespace iRacingReplayOverlay.Phases
                     {
                         action();
                         if (requestAbort)
-                            return;
+                            break;
                     }
+
+                    context.Post(() => onComplete(null));
                 }
                 catch(Exception e)
                 {
-                    Debug.WriteLine(e.Message);
-                    Debug.WriteLine(e.StackTrace);
-                    Debug.WriteLine("Process aborted");
+                    Trace.WriteLine(e.Message, "INFO");
+                    Trace.WriteLine(e.StackTrace, "INFO");
+                    Trace.WriteLine("Process aborted", "INFO");
+                    context.Post(() => onComplete("There was an error - details in Log Messages"));
+
                 }
                 finally
                 {
-                    context.Post(onComplete);
                     backgrounTask = null;
                     actions = new List<Action>();
                 }

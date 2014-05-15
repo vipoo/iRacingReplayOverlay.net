@@ -124,7 +124,7 @@ namespace iRacingReplayOverlay
 
             iRacingProcess = new IRacingReplay()
                 .WhenIRacingStarts(() => { BeginProcessButton.Enabled = true; ProcessErrorMessageLabel.Visible = false; WaitingForIRacingLabel.Visible = false; })
-                .InTheBackground(() => { });
+                .InTheBackground(errorMessage => { });
         }
 
         void workingFolderButton_Click(object sender, EventArgs e)
@@ -160,7 +160,7 @@ namespace iRacingReplayOverlay
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
                 .WithFiles(sourceFile: sourceVideoTextBox.Text)
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, OnTranscoderReadFramesCompleted)
-                .InTheBackground(() => { });
+                .InTheBackground(errorMessage => { });
         }
 
         void OnTranscoderReadFramesCompleted()
@@ -270,7 +270,7 @@ namespace iRacingReplayOverlay
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()
-                .CaptureRace((videoFileName, errorMessage) => 
+                .CaptureRace((videoFileName, errorMessage) =>
                 {
                     ProcessErrorMessageLabel.Text = errorMessage;
                     ProcessErrorMessageLabel.Visible = errorMessage != null;
@@ -279,7 +279,16 @@ namespace iRacingReplayOverlay
                     State = States.Idle;
                 })
                 .CloseIRacing()
-                .InTheBackground(() => BeginProcessButton.Enabled = true);
+                .InTheBackground(errorMessage =>
+                {
+                    BeginProcessButton.Enabled = true;
+                    WaitingForIRacingLabel.Visible = false;
+                    AnalysingRaceLabel.Visible = false;
+                    CapturingRaceLabel.Visible = false;
+                    ProcessErrorMessageLabel.Visible = true;
+                    ProcessErrorMessageLabel.Text = errorMessage;
+
+                });
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
