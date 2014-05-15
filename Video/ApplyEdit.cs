@@ -24,6 +24,13 @@ namespace iRacingReplayOverlay.Video
 {
     public partial class Process
     {
+        public static ProcessSample ApplyEditWithFade(long starting, long finishing, ProcessSample next)
+        {
+            return ApplyEdit(starting, finishing, 
+                FadeOut(starting - 1.FromSecondsToNano(), 1.FromSecondsToNano(), next),
+                FadeIn(next));
+        }
+
         public static ProcessSample ApplyEdit(long starting, long finishing, ProcessSample beforeEdit, ProcessSample afterEdit)
         {
             return SplitFrom(starting, beforeEdit, SkipTo(finishing, afterEdit));

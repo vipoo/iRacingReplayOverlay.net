@@ -76,15 +76,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         private ProcessSample NewMethod(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
         {
-            var cut = Process.ApplyEdit(7.FromSecondsToNano(), 23.FromSecondsToNano(),
-                            Process.FadeOut(6.FromSecondsToNano(), 1.FromSecondsToNano(), next),
-                            Process.FadeIn(next));
+            ProcessSample cut = next;
+
+            foreach (var editCut in EditCuts)
+                cut = Process.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
 
             var overlays = OverlayRaceData(sampleFn, Process.FadeIn(cut));
 
-            var seperates = Process.SeperateAudioVideo(cut, overlays);
-
-            return seperates;
+            return Process.SeperateAudioVideo(cut, overlays);
         }
 
         private ProcessSample ConnectStreams(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
