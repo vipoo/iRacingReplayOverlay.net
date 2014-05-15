@@ -29,36 +29,21 @@ namespace iRacingReplayOverlay.Video
         public static ProcessSample FadeOut(long fadingOutFrom, long duration, ProcessSample next)
         {
             return Process.SeperateAudioVideo(
-                FadeOut(_AudioFadeOut, fadingOutFrom, duration, next),
-                FadeOut(_VideoFadeOut, fadingOutFrom, duration, next));
+                FadeOut(_AudioFadeOut(fadingOutFrom, duration, next), fadingOutFrom, next),
+                FadeOut(_VideoFadeOut(fadingOutFrom, duration, next), fadingOutFrom, next));
         }
 
         public static ProcessSample FadeOut(SourceStream sourceStream, ProcessSample next)
         {
-            return Process.SeperateAudioVideo(
-                AudioFadeIn(next), 
-                VideoFadeOut(sourceStream, next));
-        }
-
-        static ProcessSample FadeOut(Func<long, long, ProcessSample, ProcessSample> streamFader, long fadingOutFrom, long duration, ProcessSample next)
-        {
-            var fader = If(s => fadingOutFrom <= s.Timestamp,
-                streamFader(fadingOutFrom, duration, next),
-                next);
-
-            return DataSamplesOnly(fader, next);
-        }
-
-        static ProcessSample VideoFadeOut(SourceStream sourceStream, ProcessSample next)
-        {
-            return VideoFadeOut(sourceStream, 1.FromSecondsToNano(), next);
-        }
-
-        static ProcessSample VideoFadeOut(SourceStream sourceStream, long duration, ProcessSample next)
-        {
+            long duration = 1.FromSecondsToNano();
             long fadingOutFrom = (long)sourceStream.Duration - duration;
 
-            return FadeOut(_VideoFadeOut, fadingOutFrom, duration, next);
+            return FadeOut(fadingOutFrom, duration, next);
+        }
+
+        static ProcessSample FadeOut(ProcessSample streamFader, long fadingOutFrom, ProcessSample next)
+        {
+            return DataSamplesOnly(If(s => fadingOutFrom <= s.Timestamp, streamFader, next), next);
         }
 
         static ProcessSample _VideoFadeOut(long fadingOutFrom, long duration, ProcessSample next)
@@ -81,9 +66,7 @@ namespace iRacingReplayOverlay.Video
         {
             return sample =>
                 {
-                    var fadeOut = (sample.Timestamp - fadingOutFrom).FromNanoToSeconds();
-                    fadeOut = Math.Max(0, fadeOut);
-                    fadeOut = Math.Min(1.0, 1.0 - fadeOut);
+                    var fadeOut = 1.0 - (sample.Timestamp - fadingOutFrom).FromNanoToSeconds();
          
                     FadeAudio(sample, fadeOut);
 

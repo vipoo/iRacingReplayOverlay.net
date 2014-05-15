@@ -28,54 +28,37 @@ namespace iRacingReplayOverlay.Video
     {
         public static ProcessSample FadeIn(ProcessSample next)
         {
-            return Process.SeperateAudioVideo(AudioFadeIn(next), VideoFadeIn(next));
+            return Process.SeperateAudioVideo(
+                FadeIn(_AudioFadeIn(next), next),
+                FadeIn(_VideoFadeIn(next), next));
         }
 
-        public static ProcessSample AudioFadeIn(ProcessSample next)
+        static ProcessSample FadeIn(ProcessSample<long> streamFader, ProcessSample next)
         {
-            long fadingInFrom = -1;
+            return DataSamplesOnly(Split(1.FromSecondsToNano(), streamFader, next), next);
+        }
 
-            return sample =>
+        static ProcessSample<long> _VideoFadeIn(ProcessSample next)
+        {
+            return (sample, fadingInFrom) =>
+            {
+                var fadeIn = Math.Min(255, 255 - ((sample.Timestamp - fadingInFrom).FromNanoToSeconds() * 255));
+                fadeIn = Math.Max(0, fadeIn);
+
+                using (var videoSample = new SourceReaderSampleWithBitmap(sample))
+                    videoSample.Graphic.FillRectangle(new SolidBrush(Color.FromArgb((int)fadeIn, Color.Black)), 0, 0, 1920, 1080);
+
+                return next(sample);
+            };
+        }
+
+        static ProcessSample<long> _AudioFadeIn(ProcessSample next)
+        {
+            return (sample, fadingInFrom) =>
                 {
-                    if (sample.Sample == null)
-                        return next(sample);
-
-                    if (fadingInFrom == -1)
-                        fadingInFrom = sample.Timestamp;
-
-                    if (sample.Timestamp - fadingInFrom > 1.FromSecondsToNano())
-                        return next(sample);
-
                     var fadeOut = (sample.Timestamp - fadingInFrom).FromNanoToSeconds();
-                    fadeOut = Math.Max(0, fadeOut);
-                    fadeOut = Math.Min(1.0, fadeOut);
 
                     FadeAudio(sample, fadeOut);
-
-                    return next(sample);
-                };
-        }
-
-        public static ProcessSample VideoFadeIn(ProcessSample next)
-        {
-            long fadingInFrom = -1;
-
-            return sample =>
-                {
-                    if (sample.Sample == null)
-                        return next(sample);
-
-                    if (fadingInFrom == -1)
-                        fadingInFrom = sample.Timestamp;
-
-                    if (sample.Timestamp > fadingInFrom + 1.FromSecondsToNano())
-                        return next(sample);
-
-                    var fadeIn = Math.Min(255, 255 - ((sample.Timestamp - fadingInFrom).FromNanoToSeconds() * 255));
-                    fadeIn = Math.Max(0, fadeIn);
-
-                    using (var videoSample = new SourceReaderSampleWithBitmap(sample))
-                        videoSample.Graphic.FillRectangle(new SolidBrush(Color.FromArgb((int)fadeIn, Color.Black)), 0, 0, 1920, 1080);
 
                     return next(sample);
                 };

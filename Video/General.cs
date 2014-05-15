@@ -22,8 +22,26 @@ using System;
 
 namespace iRacingReplayOverlay.Video
 {
+    public delegate bool ProcessSample<T>(SourceReaderSample sample, T t);
+
     public partial class Process
     {
+        public static ProcessSample Split(long duration, ProcessSample<long> beforeSplit, ProcessSample afterSplit)
+        {
+            long firstSampleTime = -1;
+
+            return sample =>
+            {
+                if (firstSampleTime == -1)
+                    firstSampleTime = sample.Timestamp;
+
+                if (sample.Timestamp <= firstSampleTime + duration)
+                    return beforeSplit(sample, firstSampleTime);
+
+                return afterSplit(sample);
+            };
+        }
+
         public static ProcessSample DataSamplesOnly(ProcessSample dataSamples, ProcessSample next)
         {
             return If(s => s.Sample != null, dataSamples, next);
