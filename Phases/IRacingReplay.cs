@@ -161,7 +161,6 @@ namespace iRacingReplayOverlay.Phases
                     Trace.WriteLine(e.StackTrace, "INFO");
                     Trace.WriteLine("Process aborted", "INFO");
                     context.Post(() => onComplete("There was an error - details in Log Messages"));
-
                 }
                 finally
                 {

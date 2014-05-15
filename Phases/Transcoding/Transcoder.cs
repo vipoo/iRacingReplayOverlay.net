@@ -50,7 +50,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     SourceReaderEnableVideoProcessing = true
                 };
 
-                var introSourceReader = readWriteFactory.CreateSourceReaderFromURL(IntroVideoFile, attributes);
+
+                var introSourceReader = IntroVideoFile == null ? null : readWriteFactory.CreateSourceReaderFromURL(IntroVideoFile, attributes);
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(SourceFile, attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);
 
@@ -65,10 +66,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         private ProcessSample ConnectStreams(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
         {
-            var sourceAudioStream = SetAudioMediaType(introSourceReader);
-            var sourceVideoStream = SetVideoMediaType(introSourceReader);
-            SetAudioMediaType(sourceReader);
-            SetVideoMediaType(sourceReader);
+            if (introSourceReader != null)
+            {
+                SetAudioMediaType(introSourceReader);
+                SetVideoMediaType(introSourceReader);
+            }
+
+            var sourceAudioStream = SetAudioMediaType(sourceReader);
+            var sourceVideoStream = SetVideoMediaType(sourceReader);
 
             var sinkAudioStream = AddStream(sinkWriter, sourceAudioStream.CurrentMediaType, CreateTargetAudioMediaType(sourceAudioStream.NativeMediaType));
             var sinkVideoStream = AddStream(sinkWriter, sourceVideoStream.CurrentMediaType, CreateTargetVideoMediaType(sourceVideoStream.NativeMediaType));

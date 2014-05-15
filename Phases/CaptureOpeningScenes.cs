@@ -32,6 +32,9 @@ namespace iRacingReplayOverlay.Phases
         void _CaptureOpeningScenes(Action onComplete)
         {
             var data = iRacing.GetDataFeed().First();
+            if (data.SessionData.SessionInfo.Sessions.Qualifying() == null)
+                return;
+
             iRacing.Replay.MoveToQualifying();
             data = iRacing.GetDataFeed().First();
             var f = data.Telemetry.ReplayFrameNum;

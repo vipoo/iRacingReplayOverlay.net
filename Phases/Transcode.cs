@@ -73,14 +73,19 @@ namespace iRacingReplayOverlay.Phases
 
             transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
             {
-                Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
-                        ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
-
                 Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
                     MonitorProgress(progress, readFramesCompleted, 
                         RaceHightlights(leaderBoard, next)));
 
-                AVOperation.Concat(introFeed, mainFeed, saveToSink);
+                if (introSourceReader == null)
+                    mainFeed(saveToSink);
+                else
+                {
+                    Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
+                        ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
+
+                    AVOperation.Concat(introFeed, mainFeed, saveToSink);
+                }
             });
 
             completed();

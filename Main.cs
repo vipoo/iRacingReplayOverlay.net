@@ -160,7 +160,9 @@ namespace iRacingReplayOverlay
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
                 .WithFiles(sourceFile: sourceVideoTextBox.Text)
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, OnTranscoderReadFramesCompleted)
-                .InTheBackground(errorMessage => { });
+                .InTheBackground(errorMessage => {
+                    OnTranscoderCompleted();
+                });
         }
 
         void OnTranscoderReadFramesCompleted()
