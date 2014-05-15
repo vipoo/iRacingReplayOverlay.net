@@ -2,6 +2,7 @@
 using MediaFoundation.Net;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,32 @@ namespace iRacingReplayOverlay.Video
     {
         public static ProcessSample FadeIn(ProcessSample next)
         {
-            return Process.SeperateAudioVideo(next, VideoFadeIn(next));
+            return Process.SeperateAudioVideo(AudioFadeIn(next), VideoFadeIn(next));
+        }
+
+        public static ProcessSample AudioFadeIn(ProcessSample next)
+        {
+            long fadingInFrom = -1;
+
+            return sample =>
+                {
+                    if (sample.Sample == null)
+                        return next(sample);
+
+                    if (fadingInFrom == -1)
+                        fadingInFrom = sample.Timestamp;
+
+                    if (sample.Timestamp - fadingInFrom > 1.FromSecondsToNano())
+                        return next(sample);
+
+                    var fadeOut = (sample.Timestamp - fadingInFrom).FromNanoToSeconds();
+                    fadeOut = Math.Max(0, fadeOut);
+                    fadeOut = Math.Min(1.0, fadeOut);
+
+                    FadeAudio(sample, fadeOut);
+
+                    return next(sample);
+                };
         }
 
         public static ProcessSample VideoFadeIn(ProcessSample next)

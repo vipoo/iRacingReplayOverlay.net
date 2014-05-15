@@ -63,7 +63,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 using (sinkWriter.BeginWriting())
                 {
-                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(NewMethod(sampleFn, next));
+                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
+                        NewMethod(sampleFn, next));
 
                     Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
                         Process.FadeOut(introSourceReader.MediaSource, next));
@@ -75,8 +76,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         private ProcessSample NewMethod(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
         {
-            var cut = Process.ApplyEdit(5.FromSecondsToNano(), 23.FromSecondsToNano(),
-                            Process.FadeOut(4.FromSecondsToNano(), 1.FromSecondsToNano(), next),
+            var cut = Process.ApplyEdit(7.FromSecondsToNano(), 23.FromSecondsToNano(),
+                            Process.FadeOut(6.FromSecondsToNano(), 1.FromSecondsToNano(), next),
                             Process.FadeIn(next));
 
             var overlays = OverlayRaceData(sampleFn, Process.FadeIn(cut));
