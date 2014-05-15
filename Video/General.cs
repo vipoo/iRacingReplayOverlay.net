@@ -26,6 +26,44 @@ namespace iRacingReplayOverlay.Video
 
     public partial class Process
     {
+        public static ProcessSample SplitFrom(long timestamp, ProcessSample beforeSplit, ProcessSample afterSplit)
+        {
+            return sample =>
+            {
+                if (sample.Timestamp <= timestamp)
+                    return beforeSplit(sample);
+
+                return afterSplit(sample);
+            };
+        }
+
+        public static ProcessSample SkipTo(long timestamp, ProcessSample afterSplit)
+        {
+            long offset = -1;
+            bool isAfterSplit = false;
+            long skippingFrom = -1;
+
+            return sample =>
+            {
+                if (skippingFrom == -1)
+                    skippingFrom = sample.Timestamp;
+
+                if (sample.Timestamp <= timestamp)
+                    return true;
+
+                if (!isAfterSplit)
+                {
+                    isAfterSplit = true;
+                    offset = sample.Timestamp - skippingFrom;
+                }
+
+                if (!sample.Flags.EndOfStream)
+                    sample.SampleTime -= offset;
+
+                return afterSplit(sample);
+            };
+        }
+
         public static ProcessSample Split(long duration, ProcessSample<long> beforeSplit, ProcessSample afterSplit)
         {
             long firstSampleTime = -1;
