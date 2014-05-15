@@ -21,7 +21,7 @@ using System;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
         public static Action FromFile(ReadWriteClassFactory factory, Attributes attributes, string filename, ProcessSample next)
         {

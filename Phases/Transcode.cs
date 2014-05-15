@@ -19,6 +19,7 @@
 
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
+using iRacingReplayOverlay.Video;
 using iRacingSDK;
 using MediaFoundation.Net;
 using System;
@@ -74,9 +75,9 @@ namespace iRacingReplayOverlay.Phases
                    NewMethod(ApplyOverlay(leaderBoard, progress, readFramesCompleted), leaderBoard.OverlayData.EditCuts, next));
 
                 Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
-                    iRacingReplayOverlay.Video.Process.FadeOut(introSourceReader.MediaSource, next));
+                    AVOperation.FadeOut(introSourceReader.MediaSource, next));
 
-                iRacingReplayOverlay.Video.Process.Concat(introFeed, mainFeed, saveToSink);
+                AVOperation.Concat(introFeed, mainFeed, saveToSink);
             });
 
             completed();
@@ -105,11 +106,11 @@ namespace iRacingReplayOverlay.Phases
             ProcessSample cut = next;
 
             foreach (var editCut in editCuts)
-                cut = iRacingReplayOverlay.Video.Process.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
+                cut = AVOperation.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
 
-            var overlays = OverlayRaceData(sampleFn, iRacingReplayOverlay.Video.Process.FadeIn(cut));
+            var overlays = OverlayRaceData(sampleFn, AVOperation.FadeIn(cut));
 
-            return iRacingReplayOverlay.Video.Process.SeperateAudioVideo(cut, overlays);
+            return AVOperation.SeperateAudioVideo(cut, overlays);
         }
 
         public ProcessSample OverlayRaceData(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)

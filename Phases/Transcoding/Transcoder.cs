@@ -73,10 +73,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var sinkAudioStream = AddStream(sinkWriter, sourceAudioStream.CurrentMediaType, CreateTargetAudioMediaType(sourceAudioStream.NativeMediaType));
             var sinkVideoStream = AddStream(sinkWriter, sourceVideoStream.CurrentMediaType, CreateTargetVideoMediaType(sourceVideoStream.NativeMediaType));
 
-            var saveAudio = Process.MediaTypeChange(sinkAudioStream, Process.SaveTo(sinkAudioStream));
-            var saveVideo = Process.MediaTypeChange(sinkVideoStream, Process.SaveTo(sinkVideoStream));
+            var saveAudio = AVOperation.MediaTypeChange(sinkAudioStream, AVOperation.SaveTo(sinkAudioStream));
+            var saveVideo = AVOperation.MediaTypeChange(sinkVideoStream, AVOperation.SaveTo(sinkVideoStream));
 
-            return Process.SeperateAudioVideo(saveAudio, saveVideo);
+            return AVOperation.SeperateAudioVideo(saveAudio, saveVideo);
         }
 
         SourceStream SetAudioMediaType(SourceReader sourceReader)

@@ -21,7 +21,7 @@ using MediaFoundation.Net;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
         public static ProcessSample MediaTypeChange(SinkStream sinkStream, ProcessSample next)
         {

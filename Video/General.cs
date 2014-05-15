@@ -24,7 +24,7 @@ namespace iRacingReplayOverlay.Video
 {
     public delegate bool ProcessSample<T>(SourceReaderSample sample, T t);
 
-    public partial class Process
+    public partial class AVOperation
     {
         public static ProcessSample SplitFrom(long timestamp, ProcessSample beforeSplit, ProcessSample afterSplit)
         {

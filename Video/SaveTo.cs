@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
         public static ProcessSample SaveTo(SinkStream sinkStream)
         {

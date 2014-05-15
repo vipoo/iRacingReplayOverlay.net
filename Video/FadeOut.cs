@@ -24,11 +24,11 @@ using System.Drawing;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
         public static ProcessSample FadeOut(long fadingOutFrom, long duration, ProcessSample next)
         {
-            return Process.SeperateAudioVideo(
+            return AVOperation.SeperateAudioVideo(
                 FadeOut(_AudioFadeOut(fadingOutFrom, duration, next), fadingOutFrom, next),
                 FadeOut(_VideoFadeOut(fadingOutFrom, duration, next), fadingOutFrom, next));
         }

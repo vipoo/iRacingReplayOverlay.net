@@ -22,7 +22,7 @@ using MediaFoundation.Net;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
         public static ProcessSample OverlayRaceData(LeaderBoard leaderBoard, ProcessSample next)
         {

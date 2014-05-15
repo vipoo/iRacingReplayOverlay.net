@@ -22,7 +22,7 @@ using System;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
         public static void Concat(Action<ProcessSample> first, Action<ProcessSample> second, ProcessSample next)
         {

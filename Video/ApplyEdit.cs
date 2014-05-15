@@ -22,7 +22,7 @@ using System;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
         public static ProcessSample ApplyEditWithFade(long starting, long finishing, ProcessSample next)
         {

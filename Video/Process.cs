@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay.Video
 {
-    public partial class Process
+    public partial class AVOperation
     {
     }
 }
