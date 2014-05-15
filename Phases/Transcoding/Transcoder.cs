@@ -34,17 +34,12 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         public string DestinationFile { get; set; }
         public int AudioBitRate;
         public int VideoBitRate;
-        public List<Capturing.OverlayData.BoringBit> EditCuts;
 
         static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
         static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
-        List<Capturing.OverlayData.BoringBit>.Enumerator nextCut;
 
-        internal void Frames(Func<SourceReaderSampleWithBitmap, bool> sampleFn)
+        internal void ProcessVideo(Action<SourceReader, SourceReader, ProcessSample> process)
         {
-            nextCut = EditCuts.GetEnumerator();
-            nextCut.MoveNext();
-
             using (MFSystem.Start())
             {
                 var readWriteFactory = new ReadWriteClassFactory();
@@ -63,27 +58,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 using (sinkWriter.BeginWriting())
                 {
-                    Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
-                        NewMethod(sampleFn, next));
-
-                    Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
-                        Process.FadeOut(introSourceReader.MediaSource, next));
-
-                    Process.Concat(introFeed, mainFeed, writeToSink);
+                    process(introSourceReader, sourceReader, writeToSink);
                 }
             }
-        }
-
-        private ProcessSample NewMethod(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
-        {
-            ProcessSample cut = next;
-
-            foreach (var editCut in EditCuts)
-                cut = Process.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
-
-            var overlays = OverlayRaceData(sampleFn, Process.FadeIn(cut));
-
-            return Process.SeperateAudioVideo(cut, overlays);
         }
 
         private ProcessSample ConnectStreams(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
@@ -100,19 +77,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var saveVideo = Process.MediaTypeChange(sinkVideoStream, Process.SaveTo(sinkVideoStream));
 
             return Process.SeperateAudioVideo(saveAudio, saveVideo);
-        }
-
-        //    SamplesAfterEditing(EditCuts, -offset))
-        
-        public ProcessSample OverlayRaceData(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
-        {
-            return sample => 
-            {
-                using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                    sampleFn(sampleWithBitmap);
-
-                return next(sample);
-            };
         }
 
         SourceStream SetAudioMediaType(SourceReader sourceReader)

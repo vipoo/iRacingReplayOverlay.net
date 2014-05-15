@@ -20,7 +20,9 @@
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingSDK;
+using MediaFoundation.Net;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -63,11 +65,26 @@ namespace iRacingReplayOverlay.Phases
                 SourceFile = sourceFile,
                 DestinationFile = destinationFile,
                 VideoBitRate = videoBitRate,
-                AudioBitRate = audioBitRate,
-                EditCuts = leaderBoard.OverlayData.EditCuts
+                AudioBitRate = audioBitRate
             };
 
-            transcoder.Frames(frame => 
+            transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
+            {
+                Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
+                   NewMethod(ApplyOverlay(leaderBoard, progress, readFramesCompleted), leaderBoard.OverlayData.EditCuts, next));
+
+                Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
+                    iRacingReplayOverlay.Video.Process.FadeOut(introSourceReader.MediaSource, next));
+
+                iRacingReplayOverlay.Video.Process.Concat(introFeed, mainFeed, saveToSink);
+            });
+
+            completed();
+        }
+
+        private Func<SourceReaderSampleWithBitmap, bool> ApplyOverlay(LeaderBoard leaderBoard, _Progress progress, Action readFramesCompleted)
+        {
+            return frame =>
             {
                 if (frame.Flags.EndOfStream)
                     readFramesCompleted();
@@ -80,9 +97,30 @@ namespace iRacingReplayOverlay.Phases
                 }
 
                 return !requestAbort;
-            });
+            };
+        }
 
-            completed();
+        private ProcessSample NewMethod(Func<SourceReaderSampleWithBitmap, bool> sampleFn, List<iRacingReplayOverlay.Phases.Capturing.OverlayData.BoringBit> editCuts, ProcessSample next)
+        {
+            ProcessSample cut = next;
+
+            foreach (var editCut in editCuts)
+                cut = iRacingReplayOverlay.Video.Process.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
+
+            var overlays = OverlayRaceData(sampleFn, iRacingReplayOverlay.Video.Process.FadeIn(cut));
+
+            return iRacingReplayOverlay.Video.Process.SeperateAudioVideo(cut, overlays);
+        }
+
+        public ProcessSample OverlayRaceData(Func<SourceReaderSampleWithBitmap, bool> sampleFn, ProcessSample next)
+        {
+            return sample =>
+            {
+                using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
+                    sampleFn(sampleWithBitmap);
+
+                return next(sample);
+            };
         }
     }
 }
