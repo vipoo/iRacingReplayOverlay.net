@@ -76,7 +76,7 @@ namespace iRacingReplayOverlay.Phases
                 .WithFinishingStatus()
                 //.AtSpeed(3)
                 //.AtSpeed(4)
-                .TakeWhile(d => d.Telemetry.RaceLaps < 2)
+                //.TakeWhile(d => d.Telemetry.RaceLaps < 2)
                 //.AtSpeed(16, d => d.Telemetry.RaceLaps >=0 && d.Telemetry.RaceLaps < 19)
                 //.AtSpeed(6, d => d.Telemetry.RaceLaps >=19 )
 )            {

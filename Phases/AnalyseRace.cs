@@ -56,8 +56,8 @@ namespace iRacingReplayOverlay.Phases
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
             incidents = new Incidents();
-			//foreach (var data in iRacing.GetDataFeed().RaceIncidents())
-			//    incidents.Process(data);
+			foreach (var data in iRacing.GetDataFeed().RaceIncidents())
+			    incidents.Process(data);
             incidents.Stop();
         }
     }
