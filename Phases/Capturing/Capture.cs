@@ -187,7 +187,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                     timingSample = CreateTimingSample(data, relativeTime, drivers.ToArray());
 
-                    var msg = string.Format("{0} {1} finished in {2}{3}", data.Telemetry.SessionTimeSpan, driver.UserName, position, position.Ordinal());
+                    var msg = string.Format("{0} finished in {1}{2}", driver.UserName, position, position.Ordinal());
                     Trace.WriteLine("{0} {1}".F(data.Telemetry.SessionTimeSpan, msg), "INFO");
                     commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                 }
