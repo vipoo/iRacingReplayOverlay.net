@@ -201,7 +201,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
 		private void DrawLeaderboard(Graphics g, OverlayData.TimingSample sample)
         {
-            var r = g.InRectangle(80, 80, 210, 40)
+            var r = g.InRectangle(80, 80, 230, 40)
                 .With(SimpleWhiteBox)
                 .DrawText(sample.RacePosition);
 
@@ -216,7 +216,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 r.With(ColourBox(Styles.LightYellow))
                     .DrawText(d.Position)
-                    .ToRight(width: 50)
+                    .ToRight(width: 70)
                     .With(SimpleWhiteBox)
                     .DrawText(d.CarNumber)
                     .ToRight(width:120)
@@ -228,7 +228,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
 		private void DrawCurrentDriverRow(Graphics g, OverlayData.Driver p)
         {
-            g.InRectangle(1920/2-420/2, 980, 70, 40)
+            g.InRectangle(1920/2-440/2, 980, 70, 40)
                 .WithBrush(Styles.Brushes.Yellow)
                 .WithPen(Styles.Pens.Black)
                 .DrawRectangleWithBorder()
@@ -243,7 +243,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                             .DrawText(p.Indicator)
                 )
 
-                .ToRight(50)
+                .ToRight(width: 70)
                 .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)

@@ -131,7 +131,7 @@ namespace ImagerOverlayer
                             new OverlayData.FastLap() 
                             {
                                 StartTime = 10,
-                                Driver = new OverlayData.Driver { CarNumber = 13, Name = "Dean Netherton" },
+                                Driver = new OverlayData.Driver { CarNumber = 888, Name = "Dean Netherton" },
                                 Time = TimeSpan.FromSeconds(65.345).TotalSeconds
                             }
                         };
@@ -143,12 +143,12 @@ namespace ImagerOverlayer
                                 LapCounter = "Lap 2",
                                 StartTime = 0, 
                                 Drivers = new [] {
-                                    new OverlayData.Driver { CarNumber = 12, Name = "Dean Netherton", Position = 1},
+                                    new OverlayData.Driver { CarNumber = 888, Name = "Dean Netherton", Position = 1},
                                     new OverlayData.Driver { CarNumber = 13, Name = "Matty", Position = 2 },
                                     new OverlayData.Driver { CarNumber = 3, Name = "Fred", Position = 3 }
                                 },
                                 RacePosition = "39:34",
-                                CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 29, Name = "Somebody" },
+                                CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 888, Name = "Somebody" },
                             }
                         };
             return result;
@@ -156,8 +156,8 @@ namespace ImagerOverlayer
 
         public static void Main(string[] args)
         {
-            //TestRaceDataOverlay();
-            TestIntroOverlay();
+            TestRaceDataOverlay();
+            //TestIntroOverlay();
         }
 
         private static void TestIntroOverlay()
