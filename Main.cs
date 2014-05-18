@@ -156,7 +156,7 @@ namespace iRacingReplayOverlay
 
             State = States.Transcoding;
 
-            iRacingProcess
+            iRacingProcess = new IRacingReplay()
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
                 .WithFiles(sourceFile: sourceVideoTextBox.Text)
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, OnTranscoderReadFramesCompleted)
@@ -268,7 +268,7 @@ namespace iRacingReplayOverlay
             AnalysingRaceLabel.Visible = true;
             State = States.CapturingGameData;
 
-            iRacingProcess
+            iRacingProcess = new IRacingReplay()
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()
