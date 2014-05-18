@@ -28,7 +28,7 @@ namespace iRacingReplayOverlay.Video
     {
         public static ProcessSample FadeOut(long fadingOutFrom, long duration, ProcessSample next)
         {
-            return AVOperation.SeperateAudioVideo(
+            return AVOperations.SeperateAudioVideo(
                 FadeOut(_AudioFadeOut(fadingOutFrom, duration, next), fadingOutFrom, next),
                 FadeOut(_VideoFadeOut(fadingOutFrom, duration, next), fadingOutFrom, next));
         }

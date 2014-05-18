@@ -28,7 +28,7 @@ namespace iRacingReplayOverlay.Video
     {
         public static ProcessSample FadeIn(ProcessSample next)
         {
-            return AVOperation.SeperateAudioVideo(
+            return AVOperations.SeperateAudioVideo(
                 FadeIn(_AudioFadeIn(next), next),
                 FadeIn(_VideoFadeIn(next), next));
         }

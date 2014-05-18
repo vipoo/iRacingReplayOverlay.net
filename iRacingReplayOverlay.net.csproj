@@ -133,13 +133,10 @@
     <Compile Include="Video\FadeOut.cs" />
     <Compile Include="Video\OverlayRaceData.cs" />
     <Compile Include="Video\FromFile.cs" />
-    <Compile Include="Video\MediaTypeChange.cs" />
     <Compile Include="Video\Concat.cs" />
     <Compile Include="Video\FadeIn.cs" />
     <Compile Include="Video\General.cs" />
     <Compile Include="Video\Process.cs" />
-    <Compile Include="Video\SaveTo.cs" />
-    <Compile Include="Video\SeperateAudioVideo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

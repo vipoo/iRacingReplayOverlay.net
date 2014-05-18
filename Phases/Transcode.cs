@@ -49,7 +49,7 @@ namespace iRacingReplayOverlay.Phases
         public void _WithFiles(string sourceFile)
         {
             this.sourceFile = sourceFile;
-            this.destinationFile = Path.ChangeExtension(sourceFile, "wmv");
+            this.destinationFile = Path.ChangeExtension(sourceFile, "mp4");
             this.gameDataFile = Path.ChangeExtension(sourceFile, "xml");
         }
 
@@ -93,7 +93,7 @@ namespace iRacingReplayOverlay.Phases
 
         private ProcessSample ApplyIntroTitles(LeaderBoard leaderBoard, ProcessSample next)
         {
-            return AVOperation.SeperateAudioVideo(next, AVOperation.DataSamplesOnly(IntroTitles(leaderBoard, next), next));
+            return AVOperations.SeperateAudioVideo(next, AVOperation.DataSamplesOnly(IntroTitles(leaderBoard, next), next));
         }
 
         private ProcessSample IntroTitles(LeaderBoard leaderBoard, ProcessSample next)
@@ -132,7 +132,7 @@ namespace iRacingReplayOverlay.Phases
 
             var overlays = AVOperation.DataSamplesOnly(OverlayRaceData(leaderBoard, AVOperation.FadeIn(cut)), cut);
 
-            return AVOperation.SeperateAudioVideo(cut, overlays);
+            return AVOperations.SeperateAudioVideo(cut, overlays);
         }
 
         public ProcessSample OverlayRaceData(LeaderBoard leaderBoard, ProcessSample next)
