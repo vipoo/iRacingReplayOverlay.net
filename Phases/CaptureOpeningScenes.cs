@@ -31,6 +31,8 @@ namespace iRacingReplayOverlay.Phases
     {
         void _CaptureOpeningScenes(Action onComplete)
         {
+            throw new Exception("Seomthing went wrong!");
+
             var data = iRacing.GetDataFeed().First();
             if (data.SessionData.SessionInfo.Sessions.Qualifying() == null)
                 return;

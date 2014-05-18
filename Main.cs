@@ -109,6 +109,8 @@ namespace iRacingReplayOverlay
             logMessagges = new LogMessages();
             Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
 
+            LogListener.ToFile(DefaultLogFileName);
+
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
             fileWatchTimer.Tick += (s, a) => OnGameDataFileChanged();
@@ -156,12 +158,17 @@ namespace iRacingReplayOverlay
 
             State = States.Transcoding;
 
+            var defaultLogFile = logFile;
+
+            LogListener.ToFile(Path.ChangeExtension(sourceVideoTextBox.Text, "log"));
+
             iRacingProcess = new IRacingReplay()
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
                 .WithFiles(sourceFile: sourceVideoTextBox.Text)
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, OnTranscoderReadFramesCompleted)
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
+                    LogListener.ToFile(DefaultLogFileName);
                 });
         }
 
@@ -197,6 +204,8 @@ namespace iRacingReplayOverlay
 
         System.Windows.Forms.Timer lookForAudioBitRates;
         private LogMessages logMessagges;
+        private LogListener logFile;
+        const string DefaultLogFileName = "general.log";
 
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -268,6 +277,8 @@ namespace iRacingReplayOverlay
             AnalysingRaceLabel.Visible = true;
             State = States.CapturingGameData;
 
+            LogListener.ToFile(workingFolderTextBox.Text + "\\capture.log");
+
             iRacingProcess = new IRacingReplay()
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
@@ -279,6 +290,8 @@ namespace iRacingReplayOverlay
                     CapturingRaceLabel.Visible = false;
                     sourceVideoTextBox.Text = videoFileName;
                     State = States.Idle;
+
+                    LogListener.MoveToFile(Path.ChangeExtension(videoFileName, "log"));
                 })
                 .CloseIRacing()
                 .InTheBackground(errorMessage =>
@@ -290,6 +303,7 @@ namespace iRacingReplayOverlay
                     ProcessErrorMessageLabel.Visible = true;
                     ProcessErrorMessageLabel.Text = errorMessage;
 
+                    LogListener.ToFile(DefaultLogFileName);
                 });
         }
 
