@@ -32,7 +32,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
         readonly CommentaryMessages commentaryMessages;
         readonly RemovalEdits removalEdits;
 
-        TimeSpan lastTime;
         OverlayData.LeaderBoard leaderBoard;
         OverlayData.Driver[] lastDrivers;
         int leaderBoardUpdateRate = 0;
@@ -48,10 +47,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
-            if (data.Telemetry.SessionTimeSpan.Subtract(lastTime).TotalSeconds < 0.5)
-                return;
-
-            lastTime = data.Telemetry.SessionTimeSpan;
 
             if (ProcessForLastLap(data, relativeTime))
                 return;

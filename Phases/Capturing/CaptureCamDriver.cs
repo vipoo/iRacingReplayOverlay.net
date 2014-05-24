@@ -28,7 +28,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
     public class CaptureCamDriver
     {
         readonly OverlayData overlayData;
-        TimeSpan lastTime;
 
         public CaptureCamDriver(OverlayData overlayData)
         {
@@ -37,13 +36,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
-            if (data.Telemetry.SessionTimeSpan.Subtract(lastTime).TotalSeconds < 0.25)
-                return;
-
-            lastTime = data.Telemetry.SessionTimeSpan;
-
             var camDriver = CreateCamDriver(data, relativeTime);
-            if( camDriver!=null)
+            if (camDriver != null)
                 overlayData.CamDrivers.Add(camDriver);
         }
 

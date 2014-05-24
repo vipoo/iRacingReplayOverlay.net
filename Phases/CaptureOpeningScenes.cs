@@ -49,7 +49,7 @@ namespace iRacingReplayOverlay.Phases
 
             videoCapture.Activate(workingFolder);
 
-            Thread.Sleep(20000);
+            Thread.Sleep(shortTestOnly ? 5000 : 20000);
 
             var fileName = videoCapture.Deactivate();
 

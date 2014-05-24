@@ -61,30 +61,40 @@ namespace iRacingReplayOverlay.Phases
             var removalEdits = new RemovalEdits(overlayData);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
-            var capture = new Capture(overlayData, commentaryMessages, removalEdits, workingFolder);
-            var captureCamDriver = new CaptureCamDriver(overlayData);
             var fastestLaps = new RecordFastestLaps(overlayData);
             var replayControl = new ReplayControl(samples.First().SessionData, incidents, commentaryMessages, removalEdits, TrackCameras);
             var sessionDataCapture = new SessionDataCapture(overlayData);
+
+            var captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5), 
+                new Capture(overlayData, commentaryMessages, removalEdits, workingFolder).Process);
+
+            var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
+                 new CaptureCamDriver(overlayData).Process);
 
             Thread.Sleep(2000);
             videoCapture.Activate(workingFolder);
             var startTime = DateTime.Now;
 
-			foreach (var data in samples
+            samples = samples
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
-                .WithFinishingStatus()
-                //.AtSpeed(4)
-                //.TakeWhile(d => d.Telemetry.RaceLaps < 2)
-                //.AtSpeed(16, d => d.Telemetry.RaceLaps >=0 && d.Telemetry.RaceLaps < 19)
-                //.AtSpeed(6, d => d.Telemetry.RaceLaps >=19 )
-)            {
+                .WithFinishingStatus();
+
+            if (shortTestOnly)
+                samples = samples
+                    .TakeWhile(d => d.Telemetry.RaceLaps < 3);
+
+            //samples = samples.AtSpeed(4);
+
+			foreach (var data in samples)
+            {
                 var relativeTime = DateTime.Now - startTime;
 
                 sessionDataCapture.Process(data);
-                capture.Process(data, relativeTime);
-                captureCamDriver.Process(data, relativeTime);
+
+                captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
+                captureCamDriverEveryQuaterSecond.Process(data, relativeTime);
+
                 fastestLaps.Process(data, relativeTime);
                 if (replayControl.Process(data))
                     break;

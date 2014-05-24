@@ -40,6 +40,12 @@ namespace iRacingReplayOverlay.Phases
     public partial class IRacingReplay
     {
         List<Action> actions = new List<Action>();
+        bool shortTestOnly;
+
+        public IRacingReplay(bool shortTestOnly = false)
+        {
+            this.shortTestOnly = shortTestOnly;
+        }
 
         private void Add(Action<Action> action, Action onComplete)
         {

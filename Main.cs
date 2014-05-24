@@ -279,7 +279,7 @@ namespace iRacingReplayOverlay
 
             LogListener.ToFile(workingFolderTextBox.Text + "\\capture.log");
 
-            iRacingProcess = new IRacingReplay()
+            iRacingProcess = new IRacingReplay(shortTestOnly: TestOnlyCheckBox.Checked)
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()

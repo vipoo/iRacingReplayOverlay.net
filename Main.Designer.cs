@@ -72,6 +72,7 @@ namespace iRacingReplayOverlay
             this.SettingsButton = new System.Windows.Forms.Button();
             this.configureGeneralSettingsButton = new System.Windows.Forms.Button();
             this.logMessagesButton = new System.Windows.Forms.Button();
+            this.TestOnlyCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -247,7 +248,7 @@ namespace iRacingReplayOverlay
             this.AnalysingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
             this.AnalysingRaceLabel.Location = new System.Drawing.Point(216, 171);
             this.AnalysingRaceLabel.Name = "AnalysingRaceLabel";
-            this.AnalysingRaceLabel.Size = new System.Drawing.Size(323, 64);
+            this.AnalysingRaceLabel.Size = new System.Drawing.Size(406, 47);
             this.AnalysingRaceLabel.TabIndex = 24;
             this.AnalysingRaceLabel.Text = "Analysing your race replay ...";
             this.AnalysingRaceLabel.Visible = false;
@@ -257,7 +258,7 @@ namespace iRacingReplayOverlay
             this.CapturingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
             this.CapturingRaceLabel.Location = new System.Drawing.Point(216, 171);
             this.CapturingRaceLabel.Name = "CapturingRaceLabel";
-            this.CapturingRaceLabel.Size = new System.Drawing.Size(323, 64);
+            this.CapturingRaceLabel.Size = new System.Drawing.Size(406, 47);
             this.CapturingRaceLabel.TabIndex = 25;
             this.CapturingRaceLabel.Text = "Capturing your replay to video ...";
             this.CapturingRaceLabel.Visible = false;
@@ -277,7 +278,7 @@ namespace iRacingReplayOverlay
             this.WaitingForIRacingLabel.ForeColor = System.Drawing.Color.DarkRed;
             this.WaitingForIRacingLabel.Location = new System.Drawing.Point(216, 171);
             this.WaitingForIRacingLabel.Name = "WaitingForIRacingLabel";
-            this.WaitingForIRacingLabel.Size = new System.Drawing.Size(323, 64);
+            this.WaitingForIRacingLabel.Size = new System.Drawing.Size(406, 39);
             this.WaitingForIRacingLabel.TabIndex = 27;
             this.WaitingForIRacingLabel.Text = "Waiting for iRacing to start ...";
             // 
@@ -329,11 +330,22 @@ namespace iRacingReplayOverlay
             this.logMessagesButton.UseVisualStyleBackColor = true;
             this.logMessagesButton.Click += new System.EventHandler(this.logMessagesButton_Click);
             // 
+            // TestOnlyCheckBox
+            // 
+            this.TestOnlyCheckBox.AutoSize = true;
+            this.TestOnlyCheckBox.Location = new System.Drawing.Point(219, 216);
+            this.TestOnlyCheckBox.Name = "TestOnlyCheckBox";
+            this.TestOnlyCheckBox.Size = new System.Drawing.Size(120, 22);
+            this.TestOnlyCheckBox.TabIndex = 33;
+            this.TestOnlyCheckBox.Text = "Short Test Only";
+            this.TestOnlyCheckBox.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 535);
+            this.Controls.Add(this.TestOnlyCheckBox);
             this.Controls.Add(this.logMessagesButton);
             this.Controls.Add(this.configureGeneralSettingsButton);
             this.Controls.Add(this.SettingsButton);
@@ -403,5 +415,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Button SettingsButton;
         private System.Windows.Forms.Button configureGeneralSettingsButton;
         private System.Windows.Forms.Button logMessagesButton;
+        private System.Windows.Forms.CheckBox TestOnlyCheckBox;
     }
 }
