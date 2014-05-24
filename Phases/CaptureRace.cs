@@ -82,6 +82,9 @@ namespace iRacingReplayOverlay.Phases
 
             bool haveSkipForTesting = false;
 
+            if (shortTestOnly)
+                samples = samples.AtSpeed(4);
+
 			foreach (var data in samples)
             {
                 if (shortTestOnly && !haveSkipForTesting && ReturnIfSkipping(data))

@@ -70,13 +70,32 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (data.Telemetry.RaceDistance > 1.10)
                 return false;
 
-            leaderBoard = CreateLeaderBoard(data, relativeTime, new OverlayData.Driver[0]);
+            leaderBoard = CreateLeaderBoard(data, relativeTime, GetQualifyingOrder(data));
 
             leaderBoardUpdateRate = 0;
 
             overlayData.LeaderBoards.Add(leaderBoard);
 
             return true;
+        }
+
+        OverlayData.Driver[] GetQualifyingOrder(DataSample data)
+        {
+            var session = data.SessionData.SessionInfo.Sessions.Qualifying();
+
+            if (session == null)
+                return new OverlayData.Driver[0];
+
+            return session
+                .ResultsPositions
+                .Select(rp => new OverlayData.Driver 
+                {
+                    CarIdx = (int)rp.CarIdx,
+                    CarNumber = (int)data.SessionData.DriverInfo.Drivers[rp.CarIdx].CarNumber,
+                    Indicator = rp.Position.Ordinal(),
+                    UserName = data.SessionData.DriverInfo.Drivers[rp.CarIdx].UserName
+                })
+                .ToArray();
         }
 
         OverlayData.Driver[] ProcessLatestRunningOrder(DataSample data, TimeSpan relativeTime)
