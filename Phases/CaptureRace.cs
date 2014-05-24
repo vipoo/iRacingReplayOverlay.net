@@ -80,14 +80,16 @@ namespace iRacingReplayOverlay.Phases
                 .WithCorrectedDistances()
                 .WithFinishingStatus();
 
-            if (shortTestOnly)
-                samples = samples
-                    .TakeWhile(d => d.Telemetry.RaceLaps < 3);
-
-            //samples = samples.AtSpeed(4);
+            bool haveSkipForTesting = false;
 
 			foreach (var data in samples)
             {
+                if (shortTestOnly && !haveSkipForTesting && ReturnIfSkipping(data))
+                {
+                    haveSkipForTesting = true;
+                    continue;
+                }
+            
                 var relativeTime = DateTime.Now - startTime;
 
                 sessionDataCapture.Process(data);
@@ -119,6 +121,18 @@ namespace iRacingReplayOverlay.Phases
                 errorMessage = "Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder);
 
             onComplete(fileName, errorMessage);
+        }
+
+        private bool ReturnIfSkipping(DataSample data)
+        {
+            if( data.Telemetry.RaceLaps <= 2)
+                return false;
+
+            var lapSkip = data.Telemetry.Session.ResultsLapsComplete - data.Telemetry.RaceLaps - 2;
+            var skipFrames = 60 * data.Telemetry.Session.ResultsAverageLapTime * lapSkip;
+            iRacing.Replay.MoveToFrame((int)skipFrames, ReplayPositionMode.Current);
+            iRacing.Replay.SetSpeed(1);
+            return true;
         }
 
         private void SaveOverlayData(OverlayData overlayData, string fileName)
