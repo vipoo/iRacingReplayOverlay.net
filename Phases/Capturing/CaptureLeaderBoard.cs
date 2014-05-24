@@ -51,6 +51,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (ProcessForLastLap(data, relativeTime))
                 return;
 
+            if (ProcessForStarting(data, relativeTime))
+                return;
+
             if (leaderBoardUpdateRate == 0 || leaderBoard == null)
                 leaderBoard = CreateLeaderBoard(data, relativeTime, ProcessLatestRunningOrder(data, relativeTime));
             else
@@ -60,6 +63,20 @@ namespace iRacingReplayOverlay.Phases.Capturing
             leaderBoardUpdateRate = leaderBoardUpdateRate % 8;
 
             overlayData.LeaderBoards.Add(leaderBoard);
+        }
+
+        private bool ProcessForStarting(DataSample data, TimeSpan relativeTime)
+        {
+            if (data.Telemetry.RaceDistance > 1.10)
+                return false;
+
+            leaderBoard = CreateLeaderBoard(data, relativeTime, new OverlayData.Driver[0]);
+
+            leaderBoardUpdateRate = 0;
+
+            overlayData.LeaderBoards.Add(leaderBoard);
+
+            return true;
         }
 
         OverlayData.Driver[] ProcessLatestRunningOrder(DataSample data, TimeSpan relativeTime)
