@@ -62,6 +62,7 @@ namespace iRacingReplayOverlay.Phases
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
             var capture = new Capture(overlayData, commentaryMessages, removalEdits, workingFolder);
+            var captureCamDriver = new CaptureCamDriver(overlayData);
             var fastestLaps = new RecordFastestLaps(overlayData);
             var replayControl = new ReplayControl(samples.First().SessionData, incidents, commentaryMessages, removalEdits, TrackCameras);
             var sessionDataCapture = new SessionDataCapture(overlayData);
@@ -74,7 +75,6 @@ namespace iRacingReplayOverlay.Phases
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
                 .WithFinishingStatus()
-                //.AtSpeed(3)
                 //.AtSpeed(4)
                 //.TakeWhile(d => d.Telemetry.RaceLaps < 2)
                 //.AtSpeed(16, d => d.Telemetry.RaceLaps >=0 && d.Telemetry.RaceLaps < 19)
@@ -84,6 +84,7 @@ namespace iRacingReplayOverlay.Phases
 
                 sessionDataCapture.Process(data);
                 capture.Process(data, relativeTime);
+                captureCamDriver.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
                 if (replayControl.Process(data))
                     break;

@@ -108,13 +108,13 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            var sample = OverlayData.TimingSamples.LastOrDefault(s => s.StartTime <= timeInSeconds);
-
+            var sample = OverlayData.LeaderBoards.LastOrDefault(s => s.StartTime <= timeInSeconds);
             if (sample != null)
-            {
                 DrawLeaderboard(graphics, sample);
-                DrawCurrentDriverRow(graphics, sample.CurrentDriver);
-            }
+
+            var camDriver = OverlayData.CamDrivers.LastOrDefault(s => s.StartTime <= timeInSeconds);
+            if (camDriver != null)
+                DrawCurrentDriverRow(graphics, camDriver.CurrentDriver);
 
             var messageState = OverlayData.MessageStates.LastOrDefault(s => s.Time <= timeInSeconds);
             if (messageState != null)
@@ -173,7 +173,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .DrawText(fastestLap.Driver.CarNumber)
                 .ToRight(width: 250)
                 .With(blueBox)
-                .DrawText(fastestLap.Driver.Name)
+                .DrawText(fastestLap.Driver.UserName)
                 .ToRight(width: 150)
                 .With(blueBox)
                 .DrawText(TimeSpan.FromSeconds(fastestLap.Time).ToString(@"mm\:ss\.fff"));
@@ -199,7 +199,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     .WithStringFormat(StringAlignment.Center);
         }
 
-		private void DrawLeaderboard(Graphics g, OverlayData.TimingSample sample)
+		private void DrawLeaderboard(Graphics g, OverlayData.LeaderBoard sample)
         {
             var r = g.InRectangle(80, 80, 230, 40)
                 .With(SimpleWhiteBox)
@@ -240,7 +240,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                             .AfterText(p.Position.ToString())
                             .MoveRight(3)
                             .WithFont("Calibri", 18, FontStyle.Bold)
-                            .DrawText(p.Indicator)
+                            .DrawText(p.Position.Ordinal())
                 )
 
                 .ToRight(width: 70)
@@ -255,7 +255,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
                 .WithBrush(Styles.Brushes.Black)
-                .DrawText(p.Name);
+                .DrawText(p.UserName);
         }
 
         public static class Styles

@@ -50,7 +50,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     SourceReaderEnableVideoProcessing = true
                 };
 
-
                 var introSourceReader = IntroVideoFile == null ? null : readWriteFactory.CreateSourceReaderFromURL(IntroVideoFile, attributes);
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(SourceFile, attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);

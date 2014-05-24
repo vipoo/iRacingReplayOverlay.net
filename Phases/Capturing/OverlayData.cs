@@ -41,17 +41,22 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double Time;
         }
 
-        public class TimingSample
+        public class CamDriver
+        {
+            public double StartTime;
+            public Driver CurrentDriver;
+        }
+
+        public class LeaderBoard
         {
             public double StartTime;
             public Driver[] Drivers;
             public string RacePosition;
 			public string LapCounter; //optional
-            public Driver CurrentDriver;
 
-            public TimingSample Clone()
+            public LeaderBoard Clone()
             {
-                return (TimingSample)base.MemberwiseClone();
+                return (LeaderBoard)base.MemberwiseClone();
             }
         }
 
@@ -60,7 +65,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public int Position;
             public string Indicator;
             public int CarNumber;
-            public string Name;
+            public string UserName;
 
             [XmlIgnore]
             public int CarIdx;
@@ -73,10 +78,10 @@ namespace iRacingReplayOverlay.Phases.Capturing
             {
                 get
                 {
-                    if (driverNickNames.ContainsKey(Name))
-                        return driverNickNames[Name];
+                    if (driverNickNames.ContainsKey(UserName))
+                        return driverNickNames[UserName];
 
-                    var names = Name.Split(' ');
+                    var names = UserName.Split(' ');
                     var firstName = names.First();
                     var lastName = names.Last();
 
@@ -84,7 +89,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         + lastName.Substring(0, 1).ToUpper()
                         + lastName.Substring(1, Math.Min(3, lastName.Length-1));
 
-                    driverNickNames.Add(Name, name);
+                    driverNickNames.Add(UserName, name);
                     return name;
                 }
             }
@@ -103,7 +108,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
         }
 
         public string IntroVideoFileName;
-        public List<TimingSample> TimingSamples = new List<TimingSample>();
+        public List<LeaderBoard> LeaderBoards = new List<LeaderBoard>();
+        public List<CamDriver> CamDrivers = new List<CamDriver>();
         public List<FastLap> FastestLaps = new List<FastLap>();
         public List<MessageState> MessageStates = new List<MessageState>();
         public List<BoringBit> EditCuts = new List<BoringBit>();

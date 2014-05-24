@@ -131,26 +131,34 @@ namespace ImagerOverlayer
                             new OverlayData.FastLap() 
                             {
                                 StartTime = 10,
-                                Driver = new OverlayData.Driver { CarNumber = 888, Name = "Dean Netherton" },
+                                Driver = new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton" },
                                 Time = TimeSpan.FromSeconds(65.345).TotalSeconds
                             }
                         };
 
-            result.TimingSamples = new List<OverlayData.TimingSample>() 
+            result.LeaderBoards = new List<OverlayData.LeaderBoard>() 
                         {
-                            new OverlayData.TimingSample
+                            new OverlayData.LeaderBoard
                             {
                                 LapCounter = "Lap 2",
                                 StartTime = 0, 
                                 Drivers = new [] {
-                                    new OverlayData.Driver { CarNumber = 888, Name = "Dean Netherton", Position = 1},
-                                    new OverlayData.Driver { CarNumber = 13, Name = "Matty", Position = 2 },
-                                    new OverlayData.Driver { CarNumber = 3, Name = "Fred", Position = 3 }
+                                    new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton", Position = 1},
+                                    new OverlayData.Driver { CarNumber = 13, UserName = "Matty", Position = 2 },
+                                    new OverlayData.Driver { CarNumber = 3, UserName = "Fred", Position = 3 }
                                 },
                                 RacePosition = "39:34",
-                                CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 888, Name = "Somebody" },
                             }
                         };
+
+            result.CamDrivers = new List<OverlayData.CamDriver>()
+            {
+                new OverlayData.CamDriver
+                {
+                    StartTime = 0,
+                    CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 888, UserName = "Dean" },
+                }
+            };
             return result;
         }
 

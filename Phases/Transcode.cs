@@ -49,7 +49,7 @@ namespace iRacingReplayOverlay.Phases
         public void _WithFiles(string sourceFile)
         {
             this.sourceFile = sourceFile;
-            this.destinationFile = Path.ChangeExtension(sourceFile, "mp4");
+            this.destinationFile = Path.ChangeExtension(sourceFile, "wmv");
             this.gameDataFile = Path.ChangeExtension(sourceFile, "xml");
         }
 
