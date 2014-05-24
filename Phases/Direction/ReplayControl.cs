@@ -175,13 +175,13 @@ namespace iRacingReplayOverlay.Phases.Direction
             {
 				currentlyViewing= ViewType.CloseBattle;
                 removalEdits.InterestingThingHappend(data);
-                Trace.WriteLine("{0} Changing camera to driver number {1}, using camera number {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+                Trace.WriteLine("{0} Changing camera to driver number {1}, using camera {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }
             else
             {
 				currentlyViewing = ViewType.RandomCar;
                 car = FindARandomDriver(data);
-                Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera number {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+                Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
             }
 
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
