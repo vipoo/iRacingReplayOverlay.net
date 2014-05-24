@@ -66,7 +66,7 @@ namespace iRacingReplayOverlay.Phases
             var sessionDataCapture = new SessionDataCapture(overlayData);
 
             var captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5), 
-                new Capture(overlayData, commentaryMessages, removalEdits, workingFolder).Process);
+                new CaptureLeaderBoard(overlayData, commentaryMessages, removalEdits, workingFolder).Process);
 
             var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
                  new CaptureCamDriver(overlayData).Process);

@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
-    public class Capture
+    public class CaptureLeaderBoard
     {
         readonly String workingFolder;
         readonly OverlayData overlayData;
@@ -38,7 +38,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         double raceStartTimeOffset = 0;
         bool[] haveNotedCheckerdFlag = new bool[64];
 
-        public Capture(OverlayData overlayData, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, string workingFolder)
+        public CaptureLeaderBoard(OverlayData overlayData, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, string workingFolder)
         {
             this.overlayData = overlayData;
             this.workingFolder = workingFolder;
