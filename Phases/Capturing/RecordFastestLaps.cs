@@ -17,78 +17,61 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using iRacingReplayOverlay.Support;
+using iRacingSDK;
+using System;
+using System.Diagnostics;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class RecordFastestLaps
     {
         readonly OverlayData overlayData;
-        OverlayData.FastLap lastFastLap;
-
-        public int[] lastDriverLaps = new int[64];
-        public double[] driverLapStartTime = new double[64];
-
-        public double fastestLapTime = double.MaxValue;
-        public double? timeToNoteFastestLap = null;
+        FastLap lastFastestLap = null;
+        double? timeToNoteFastestLap = null;
 
         public RecordFastestLaps(OverlayData overlayData)
         {
             this.overlayData = overlayData;
         }
 
-        public void Process(iRacingSDK.DataSample data, TimeSpan relativeTime)
+        public void Process(DataSample data, TimeSpan relativeTime)
         {
-            if (timeToNoteFastestLap != null && timeToNoteFastestLap.Value < data.Telemetry.SessionTime)
+            ShowAnyPendingFastestLap(data, relativeTime);
+
+            if (lastFastestLap != data.Telemetry.FastestLap)
+                NoteNewFastestLap(data, relativeTime);
+        }
+
+        void NoteNewFastestLap(DataSample data, TimeSpan relativeTime)
+        {
+            if (timeToNoteFastestLap == null)
+                timeToNoteFastestLap = data.Telemetry.SessionTime + 20;
+
+            lastFastestLap = data.Telemetry.FastestLap;
+
+            Trace.WriteLine("{0} Driver {1} recorded a new fast lap of {2:0.00}".F(data.Telemetry.SessionTimeSpan, lastFastestLap.Driver.UserName, lastFastestLap.Time.TotalSeconds), "INFO");
+        }
+
+        void ShowAnyPendingFastestLap(DataSample data, TimeSpan relativeTime)
+        {
+            if (timeToNoteFastestLap == null || timeToNoteFastestLap.Value >= data.Telemetry.SessionTime)
+                return;
+
+            var fastLap = new OverlayData.FastLap
             {
-                Trace.WriteLine("{0} Showing Driver {1} recorded a new fast lap of {2:0.00}".F(data.Telemetry.SessionTimeSpan, lastFastLap.Driver.UserName, lastFastLap.Time), "INFO");
-
-                overlayData.FastestLaps.Add(lastFastLap);
-                timeToNoteFastestLap = null;
-            }
-
-            foreach( var lap in data.Telemetry
-                .CarIdxLap
-                .Select((l, i) => new {CarIdx = i, Lap = l })
-                .Skip(1)
-                .Take(data.SessionData.DriverInfo.Drivers.Length-1))
-            {
-                if (lap.Lap == -1)
-                    continue;
-
-                if( lap.Lap == lastDriverLaps[lap.CarIdx]+1)
+                StartTime = (int)relativeTime.TotalSeconds,
+                Time = lastFastestLap.Time.TotalSeconds,
+                Driver = new OverlayData.Driver
                 {
-                    var lapTime = data.Telemetry.SessionTime - driverLapStartTime[lap.CarIdx];
-
-                    driverLapStartTime[lap.CarIdx] = data.Telemetry.SessionTime;
-                    lastDriverLaps[lap.CarIdx] = lap.Lap;
-
-                    if( lap.Lap > 1 && lapTime < fastestLapTime)
-                    {
-                        fastestLapTime = lapTime;
-
-                        lastFastLap = new OverlayData.FastLap
-                        {
-                            Time = lapTime,
-                            StartTime = (int)relativeTime.TotalSeconds,
-                            Driver = new OverlayData.Driver
-                            {
-                                UserName = data.SessionData.DriverInfo.Drivers[lap.CarIdx].UserName,
-                                CarNumber = (int)data.SessionData.DriverInfo.Drivers[lap.CarIdx].CarNumber
-                            }
-                        };
-
-                        if (timeToNoteFastestLap == null)
-                            timeToNoteFastestLap = data.Telemetry.SessionTime + 20;
-                        Trace.WriteLine("{0} Driver {1} recorded a new fast lap of {2:0.00}".F(data.Telemetry.SessionTimeSpan, lastFastLap.Driver.UserName, lastFastLap.Time), "INFO");
-                    }
+                    UserName = lastFastestLap.Driver.UserName,
+                    CarNumber = (int)lastFastestLap.Driver.CarNumber
                 }
-            }
+            };
+
+            Trace.WriteLine("{0} Showing Driver {1} recorded a new fast lap of {2:0.00}".F(data.Telemetry.SessionTimeSpan, lastFastestLap.Driver.UserName, lastFastestLap.Time.TotalSeconds), "INFO");
+            overlayData.FastestLaps.Add(fastLap);
+            timeToNoteFastestLap = null;
         }
     }
 }
