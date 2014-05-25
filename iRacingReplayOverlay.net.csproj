@@ -78,6 +78,9 @@
     <Compile Include="LogMessages.Designer.cs">
       <DependentUpon>LogMessages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Phases\Capturing\LeaderBoard\CaptureLeaderBoardMiddleLaps.cs" />
+    <Compile Include="Phases\Capturing\LeaderBoard\CaptureLeaderBoardLastLap.cs" />
+    <Compile Include="Phases\Capturing\LeaderBoard\CaptureLeaderBoardFirstLap.cs" />
     <Compile Include="Phases\Capturing\SampleFilter.cs" />
     <Compile Include="Phases\Capturing\CaptureCamDriver.cs" />
     <Compile Include="Phases\Capturing\SessionDataCapture.cs" />
