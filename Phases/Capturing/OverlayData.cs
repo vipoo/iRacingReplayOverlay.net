@@ -62,8 +62,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public class Driver
         {
-            public int Position;
-            public string Indicator;
+            public int? Position;
             public int CarNumber;
             public string UserName;
 

@@ -16,12 +16,11 @@
 // You should have received a copy of the GNU General Public License333
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
@@ -34,11 +33,30 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.overlayData = overlayData;
         }
 
+        OverlayData.Driver lastCamDriver = null;
+        
         public void Process(DataSample data, TimeSpan relativeTime)
         {
             var camDriver = CreateCamDriver(data, relativeTime);
             if (camDriver != null)
+            {
+                if (lastCamDriver == null || 
+                    lastCamDriver.UserName != camDriver.CurrentDriver.UserName ||
+                    lastCamDriver.Position != camDriver.CurrentDriver.Position)
+                {
+                    var position = camDriver.CurrentDriver.Position != null ? camDriver.CurrentDriver.Position.Value.ToString() : "";
+                    var indicator = camDriver.CurrentDriver.Position != null ? camDriver.CurrentDriver.Position.Value.Ordinal() : "";
+
+                    Trace.WriteLine("{0} Camera on {1} {2} in position {3}{4}".F(
+                        data.Telemetry.SessionTimeSpan,
+                        camDriver.CurrentDriver.UserName,
+                        camDriver.CurrentDriver.CarNumber,
+                        position, indicator), "INFO");
+
+                    lastCamDriver = camDriver.CurrentDriver;
+                }
                 overlayData.CamDrivers.Add(camDriver);
+            }
         }
 
         OverlayData.CamDriver CreateCamDriver(DataSample data, TimeSpan relativeTime)
@@ -61,16 +79,33 @@ namespace iRacingReplayOverlay.Phases.Capturing
             if (car == null)
                 return null;
 
+            var position = GetPositionFor(data, car);
+
             var driver = new OverlayData.Driver
             {
                 CarIdx = car.CarIdx,
                 CarNumber = car.CarNumber,
-                Indicator = car.Position.Ordinal(),
                 UserName = car.UserName,
-                Position = car.Position
+                Position = position
             };
 
             return driver;
+        }
+
+        private static int? GetPositionFor(DataSample data, Car car)
+        {
+            if (data.Telemetry.RaceDistance > 1.10)
+                return car.Position;
+
+            var session = data.SessionData.SessionInfo.Sessions.Qualifying();
+            if (session == null)
+                return null;
+
+            var qualifyingResult = session.ResultsPositions.FirstOrDefault(p => p.CarIdx == car.CarIdx);
+            if (qualifyingResult == null)
+                return null;
+
+            return (int)qualifyingResult.Position;
         }
     }
 }

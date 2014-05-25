@@ -92,7 +92,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 {
                     CarIdx = (int)rp.CarIdx,
                     CarNumber = (int)data.SessionData.DriverInfo.Drivers[rp.CarIdx].CarNumber,
-                    Indicator = rp.Position.Ordinal(),
                     UserName = data.SessionData.DriverInfo.Drivers[rp.CarIdx].UserName
                 })
                 .ToArray();
@@ -117,7 +116,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     if (lastPosition != null && lastPosition.Position != d.Position)
                     {
                         removalEdits.InterestingThingHappend(data);
-                        var msg = "{0} in {1}{2}".F(d.UserName, d.Position, d.Position.Ordinal());
+                        var position = d.Position != null ? d.Position.Value.ToString() : "";
+                        var indicator = d.Position != null ? d.Position.Value.Ordinal() : "";
+                        var msg = "{0} in {1}{2}".F(d.UserName, position, indicator);
                         Trace.WriteLine("{0} {1}".F(data.Telemetry.SessionTimeSpan, msg), "INFO");
                         commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                     }

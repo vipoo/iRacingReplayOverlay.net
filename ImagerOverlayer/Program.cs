@@ -156,7 +156,7 @@ namespace ImagerOverlayer
                 new OverlayData.CamDriver
                 {
                     StartTime = 0,
-                    CurrentDriver = new OverlayData.Driver { Position = 13, Indicator = "th", CarNumber = 888, UserName = "Dean" },
+                    CurrentDriver = new OverlayData.Driver { Position = 13, CarNumber = 888, UserName = "Dean" },
                 }
             };
             return result;

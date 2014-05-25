@@ -214,8 +214,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             { 
                 r = r.ToBelow(width: 40);
 
+                var position = d.Position != null ? d.Position.Value.ToString() : "";
+
                 r.With(ColourBox(Styles.LightYellow))
-                    .DrawText(d.Position)
+                    .DrawText(position)
                     .ToRight(width: 70)
                     .With(SimpleWhiteBox)
                     .DrawText(d.CarNumber)
@@ -228,6 +230,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
 		private void DrawCurrentDriverRow(Graphics g, OverlayData.Driver p)
         {
+            var position = p.Position != null ? p.Position.Value.ToString() : "";
+            var indicator = p.Position != null ? p.Position.Value.Ordinal() : "";
+
             g.InRectangle(1920/2-440/2, 980, 70, 40)
                 .WithBrush(Styles.Brushes.Yellow)
                 .WithPen(Styles.Pens.Black)
@@ -236,11 +241,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .WithBrush(Styles.Brushes.Black)
                 .WithStringFormat(StringAlignment.Near)
                 .Center(cg => cg
-                            .DrawText(p.Position.ToString())
-                            .AfterText(p.Position.ToString())
+                            .DrawText(position)
+                            .AfterText(position)
                             .MoveRight(3)
                             .WithFont("Calibri", 18, FontStyle.Bold)
-                            .DrawText(p.Position.Ordinal())
+                            .DrawText(indicator)
                 )
 
                 .ToRight(width: 70)
