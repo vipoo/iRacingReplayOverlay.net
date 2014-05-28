@@ -140,10 +140,11 @@ namespace iRacingReplayOverlay
             // 
             // workingFolderTextBox
             // 
-            this.workingFolderTextBox.Location = new System.Drawing.Point(134, 80);
+            this.workingFolderTextBox.Location = new System.Drawing.Point(178, 80);
             this.workingFolderTextBox.Name = "workingFolderTextBox";
-            this.workingFolderTextBox.Size = new System.Drawing.Size(488, 26);
+            this.workingFolderTextBox.Size = new System.Drawing.Size(444, 26);
             this.workingFolderTextBox.TabIndex = 13;
+            this.workingFolderTextBox.TextChanged += new System.EventHandler(this.workingFolderTextBox_TextChanged);
             // 
             // sourceVideoButton
             // 
@@ -160,9 +161,9 @@ namespace iRacingReplayOverlay
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(28, 80);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(100, 18);
+            this.label5.Size = new System.Drawing.Size(144, 18);
             this.label5.TabIndex = 14;
-            this.label5.Text = "Worker Folder:";
+            this.label5.Text = "Video Capture Folder:";
             // 
             // workingFolderButton
             // 

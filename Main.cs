@@ -121,11 +121,13 @@ namespace iRacingReplayOverlay
             aTimer.Tick += (s, a) => GuessFinializeProgress();
 
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
+            
+
             videoBitRate.Text = Settings.Default.videoBitRate.ToString();
             sourceVideoTextBox.Text = Settings.Default.lastVideoFile;
 
             iRacingProcess = new IRacingReplay()
-                .WhenIRacingStarts(() => { BeginProcessButton.Enabled = true; ProcessErrorMessageLabel.Visible = false; WaitingForIRacingLabel.Visible = false; })
+                .WhenIRacingStarts(() => { workingFolderTextBox_TextChanged(null, null); ProcessErrorMessageLabel.Visible = false; WaitingForIRacingLabel.Visible = false; })
                 .InTheBackground(errorMessage => { });
         }
 
@@ -135,10 +137,7 @@ namespace iRacingReplayOverlay
             fbd.SelectedPath = workingFolderTextBox.Text;
 
             if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                Settings.Default.WorkingFolder = workingFolderTextBox.Text = fbd.SelectedPath;
-                Settings.Default.Save();
-            }
+                workingFolderTextBox.Text = fbd.SelectedPath;
         }
 
         void sourceVideoButton_Click(object sender, EventArgs e)
@@ -296,7 +295,7 @@ namespace iRacingReplayOverlay
                 .CloseIRacing()
                 .InTheBackground(errorMessage =>
                 {
-                    BeginProcessButton.Enabled = true;
+                    workingFolderTextBox_TextChanged(null, null);
                     WaitingForIRacingLabel.Visible = false;
                     AnalysingRaceLabel.Visible = false;
                     CapturingRaceLabel.Visible = false;
@@ -322,6 +321,16 @@ namespace iRacingReplayOverlay
         private void logMessagesButton_Click(object sender, EventArgs e)
         {
             logMessagges.Show();
+        }
+
+        private void workingFolderTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var exists = Directory.Exists(workingFolderTextBox.Text);
+
+            BeginProcessButton.Enabled = exists;
+
+            Settings.Default.WorkingFolder = workingFolderTextBox.Text;
+            Settings.Default.Save();
         }
     }
 }
