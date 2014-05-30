@@ -40,9 +40,19 @@ namespace iRacingReplayOverlay.Support
             File.AppendAllText(FileName, message);
         }
 
+        string lastMessage = null;
+        DateTime lastTime = DateTime.Now;
+
         public override void WriteLine(string message)
         {
-            this.Write(DateTime.Now.ToString("s"));
+            var now = DateTime.Now;
+            if (message == lastMessage && now - lastTime < TimeSpan.FromSeconds(5))
+                return;
+
+            lastMessage = message;
+            lastTime = now;
+
+            this.Write(now.ToString("s"));
             this.Write("\t");
             this.Write(message + "\r\n");
         }

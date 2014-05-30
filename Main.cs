@@ -31,6 +31,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using iRacingSDK;
 
 namespace iRacingReplayOverlay
 {
@@ -48,54 +49,66 @@ namespace iRacingReplayOverlay
         enum States {Idle, CapturingGameData, Transcoding};
         States _states = States.Idle;
 
+        System.Windows.Forms.Timer lookForAudioBitRates;
+        LogMessages logMessagges;
+        const string DefaultLogFileName = "general.log";
+
         States State
         {
             set
             {
                 _states = value;
-                switch(_states)
-                {
-                    case States.Idle:
-                        transcodeVideoButton.Enabled = IsReadyForTranscoding();
-                        transcodeCancelButton.Visible = false;
-                        transcodeProgressBar.Visible = false;
-                        transcodeProgressBar.Value = 0;
-                        videoBitRate.Enabled =
-                        audioBitRate.Enabled =
-                        workingFolderTextBox.Enabled = 
-                        workingFolderButton.Enabled = 
-                        sourceVideoTextBox.Enabled =
-                        sourceVideoButton.Enabled = true;
-                        break;
-
-                    case States.CapturingGameData:
-                        transcodeVideoButton.Enabled = false;
-                        transcodeCancelButton.Visible = false;
-                        transcodeProgressBar.Visible = false;
-                        videoBitRate.Enabled =
-                        audioBitRate.Enabled =
-                        workingFolderTextBox.Enabled = 
-                        workingFolderButton.Enabled = 
-                        sourceVideoTextBox.Enabled =
-                        sourceVideoButton.Enabled = false;
-                        break;
-
-                    case States.Transcoding:
-                        transcodeVideoButton.Enabled = false;
-                        transcodeCancelButton.Visible = true;
-                        transcodeProgressBar.Visible = true;
-                        videoBitRate.Enabled =
-                        audioBitRate.Enabled =
-                        workingFolderTextBox.Enabled = 
-                        workingFolderButton.Enabled = 
-                        sourceVideoTextBox.Enabled =
-                        sourceVideoButton.Enabled = false;
-                        break;
-                }
+                StateUpdated();
             }
             get
             {
                 return _states;
+            }
+        }
+
+        void StateUpdated()
+        {
+            switch (_states)
+            {
+                case States.Idle:
+                    BeginProcessButton.Enabled = Directory.Exists(workingFolderTextBox.Text) && iRacing.IsConnected;
+                    transcodeVideoButton.Enabled = IsReadyForTranscoding();
+                    transcodeCancelButton.Visible = false;
+                    transcodeProgressBar.Visible = false;
+                    transcodeProgressBar.Value = 0;
+                    videoBitRate.Enabled =
+                    audioBitRate.Enabled =
+                    workingFolderTextBox.Enabled =
+                    workingFolderButton.Enabled =
+                    sourceVideoTextBox.Enabled =
+                    sourceVideoButton.Enabled = true;
+                    break;
+
+                case States.CapturingGameData:
+                    BeginProcessButton.Enabled = false;
+                    transcodeVideoButton.Enabled = false;
+                    transcodeCancelButton.Visible = false;
+                    transcodeProgressBar.Visible = false;
+                    videoBitRate.Enabled =
+                    audioBitRate.Enabled =
+                    workingFolderTextBox.Enabled =
+                    workingFolderButton.Enabled =
+                    sourceVideoTextBox.Enabled =
+                    sourceVideoButton.Enabled = false;
+                    break;
+
+                case States.Transcoding:
+                    BeginProcessButton.Enabled = Directory.Exists(workingFolderTextBox.Text) && iRacing.IsConnected;
+                    transcodeVideoButton.Enabled = false;
+                    transcodeCancelButton.Visible = true;
+                    transcodeProgressBar.Visible = true;
+                    videoBitRate.Enabled =
+                    audioBitRate.Enabled =
+                    workingFolderTextBox.Enabled =
+                    workingFolderButton.Enabled =
+                    sourceVideoTextBox.Enabled =
+                    sourceVideoButton.Enabled = false;
+                    break;
             }
         }
 
@@ -104,12 +117,22 @@ namespace iRacingReplayOverlay
             InitializeComponent();
         }
 
-        private void Main_Load(object sender, EventArgs e)
+        string GetDefaultLogFileName()
         {
+            if (Directory.Exists(workingFolderTextBox.Text))
+                return Path.Combine(workingFolderTextBox.Text, "general.log");
+
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "general.log");
+        }
+
+        void Main_Load(object sender, EventArgs e)
+        {
+            workingFolderTextBox.Text = Settings.Default.WorkingFolder;
+            
             logMessagges = new LogMessages();
             Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
 
-            LogListener.ToFile(DefaultLogFileName);
+            LogListener.ToFile(GetDefaultLogFileName());
 
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
@@ -120,14 +143,19 @@ namespace iRacingReplayOverlay
             aTimer.Interval = 500;
             aTimer.Tick += (s, a) => GuessFinializeProgress();
 
-            workingFolderTextBox.Text = Settings.Default.WorkingFolder;
-            
-
             videoBitRate.Text = Settings.Default.videoBitRate.ToString();
             sourceVideoTextBox.Text = Settings.Default.lastVideoFile;
 
+            BeginProcessButton.Enabled = false;
+
             iRacingProcess = new IRacingReplay()
-                .WhenIRacingStarts(() => { workingFolderTextBox_TextChanged(null, null); ProcessErrorMessageLabel.Visible = false; WaitingForIRacingLabel.Visible = false; })
+                .WhenIRacingStarts(() => 
+                {
+                    BeginProcessButton.Enabled = true;
+                    workingFolderTextBox_TextChanged(null, null); 
+                    ProcessErrorMessageLabel.Visible = false; 
+                    WaitingForIRacingLabel.Visible = false;
+                })
                 .InTheBackground(errorMessage => { });
         }
 
@@ -157,8 +185,6 @@ namespace iRacingReplayOverlay
 
             State = States.Transcoding;
 
-            var defaultLogFile = logFile;
-
             LogListener.ToFile(Path.ChangeExtension(sourceVideoTextBox.Text, "log"));
 
             iRacingProcess = new IRacingReplay()
@@ -167,7 +193,7 @@ namespace iRacingReplayOverlay
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, OnTranscoderReadFramesCompleted)
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
-                    LogListener.ToFile(DefaultLogFileName);
+                    LogListener.ToFile(GetDefaultLogFileName());
                 });
         }
 
@@ -201,10 +227,6 @@ namespace iRacingReplayOverlay
             State = States.Idle;
         }
 
-        System.Windows.Forms.Timer lookForAudioBitRates;
-        private LogMessages logMessagges;
-        private LogListener logFile;
-        const string DefaultLogFileName = "general.log";
 
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -302,7 +324,7 @@ namespace iRacingReplayOverlay
                     ProcessErrorMessageLabel.Visible = true;
                     ProcessErrorMessageLabel.Text = errorMessage;
 
-                    LogListener.ToFile(DefaultLogFileName);
+                    LogListener.ToFile(GetDefaultLogFileName());
                 });
         }
 
@@ -325,12 +347,10 @@ namespace iRacingReplayOverlay
 
         private void workingFolderTextBox_TextChanged(object sender, EventArgs e)
         {
-            var exists = Directory.Exists(workingFolderTextBox.Text);
-
-            BeginProcessButton.Enabled = exists;
-
             Settings.Default.WorkingFolder = workingFolderTextBox.Text;
             Settings.Default.Save();
+
+            StateUpdated();
         }
     }
 }
