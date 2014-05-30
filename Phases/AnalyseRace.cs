@@ -46,6 +46,12 @@ namespace iRacingReplayOverlay.Phases
 
             raceStartFrameNumber = data.Telemetry.ReplayFrameNum - (60*20);
 
+            if (raceStartFrameNumber < 0)
+            {
+                Trace.WriteLine("Unable to start capturing at 20 seconds prior to race start.  Starting at start of replay file.", "INFO");
+                raceStartFrameNumber = 0;
+            }
+
             AnalyseIncidents();
 
             onComplete();
