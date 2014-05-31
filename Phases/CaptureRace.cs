@@ -79,7 +79,8 @@ namespace iRacingReplayOverlay.Phases
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
                 .WithFastestLaps()
-                .WithFinishingStatus();
+                .WithFinishingStatus()
+                .TakeUntilEndOfReplay();
 
             bool haveSkipForTesting = false;
 
