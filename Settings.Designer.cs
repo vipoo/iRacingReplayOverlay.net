@@ -117,5 +117,17 @@ namespace iRacingReplayOverlay {
                 this["PreferredDriverName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:01")]
+        public global::System.TimeSpan MaxTimeForInterestingEvent {
+            get {
+                return ((global::System.TimeSpan)(this["MaxTimeForInterestingEvent"]));
+            }
+            set {
+                this["MaxTimeForInterestingEvent"] = value;
+            }
+        }
     }
 }

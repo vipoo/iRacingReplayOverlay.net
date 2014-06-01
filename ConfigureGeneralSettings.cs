@@ -33,7 +33,8 @@ namespace iRacingReplayOverlay
 
 		private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
 		{
-			MaxTimeForIncidentsTextBox.Text=((int)Settings.Default.MaxTimeForIncidents.TotalSeconds).ToString();
+			MaxTimeForIncidentsTextBox.Text=Settings.Default.MaxTimeForIncidents.TotalSeconds.ToString();
+			MaxTimeForInterestingEventTextBox.Text=Settings.Default.MaxTimeForInterestingEvent.TotalSeconds.ToString();
 			PreferredDriverNameTextBox.Text=Settings.Default.PreferredDriverName;
 		}
 
@@ -43,10 +44,20 @@ namespace iRacingReplayOverlay
 
 		private void MaxTimeForIncidentsTextBox_TextChanged(object sender, EventArgs e)
 		{
-			var newSeconds=0;
-			if(int.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds))
+			var newSeconds=0.0;
+			if(double.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds))
 			{
 				Settings.Default.MaxTimeForIncidents=TimeSpan.FromSeconds(newSeconds);
+				Settings.Default.Save();
+			}
+		}
+
+		private void MaxTimeForInterestingEventTextBox_TextChanged(object sender, EventArgs e)
+		{
+			var newSeconds=0.0;
+			if(double.TryParse(MaxTimeForInterestingEventTextBox.Text, out newSeconds))
+			{
+				Settings.Default.MaxTimeForInterestingEvent=TimeSpan.FromSeconds(newSeconds);
 				Settings.Default.Save();
 			}
 		}

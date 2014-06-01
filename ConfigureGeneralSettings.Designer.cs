@@ -34,12 +34,16 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.PreferredDriverNameTextBox = new System.Windows.Forms.TextBox();
+			this.MaxTimeForInterestingEventTextBox = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// okButton
 			// 
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.okButton.Location = new System.Drawing.Point(548, 308);
+			this.okButton.Location = new System.Drawing.Point(395, 146);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(109, 37);
 			this.okButton.TabIndex = 10;
@@ -76,7 +80,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(13, 61);
+			this.label3.Location = new System.Drawing.Point(13, 89);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(138, 16);
 			this.label3.TabIndex = 15;
@@ -84,17 +88,46 @@
 			// 
 			// PreferredDriverNameTextBox
 			// 
-			this.PreferredDriverNameTextBox.Location = new System.Drawing.Point(300, 58);
+			this.PreferredDriverNameTextBox.Location = new System.Drawing.Point(300, 86);
 			this.PreferredDriverNameTextBox.Name = "PreferredDriverNameTextBox";
 			this.PreferredDriverNameTextBox.Size = new System.Drawing.Size(134, 22);
 			this.PreferredDriverNameTextBox.TabIndex = 16;
 			this.PreferredDriverNameTextBox.TextChanged += new System.EventHandler(this.PreferredDriverNameTextBox_TextChanged);
 			// 
+			// MaxTimeForInterestingEventTextBox
+			// 
+			this.MaxTimeForInterestingEventTextBox.Location = new System.Drawing.Point(300, 58);
+			this.MaxTimeForInterestingEventTextBox.Name = "MaxTimeForInterestingEventTextBox";
+			this.MaxTimeForInterestingEventTextBox.Size = new System.Drawing.Size(134, 22);
+			this.MaxTimeForInterestingEventTextBox.TabIndex = 17;
+			this.MaxTimeForInterestingEventTextBox.TextChanged += new System.EventHandler(this.MaxTimeForInterestingEventTextBox_TextChanged);
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(440, 61);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(60, 16);
+			this.label4.TabIndex = 18;
+			this.label4.Text = "seconds";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(13, 61);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(240, 16);
+			this.label5.TabIndex = 19;
+			this.label5.Text = "Time between cars for interesting event";
+			// 
 			// ConfigureGeneralSettings
 			// 
 			this.AcceptButton = this.okButton;
 			this.CancelButton = this.okButton;
-			this.ClientSize = new System.Drawing.Size(691, 369);
+			this.ClientSize = new System.Drawing.Size(516, 195);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.MaxTimeForInterestingEventTextBox);
 			this.Controls.Add(this.PreferredDriverNameTextBox);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
@@ -120,6 +153,9 @@
         private System.Windows.Forms.Label label2;
 				private System.Windows.Forms.Label label3;
 				private System.Windows.Forms.TextBox PreferredDriverNameTextBox;
+				private System.Windows.Forms.TextBox MaxTimeForInterestingEventTextBox;
+				private System.Windows.Forms.Label label4;
+				private System.Windows.Forms.Label label5;
 
     }
 }

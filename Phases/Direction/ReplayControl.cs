@@ -41,7 +41,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
 		double lastTimeStamp=0;
 		bool isShowingIncident;
-		SessionData._DriverInfo._Drivers preferredCar=null;
+
+		SessionData._DriverInfo._Drivers preferredCar;
+		double maxTimeForInterestingEvent;
 
 		public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, TrackCameras trackCameras)
 		{
@@ -52,14 +54,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 			random=new System.Random();
 			randomDriverNumber=new Random();
 
-			try
-			{
-				preferredCar=sessionData.DriverInfo.Drivers.First(x => x.UserName==Settings.Default.PreferredDriverName);
-			}
-			catch(InvalidOperationException)
-			{
-				preferredCar=null;
-			}
+			preferredCar=sessionData.DriverInfo.Drivers.FirstOrDefault(x => x.UserName==Settings.Default.PreferredDriverName);
+			maxTimeForInterestingEvent=Settings.Default.MaxTimeForInterestingEvent.TotalSeconds;
 
 			cameras=trackCameras.Where(tc => tc.TrackName==sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
@@ -176,14 +172,14 @@ namespace iRacingReplayOverlay.Phases.Direction
 
 			lastTimeStamp=data.Telemetry.SessionTime;
 
-			car=FindCarWithin1Second(data);
+			car=FindCarWithinRange(data, maxTimeForInterestingEvent);
 			camera=FindACamera();
 			car=ChangeCarForCamera(data, camera, car);
 			if(car!=null)
 			{
 				currentlyViewing=ViewType.CloseBattle;
 				removalEdits.InterestingThingHappend(data);
-				Trace.WriteLine("{0} Changing camera to driver number {1}, using camera {2} - within 1 second".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+				Trace.WriteLine("{0} Changing camera to driver number {1}, using camera {2} - within {3} seconds".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName, maxTimeForInterestingEvent), "INFO");
 			}
 			else
 			{
@@ -322,7 +318,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 			return sessionData.DriverInfo.Drivers[activeDrivers[next].CarIdx];
 		}
 
-		SessionData._DriverInfo._Drivers FindCarWithin1Second(DataSample data)
+		SessionData._DriverInfo._Drivers FindCarWithinRange(DataSample data, double range)
 		{
 			var distances=data.Telemetry.CarIdxDistance
 					.Select((d, i) => new { CarIdx=i, Distance=d })
@@ -345,7 +341,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 						Time=g.Distance*data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsAverageLapTime,
 						Position=g.Position
 					})
-					.Where(d => d.Time<=1)
+					.Where(d => d.Time<=range)
 					.OrderBy(d => d.Position);
 
 			var closest=timeGap.FirstOrDefault();
