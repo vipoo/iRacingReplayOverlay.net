@@ -24,30 +24,37 @@ using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
-    public partial class ConfigureGeneralSettings : Form
-    {
-        public ConfigureGeneralSettings()
-        {
-            InitializeComponent();
-        }
+	public partial class ConfigureGeneralSettings : Form
+	{
+		public ConfigureGeneralSettings()
+		{
+			InitializeComponent();
+		}
 
-        private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
-        {
-            MaxTimeForIncidentsTextBox.Text = ((int)Settings.Default.MaxTimeForIncidents.TotalSeconds).ToString();
-        }
+		private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
+		{
+			MaxTimeForIncidentsTextBox.Text=((int)Settings.Default.MaxTimeForIncidents.TotalSeconds).ToString();
+			PreferredDriverNameTextBox.Text=Settings.Default.PreferredDriverName;
+		}
 
-        private void okButton_Click(object sender, EventArgs e)
-        {
-        }
+		private void okButton_Click(object sender, EventArgs e)
+		{
+		}
 
-        private void MaxTimeForIncidentsTextBox_TextChanged(object sender, EventArgs e)
-        {
-            var newSeconds = 0;
-            if( int.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds) )
-            {
-                Settings.Default.MaxTimeForIncidents = TimeSpan.FromSeconds(newSeconds);
-                Settings.Default.Save();
-            }
-        }
-    }
+		private void MaxTimeForIncidentsTextBox_TextChanged(object sender, EventArgs e)
+		{
+			var newSeconds=0;
+			if(int.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds))
+			{
+				Settings.Default.MaxTimeForIncidents=TimeSpan.FromSeconds(newSeconds);
+				Settings.Default.Save();
+			}
+		}
+
+		private void PreferredDriverNameTextBox_TextChanged(object sender, EventArgs e)
+		{
+			Settings.Default.PreferredDriverName=PreferredDriverNameTextBox.Text;
+			Settings.Default.Save();
+		}
+	}
 }
