@@ -71,7 +71,6 @@ namespace iRacingReplayOverlay.Phases
             var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
                  new CaptureCamDriver(overlayData).Process);
 
-            Thread.Sleep(2000);
             videoCapture.Activate(workingFolder);
             var startTime = DateTime.Now;
 
