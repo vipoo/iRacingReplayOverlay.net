@@ -66,11 +66,11 @@ namespace iRacingReplayOverlay.Phases.Direction
             Trace.WriteLine("Sending key event ALT+F9", "INFO");
 
             keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(10);
+            Thread.Sleep(200);
             keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(10);
+            Thread.Sleep(200);
             keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-            Thread.Sleep(10);
+            Thread.Sleep(200);
             keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
 
