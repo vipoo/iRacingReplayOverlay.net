@@ -147,6 +147,7 @@
     <None Include="App.config" />
     <None Include="LICENSE.txt" />
     <None Include="packages\repositories.config" />
+    <None Include="README.md" />
     <None Include="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

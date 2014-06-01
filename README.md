@@ -32,3 +32,12 @@ Whats next
 * Fix some bugs
 * Perhaps provide a way to add the championship standings
 
+Compiling/Building
+
+As all development is pushed to the master branch - it is possible that at any point in time this code will not compile or will have
+bugs.  Tags are created for 'stable' versions of the code. Review the message of each of the tags to find the versions
+of dependent projects and other release notes.  
+
+```git tag -l -n5```
+
+The tagged versions should compile OK.
