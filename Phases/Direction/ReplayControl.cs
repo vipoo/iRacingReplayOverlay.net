@@ -29,6 +29,15 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class ReplayControl
     {
+        public enum ViewType
+        {
+            Incident,
+            CloseBattle,
+            RandomCar,
+            FirstLap,
+            LastLap
+        }
+
         readonly SessionData sessionData;
         readonly Random random;
         readonly TrackCamera[] cameras;
@@ -38,12 +47,16 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly IEnumerator<Incidents.Incident> nextIncident;
         readonly CommentaryMessages commentaryMessages;
         readonly RemovalEdits removalEdits;
+        readonly SessionData._DriverInfo._Drivers preferredCar;
+        readonly double maxTimeForInterestingEvent;
 
+        ViewType currentlyViewing;
         double lastTimeStamp = 0;
         bool isShowingIncident;
-
-        SessionData._DriverInfo._Drivers preferredCar;
-        double maxTimeForInterestingEvent;
+        double incidentPitBoxStartTime = 0;
+        DateTime timeOfFinisher = DateTime.Now;
+        int lastFinisherCarIdx = -1;
+        DateTime lastTimeLeaderWasSelected = DateTime.Now;
 
         public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, TrackCameras trackCameras)
         {
@@ -73,8 +86,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident = incidents.GetEnumerator();
             nextIncident.MoveNext();
         }
-
-        double incidentPitBoxStartTime = 0;
 
         bool IsShowingIncident(DataSample data)
         {
@@ -111,16 +122,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             return true;
         }
 
-        public enum ViewType
-        {
-            Incident,
-            CloseBattle,
-            RandomCar,
-            FirstLap,
-            LastLap
-        }
-
-        ViewType currentlyViewing;
         public bool Process(DataSample data)
         {
             if (OnLastLap(data))
@@ -229,9 +230,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
         }
 
-        DateTime timeOfFinisher = DateTime.Now;
-        int lastFinisherCarIdx = -1;
-
         private bool SwitchToFinishingDrivers(DataSample data)
         {
             removalEdits.InterestingThingHappend(data);
@@ -280,8 +278,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             return lastTimeStamp + 20.0 <= data.Telemetry.SessionTime;
         }
 
-        DateTime lastTimeLeaderWasSelected = DateTime.Now;
-
         bool IsBeforeFirstLapSector2(DataSample data)
         {
             var result = data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
@@ -318,7 +314,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             return sessionData.DriverInfo.Drivers[activeDrivers[next].CarIdx];
         }
 
-        SessionData._DriverInfo._Drivers FindCarWithinRange(DataSample data, double range)
+        static SessionData._DriverInfo._Drivers FindCarWithinRange(DataSample data, double range)
         {
             var distances = data.Telemetry.CarIdxDistance
                     .Select((d, i) => new { CarIdx = i, Distance = d })
@@ -347,7 +343,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             var closest = timeGap.FirstOrDefault();
 
             if (closest != null)
-                return sessionData.DriverInfo.Drivers[closest.CarIdx];
+                return data.SessionData.DriverInfo.Drivers[closest.CarIdx];
 
             return null;
         }
@@ -371,7 +367,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             return camera;
         }
 
-        SessionData._DriverInfo._Drivers ChangeCarForCamera(DataSample data, TrackCamera camera, SessionData._DriverInfo._Drivers driver)
+        static SessionData._DriverInfo._Drivers ChangeCarForCamera(DataSample data, TrackCamera camera, SessionData._DriverInfo._Drivers driver)
         {
             if (driver == null)
                 return null;
@@ -389,4 +385,3 @@ namespace iRacingReplayOverlay.Phases.Direction
         }
     }
 }
-
