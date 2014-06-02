@@ -35,7 +35,7 @@ namespace iRacingReplayOverlay
         {
             MaxTimeForIncidentsTextBox.Text = Settings.Default.MaxTimeForIncidents.TotalSeconds.ToString();
             MaxTimeForInterestingEventTextBox.Text = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds.ToString();
-            PreferredDriverNameTextBox.Text = Settings.Default.PreferredDriverName;
+            PreferredDriverNameTextBox.Text = Settings.Default.PreferredDriverNames;
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -64,7 +64,7 @@ namespace iRacingReplayOverlay
 
         private void PreferredDriverNameTextBox_TextChanged(object sender, EventArgs e)
         {
-            Settings.Default.PreferredDriverName = PreferredDriverNameTextBox.Text;
+            Settings.Default.PreferredDriverNames = PreferredDriverNameTextBox.Text;
             Settings.Default.Save();
         }
     }

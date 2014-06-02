@@ -44,10 +44,11 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly TrackCamera TV2;
         readonly TrackCamera TV3;
         readonly Random randomDriverNumber;
+        readonly Random randomPreferredDriver;
         readonly IEnumerator<Incidents.Incident> nextIncident;
         readonly CommentaryMessages commentaryMessages;
         readonly RemovalEdits removalEdits;
-        readonly SessionData._DriverInfo._Drivers preferredCar;
+        readonly IList<SessionData._DriverInfo._Drivers> preferredCars;
         readonly double maxTimeForInterestingEvent;
 
         ViewType currentlyViewing;
@@ -66,8 +67,10 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             random = new System.Random();
             randomDriverNumber = new Random();
+            randomPreferredDriver = new Random();
 
-            preferredCar = sessionData.DriverInfo.Drivers.FirstOrDefault(x => x.UserName == Settings.Default.PreferredDriverName);
+            IEnumerable<string> preferredDriverNames=Settings.Default.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim());
+            preferredCars = sessionData.DriverInfo.Drivers.Where(x => preferredDriverNames.Contains(x.UserName)).ToList();
             maxTimeForInterestingEvent = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds;
 
             cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
@@ -185,14 +188,14 @@ namespace iRacingReplayOverlay.Phases.Direction
             else
             {
                 currentlyViewing = ViewType.RandomCar;
-                if (preferredCar == null)
+                if (preferredCars.Count() == 0)
                 {
                     car = FindARandomDriver(data);
                     Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
                 }
                 else
                 {
-                    car = preferredCar;
+                    car = FindAPreferredDriver();
                     Trace.WriteLine("{0} Changing camera to preferred driver number {1}, using camera {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
                 }
             }
@@ -312,6 +315,13 @@ namespace iRacingReplayOverlay.Phases.Direction
             var next = randomDriverNumber.Next(activeDrivers.Count);
 
             return sessionData.DriverInfo.Drivers[activeDrivers[next].CarIdx];
+        }
+
+        SessionData._DriverInfo._Drivers FindAPreferredDriver()
+        {
+            var next = randomPreferredDriver.Next(preferredCars.Count());
+
+            return sessionData.DriverInfo.Drivers[preferredCars[next].CarIdx];
         }
 
         static SessionData._DriverInfo._Drivers FindCarWithinRange(DataSample data, double range)

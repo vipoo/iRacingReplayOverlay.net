@@ -109,12 +109,12 @@ namespace iRacingReplayOverlay {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PreferredDriverName {
+        public string PreferredDriverNames {
             get {
-                return ((string)(this["PreferredDriverName"]));
+                return ((string)(this["PreferredDriverNames"]));
             }
             set {
-                this["PreferredDriverName"] = value;
+                this["PreferredDriverNames"] = value;
             }
         }
         
