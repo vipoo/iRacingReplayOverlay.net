@@ -24,48 +24,48 @@ using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
-	public partial class ConfigureGeneralSettings : Form
-	{
-		public ConfigureGeneralSettings()
-		{
-			InitializeComponent();
-		}
+    public partial class ConfigureGeneralSettings : Form
+    {
+        public ConfigureGeneralSettings()
+        {
+            InitializeComponent();
+        }
 
-		private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
-		{
-			MaxTimeForIncidentsTextBox.Text=Settings.Default.MaxTimeForIncidents.TotalSeconds.ToString();
-			MaxTimeForInterestingEventTextBox.Text=Settings.Default.MaxTimeForInterestingEvent.TotalSeconds.ToString();
-			PreferredDriverNameTextBox.Text=Settings.Default.PreferredDriverName;
-		}
+        private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
+        {
+            MaxTimeForIncidentsTextBox.Text = Settings.Default.MaxTimeForIncidents.TotalSeconds.ToString();
+            MaxTimeForInterestingEventTextBox.Text = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds.ToString();
+            PreferredDriverNameTextBox.Text = Settings.Default.PreferredDriverName;
+        }
 
-		private void okButton_Click(object sender, EventArgs e)
-		{
-		}
+        private void okButton_Click(object sender, EventArgs e)
+        {
+        }
 
-		private void MaxTimeForIncidentsTextBox_TextChanged(object sender, EventArgs e)
-		{
-			var newSeconds=0.0;
-			if(double.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds))
-			{
-				Settings.Default.MaxTimeForIncidents=TimeSpan.FromSeconds(newSeconds);
-				Settings.Default.Save();
-			}
-		}
+        private void MaxTimeForIncidentsTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var newSeconds = 0.0;
+            if (double.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds))
+            {
+                Settings.Default.MaxTimeForIncidents = TimeSpan.FromSeconds(newSeconds);
+                Settings.Default.Save();
+            }
+        }
 
-		private void MaxTimeForInterestingEventTextBox_TextChanged(object sender, EventArgs e)
-		{
-			var newSeconds=0.0;
-			if(double.TryParse(MaxTimeForInterestingEventTextBox.Text, out newSeconds))
-			{
-				Settings.Default.MaxTimeForInterestingEvent=TimeSpan.FromSeconds(newSeconds);
-				Settings.Default.Save();
-			}
-		}
+        private void MaxTimeForInterestingEventTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var newSeconds = 0.0;
+            if (double.TryParse(MaxTimeForInterestingEventTextBox.Text, out newSeconds))
+            {
+                Settings.Default.MaxTimeForInterestingEvent = TimeSpan.FromSeconds(newSeconds);
+                Settings.Default.Save();
+            }
+        }
 
-		private void PreferredDriverNameTextBox_TextChanged(object sender, EventArgs e)
-		{
-			Settings.Default.PreferredDriverName=PreferredDriverNameTextBox.Text;
-			Settings.Default.Save();
-		}
-	}
+        private void PreferredDriverNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.PreferredDriverName = PreferredDriverNameTextBox.Text;
+            Settings.Default.Save();
+        }
+    }
 }
