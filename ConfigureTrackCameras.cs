@@ -133,11 +133,36 @@ namespace iRacingReplayOverlay
                 return;
 
             foreach (var camera in sample.SessionData.CameraInfo.Groups)
-                trackCameras.Add(new TrackCamera
+            {
+                TrackCamera trackCamera = new TrackCamera();
+
+                trackCamera.TrackName = sample.SessionData.WeekendInfo.TrackDisplayName;
+                trackCamera.CameraName = camera.GroupName;
+                trackCamera.CameraAngle=TrackCameraAngle.LookingAtTrack;
+
+                switch(trackCamera.CameraName)
                 {
-                    TrackName = sample.SessionData.WeekendInfo.TrackDisplayName,
-                    CameraName = camera.GroupName
-                });
+                    case "Nose": trackCamera.CameraAngle = TrackCameraAngle.LookingInfrontOfCar; break;
+                    case "Gearbox": trackCamera.CameraAngle = TrackCameraAngle.LookingBehindCar; break;
+                    case "Roll Bar": trackCamera.CameraAngle = TrackCameraAngle.LookingInfrontOfCar; break;
+                    case "LF Susp": trackCamera.CameraAngle = TrackCameraAngle.LookingInfrontOfCar; break;
+                    case "RF Susp": trackCamera.CameraAngle = TrackCameraAngle.LookingInfrontOfCar; break;
+                    case "LR Susp": trackCamera.CameraAngle = TrackCameraAngle.LookingBehindCar; break;
+                    case "RR Susp": trackCamera.CameraAngle = TrackCameraAngle.LookingBehindCar; break;
+                    case "Gyro": trackCamera.CameraAngle = TrackCameraAngle.LookingInfrontOfCar; break;
+                    case "Cockpit": trackCamera.CameraAngle = TrackCameraAngle.LookingInfrontOfCar; break;
+                    case "Blimp": trackCamera.CameraAngle = TrackCameraAngle.LookingAtCar; break;
+                    case "Chopper": trackCamera.CameraAngle = TrackCameraAngle.LookingAtCar; break;
+                    case "Chase": trackCamera.CameraAngle = TrackCameraAngle.LookingInfrontOfCar; break;
+                    case "Rear Chase": trackCamera.CameraAngle = TrackCameraAngle.LookingBehindCar; break;
+                    case "Far Chase": trackCamera.CameraAngle = TrackCameraAngle.LookingAtCar; break;
+                    case "TV1": trackCamera.CameraAngle = TrackCameraAngle.LookingAtCar; break;
+                    case "TV2": trackCamera.CameraAngle = TrackCameraAngle.LookingAtCar; break;
+                    case "TV3": trackCamera.CameraAngle = TrackCameraAngle.LookingAtCar; break;
+                }
+
+                trackCameras.Add(trackCamera);
+            }
         }
 
         private void InitaliseListOfCameras()

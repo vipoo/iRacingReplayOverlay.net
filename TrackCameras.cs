@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay
 {
+    public enum TrackCameraAngle
+    {
+        LookingInfrontOfCar,
+        LookingBehindCar,
+        LookingAtCar,
+        LookingAtTrack
+    }
+
     public class TrackCameras : List<TrackCamera>
     {
     }
@@ -16,5 +24,6 @@ namespace iRacingReplayOverlay
         public string CameraName;
         public int Ratio;
         public short CameraNumber;
+        public TrackCameraAngle CameraAngle;
     }
 }
