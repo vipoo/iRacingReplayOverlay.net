@@ -90,41 +90,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident.MoveNext();
         }
 
-        bool IsShowingIncident(DataSample data)
-        {
-            if (!(isShowingIncident && nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime))
-                return false;
-
-            if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall && incidentPitBoxStartTime == 0)
-            {
-                Trace.WriteLine("Incident car is in pit stall {0}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
-                incidentPitBoxStartTime = data.Telemetry.SessionTime;
-            }
-
-            if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall && incidentPitBoxStartTime + 2 < data.Telemetry.SessionTime)
-            {
-                Trace.WriteLine("Finishing showing incident as car is in pit stall {0}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
-                return false;
-            }
-
-            removalEdits.InterestingThingHappend(data);
-
-            return true;
-        }
-
-        private bool IsFinishedShowingIncident(DataSample data)
-        {
-            if (!isShowingIncident)
-                return false;
-
-            removalEdits.InterestingThingHappend(data);
-            Trace.WriteLine("Finishing incident from {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)), "INFO");
-
-            isShowingIncident = false;
-            nextIncident.MoveNext();
-            return true;
-        }
-
         public bool Process(DataSample data)
         {
             if (OnLastLap(data))
@@ -157,15 +122,6 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TrackCamera camera;
             SessionData._DriverInfo._Drivers car;
-
-            /*if( !data.Telemetry.CamCar.HasData)
-            {
-                    camera = FindACamera();
-                    car = FindARandomDriver(data);
-                    Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera number {2} as previous car has drop out".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
-                    iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
-                    return false;
-            }*/
 
             if (!finishedShowingIncident && !TwentySecondsAfterLastCameraChange(data))
             {
@@ -205,7 +161,42 @@ namespace iRacingReplayOverlay.Phases.Direction
             return false;
         }
 
-        private bool SwitchToIncident(DataSample data)
+        bool IsShowingIncident(DataSample data)
+        {
+            if (!(isShowingIncident && nextIncident.Current.EndSessionTime >= data.Telemetry.SessionTime))
+                return false;
+
+            if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall && incidentPitBoxStartTime == 0)
+            {
+                Trace.WriteLine("Incident car is in pit stall {0}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
+                incidentPitBoxStartTime = data.Telemetry.SessionTime;
+            }
+
+            if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall && incidentPitBoxStartTime + 2 < data.Telemetry.SessionTime)
+            {
+                Trace.WriteLine("Finishing showing incident as car is in pit stall {0}".F(TimeSpan.FromSeconds(data.Telemetry.SessionTime)));
+                return false;
+            }
+
+            removalEdits.InterestingThingHappend(data);
+
+            return true;
+        }
+
+        bool IsFinishedShowingIncident(DataSample data)
+        {
+            if (!isShowingIncident)
+                return false;
+
+            removalEdits.InterestingThingHappend(data);
+            Trace.WriteLine("Finishing incident from {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)), "INFO");
+
+            isShowingIncident = false;
+            nextIncident.MoveNext();
+            return true;
+        }
+
+        bool SwitchToIncident(DataSample data)
         {
             if (nextIncident.Current != null && (nextIncident.Current.StartSessionTime) < data.Telemetry.SessionTime)
             {
@@ -224,7 +215,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             return false;
         }
 
-        private void SkipOverlappingIncidents(DataSample data)
+        void SkipOverlappingIncidents(DataSample data)
         {
             while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
             {
@@ -233,7 +224,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
         }
 
-        private bool SwitchToFinishingDrivers(DataSample data)
+        bool SwitchToFinishingDrivers(DataSample data)
         {
             removalEdits.InterestingThingHappend(data);
 
@@ -324,6 +315,25 @@ namespace iRacingReplayOverlay.Phases.Direction
             return sessionData.DriverInfo.Drivers[preferredCars[next].CarIdx];
         }
 
+        TrackCamera FindACamera()
+        {
+            var rand = random.Next(100);
+            var offset = 0;
+            var camera = TV2;
+
+            foreach (var tc in cameras)
+            {
+                if (rand < tc.Ratio + offset)
+                {
+                    camera = tc;
+                    break;
+                }
+                offset += tc.Ratio;
+            }
+
+            return camera;
+        }
+
         static SessionData._DriverInfo._Drivers FindCarWithinRange(DataSample data, double range)
         {
             var distances = data.Telemetry.CarIdxDistance
@@ -356,25 +366,6 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return data.SessionData.DriverInfo.Drivers[closest.CarIdx];
 
             return null;
-        }
-
-        TrackCamera FindACamera()
-        {
-            var rand = random.Next(100);
-            var offset = 0;
-            var camera = TV2;
-
-            foreach (var tc in cameras)
-            {
-                if (rand < tc.Ratio + offset)
-                {
-                    camera = tc;
-                    break;
-                }
-                offset += tc.Ratio;
-            }
-
-            return camera;
         }
 
         static SessionData._DriverInfo._Drivers ChangeCarForCamera(DataSample data, TrackCamera camera, SessionData._DriverInfo._Drivers driver)
