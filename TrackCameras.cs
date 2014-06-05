@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay
 {
-    public enum TrackCameraAngle
+    public enum CameraAngle
     {
         LookingInfrontOfCar,
         LookingBehindCar,
@@ -20,10 +20,37 @@ namespace iRacingReplayOverlay
 
     public class TrackCamera
     {
+        static Dictionary<string, CameraAngle> cameraAngles = new Dictionary<string, CameraAngle>
+        {
+            { "Nose", CameraAngle.LookingInfrontOfCar },
+            { "Gearbox", CameraAngle.LookingBehindCar },
+            { "Roll Bar", CameraAngle.LookingInfrontOfCar },
+            { "LF Susp", CameraAngle.LookingInfrontOfCar },
+            { "RF Susp", CameraAngle.LookingInfrontOfCar },
+            { "LR Susp", CameraAngle.LookingBehindCar },
+            { "RR Susp", CameraAngle.LookingBehindCar },
+            { "Gyro", CameraAngle.LookingInfrontOfCar },
+            { "Cockpit", CameraAngle.LookingInfrontOfCar },
+            { "Blimp", CameraAngle.LookingAtCar },
+            { "Chopper", CameraAngle.LookingAtCar },
+            { "Chase", CameraAngle.LookingInfrontOfCar },
+            { "Rear Chase", CameraAngle.LookingBehindCar },
+            { "Far Chase", CameraAngle.LookingAtCar },
+            { "TV1", CameraAngle.LookingAtCar },
+            { "TV2", CameraAngle.LookingAtCar },
+            { "TV3", CameraAngle.LookingAtCar }
+        };
+
         public string TrackName;
         public string CameraName;
         public int Ratio;
         public short CameraNumber;
-        public TrackCameraAngle CameraAngle;
+        public CameraAngle CameraAngle
+        {
+            get
+            {
+                return cameraAngles[CameraName];
+            }
+        }
     }
 }
