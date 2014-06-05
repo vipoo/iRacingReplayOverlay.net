@@ -443,7 +443,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var car = data.Telemetry.Cars[driver.CarIdx];
 
-            if (camera.CameraName == "Gearbox")
+            if (camera.CameraAngle == CameraAngle.LookingBehindCar)
             {
                 Trace.WriteLine("Changing to forward car, with reverse camera");
                 car = data.Telemetry.Cars.First(c => c.Position == car.Position - 1);
