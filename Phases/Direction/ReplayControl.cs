@@ -50,6 +50,9 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly RemovalEdits removalEdits;
         readonly IList<SessionData._DriverInfo._Drivers> preferredCars;
         readonly double maxTimeForInterestingEvent;
+        readonly List<CameraAngle> forwardCameraAngles;
+        readonly List<CameraAngle> battleCameraAngles;
+        readonly List<CameraAngle> normalCameraAngles;
 
         ViewType currentlyViewing;
         double lastTimeStamp = 0;
@@ -58,6 +61,8 @@ namespace iRacingReplayOverlay.Phases.Direction
         DateTime timeOfFinisher = DateTime.Now;
         int lastFinisherCarIdx = -1;
         DateTime lastTimeLeaderWasSelected = DateTime.Now;
+        long previousCarIdx = -1;
+        long previousCarPosition = -1;
 
         public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, TrackCameras trackCameras)
         {
@@ -69,7 +74,24 @@ namespace iRacingReplayOverlay.Phases.Direction
             randomDriverNumber = new Random();
             randomPreferredDriver = new Random();
 
-            IEnumerable<string> preferredDriverNames=Settings.Default.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim());
+            forwardCameraAngles = new List<CameraAngle>
+            {
+                CameraAngle.LookingInfrontOfCar, 
+            };
+            battleCameraAngles = new List<CameraAngle>
+            {
+                CameraAngle.LookingInfrontOfCar, 
+                CameraAngle.LookingBehindCar,
+                CameraAngle.LookingAtCar
+            };
+            normalCameraAngles = new List<CameraAngle>
+            {
+                CameraAngle.LookingInfrontOfCar, 
+                CameraAngle.LookingAtCar,
+                CameraAngle.LookingAtTrack
+            };
+
+            IEnumerable<string> preferredDriverNames = Settings.Default.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim());
             preferredCars = sessionData.DriverInfo.Drivers.Where(x => preferredDriverNames.Contains(x.UserName)).ToList();
             maxTimeForInterestingEvent = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds;
 
@@ -122,8 +144,19 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TrackCamera camera;
             SessionData._DriverInfo._Drivers car;
+            bool currentCarOvertake = false;
 
-            if (!finishedShowingIncident && !TwentySecondsAfterLastCameraChange(data))
+            // Find car of previous iteration
+            Car previousCar = data.Telemetry.Cars.FirstOrDefault(x => x.CarIdx == previousCarIdx);
+            if (previousCar != null)
+            {
+                // Detect if car has been overtaken
+                long currentPositionOfPreviousCar = data.Telemetry.Cars.FirstOrDefault(x => x.CarIdx == previousCarIdx).Position;
+                if (currentPositionOfPreviousCar > previousCarPosition) currentCarOvertake = true;
+            }
+
+            // Continue only if incident is finished or camera has not chaged for 20s or car has been overtaken
+            if (!finishedShowingIncident && !TwentySecondsAfterLastCameraChange(data) && !currentCarOvertake)
             {
                 if (currentlyViewing != ViewType.RandomCar)
                     removalEdits.InterestingThingHappend(data);
@@ -133,30 +166,50 @@ namespace iRacingReplayOverlay.Phases.Direction
             lastTimeStamp = data.Telemetry.SessionTime;
 
             car = FindCarWithinRange(data, maxTimeForInterestingEvent);
-            camera = FindACamera();
-            car = ChangeCarForCamera(data, camera, car);
             if (car != null)
             {
                 currentlyViewing = ViewType.CloseBattle;
+
+                // In a battle use only battle cameraAngles
+                camera = FindACamera(battleCameraAngles);
+                car = ChangeCarForCamera(data, camera, car);
                 removalEdits.InterestingThingHappend(data);
                 Trace.WriteLine("{0} Changing camera to driver number {1}, using camera {2} - within {3} seconds".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName, maxTimeForInterestingEvent), "INFO");
             }
             else
             {
                 currentlyViewing = ViewType.RandomCar;
+
                 if (preferredCars.Count() == 0)
                 {
                     car = FindARandomDriver(data);
+                    camera = FindACamera(normalCameraAngles);
                     Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
                 }
                 else
                 {
                     car = FindAPreferredDriver();
+                    camera = FindACamera(normalCameraAngles);
                     Trace.WriteLine("{0} Changing camera to preferred driver number {1}, using camera {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
                 }
             }
 
+            long currentCarPosition = data.Telemetry.Cars.FirstOrDefault(x => x.CarIdx == car.CarIdx).Position;
+
+            if (car.CarIdx == previousCarIdx)
+            {
+                if (currentCarPosition > previousCarPosition)
+                {
+                    // After overtake switch to forward cameraAngles
+                    camera = FindACamera(forwardCameraAngles);
+                    Trace.WriteLine("{0} Driver number {1} has been passed, switching to forward camera {2}".F(TimeSpan.FromSeconds(lastTimeStamp), car.CarNumber, camera.CameraName), "INFO");
+                }
+            }
+
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+
+            previousCarIdx = car.CarIdx;
+            previousCarPosition = currentCarPosition;
 
             return false;
         }
@@ -315,13 +368,28 @@ namespace iRacingReplayOverlay.Phases.Direction
             return sessionData.DriverInfo.Drivers[preferredCars[next].CarIdx];
         }
 
-        TrackCamera FindACamera()
+        TrackCamera FindACamera(IList<CameraAngle> cameraAngles)
         {
-            var rand = random.Next(100);
+            var rand = 0;
             var offset = 0;
             var camera = TV2;
 
-            foreach (var tc in cameras)
+            // Filter cameras to take only those having the specified TrackCameraAngles
+            IEnumerable<TrackCamera> selectableCameras = cameras.Where(x => cameraAngles.Contains(x.CameraAngle));
+            int total = selectableCameras.Sum(x => x.Ratio);
+
+            // If no camera within specified cameraAngles has non zero ratio select among all
+            if (total == 0)
+            {
+                selectableCameras = cameras;
+                rand = random.Next(100);
+            }
+            else
+            {
+                rand = random.Next(total);
+            }
+
+            foreach (var tc in selectableCameras)
             {
                 if (rand < tc.Ratio + offset)
                 {
