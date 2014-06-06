@@ -33,7 +33,7 @@ namespace iRacingReplayOverlay
 
         private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
         {
-            MaxTimeForIncidentsTextBox.Text = Settings.Default.MaxTimeForIncidents.TotalSeconds.ToString();
+            MaxTimeBetweenCameraChangesTextBox.Text = Settings.Default.MaxTimeBetweenCameraChanges.TotalSeconds.ToString();
             MaxTimeForInterestingEventTextBox.Text = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds.ToString();
             PreferredDriverNameTextBox.Text = Settings.Default.PreferredDriverNames;
         }
@@ -42,12 +42,12 @@ namespace iRacingReplayOverlay
         {
         }
 
-        private void MaxTimeForIncidentsTextBox_TextChanged(object sender, EventArgs e)
+        private void MaxTimeBetweenCameraSwitchesTextBox_TextChanged(object sender, EventArgs e)
         {
             var newSeconds = 0.0;
-            if (double.TryParse(MaxTimeForIncidentsTextBox.Text, out newSeconds))
+            if (double.TryParse(MaxTimeBetweenCameraChangesTextBox.Text, out newSeconds))
             {
-                Settings.Default.MaxTimeForIncidents = TimeSpan.FromSeconds(newSeconds);
+                Settings.Default.MaxTimeBetweenCameraChanges = TimeSpan.FromSeconds(newSeconds);
                 Settings.Default.Save();
             }
         }

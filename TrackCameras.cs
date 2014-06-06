@@ -49,7 +49,12 @@ namespace iRacingReplayOverlay
         {
             get
             {
-                return cameraAngles[CameraName];
+                CameraAngle cameraAngle;
+
+                if(cameraAngles.TryGetValue(CameraName, out cameraAngle))
+                    return cameraAngle;
+                else 
+                    return CameraAngle.LookingAtTrack;
             }
         }
     }

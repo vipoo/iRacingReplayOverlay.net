@@ -96,13 +96,13 @@ namespace iRacingReplayOverlay {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:00:10")]
-        public global::System.TimeSpan MaxTimeForIncidents {
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:20")]
+        public global::System.TimeSpan MaxTimeBetweenCameraChanges {
             get {
-                return ((global::System.TimeSpan)(this["MaxTimeForIncidents"]));
+                return ((global::System.TimeSpan)(this["MaxTimeBetweenCameraChanges"]));
             }
             set {
-                this["MaxTimeForIncidents"] = value;
+                this["MaxTimeBetweenCameraChanges"] = value;
             }
         }
         

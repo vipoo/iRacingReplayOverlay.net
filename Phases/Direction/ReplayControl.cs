@@ -50,6 +50,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly RemovalEdits removalEdits;
         readonly IList<SessionData._DriverInfo._Drivers> preferredCars;
         readonly double maxTimeForInterestingEvent;
+        readonly double maxTimeBetweenCameraChanges;
         readonly List<CameraAngle> forwardCameraAngles;
         readonly List<CameraAngle> battleCameraAngles;
         readonly List<CameraAngle> normalCameraAngles;
@@ -94,6 +95,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             IEnumerable<string> preferredDriverNames = Settings.Default.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim());
             preferredCars = sessionData.DriverInfo.Drivers.Where(x => preferredDriverNames.Contains(x.UserName)).ToList();
             maxTimeForInterestingEvent = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds;
+            maxTimeBetweenCameraChanges = Settings.Default.MaxTimeBetweenCameraChanges.TotalSeconds;
 
             cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
@@ -155,8 +157,8 @@ namespace iRacingReplayOverlay.Phases.Direction
                 if (currentPositionOfPreviousCar > previousCarPosition) currentCarOvertake = true;
             }
 
-            // Continue only if incident is finished or camera has not chaged for 20s or car has been overtaken
-            if (!finishedShowingIncident && !TwentySecondsAfterLastCameraChange(data) && !currentCarOvertake)
+            // Continue only if incident is finished or camera has not changed for 20s or car has been overtaken
+            if (!finishedShowingIncident && !CameraChanged(data) && !currentCarOvertake)
             {
                 if (currentlyViewing != ViewType.RandomCar)
                     removalEdits.InterestingThingHappend(data);
@@ -320,9 +322,9 @@ namespace iRacingReplayOverlay.Phases.Direction
             return false;
         }
 
-        bool TwentySecondsAfterLastCameraChange(DataSample data)
+        bool CameraChanged(DataSample data)
         {
-            return lastTimeStamp + 20.0 <= data.Telemetry.SessionTime;
+            return lastTimeStamp + maxTimeBetweenCameraChanges <= data.Telemetry.SessionTime;
         }
 
         bool IsBeforeFirstLapSector2(DataSample data)
