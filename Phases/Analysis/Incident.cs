@@ -35,6 +35,11 @@ namespace iRacingReplayOverlay.Phases.Analysis
             public double EndSessionTime;
             public int StartFrameNumber;
             public int CarIdx;
+
+            public bool IsInside(double time)
+            {
+                return time >= StartSessionTime && time <= EndSessionTime;
+            }
         }
 
         List<Incident> incidents = new List<Incident>();
