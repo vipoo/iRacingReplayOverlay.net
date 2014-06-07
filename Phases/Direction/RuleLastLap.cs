@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleLastLap
+    public class RuleLastSectors
     {
         readonly RemovalEdits removalEdits;
         readonly TrackCamera[] cameras;
@@ -34,7 +34,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         int lastFinisherCarIdx = -1;
         DateTime timeOfFinisher = DateTime.Now;
 
-        public RuleLastLap(TrackCamera[] cameras, RemovalEdits removalEdits)
+        public RuleLastSectors(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
             this.cameras = cameras;
             this.removalEdits = removalEdits;

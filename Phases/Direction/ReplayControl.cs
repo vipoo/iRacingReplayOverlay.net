@@ -59,7 +59,6 @@ namespace iRacingReplayOverlay.Phases.Direction
         double lastTimeStamp = 0;
         bool isShowingIncident;
         double incidentPitBoxStartTime = 0;
-        DateTime lastTimeLeaderWasSelected = DateTime.Now;
         long previousCarIdx = -1;
         long previousCarPosition = -1;
 
@@ -113,7 +112,10 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident = incidents.GetEnumerator();
             nextIncident.MoveNext();
 
-            directionRules = new Func<DataSample, bool>[] { new RuleLastLap(cameras, removalEdits).Process };
+            directionRules = new Func<DataSample, bool>[] { 
+                new RuleLastSectors(cameras, removalEdits).Process,
+                new RuleFirstSectors(cameras, removalEdits).Process
+            };
         }
 
         public void Process(DataSample data)
@@ -121,12 +123,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             foreach (var rule in directionRules)
                 if (rule(data))
                     return;
-
-            if (IsBeforeFirstLapSector2(data))
-            {
-                currentlyViewing = ViewType.FirstLap;
-                return;
-            }
 
             if (IsShowingIncident(data))
             {
@@ -280,24 +276,6 @@ namespace iRacingReplayOverlay.Phases.Direction
         bool CameraChanged(DataSample data)
         {
             return lastTimeStamp + maxTimeBetweenCameraChanges <= data.Telemetry.SessionTime;
-        }
-
-        bool IsBeforeFirstLapSector2(DataSample data)
-        {
-            var result = data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
-            if (result)
-            {
-                removalEdits.InterestingThingHappend(data);
-
-                if ((DateTime.Now - lastTimeLeaderWasSelected).TotalSeconds > 5)
-                {
-                    iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
-
-                    lastTimeLeaderWasSelected = DateTime.Now;
-                }
-            }
-
-            return result;
         }
 
         SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)
