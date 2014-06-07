@@ -99,10 +99,8 @@ namespace iRacingReplayOverlay.Phases
                 var relativeTime = DateTime.Now - startTime;
 
                 sessionDataCapture.Process(data);
-
                 captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
                 captureCamDriverEveryQuaterSecond.Process(data, relativeTime);
-
                 fastestLaps.Process(data, relativeTime);
                 replayControl.Process(data);
                 removalEdits.Process(data, relativeTime);

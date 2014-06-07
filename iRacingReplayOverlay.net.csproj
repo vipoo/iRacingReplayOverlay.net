@@ -98,6 +98,7 @@
     <Compile Include="Phases\Transcoding\Editor.cs" />
     <Compile Include="Support\LogListener.cs" />
     <Compile Include="Support\Messages.cs" />
+    <Compile Include="Support\SimpleProfiler.cs" />
     <Compile Include="TrackCameras.cs" />
     <Compile Include="DllImports\Win32\Messages.cs" />
     <Compile Include="Main.cs">

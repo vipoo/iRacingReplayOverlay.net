@@ -54,7 +54,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         bool OnLastSectors(DataSample data)
         {
-            var totalLaps = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
+            var totalLaps = data.Telemetry.Session.ResultsLapsComplete;
             return data.Telemetry.RaceLapSector >= new LapSector((int)totalLaps, 1);
         }
 
