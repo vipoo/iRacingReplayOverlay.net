@@ -84,6 +84,8 @@
     <Compile Include="Phases\Capturing\SampleFilter.cs" />
     <Compile Include="Phases\Capturing\CaptureCamDriver.cs" />
     <Compile Include="Phases\Capturing\SessionDataCapture.cs" />
+    <Compile Include="Phases\Direction\CameraControl.cs" />
+    <Compile Include="Phases\Direction\RuleBattle.cs" />
     <Compile Include="Phases\Direction\RuleFirstSectors.cs" />
     <Compile Include="Phases\Direction\RuleIncident.cs" />
     <Compile Include="Phases\Direction\RuleLastSectors.cs" />

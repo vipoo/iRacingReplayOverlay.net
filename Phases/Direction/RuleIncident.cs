@@ -44,10 +44,11 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             nextIncident = incidents.GetEnumerator();
             nextIncident.MoveNext();
-
+            if(nextIncident.Current != null)
+                Trace.WriteLine("First incident at {0}".F(nextIncident.Current.StartSessionTimeSpan), "INFO");
             TV2 = cameras.First(tc => tc.CameraName == "TV2");
         }
-
+        
         public bool Process(DataSample data)
         {
             var position = GetIncidentPosition(data);
@@ -64,8 +65,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     return true;
 
                 case IncidentPosition.Finished:
-                    WatchForNextIncident();
-                    SkipOverlappingIncidents(data);
+                    WatchForNextIncident(data);
                     removalEdits.InterestingThingHappend(data);
                     return true;
 
@@ -78,6 +78,12 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         IncidentPosition GetIncidentPosition(DataSample data)
         {
+            if (nextIncident.Current == null)
+                return IncidentPosition.Outside;
+
+            if (!isInside)
+                SkipMissedIncidents(data);
+
             if (nextIncident.Current == null)
                 return IncidentPosition.Outside;
 
@@ -115,20 +121,28 @@ namespace iRacingReplayOverlay.Phases.Direction
             return false;
         }
 
-        void WatchForNextIncident()
+        void WatchForNextIncident(DataSample data)
         {
-            Trace.WriteLine("Finishing incident from {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)), "INFO");
+            Trace.WriteLine("{0} Finishing incident from {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTimeSpan), "INFO");
 
             nextIncident.MoveNext();
+
+            if(nextIncident.Current != null)
+                Trace.WriteLine("{0} (Move) Next incident at {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTimeSpan), "INFO");
         }
 
-        void SkipOverlappingIncidents(DataSample data)
+        void SkipMissedIncidents(DataSample data)
         {
-            while (nextIncident.Current != null && nextIncident.Current.StartSessionTime + 1 < data.Telemetry.SessionTime)
+            var hasSkipped = false;
+            while (nextIncident.Current != null && (nextIncident.Current.StartSessionTime + 1.0) < data.Telemetry.SessionTime)
             {
-                Trace.WriteLine("Skipping incident at time {0}".F(TimeSpan.FromSeconds(nextIncident.Current.StartSessionTime)), "INFO");
+                hasSkipped = true;
+                Trace.WriteLine("{0} Skipping incident at time {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTimeSpan), "INFO");
                 nextIncident.MoveNext();
             }
+
+            if (nextIncident.Current != null && hasSkipped)
+                Trace.WriteLine("{0} (Skip) Next incident at {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTimeSpan), "INFO");
         }
 
         void SwitchToIncident(DataSample data)
@@ -137,7 +151,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var incidentCar = data.SessionData.DriverInfo.Drivers[nextIncident.Current.CarIdx];
 
-            Trace.WriteLine("{0} Showing incident with {1}".F(data.Telemetry.SessionTimeSpan, incidentCar.UserName), "INFO");
+            Trace.WriteLine("{0} Showing incident with {1} starting from {2}".F(data.Telemetry.SessionTimeSpan, incidentCar.UserName, nextIncident.Current.StartSessionTimeSpan), "INFO");
 
             iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
         }

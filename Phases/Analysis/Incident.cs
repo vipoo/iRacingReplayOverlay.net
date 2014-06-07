@@ -40,6 +40,9 @@ namespace iRacingReplayOverlay.Phases.Analysis
             {
                 return time >= StartSessionTime && time <= EndSessionTime;
             }
+
+            public TimeSpan StartSessionTimeSpan { get { return TimeSpan.FromSeconds(StartSessionTime); } }
+            public TimeSpan EndSessionTimeSpan { get { return TimeSpan.FromSeconds(EndSessionTime); } }
         }
 
         List<Incident> incidents = new List<Incident>();
