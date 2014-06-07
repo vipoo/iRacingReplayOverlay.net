@@ -194,14 +194,6 @@ namespace iRacingReplayOverlay.Phases.Direction
                 Position = g.Position
             });
 
-
-            Trace.WriteLine("============================= {0}".F(range));
-            foreach( var x in timeGap.OrderBy(c=>c.Position))
-            {
-                Trace.WriteLine("{0} ~= {1}".F(data.Telemetry.Cars[x.CarIdx].UserName, x.Time));
-            }
-            Trace.WriteLine("=============================");
-
             var closest = timeGap
                 .OrderBy(d => d.Position)
                 .FirstOrDefault(d => d.Time < range);

@@ -19,6 +19,7 @@
 
 using iRacingReplayOverlay.Support;
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,18 +32,14 @@ namespace iRacingReplayOverlay.Phases.Analysis
         public class Incident
         {
             public int LapNumber;
-            public double StartSessionTime;
-            public double EndSessionTime;
-            public int StartFrameNumber;
-            public int CarIdx;
+            public TimeSpan StartSessionTime;
+            public TimeSpan EndSessionTime;
+            public Car Car;
 
-            public bool IsInside(double time)
+            public bool IsInside(TimeSpan time)
             {
                 return time >= StartSessionTime && time <= EndSessionTime;
             }
-
-            public TimeSpan StartSessionTimeSpan { get { return TimeSpan.FromSeconds(StartSessionTime); } }
-            public TimeSpan EndSessionTimeSpan { get { return TimeSpan.FromSeconds(EndSessionTime); } }
         }
 
         List<Incident> incidents = new List<Incident>();
@@ -61,19 +58,18 @@ namespace iRacingReplayOverlay.Phases.Analysis
             var i = new Incident 
             {
                 LapNumber = data.Telemetry.RaceLaps, 
-                CarIdx = data.Telemetry.CamCarIdx, 
-                StartFrameNumber = data.Telemetry.ReplayFrameNum,
-                StartSessionTime = data.Telemetry.SessionTime - 1,
-                EndSessionTime = data.Telemetry.SessionTime + 8
+                Car = data.Telemetry.CamCar, 
+                StartSessionTime = data.Telemetry.SessionTimeSpan - 1.Seconds(),
+                EndSessionTime = data.Telemetry.SessionTimeSpan + 8.Seconds()
             };
 
             if( lastIncident == null )
                 lastIncident = i;
            
-            else if (lastIncident.CarIdx != i.CarIdx)
+            else if (lastIncident.Car.CarIdx != i.Car.CarIdx)
                 AddLastIncident(i);
             
-            else if(lastIncident.EndSessionTime + 15.0 < i.StartSessionTime)
+            else if(lastIncident.EndSessionTime + 15.Seconds() < i.StartSessionTime)
                 AddLastIncident(i);
             
             else
@@ -85,9 +81,9 @@ namespace iRacingReplayOverlay.Phases.Analysis
             if (lastIncident != null)
             {
                 Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
-                    lastIncident.CarIdx, lastIncident.LapNumber,
-                    TimeSpan.FromSeconds(lastIncident.StartSessionTime),
-                    TimeSpan.FromSeconds(lastIncident.EndSessionTime)), "INFO");
+                    lastIncident.Car.UserName, lastIncident.LapNumber,
+                    lastIncident.StartSessionTime,
+                    lastIncident.EndSessionTime), "INFO");
                 incidents.Add(lastIncident);
             }
         }
@@ -95,9 +91,9 @@ namespace iRacingReplayOverlay.Phases.Analysis
         void AddLastIncident(Incident i)
         {
             Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
-                lastIncident.CarIdx, lastIncident.LapNumber,
-                TimeSpan.FromSeconds(lastIncident.StartSessionTime),
-                TimeSpan.FromSeconds(lastIncident.EndSessionTime)), "INFO");
+                lastIncident.Car.UserName, lastIncident.LapNumber,
+                lastIncident.StartSessionTime,
+                lastIncident.EndSessionTime), "INFO");
             incidents.Add(lastIncident);
             lastIncident = i;
         }
