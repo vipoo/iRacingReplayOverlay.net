@@ -84,6 +84,7 @@
     <Compile Include="Phases\Capturing\SampleFilter.cs" />
     <Compile Include="Phases\Capturing\CaptureCamDriver.cs" />
     <Compile Include="Phases\Capturing\SessionDataCapture.cs" />
+    <Compile Include="Phases\Direction\RuleLastLap.cs" />
     <Compile Include="Phases\Transcode.cs" />
     <Compile Include="Phases\CaptureOpeningScenes.cs" />
     <Compile Include="Phases\Capturing\RemovalEdits.cs" />
