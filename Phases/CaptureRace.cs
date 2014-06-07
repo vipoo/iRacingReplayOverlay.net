@@ -20,6 +20,7 @@
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -79,7 +80,8 @@ namespace iRacingReplayOverlay.Phases
                 .WithCorrectedDistances()
                 .WithFastestLaps()
                 .WithFinishingStatus()
-                .TakeUntilEndOfReplay();
+                .TakeUntil(3.Seconds()).After(d => d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired))
+                .TakeUntil(3.Seconds()).AfterReplayPaused();
 
             bool haveSkipForTesting = false;
 
@@ -102,8 +104,7 @@ namespace iRacingReplayOverlay.Phases
                 captureCamDriverEveryQuaterSecond.Process(data, relativeTime);
 
                 fastestLaps.Process(data, relativeTime);
-                if (replayControl.Process(data))
-                    break;
+                replayControl.Process(data);
                 removalEdits.Process(data, relativeTime);
             }
 

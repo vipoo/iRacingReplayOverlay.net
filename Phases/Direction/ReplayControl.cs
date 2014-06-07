@@ -114,24 +114,25 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident.MoveNext();
         }
 
-        public bool Process(DataSample data)
+        public void Process(DataSample data)
         {
             if (OnLastLap(data))
             {
                 currentlyViewing = ViewType.LastLap;
-                return SwitchToFinishingDrivers(data);
+                SwitchToFinishingDrivers(data);
+                return;
             }
 
             if (IsBeforeFirstLapSector2(data))
             {
                 currentlyViewing = ViewType.FirstLap;
-                return false;
+                return;
             }
 
             if (IsShowingIncident(data))
             {
                 currentlyViewing = ViewType.Incident;
-                return false;
+                return;
             }
 
             var finishedShowingIncident = IsFinishedShowingIncident(data);
@@ -141,7 +142,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (SwitchToIncident(data))
             {
                 currentlyViewing = ViewType.Incident;
-                return false;
+                return;
             }
 
             TrackCamera camera;
@@ -162,7 +163,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             {
                 if (currentlyViewing != ViewType.RandomCar)
                     removalEdits.InterestingThingHappend(data);
-                return false;
+                return;
             }
 
             lastTimeStamp = data.Telemetry.SessionTime;
@@ -212,8 +213,6 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             previousCarIdx = car.CarIdx;
             previousCarPosition = currentCarPosition;
-
-            return false;
         }
 
         bool IsShowingIncident(DataSample data)
@@ -279,7 +278,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
         }
 
-        bool SwitchToFinishingDrivers(DataSample data)
+        void SwitchToFinishingDrivers(DataSample data)
         {
             removalEdits.InterestingThingHappend(data);
 
@@ -288,11 +287,11 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (lastFinisherCarIdx != -1 && !data.Telemetry.Cars[lastFinisherCarIdx].HasSeenCheckeredFlag)
             {
                 timeOfFinisher = DateTime.Now.AddSeconds(2);
-                return false;
+                return;
             }
 
             if (timeOfFinisher > DateTime.Now)
-                return false;
+                return;
 
             Car nextFinisher;
 
@@ -308,7 +307,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                         .FirstOrDefault();
 
             if (nextFinisher == null)
-                return true;
+                return;
 
             Trace.WriteLine("{0} Found {1} in position {2}".F(data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position), "DEBUG");
 
@@ -319,7 +318,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, TV2.CameraNumber);
 
-            return false;
+            return;
         }
 
         bool CameraChanged(DataSample data)
