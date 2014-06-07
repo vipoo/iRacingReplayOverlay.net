@@ -20,6 +20,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace iRacingReplayOverlay.Support
 {
@@ -27,17 +28,33 @@ namespace iRacingReplayOverlay.Support
     {
         static LogListener logFile;
         public string FileName { get; internal set; }
-     
+        StreamWriter file;
+
         public LogListener(string filename)
         {
             this.FileName = filename;
+            this.file = new StreamWriter(filename, true);
+            
             Write("\r\n");
             WriteLine("----------------------------");
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            file.Close();
+
+            base.Dispose(disposing);
+        }
+
+        public override void Flush()
+        {
+            file.Flush();
+            base.Flush();
+        }
+
         public override void Write(string message)
         {
-            File.AppendAllText(FileName, message);
+            file.Write(message);
         }
 
         string lastMessage = null;
