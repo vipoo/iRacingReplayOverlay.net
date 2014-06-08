@@ -27,7 +27,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleBattle
+    public class RuleBattle : IDirectionRule
     {
         enum BattlePosition { Started, Inside, Finished, Outside };
         struct BattleState
@@ -51,6 +51,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         TimeSpan battleEndTime;
         Car battleFollower;
         Car battleLeader;
+        Action directionAction;
         
         public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan battleStickyTime, TimeSpan battleGap)
         {
@@ -60,31 +61,43 @@ namespace iRacingReplayOverlay.Phases.Direction
             this.battleGap = battleGap;
         }
 
-        public bool Process(DataSample data)
+        public bool IsActive(DataSample data)
         {
             var state = GetBattlePosition(data);
 
             switch(state.State)
             {
                 case BattlePosition.Started:
-                    removalEdits.InterestingThingHappend(data);
-                    SwitchToBattle(data, state.Driver);
+                    directionAction = () =>
+                    {
+                        removalEdits.InterestingThingHappend(data);
+                        SwitchToBattle(data, state.Driver);
+                    };
                     return true;
 
                 case BattlePosition.Inside:
-                    UpdateCameraIfOvertake(data);
-                    removalEdits.InterestingThingHappend(data);
+                    directionAction = () =>
+                    {
+                        UpdateCameraIfOvertake(data);
+                        removalEdits.InterestingThingHappend(data);
+                    };
                     return true;
 
                 case BattlePosition.Finished:
-                    removalEdits.InterestingThingHappend(data);
-                    return false;
+                    directionAction = () => removalEdits.InterestingThingHappend(data);
+                    return true;
 
                 case BattlePosition.Outside:
+                    directionAction = () => { };
                     return false;
             }
 
             throw new Exception("Invalid Battle state {0}".F(state));
+        }
+
+        public void Direct(DataSample data)
+        {
+            directionAction();
         }
 
         void SwitchToBattle(DataSample data, SessionData._DriverInfo._Drivers follower)
@@ -105,7 +118,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (BattlersHaveSwappedPositions(data))
             {
-                Trace.WriteLine("{0} {1} has overtaken {2}".F(data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName));
+                Trace.WriteLine("{0} {1} has overtaken {2}".F(data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName), "INFO");
                 SwitchToBattle(data, battleLeader.Driver);
             }
         }

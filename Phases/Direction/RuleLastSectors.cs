@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleLastSectors
+    public class RuleLastSectors : IDirectionRule
     {
         readonly RemovalEdits removalEdits;
         readonly TrackCamera[] cameras;
@@ -41,15 +41,15 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TV2 = cameras.First(tc => tc.CameraName == "TV2");
         }
-        
-        public bool Process(DataSample data)
+
+        public bool IsActive(DataSample data)
         {
-            if (!OnLastSectors(data))
-                return false;
-
+            return OnLastSectors(data);
+        }
+        
+        public void Direct(DataSample data)
+        {
             SwitchToFinishingDrivers(data);
-
-            return true;
         }
 
         bool OnLastSectors(DataSample data)

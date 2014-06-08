@@ -28,7 +28,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleIncident
+    public class RuleIncident : IDirectionRule
     {
         enum IncidentPosition { Started, Inside, Finished, Outside };
 
@@ -38,6 +38,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         double pitBoxStartTime = 0;
         bool isInside = false;
+        Action directionAction;
 
         public RuleIncident(TrackCamera[] cameras, RemovalEdits removalEdits, Incidents incidents)
         {
@@ -49,32 +50,47 @@ namespace iRacingReplayOverlay.Phases.Direction
                 Trace.WriteLine("First incident at {0}".F(nextIncident.Current.StartSessionTime), "INFO");
             TV2 = cameras.First(tc => tc.CameraName == "TV2");
         }
-        
-        public bool Process(DataSample data)
+
+        public bool IsActive(DataSample data)
         {
             var position = GetIncidentPosition(data);
 
             switch( position)
             {
                 case IncidentPosition.Started:
-                    removalEdits.InterestingThingHappend(data);
-                    SwitchToIncident(data);
+                    directionAction = () =>
+                    {
+                        removalEdits.InterestingThingHappend(data);
+                        SwitchToIncident(data);
+                    };
                     return true;
 
                 case IncidentPosition.Inside:
-                    removalEdits.InterestingThingHappend(data);
+                    directionAction = () =>
+                    {
+                        removalEdits.InterestingThingHappend(data);
+                    };
                     return true;
 
                 case IncidentPosition.Finished:
-                    WatchForNextIncident(data);
-                    removalEdits.InterestingThingHappend(data);
+                    directionAction = () =>
+                    {
+                        WatchForNextIncident(data);
+                        removalEdits.InterestingThingHappend(data);
+                    };
                     return true;
 
                 case IncidentPosition.Outside:
+                    directionAction = () => { };
                     return false;
             }
 
             throw new Exception("Invalid Incident Position {0}".F(position));
+        }
+
+        public void Direct(DataSample data)
+        {
+            directionAction();
         }
 
         IncidentPosition GetIncidentPosition(DataSample data)

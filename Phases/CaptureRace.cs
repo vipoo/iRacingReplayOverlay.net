@@ -19,15 +19,15 @@
 
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
-using iRacingReplayOverlay.Support;
-using System.Collections.Generic;
-using System.IO;
 
 namespace iRacingReplayOverlay.Phases
 {

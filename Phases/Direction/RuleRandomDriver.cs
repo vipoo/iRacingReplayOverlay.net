@@ -24,14 +24,14 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleFirstSectors : IDirectionRule
+    public class RuleRandomDriver : IDirectionRule
     {
         readonly RemovalEdits removalEdits;
         readonly TrackCamera TV3;
 
         DateTime reselectLeaderAt = DateTime.Now;
 
-        public RuleFirstSectors(TrackCamera[] cameras, RemovalEdits removalEdits)
+        public RuleRandomDriver(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
             this.removalEdits = removalEdits;
             TV3 = cameras.First(tc => tc.CameraName == "TV3");
@@ -39,29 +39,11 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public bool IsActive(DataSample data)
         {
-            return OnFirstSecotrs(data);
+            return false;
         }
 
         public void Direct(DataSample data)
         {
-            SwitchToLeader(data);
-        }
-
-        bool OnFirstSecotrs(DataSample data)
-        {
-            return data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
-        }
-
-        void SwitchToLeader(DataSample data)
-        {
-            removalEdits.InterestingThingHappend(data);
-
-            if (reselectLeaderAt < DateTime.Now)
-            {
-                iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
-
-                reselectLeaderAt = DateTime.Now + 5.Seconds(); ;
-            }
         }
     }
 }

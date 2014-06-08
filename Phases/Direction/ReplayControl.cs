@@ -40,7 +40,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly IList<SessionData._DriverInfo._Drivers> preferredCars;
         readonly List<CameraAngle> normalCameraAngles;
 
-        readonly Func<DataSample, bool>[] directionRules;
+        readonly IDirectionRule[] directionRules;
         readonly CameraControl cameraControl;
         private TimeSpan jumptToNextRandomCarAt;
 
@@ -78,18 +78,25 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             cameraControl = new CameraControl(cameras);
 
-            directionRules = new Func<DataSample, bool>[] { 
-                new RuleLastSectors(cameras, removalEdits).Process,
-                new RuleFirstSectors(cameras, removalEdits).Process,
-                new RuleIncident(cameras, removalEdits, incidents).Process,
-                new RuleBattle(cameraControl, removalEdits, Settings.Default.MaxTimeBetweenCameraChanges, Settings.Default.MaxTimeForInterestingEvent).Process
+            directionRules = new IDirectionRule[] { 
+                new RuleLastSectors(cameras, removalEdits),
+                new RuleFirstSectors(cameras, removalEdits),
+                new RuleIncident(cameras, removalEdits, incidents),
+                new RuleBattle(cameraControl, removalEdits, Settings.Default.MaxTimeBetweenCameraChanges, Settings.Default.MaxTimeForInterestingEvent)
             };
+
+            currentRule = directionRules[0];
         }
+
+        IDirectionRule currentRule;
 
         public void Process(DataSample data)
         {
+            if (ActiveRule(currentRule, data))
+                return;
+
             foreach (var rule in directionRules)
-                if (rule(data))
+                if (ActiveRule(rule, data))
                     return;
 
             TrackCamera camera;
@@ -116,6 +123,17 @@ namespace iRacingReplayOverlay.Phases.Direction
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
+        bool ActiveRule(IDirectionRule rule, DataSample data)
+        {
+            if (rule.IsActive(data))
+            {
+                currentRule = rule;
+                rule.Direct(data);
+                return true;
+            }
+
+            return false;
+        }
         SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)
         {
             var activeDrivers = data.Telemetry.Cars
