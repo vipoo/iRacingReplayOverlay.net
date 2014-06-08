@@ -48,7 +48,7 @@ namespace iRacingReplayOverlay.Phases
 
         void _CaptureRace(Action<string, string> onComplete)
 		{
-			_CaptureRaceTest(onComplete, iRacing.GetDataFeed());
+			_CaptureRaceTest(onComplete, new iRacingConnection().GetBufferedDataFeed());
 		}
 
 		internal void _CaptureRaceTest(Action<string, string> onComplete, IEnumerable<DataSample> samples)
