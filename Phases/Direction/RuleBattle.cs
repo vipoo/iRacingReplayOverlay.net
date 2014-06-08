@@ -118,6 +118,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (BattlersHaveSwappedPositions(data))
             {
+                battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyTime;
                 Trace.WriteLine("{0} {1} has overtaken {2}".F(data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName), "INFO");
                 SwitchToBattle(data, battleLeader.Driver);
             }
