@@ -22,7 +22,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public static class RuleVetoExtensions
     {
-        public static IDirectionRule WithVeto(this IDirectionRule mainRule, IDirectionRule vetoRule)
+        public static IDirectionRule WithVeto(this IVetoRule mainRule, IDirectionRule vetoRule)
         {
             return new RuleVeto(mainRule, vetoRule);
         }
@@ -30,12 +30,13 @@ namespace iRacingReplayOverlay.Phases.Direction
 
     public class RuleVeto : IDirectionRule
     {
-        readonly IDirectionRule mainRule;
+        readonly IVetoRule mainRule;
         readonly IDirectionRule vetoRule;
 
         bool isVetoed = false;
+        private bool wasVetored;
 
-        public RuleVeto(IDirectionRule mainRule, IDirectionRule vetoRule)
+        public RuleVeto(IVetoRule mainRule, IDirectionRule vetoRule)
         {
             this.mainRule = mainRule;
             this.vetoRule = vetoRule;
@@ -44,7 +45,10 @@ namespace iRacingReplayOverlay.Phases.Direction
         public bool IsActive(DataSample data)
         {
             if (isVetoed = vetoRule.IsActive(data))
+            {
+                wasVetored = true;
                 return true;
+            }
 
             return mainRule.IsActive(data);
         }
@@ -56,6 +60,11 @@ namespace iRacingReplayOverlay.Phases.Direction
                 vetoRule.Direct(data);
                 return;
             }
+
+            if (wasVetored)
+                mainRule.Redirect(data);
+
+            wasVetored = false;
 
             mainRule.Direct(data);
         }

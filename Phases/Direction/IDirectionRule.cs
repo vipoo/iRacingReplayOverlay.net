@@ -25,4 +25,9 @@ namespace iRacingReplayOverlay.Phases.Direction
         bool IsActive(DataSample data);
         void Direct(DataSample data);
     }
+
+    public interface IVetoRule : IDirectionRule
+    {
+        void Redirect(DataSample data);
+    }
 }

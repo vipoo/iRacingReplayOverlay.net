@@ -27,7 +27,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleBattle : IDirectionRule
+    public class RuleBattle : IVetoRule
     {
         enum BattlePosition { Started, Inside, Finished, Outside };
         struct BattleState
@@ -52,6 +52,8 @@ namespace iRacingReplayOverlay.Phases.Direction
         Car battleFollower;
         Car battleLeader;
         Action directionAction;
+        TrackCamera camera;
+        SessionData._DriverInfo._Drivers car;
 
         public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan battleStickyTime, TimeSpan battleGap)
         {
@@ -100,18 +102,22 @@ namespace iRacingReplayOverlay.Phases.Direction
             directionAction();
         }
 
+        public void Redirect(DataSample data)
+        {
+            Trace.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}; within {3}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap), "INFO");
+            iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+        }
+
         void SwitchToBattle(DataSample data, SessionData._DriverInfo._Drivers follower)
         {
             battleFollower = data.Telemetry.Cars[follower.CarIdx];
             battleLeader = data.Telemetry.Cars.First(c => c.Position == battleFollower.Position - 1);
 
-            var camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar,  CameraAngle.LookingAtCar);
-            var driver = ChangeCarForCamera(data, camera, follower);
+            camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar,  CameraAngle.LookingAtCar);
+            car = ChangeCarForCamera(data, camera, follower);
 
-            iRacing.Replay.CameraOnDriver((short)driver.CarNumber, camera.CameraNumber);
-
-            Trace.WriteLine("{0} Changing camera to driver number {1}, using camera {2} - within {3}".F(
-                data.Telemetry.SessionTimeSpan, driver.CarNumber, camera.CameraName, battleGap), "INFO");
+            Trace.WriteLine("{0} Changing camera to driver: {1}; camera: {2}; within {3}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap), "INFO");
+            iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
         void UpdateCameraIfOvertake(DataSample data)

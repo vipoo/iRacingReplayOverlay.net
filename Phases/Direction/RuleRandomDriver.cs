@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleRandomDriver : IDirectionRule
+    public class RuleRandomDriver : IVetoRule
     {
         readonly CameraControl cameraControl;        
         readonly SessionData sessionData;
@@ -35,6 +35,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         bool isWatchingRandomDriver;
         TimeSpan finishWatchingRandomDriverAt;
+        SessionData._DriverInfo._Drivers car;
+        TrackCamera camera;
 
         public RuleRandomDriver(CameraControl cameraControl, SessionData sessionData, TimeSpan stickyTime)
         {
@@ -49,7 +51,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 preferredCarIndexes = sessionData.DriverInfo.Drivers.Where(x => preferredDriverNames.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
             }
             else
-                preferredCarIndexes = sessionData.DriverInfo.Drivers.Select(x => x.CarIdx).ToArray();
+                preferredCarIndexes = sessionData.DriverInfo.Drivers.Where(x => !x.IsPaceCar).Select(x => x.CarIdx).ToArray();
 
             randomDriverNumber = new Random();
         }
@@ -72,11 +74,16 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             finishWatchingRandomDriverAt = data.Telemetry.SessionTimeSpan + stickyTime;
 
-            var camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar, CameraAngle.LookingAtTrack);
-            var car = FindADriver(data);
+            camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar, CameraAngle.LookingAtTrack);
+            car = FindADriver(data);
 
             Trace.WriteLine("{0} Changing camera to random driver: {1}; camera: {2}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName), "INFO");
+            iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+        }
 
+        public void Redirect(DataSample data)
+        {
+            Trace.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName), "INFO");
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
