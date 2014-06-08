@@ -20,7 +20,7 @@ using iRacingSDK;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    interface IDirectionRule
+    public interface IDirectionRule
     {
         bool IsActive(DataSample data);
         void Direct(DataSample data);

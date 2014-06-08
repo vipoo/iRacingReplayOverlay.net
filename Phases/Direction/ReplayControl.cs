@@ -29,41 +29,13 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class ReplayControl
     {
-        readonly SessionData sessionData;
-        readonly TrackCamera[] cameras;
-        readonly TrackCamera TV2;
-        readonly TrackCamera TV3;
-        readonly Random randomDriverNumber;
-        readonly Random randomPreferredDriver;
-        readonly CommentaryMessages commentaryMessages;
-        readonly RemovalEdits removalEdits;
-        readonly IList<SessionData._DriverInfo._Drivers> preferredCars;
-        readonly List<CameraAngle> normalCameraAngles;
-
         readonly IDirectionRule[] directionRules;
-        readonly CameraControl cameraControl;
-        private TimeSpan jumptToNextRandomCarAt;
+        readonly IDirectionRule ruleRandom;
+        IDirectionRule currentRule;
 
         public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, TrackCameras trackCameras)
         {
-            this.sessionData = sessionData;
-            this.commentaryMessages = commentaryMessages;
-            this.removalEdits = removalEdits;
-
-            randomDriverNumber = new Random();
-            randomPreferredDriver = new Random();
-
-            normalCameraAngles = new List<CameraAngle>
-            {
-                CameraAngle.LookingInfrontOfCar, 
-                CameraAngle.LookingAtCar,
-                CameraAngle.LookingAtTrack
-            };
-
-            IEnumerable<string> preferredDriverNames = Settings.Default.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim());
-            preferredCars = sessionData.DriverInfo.Drivers.Where(x => preferredDriverNames.Contains(x.UserName)).ToList();
-
-            cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
+            var cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 
             Trace.WriteLineIf(cameras.Count() <= 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName), "INFO");
             Debug.Assert(cameras.Count() > 0, "Track Cameras not defined for {0}".F(sessionData.WeekendInfo.TrackDisplayName));
@@ -71,24 +43,27 @@ namespace iRacingReplayOverlay.Phases.Direction
             foreach (var tc in cameras)
                 tc.CameraNumber = (short)sessionData.CameraInfo.Groups.First(g => g.GroupName.ToLower() == tc.CameraName.ToLower()).GroupNum;
 
-            TV2 = cameras.First(tc => tc.CameraName == "TV2");
-            TV3 = cameras.First(tc => tc.CameraName == "TV3");
+            var TV3 = cameras.First(tc => tc.CameraName == "TV3");
 
             iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
 
-            cameraControl = new CameraControl(cameras);
+            var cameraControl = new CameraControl(cameras);
+
+            var ruleLastSectors = new RuleLastSectors(cameras, removalEdits);
+            var ruleFirstSectors = new RuleFirstSectors(cameras, removalEdits);
+            var ruleIncident = new RuleIncident(cameras, removalEdits, incidents);
+            var ruleBattle = new RuleBattle(cameraControl, removalEdits, Settings.Default.MaxTimeBetweenCameraChanges, Settings.Default.MaxTimeForInterestingEvent).WithVeto(ruleIncident);
+            ruleRandom = new RuleRandomDriver(cameraControl, sessionData, Settings.Default.MaxTimeBetweenCameraChanges).WithVeto(ruleIncident);
 
             directionRules = new IDirectionRule[] { 
-                new RuleLastSectors(cameras, removalEdits),
-                new RuleFirstSectors(cameras, removalEdits),
-                new RuleIncident(cameras, removalEdits, incidents),
-                new RuleBattle(cameraControl, removalEdits, Settings.Default.MaxTimeBetweenCameraChanges, Settings.Default.MaxTimeForInterestingEvent)
+                ruleLastSectors,
+                ruleFirstSectors,
+                ruleBattle,
+                ruleRandom
             };
 
             currentRule = directionRules[0];
         }
-
-        IDirectionRule currentRule;
 
         public void Process(DataSample data)
         {
@@ -99,28 +74,8 @@ namespace iRacingReplayOverlay.Phases.Direction
                 if (ActiveRule(rule, data))
                     return;
 
-            TrackCamera camera;
-            SessionData._DriverInfo._Drivers car;
-
-            if (jumptToNextRandomCarAt > data.Telemetry.SessionTimeSpan)
-                return;
-
-            jumptToNextRandomCarAt = data.Telemetry.SessionTimeSpan + Settings.Default.MaxTimeBetweenCameraChanges;
-
-            if (preferredCars.Count() == 0)
-            {
-                car = FindARandomDriver(data);
-                camera = cameraControl.FindACamera(normalCameraAngles);
-                Trace.WriteLine("{0} Changing camera to random driver number {1}, using camera {2}".F(data.Telemetry.SessionTimeSpan, car.CarNumber, camera.CameraName), "INFO");
-            }
-            else
-            {
-                car = FindAPreferredDriver();
-                camera = cameraControl.FindACamera(normalCameraAngles);
-                Trace.WriteLine("{0} Changing camera to preferred driver number {1}, using camera {2}".F(data.Telemetry.SessionTimeSpan, car.CarNumber, camera.CameraName), "INFO");
-            }
-
-            iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+            currentRule = ruleRandom;
+            currentRule.Direct(data);
         }
 
         bool ActiveRule(IDirectionRule rule, DataSample data)
@@ -133,24 +88,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
 
             return false;
-        }
-        SessionData._DriverInfo._Drivers FindARandomDriver(DataSample data)
-        {
-            var activeDrivers = data.Telemetry.Cars
-                    .Where(c => !c.IsPaceCar)
-                    .Where(c => c.HasData)
-                    .ToList();
-
-            var next = randomDriverNumber.Next(activeDrivers.Count);
-
-            return sessionData.DriverInfo.Drivers[activeDrivers[next].CarIdx];
-        }
-
-        SessionData._DriverInfo._Drivers FindAPreferredDriver()
-        {
-            var next = randomPreferredDriver.Next(preferredCars.Count());
-
-            return sessionData.DriverInfo.Drivers[preferredCars[next].CarIdx];
         }
     }
 }

@@ -52,7 +52,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         Car battleFollower;
         Car battleLeader;
         Action directionAction;
-        
+
         public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan battleStickyTime, TimeSpan battleGap)
         {
             this.cameraControl = cameraControl;
@@ -192,6 +192,9 @@ namespace iRacingReplayOverlay.Phases.Direction
                     .Where(d => d.Distance > 0)
                     .OrderByDescending(d => d.Distance)
                     .ToList();
+
+            if (distances.Count == 0)
+                return null;
 
             var gap = Enumerable.Range(1, distances.Count - 1)
                     .Select(i => new

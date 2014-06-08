@@ -66,10 +66,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     return true;
 
                 case IncidentPosition.Inside:
-                    directionAction = () =>
-                    {
-                        removalEdits.InterestingThingHappend(data);
-                    };
+                    directionAction = () => removalEdits.InterestingThingHappend(data);
                     return true;
 
                 case IncidentPosition.Finished:

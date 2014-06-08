@@ -17,33 +17,80 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Phases.Capturing;
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
-using iRacingSDK.Support;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
     public class RuleRandomDriver : IDirectionRule
     {
-        readonly RemovalEdits removalEdits;
-        readonly TrackCamera TV3;
+        readonly CameraControl cameraControl;        
+        readonly SessionData sessionData;
+        readonly TimeSpan stickyTime;
+        readonly long[] preferredCarIndexes;
+        readonly Random randomDriverNumber;
 
-        DateTime reselectLeaderAt = DateTime.Now;
+        bool isWatchingRandomDriver;
+        TimeSpan finishWatchingRandomDriverAt;
 
-        public RuleRandomDriver(TrackCamera[] cameras, RemovalEdits removalEdits)
+        public RuleRandomDriver(CameraControl cameraControl, SessionData sessionData, TimeSpan stickyTime)
         {
-            this.removalEdits = removalEdits;
-            TV3 = cameras.First(tc => tc.CameraName == "TV3");
+            this.cameraControl = cameraControl;
+            this.sessionData = sessionData;
+            this.stickyTime = stickyTime;
+
+            if (Settings.Default.PreferredDriverNames != null && Settings.Default.PreferredDriverNames.Length > 0)
+            {
+                var preferredDriverNames = Settings.Default.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim().ToLower()).ToList();
+
+                preferredCarIndexes = sessionData.DriverInfo.Drivers.Where(x => preferredDriverNames.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
+            }
+            else
+                preferredCarIndexes = sessionData.DriverInfo.Drivers.Select(x => x.CarIdx).ToArray();
+
+            randomDriverNumber = new Random();
         }
 
         public bool IsActive(DataSample data)
         {
+            if (isWatchingRandomDriver && data.Telemetry.SessionTimeSpan < finishWatchingRandomDriverAt)
+                return true;
+
+            isWatchingRandomDriver = false;
             return false;
         }
 
         public void Direct(DataSample data)
         {
+            if (isWatchingRandomDriver)
+                return;
+
+            isWatchingRandomDriver = true;
+
+            finishWatchingRandomDriverAt = data.Telemetry.SessionTimeSpan + stickyTime;
+
+            var camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar, CameraAngle.LookingAtTrack);
+            var car = FindADriver(data);
+
+            Trace.WriteLine("{0} Changing camera to random driver: {1}; camera: {2}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName), "INFO");
+
+            iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
+        }
+
+        SessionData._DriverInfo._Drivers FindADriver(DataSample data)
+        {
+            var activeDrivers = preferredCarIndexes
+                .Select(carIdx => data.Telemetry.Cars[carIdx])
+                .Where(c => c.HasData && c.TrackSurface != TrackLocation.InPitStall)
+                .Select(c => c.CarIdx)
+                .ToList();
+
+            var next = randomDriverNumber.Next(activeDrivers.Count);
+
+            return sessionData.DriverInfo.Drivers[activeDrivers[next]];
         }
     }
 }
