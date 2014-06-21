@@ -21,44 +21,55 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace iRacingReplayOverlay.Support
 {
     public class LogListener : TraceListener
     {
         static LogListener logFile;
-        public string FileName { get; internal set; }
-        StreamWriter file;
+        ConcurrentQueue<string> items = new ConcurrentQueue<string>();
+        bool isCancelled = false;
+        Task task;
+        string lastMessage = null;
+        DateTime lastTime = DateTime.Now;
 
-        public LogListener(string filename)
+        public string FileName { get; internal set; }
+
+        LogListener(string filename)
         {
             this.FileName = filename;
-            this.file = new StreamWriter(filename, true);
-            
+
+            task = Task.Factory.StartNew(Writer);
+
             Write("\r\n");
             WriteLine("----------------------------");
         }
 
-        protected override void Dispose(bool disposing)
+        void Writer()
         {
-            file.Close();
+            while(!isCancelled)
+            {
+                string message;
+                if( items.TryDequeue(out message) )
+                    File.AppendAllText(FileName, message);
 
-            base.Dispose(disposing);
+                Thread.Sleep(1);
+            }
         }
 
-        public override void Flush()
+        protected override void Dispose(bool disposing)
         {
-            file.Flush();
-            base.Flush();
+            isCancelled = true;
+            
+            base.Dispose(disposing);
         }
 
         public override void Write(string message)
         {
-            file.Write(message);
+            items.Enqueue(message);
         }
-
-        string lastMessage = null;
-        DateTime lastTime = DateTime.Now;
 
         public override void WriteLine(string message)
         {
