@@ -33,7 +33,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly IDirectionRule ruleRandom;
         IDirectionRule currentRule;
 
-        public ReplayControl(SessionData sessionData, Incidents incidents, CommentaryMessages commentaryMessages, RemovalEdits removalEdits, TrackCameras trackCameras)
+        public ReplayControl(SessionData sessionData, Incidents incidents, RemovalEdits removalEdits, TrackCameras trackCameras)
         {
             var cameras = trackCameras.Where(tc => tc.TrackName == sessionData.WeekendInfo.TrackDisplayName).ToArray();
 

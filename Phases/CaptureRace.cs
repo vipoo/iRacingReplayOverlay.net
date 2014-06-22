@@ -62,8 +62,10 @@ namespace iRacingReplayOverlay.Phases
             var removalEdits = new RemovalEdits(overlayData);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
+
+            var recordPitStop = new RecordPitStop(commentaryMessages);
             var fastestLaps = new RecordFastestLaps(overlayData);
-            var replayControl = new ReplayControl(samples.First().SessionData, incidents, commentaryMessages, removalEdits, TrackCameras);
+            var replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
             var sessionDataCapture = new SessionDataCapture(overlayData);
 
             var captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5), 
@@ -101,6 +103,7 @@ namespace iRacingReplayOverlay.Phases
                 sessionDataCapture.Process(data);
                 captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
                 captureCamDriverEveryQuaterSecond.Process(data, relativeTime);
+                recordPitStop.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
                 replayControl.Process(data);
                 removalEdits.Process(data, relativeTime);

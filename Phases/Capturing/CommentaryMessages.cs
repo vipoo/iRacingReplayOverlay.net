@@ -31,6 +31,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.messageStates = overlayData.MessageStates;
         }
 
+        public void Add(string message, TimeSpan time)
+        {
+            Add(message, time.TotalSeconds);
+        }
+
         public void Add(string message, double time)
         {
             OverlayData.MessageState m;
