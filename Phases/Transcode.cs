@@ -74,7 +74,7 @@ namespace iRacingReplayOverlay.Phases
             transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
             {
                 Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
-                    MonitorProgress(progress, readFramesCompleted, 
+                    MonitorProgress(progress, readFramesCompleted,
                         RaceHightlights(leaderBoard, next)));
 
                 if (introSourceReader == null)
@@ -107,7 +107,7 @@ namespace iRacingReplayOverlay.Phases
                 };
         }
 
-        private ProcessSample MonitorProgress(_Progress progress, Action readFramesCompleted, ProcessSample next)
+        ProcessSample MonitorProgress(_Progress progress, Action readFramesCompleted, ProcessSample next)
         {
             return sample =>
             {
@@ -123,7 +123,7 @@ namespace iRacingReplayOverlay.Phases
             };
         }
 
-        private ProcessSample RaceHightlights(LeaderBoard leaderBoard, ProcessSample next)
+        ProcessSample RaceHightlights(LeaderBoard leaderBoard, ProcessSample next)
         {
             ProcessSample cut = next;
 
