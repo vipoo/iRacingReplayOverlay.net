@@ -146,7 +146,6 @@
     <Compile Include="Video\Attributes.cs" />
     <Compile Include="Video\ApplyEdit.cs" />
     <Compile Include="Video\FadeOut.cs" />
-    <Compile Include="Video\OverlayRaceData.cs" />
     <Compile Include="Video\FromFile.cs" />
     <Compile Include="Video\Concat.cs" />
     <Compile Include="Video\FadeIn.cs" />
