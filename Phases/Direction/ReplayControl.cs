@@ -51,7 +51,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var ruleLastSectors = new RuleLastSectors(cameras, removalEdits);
             var ruleFirstSectors = new RuleFirstSectors(cameras, removalEdits);
-            var ruleIncident = new RuleIncident(cameras, removalEdits, incidents);
+            var ruleIncident = new RuleIncident(cameras, removalEdits, incidents).WithVeto(ruleLastSectors);
             var ruleBattle = new RuleBattle(cameraControl, removalEdits, Settings.Default.MaxTimeBetweenCameraChanges, Settings.Default.MaxTimeForInterestingEvent).WithVeto(ruleIncident);
             ruleRandom = new RuleRandomDriver(cameraControl, sessionData, Settings.Default.MaxTimeBetweenCameraChanges).WithVeto(ruleIncident);
 

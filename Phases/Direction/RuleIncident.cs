@@ -28,7 +28,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleIncident : IDirectionRule
+    public class RuleIncident : IVetoRule
     {
         enum IncidentPosition { Started, Inside, Finished, Outside };
 
@@ -88,6 +88,11 @@ namespace iRacingReplayOverlay.Phases.Direction
         public void Direct(DataSample data)
         {
             directionAction();
+        }
+
+        public void Redirect(DataSample data)
+        {
+            // Do nothing if we got directed away from an incident
         }
 
         IncidentPosition GetIncidentPosition(DataSample data)
