@@ -4,3 +4,5 @@
 **/obj/*
 **/SampleRaceStream.bin
 packages/
+TestResult.xml
+iRacingReplayOverlay.net.Tests.VisualState.xml

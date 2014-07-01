@@ -18,6 +18,7 @@
 
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
+using iRacingReplayOverlay.Phases.Direction.Support;
 using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
@@ -170,7 +171,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         BattleState SearchForNextBattle(DataSample data, Func<BattleState> notFound)
         {
-            var battleDriver = FindNewBattle(data);
+            var battleDriver = Battle.Find(data, battleGap);
             if (battleDriver == null)
             {
                 isInBattle = false;
@@ -188,40 +189,5 @@ namespace iRacingReplayOverlay.Phases.Direction
             return data.Telemetry.SessionTimeSpan > battleEndTime;
         }
 
-        SessionData._DriverInfo._Drivers FindNewBattle(DataSample data)
-        {
-            var range = battleGap.TotalSeconds;
-
-            var distances = data.Telemetry.CarIdxDistance
-                    .Select((d, i) => new { CarIdx = i, Distance = d })
-                    .Skip(1)
-                    .Where(d => d.Distance > 0)
-                    .OrderByDescending(d => d.Distance)
-                    .ToList();
-
-            if (distances.Count == 0)
-                return null;
-
-            var gap = Enumerable.Range(1, distances.Count - 1)
-                    .Select(i => new
-                    {
-                        CarIdx = distances[i].CarIdx,
-                        Distance = distances[i - 1].Distance - distances[i].Distance,
-                        Position = i
-                    });
-
-            var timeGap = gap.Select(g => new
-            {
-                CarIdx = g.CarIdx,
-                Time = g.Distance * data.Telemetry.Session.ResultsAverageLapTime,
-                Position = g.Position
-            });
-
-            var closest = timeGap
-                .OrderBy(d => d.Position)
-                .FirstOrDefault(d => d.Time < range);
-
-            return closest == null ? null : data.SessionData.DriverInfo.Drivers[closest.CarIdx];
-        }
     }
 }

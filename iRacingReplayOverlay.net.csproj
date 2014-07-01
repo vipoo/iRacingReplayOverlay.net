@@ -93,6 +93,7 @@
     <Compile Include="Phases\Direction\RuleIncident.cs" />
     <Compile Include="Phases\Direction\RuleLastSectors.cs" />
     <Compile Include="Phases\Direction\RuleVeto.cs" />
+    <Compile Include="Phases\Direction\Support\Battle.cs" />
     <Compile Include="Phases\Transcode.cs" />
     <Compile Include="Phases\CaptureOpeningScenes.cs" />
     <Compile Include="Phases\Capturing\RemovalEdits.cs" />

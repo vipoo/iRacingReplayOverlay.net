@@ -1,0 +1,7 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Default" />
+  <Config name="Default" binpathtype="Auto">
+    <assembly path="iRacingReplayOverlay.net.Tests\bin\x64\Debug\iRacingReplayOverlay.net.Tests.exe" />
+    <assembly path="..\iRacingSDK.Net\iRacingSDK.Net.Tests\bin\x64\Debug\iRacingSDK.Net.Tests.exe" />
+  </Config>
+</NUnitProject>
