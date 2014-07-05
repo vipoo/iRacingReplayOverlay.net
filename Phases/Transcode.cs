@@ -20,13 +20,12 @@
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Video;
-using iRacingSDK;
 using MediaFoundation.Net;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -38,6 +37,7 @@ namespace iRacingReplayOverlay.Phases
         int audioBitRate;
         string sourceFile;
         string destinationFile;
+        string destinationHighlightsFile;
         string gameDataFile;
         
         public void _WithEncodingOf(int videoBitRate, int audioBitRate)
@@ -50,6 +50,8 @@ namespace iRacingReplayOverlay.Phases
         {
             this.sourceFile = sourceFile;
             this.destinationFile = Path.ChangeExtension(sourceFile, "wmv");
+            this.destinationHighlightsFile = Path.ChangeExtension(sourceFile, ".highlights.wmv");
+
             this.gameDataFile = Path.ChangeExtension(sourceFile, "xml");
         }
 
@@ -57,46 +59,73 @@ namespace iRacingReplayOverlay.Phases
         {
             var overlayData = OverlayData.FromFile(gameDataFile);
 
-            var leaderBoard = new LeaderBoard
+            var transcodeHigh = new Task(() => ApplyTransformationsToVideo(overlayData, destinationHighlightsFile, true));
+            var transcodeFull = new Task(() => ApplyTransformationsToVideo(overlayData, destinationFile, false, next => MonitorProgress(progress, readFramesCompleted, next)));
+
+            using (MFSystem.Start())
             {
-                OverlayData = overlayData
-            };
+                transcodeHigh.Start();
+                //Seem to have some kind of bug in MediaFoundation - where if two threads attempt to open source Readers to the same file, we get exception raised.
+                //To work around issue, delay the start of the second transcoder - so we dont have two threads opening at the same time.
+                Thread.Sleep(10000);
+                transcodeFull.Start();
 
-            var transcoder = new Transcoder
-            {
-                IntroVideoFile = overlayData.IntroVideoFileName,
-                SourceFile = sourceFile,
-                DestinationFile = destinationFile,
-                VideoBitRate = videoBitRate,
-                AudioBitRate = audioBitRate
-            };
-
-            transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
-            {
-                Action<ProcessSample> mainFeed = (next) => sourceReader.Samples(
-                    MonitorProgress(progress, readFramesCompleted,
-                        RaceHightlights(leaderBoard, next)));
-
-                if (introSourceReader == null)
-                    mainFeed(saveToSink);
-                else
-                {
-                    Action<ProcessSample> introFeed = (next) => introSourceReader.Samples(
-                        ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
-
-                    AVOperation.Concat(introFeed, mainFeed, saveToSink);
-                }
-            });
-
+                Task.WaitAll(transcodeHigh, transcodeFull);
+            }
             completed();
         }
 
-        private ProcessSample ApplyIntroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        void ApplyTransformationsToVideo(OverlayData overlayData, string destFile, bool highlightsOnly, Func<ProcessSample, ProcessSample> monitorProgress = null)
+        {
+            try
+            {
+                var leaderBoard = new LeaderBoard { OverlayData = overlayData };
+
+                var transcoder = new Transcoder
+                {
+                    IntroVideoFile = overlayData.IntroVideoFileName,
+                    SourceFile = sourceFile,
+                    DestinationFile = destFile,
+                    VideoBitRate = videoBitRate,
+                    AudioBitRate = audioBitRate
+                };
+
+                transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
+                {
+                    Action<ProcessSample> mainFeed;
+
+                    if (highlightsOnly)
+                        mainFeed = next => sourceReader.Samples(OverlayRaceDataToVideo(leaderBoard, next));
+                    else
+                        mainFeed = next => sourceReader.Samples(monitorProgress(OverlayRaceDataToVideo(leaderBoard, next)));
+
+                    var writeToSinks = highlightsOnly ? ApplyEdits(leaderBoard, saveToSink) : saveToSink;
+
+                    if (introSourceReader == null)
+                        mainFeed(writeToSinks);
+                    else
+                    {
+                        Action<ProcessSample> introFeed = next => introSourceReader.Samples(
+                            ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
+
+                        AVOperation.Concat(introFeed, mainFeed, writeToSinks);
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.Message, "DEBUG");
+                Trace.WriteLine(e.StackTrace, "DEBUG");
+                throw;
+            }
+        }
+
+        ProcessSample ApplyIntroTitles(LeaderBoard leaderBoard, ProcessSample next)
         {
             return AVOperations.SeperateAudioVideo(next, AVOperation.DataSamplesOnly(IntroTitles(leaderBoard, next), next));
         }
 
-        private ProcessSample IntroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        ProcessSample IntroTitles(LeaderBoard leaderBoard, ProcessSample next)
         {
             return sample =>
                 {
@@ -123,19 +152,24 @@ namespace iRacingReplayOverlay.Phases
             };
         }
 
-        ProcessSample RaceHightlights(LeaderBoard leaderBoard, ProcessSample next)
+        ProcessSample ApplyEdits(LeaderBoard leaderBoard, ProcessSample next)
         {
             ProcessSample cut = next;
 
             foreach (var editCut in leaderBoard.OverlayData.EditCuts)
                 cut = AVOperation.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
 
-            var overlays = AVOperation.DataSamplesOnly(OverlayRaceData(leaderBoard, AVOperation.FadeIn(cut)), cut);
-
-            return AVOperations.SeperateAudioVideo(cut, overlays);
+            return cut;
         }
 
-        public ProcessSample OverlayRaceData(LeaderBoard leaderBoard, ProcessSample next)
+        ProcessSample OverlayRaceDataToVideo(LeaderBoard leaderBoard, ProcessSample next)
+        {
+            var overlays = AVOperation.DataSamplesOnly(OverlayRaceData(leaderBoard, AVOperation.FadeIn(next)), next);
+
+            return AVOperations.SeperateAudioVideo(next, overlays);
+        }
+
+        ProcessSample OverlayRaceData(LeaderBoard leaderBoard, ProcessSample next)
         {
             return sample =>
             {

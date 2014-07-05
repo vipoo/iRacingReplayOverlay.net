@@ -44,25 +44,25 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             r
                 .WithBrush(new SolidBrush(Color.FromArgb(180, Color.LightBlue)))
-                .WithPen(Styles.Pens.Black)
+                .WithPen(Styles.BlackPen)
                 .DrawRectangleWithBorder()
-                .WithPen(Styles.Pens.Black)
-                .WithBrush(Styles.Brushes.Black)
+                .WithPen(Styles.BlackPen)
+                .WithBrush(Styles.BlackBrush)
                 .WithFont("Calibri", 40, FontStyle.Bold)
                 .WithStringFormat(StringAlignment.Center)
                 .DrawText(OverlayData.SessionData.WeekendInfo.TrackDisplayName + "\n" + 
                 OverlayData.SessionData.WeekendInfo.TrackCity + ", " + OverlayData.SessionData.WeekendInfo.TrackCountry);
             
             graphics.InRectangle(left, 240, totalWidth, 400)
-                .WithPen(Styles.Pens.Black)
-                .WithBrush(Styles.Brushes.Black)
+                .WithPen(Styles.BlackPen)
+                .WithBrush(Styles.BlackBrush)
                 .WithFont("Calibri", 30, FontStyle.Bold)
                 .WithStringFormat(StringAlignment.Center)
                 .DrawText("Qualifying Results");
 
             r = graphics.InRectangle(left + 30, 330, 60, 40)
-                .WithPen(Styles.Pens.Black)
-                .WithBrush(Styles.Brushes.Black)
+                .WithPen(Styles.BlackPen)
+                .WithBrush(Styles.BlackBrush)
                 .WithFont("Calibri", 20, FontStyle.Bold)
                 .WithStringFormat(StringAlignment.Near);
 
@@ -128,10 +128,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         private void DrawRaceMessages(Graphics g, double timeInSeconds, OverlayData.MessageState messageState)
         {
             Func<GraphicRect, GraphicRect> blueBox = rr =>
-               rr.WithBrush(Styles.Brushes.TransparentLightBlue)
-               .WithPen(Styles.Pens.Black)
+               rr.WithBrush(Styles.TransparentLightBlueBrush)
+               .WithPen(Styles.BlackPen)
                .DrawRectangleWithBorder()
-               .WithBrush(Styles.Brushes.Black)
+               .WithBrush(Styles.BlackBrush)
                .WithFont("Calibri", 20, FontStyle.Bold)
                .WithStringFormat(StringAlignment.Near);
 
@@ -158,10 +158,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         private void DrawFastestLap(Graphics g, Capturing.OverlayData.FastLap fastestLap)
         {
             Func<GraphicRect, GraphicRect> blueBox = rr =>
-               rr.WithBrush(Styles.Brushes.TransparentLightBlue)
-               .WithPen(Styles.Pens.Black)
+               rr.WithBrush(Styles.TransparentLightBlueBrush)
+               .WithPen(Styles.BlackPen)
                .DrawRectangleWithBorder()
-               .WithBrush(Styles.Brushes.Black)
+               .WithBrush(Styles.BlackBrush)
                .WithFont("Calibri", 20, FontStyle.Bold)
                .WithStringFormat(StringAlignment.Center);
 
@@ -180,22 +180,24 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         }
 
 
-        static Func<GraphicRect, GraphicRect> SimpleWhiteBox = rr =>
-               rr.WithLinearGradientBrush(Styles.WhiteSmoke, Styles.White, LinearGradientMode.BackwardDiagonal)
-               .WithPen(Styles.Pens.Black)
-               .DrawRectangleWithBorder()
-               .WithBrush(Styles.Brushes.Black)
-               .WithFont("Calibri", 24, FontStyle.Bold)
-               .WithStringFormat(StringAlignment.Center);
+        public GraphicRect SimpleWhiteBox(GraphicRect rr)
+        {
+            return rr.WithLinearGradientBrush(Styles.WhiteSmoke, Styles.White, LinearGradientMode.BackwardDiagonal)
+            .WithPen(Styles.BlackPen)
+            .DrawRectangleWithBorder()
+            .WithBrush(Styles.BlackBrush)
+            .WithFont("Calibri", 24, FontStyle.Bold)
+            .WithStringFormat(StringAlignment.Center);
+        }
 
-        static public Func<GraphicRect, GraphicRect> ColourBox(Color color)
+        public Func<GraphicRect, GraphicRect> ColourBox(Color color)
         {
             return rr =>
                 rr.WithBrush(new SolidBrush(color))
-                    .WithPen(Styles.Pens.Black)
+                    .WithPen(Styles.BlackPen)
                     .DrawRectangleWithBorder()
                     .WithFont("Calibri", 24, FontStyle.Bold)
-                    .WithBrush(Styles.Brushes.Black)
+                    .WithBrush(Styles.BlackBrush)
                     .WithStringFormat(StringAlignment.Center);
         }
 
@@ -234,11 +236,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var indicator = p.Position != null ? p.Position.Value.Ordinal() : "";
 
             g.InRectangle(1920/2-440/2, 980, 70, 40)
-                .WithBrush(Styles.Brushes.Yellow)
-                .WithPen(Styles.Pens.Black)
+                .WithBrush(Styles.YellowBrush)
+                .WithPen(Styles.BlackPen)
                 .DrawRectangleWithBorder()
                 .WithFont("Calibri", 24, FontStyle.Bold)
-                .WithBrush(Styles.Brushes.Black)
+                .WithBrush(Styles.BlackBrush)
                 .WithStringFormat(StringAlignment.Near)
                 .Center(cg => cg
                             .DrawText(position)
@@ -252,43 +254,43 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
-                .WithBrush(Styles.Brushes.Black)
+                .WithBrush(Styles.BlackBrush)
                 .DrawText(p.CarNumber)
 
                 .ToRight(300)
                 .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
-                .WithBrush(Styles.Brushes.Black)
+                .WithBrush(Styles.BlackBrush)
                 .DrawText(p.UserName);
         }
 
-        public static class Styles
+        private readonly _Styles Styles = new _Styles();
+
+        public class _Styles
         {
             public const int AlphaLevel = 120;
-            public readonly static Color White = Color.FromArgb(AlphaLevel, Color.White);
-            public readonly static Color WhiteSmoke = Color.FromArgb(AlphaLevel, Color.WhiteSmoke);
-            public readonly static Color Black = Color.FromArgb(AlphaLevel, Color.Black);
-            public readonly static Color LightYellow = Color.FromArgb(AlphaLevel, Color.LightYellow);
-            public readonly static Color Yellow = Color.FromArgb(AlphaLevel, 150, 150, 0);
+            public readonly Color White = Color.FromArgb(AlphaLevel, Color.White);
+            public readonly Color WhiteSmoke = Color.FromArgb(AlphaLevel, Color.WhiteSmoke);
+            public readonly Color Black = Color.FromArgb(AlphaLevel, Color.Black);
+            public readonly Color LightYellow = Color.FromArgb(AlphaLevel, Color.LightYellow);
+            public readonly Color Yellow = Color.FromArgb(AlphaLevel, 150, 150, 0);
 
-            public static class Pens
+            Pen blackPen;
+            public Pen BlackPen 
             {
-                public readonly static Pen Black = new Pen(Styles.Black);
- 
+                get
+                {
+                   blackPen = blackPen ?? new Pen(Black);
+                   return blackPen;
+                }
             }
 
-            public static class Fonts
-            {
-                public readonly static Font LeaderBoard = new Font("Calibri", 24, FontStyle.Bold);
-            }
+            public readonly Font LeaderBoard = new Font("Calibri", 24, FontStyle.Bold);
 
-            public static class Brushes
-            {
-                public readonly static Brush Black = new SolidBrush(Color.Black);
-				public readonly static Brush Yellow = new SolidBrush(Color.Yellow);
-                public readonly static Brush TransparentLightBlue = new SolidBrush(Color.FromArgb(AlphaLevel, Color.LightBlue));
-            }
+            public readonly Brush BlackBrush = new SolidBrush(Color.Black);
+			public readonly Brush YellowBrush = new SolidBrush(Color.Yellow);
+            public readonly Brush TransparentLightBlueBrush = new SolidBrush(Color.FromArgb(AlphaLevel, Color.LightBlue));
         }
     }
 }

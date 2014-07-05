@@ -40,8 +40,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         internal void ProcessVideo(Action<SourceReader, SourceReader, ProcessSample> process)
         {
-            using (MFSystem.Start())
-            {
                 var readWriteFactory = new ReadWriteClassFactory();
 
                 var attributes = new Attributes
@@ -53,14 +51,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var introSourceReader = IntroVideoFile == null ? null : readWriteFactory.CreateSourceReaderFromURL(IntroVideoFile, attributes);
                 var sourceReader = readWriteFactory.CreateSourceReaderFromURL(SourceFile, attributes);
                 var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);
-
+                
                 var writeToSink = ConnectStreams(introSourceReader, sourceReader, sinkWriter);
 
-                using (sinkWriter.BeginWriting())
-                {
+                using(sinkWriter.BeginWriting())
                     process(introSourceReader, sourceReader, writeToSink);
-                }
-            }
         }
 
         private ProcessSample ConnectStreams(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
