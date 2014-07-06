@@ -151,7 +151,6 @@
     <Compile Include="Video\Concat.cs" />
     <Compile Include="Video\FadeIn.cs" />
     <Compile Include="Video\General.cs" />
-    <Compile Include="Video\Process.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
