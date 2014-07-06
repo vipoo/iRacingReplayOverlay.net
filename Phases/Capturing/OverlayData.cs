@@ -33,6 +33,22 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double StartTime;
             public double EndTime;
             public double Duration { get { return EndTime - StartTime; } }
+
+            public TimeSpan StartTimeSpan
+            {
+                get
+                {
+                    return TimeSpan.FromSeconds(StartTime);
+                }
+            }
+
+            public TimeSpan DurationSpan
+            {
+                get
+                {
+                    return TimeSpan.FromSeconds(Duration);
+                }
+            }
         }
 
         public class MessageState

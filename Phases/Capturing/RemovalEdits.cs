@@ -26,68 +26,87 @@ using iRacingSDK.Support;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
+    public class InterestLevel
+    {
+        public TimeSpan Time;
+        public short Interest;
+
+        internal bool Interesting;
+        internal int Index;
+
+        public const short FIRST_LAP = 100;
+        public const short LAST_LAP = 100;
+        public const short INCIDENT = 80;
+        public const short BATTLE = 60;
+        public const short OVERTAKE = 55;
+        public const short PITSTOP = 50;
+    }
+
     public class RemovalEdits
     {
-        public enum InterestStates
-        {
-            WaitingForInterestToFade, // + 15sconds
-            BeginingPotentialBoringBit, // + 30seconds
-            BoringBitActivate //until interesting thing happens - 4 seconds
-        }
-
         readonly List<OverlayData.BoringBit> boringBits;
-        OverlayData.BoringBit lastBoringBit = null;
-        TimeSpan lastInterestingTime = TimeSpan.FromSeconds(0);
-        InterestStates interestState = InterestStates.WaitingForInterestToFade;
+
+        short lastInterest = 0;
+        List<InterestLevel> interestLevels = new List<InterestLevel>();
 
         public RemovalEdits(OverlayData overlayData)
         {
             this.boringBits = overlayData.EditCuts;
         }
 
-        public void InterestingThingHappend(DataSample data)
+        public void InterestingThingHappend(short interest)
         {
-			AddPreviouslyMarkedBoringBit();
-         
-            lastInterestingTime = data.Telemetry.SessionTimeSpan;
-            interestState = InterestStates.WaitingForInterestToFade;
+            lastInterest = Math.Max(interest, lastInterest);
         }
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
-            if (data.LastSample == null)
-                return;
-
-            if (interestState == InterestStates.WaitingForInterestToFade && lastInterestingTime + 7.Seconds() <= data.Telemetry.SessionTimeSpan)
-            {
-                interestState = InterestStates.BeginingPotentialBoringBit;
-                lastBoringBit = new OverlayData.BoringBit { StartTime = relativeTime.TotalSeconds };
-                Trace.WriteLine("{0} Marking start of a cut - at video time of {1}".F(data.Telemetry.SessionTimeSpan, relativeTime), "INFO");
-            }
-
-            if( interestState == InterestStates.BeginingPotentialBoringBit && lastBoringBit.StartTime + 15 <= relativeTime.TotalSeconds)
-                interestState = InterestStates.BoringBitActivate;
-
-            if( interestState == InterestStates.BoringBitActivate)
-                lastBoringBit.EndTime = relativeTime.TotalSeconds;
+            interestLevels.Add(new InterestLevel { Time = relativeTime, Interest = lastInterest, Index = interestLevels.Count });
+            lastInterest = 0;
         }
-
-        void AddPreviouslyMarkedBoringBit()
-        {
-            if (interestState != InterestStates.BoringBitActivate)
-                return;
-
-            Trace.WriteLine("Cutting from {0} to {1} (video time)".F(TimeSpan.FromSeconds(lastBoringBit.StartTime), TimeSpan.FromSeconds(lastBoringBit.EndTime)), "INFO");
-            
-            boringBits.Add(lastBoringBit);
-        }
-
+        
         public void Stop()
         {
-            AddPreviouslyMarkedBoringBit();
+            const int TenMinutes = 36000;
 
-            var totalTimeCut = boringBits.Sum(b => b.EndTime - b.StartTime);
-            Trace.WriteLine("Total cut time is {0}".F(TimeSpan.FromSeconds(totalTimeCut)), "INFO");
+            var startTime = interestLevels.First().Time;
+            var endTime = interestLevels.Last().Time;
+
+            foreach (var il in interestLevels.OrderByDescending(i => i.Interest).ThenByDescending(i => i.Time.TotalSeconds).Take(TenMinutes))
+                il.Interesting = true;
+
+            OverlayData.BoringBit boringBit = null;
+            int lastIndex = -1;
+
+            foreach (var il in interestLevels.OrderBy(i => i.Index).Where(i => !i.Interesting))
+            {
+                if( boringBit != null && lastIndex + 1 != il.Index )
+                    AddBoringBit(ref boringBit);
+
+                if (boringBit == null)
+                    boringBit = new OverlayData.BoringBit { StartTime = il.Time.TotalSeconds };
+                else
+                    boringBit.EndTime = il.Time.TotalSeconds;
+                
+                lastIndex = il.Index;
+            }
+
+            if (boringBit != null)
+                AddBoringBit(ref boringBit);
+
+            Trace.WriteLine("Total edited out time is {0}".F(TimeSpan.FromSeconds(boringBits.Sum(b => b.Duration))), "INFO");
+        }
+
+        private void AddBoringBit(ref OverlayData.BoringBit boringBit)
+        {
+            if (boringBit.Duration < 10d)
+                Trace.WriteLine("Not applying edit of less then 10 seconds. From {0} for {1}".F(boringBit.StartTimeSpan, boringBit.DurationSpan));
+            else
+            {
+                this.boringBits.Add(boringBit);
+                Trace.WriteLine("Applying edit: from {0} for {1}".F(boringBit.StartTimeSpan, boringBit.DurationSpan));
+            }
+            boringBit = null;
         }
     }
 }

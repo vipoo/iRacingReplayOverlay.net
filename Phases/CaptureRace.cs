@@ -109,9 +109,9 @@ namespace iRacingReplayOverlay.Phases
                 removalEdits.Process(data, relativeTime);
             }
 
-            removalEdits.Stop();
-
             var fileName = videoCapture.Deactivate();
+
+            removalEdits.Stop();
 
             SaveOverlayData(overlayData, fileName);
 

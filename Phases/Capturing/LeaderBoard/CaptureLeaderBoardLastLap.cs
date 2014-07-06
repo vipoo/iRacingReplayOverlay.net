@@ -28,24 +28,20 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
     {
         readonly OverlayData overlayData;
         readonly CaptureLeaderBoard captureLeaderBoard;
-        readonly RemovalEdits removalEdits;
         readonly CommentaryMessages commentaryMessages;
 
         bool[] haveNotedCheckerdFlag = new bool[64];
 
-        public CaptureLeaderBoardLastLap(CaptureLeaderBoard captureLeaderBoard, OverlayData overlayData, RemovalEdits removalEdits, CommentaryMessages commentaryMessages)
+        public CaptureLeaderBoardLastLap(CaptureLeaderBoard captureLeaderBoard, OverlayData overlayData, CommentaryMessages commentaryMessages)
         {
             this.captureLeaderBoard = captureLeaderBoard;
             this.overlayData = overlayData;
-            this.removalEdits = removalEdits;
             this.commentaryMessages = commentaryMessages;
         }
 
         public void Process(DataSample data, TimeSpan relativeTime, ref OverlayData.LeaderBoard leaderBoard)
         {
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
-
-            removalEdits.InterestingThingHappend(data);
 
             leaderBoard = captureLeaderBoard.CreateLeaderBoard(data, relativeTime, leaderBoard.Drivers);
 

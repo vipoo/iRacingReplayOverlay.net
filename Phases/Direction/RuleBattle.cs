@@ -73,7 +73,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case BattlePosition.Started:
                     directionAction = () =>
                     {
-                        removalEdits.InterestingThingHappend(data);
+                        removalEdits.InterestingThingHappend(InterestLevel.BATTLE);
                         SwitchToBattle(data, state.Driver);
                     };
                     return true;
@@ -82,12 +82,12 @@ namespace iRacingReplayOverlay.Phases.Direction
                     directionAction = () =>
                     {
                         UpdateCameraIfOvertake(data);
-                        removalEdits.InterestingThingHappend(data);
+                        removalEdits.InterestingThingHappend(InterestLevel.BATTLE);
                     };
                     return true;
 
                 case BattlePosition.Finished:
-                    directionAction = () => removalEdits.InterestingThingHappend(data);
+                    directionAction = () => removalEdits.InterestingThingHappend(InterestLevel.BATTLE);
                     return true;
 
                 case BattlePosition.Outside:

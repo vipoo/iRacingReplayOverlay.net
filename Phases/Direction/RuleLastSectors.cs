@@ -60,7 +60,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         void SwitchToFinishingDrivers(DataSample data)
         {
-            removalEdits.InterestingThingHappend(data);
+            removalEdits.InterestingThingHappend(InterestLevel.LAST_LAP);
 
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 

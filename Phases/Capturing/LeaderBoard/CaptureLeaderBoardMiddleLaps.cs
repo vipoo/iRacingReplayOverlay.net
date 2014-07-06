@@ -73,7 +73,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
                     var lastPosition = lastDrivers.FirstOrDefault(lp => lp.CarIdx == d.CarIdx);
                     if (lastPosition != null && lastPosition.Position != d.Position)
                     {
-                        removalEdits.InterestingThingHappend(data);
+                        removalEdits.InterestingThingHappend(InterestLevel.OVERTAKE);
                         var position = d.Position != null ? d.Position.Value.ToString() : "";
                         var indicator = d.Position != null ? d.Position.Value.Ordinal() : "";
                         var msg = "{0} in {1}{2}".F(d.UserName, position, indicator);

@@ -36,7 +36,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             this.overlayData = overlayData;
             this.captureLeaderBoardFirstLap = new CaptureLeaderBoardFirstLap(this, overlayData);
-            this.captureLeaderBoardLastLap = new CaptureLeaderBoardLastLap(this, overlayData, removalEdits, commentaryMessages);
+            this.captureLeaderBoardLastLap = new CaptureLeaderBoardLastLap(this, overlayData, commentaryMessages);
             this.captureLeaderBoardMiddleLaps = new CaptureLeaderBoardMiddleLaps(this, overlayData, removalEdits, commentaryMessages);
         }
 
