@@ -47,6 +47,18 @@
     <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.GData.Client">
+      <HintPath>..\my-packages\Google.GData.Client.2.2.0.0\lib\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions">
+      <HintPath>..\my-packages\Google.GData.Extensions.2.2.0.0\lib\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.YouTube">
+      <HintPath>..\my-packages\Google.GData.YouTube.2.2.0.0\lib\Google.GData.YouTube.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\my-packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -155,6 +167,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="LICENSE.txt" />
+    <None Include="packages.config" />
     <None Include="packages\repositories.config" />
     <None Include="README.md" />
     <None Include="Settings.settings">

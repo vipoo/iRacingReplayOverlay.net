@@ -118,7 +118,7 @@ namespace iRacingReplayOverlay.Phases
             iRacing.Replay.SetSpeed(0);
 
             var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
-            Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_FORCEMINIMIZE);
+            Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_MINIMIZE);
             
             _WithFiles(fileName);
 
