@@ -75,12 +75,23 @@ namespace iRacingReplayOverlay
             this.transcodeProgressBar = new System.Windows.Forms.ProgressBar();
             this.transcodeVideoButton = new System.Windows.Forms.Button();
             this.tabUploading = new System.Windows.Forms.TabPage();
+            this.UploadProgress = new System.Windows.Forms.ProgressBar();
+            this.HighlightsUploadVideoButton = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.HighlightsUploadVideoFile = new System.Windows.Forms.TextBox();
+            this.UploadToYouTubeButton = new System.Windows.Forms.Button();
+            this.MainUploadVideoFileButton = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.MainUploadVideoFile = new System.Windows.Forms.TextBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.UploadVideoToYouTube = new System.Windows.Forms.CheckBox();
             this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
+            this.youTubeCredentialsRequired = new System.Windows.Forms.Label();
+            this.uploadingFileLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
+            this.tabUploading.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
@@ -141,7 +152,7 @@ namespace iRacingReplayOverlay
             this.tabCapture.Location = new System.Drawing.Point(4, 30);
             this.tabCapture.Name = "tabCapture";
             this.tabCapture.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCapture.Size = new System.Drawing.Size(676, 318);
+            this.tabCapture.Size = new System.Drawing.Size(676, 264);
             this.tabCapture.TabIndex = 0;
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
@@ -384,12 +395,96 @@ namespace iRacingReplayOverlay
             // 
             // tabUploading
             // 
+            this.tabUploading.Controls.Add(this.UploadProgress);
+            this.tabUploading.Controls.Add(this.uploadingFileLabel);
+            this.tabUploading.Controls.Add(this.HighlightsUploadVideoButton);
+            this.tabUploading.Controls.Add(this.label7);
+            this.tabUploading.Controls.Add(this.HighlightsUploadVideoFile);
+            this.tabUploading.Controls.Add(this.UploadToYouTubeButton);
+            this.tabUploading.Controls.Add(this.MainUploadVideoFileButton);
+            this.tabUploading.Controls.Add(this.label6);
+            this.tabUploading.Controls.Add(this.MainUploadVideoFile);
             this.tabUploading.Location = new System.Drawing.Point(4, 30);
             this.tabUploading.Name = "tabUploading";
-            this.tabUploading.Size = new System.Drawing.Size(676, 281);
+            this.tabUploading.Size = new System.Drawing.Size(676, 264);
             this.tabUploading.TabIndex = 2;
             this.tabUploading.Text = "Video Publishing";
             this.tabUploading.UseVisualStyleBackColor = true;
+            // 
+            // UploadProgress
+            // 
+            this.UploadProgress.Location = new System.Drawing.Point(15, 140);
+            this.UploadProgress.Margin = new System.Windows.Forms.Padding(4);
+            this.UploadProgress.Name = "UploadProgress";
+            this.UploadProgress.Size = new System.Drawing.Size(650, 32);
+            this.UploadProgress.TabIndex = 42;
+            this.UploadProgress.Visible = false;
+            // 
+            // HighlightsUploadVideoButton
+            // 
+            this.HighlightsUploadVideoButton.Location = new System.Drawing.Point(601, 75);
+            this.HighlightsUploadVideoButton.Name = "HighlightsUploadVideoButton";
+            this.HighlightsUploadVideoButton.Size = new System.Drawing.Size(64, 26);
+            this.HighlightsUploadVideoButton.TabIndex = 41;
+            this.HighlightsUploadVideoButton.Text = "browse";
+            this.HighlightsUploadVideoButton.UseVisualStyleBackColor = true;
+            this.HighlightsUploadVideoButton.Click += new System.EventHandler(this.HighlightsUploadVideoButton_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(1, 75);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(70, 18);
+            this.label7.TabIndex = 40;
+            this.label7.Text = "Highlights";
+            // 
+            // HighlightsUploadVideoFile
+            // 
+            this.HighlightsUploadVideoFile.Location = new System.Drawing.Point(131, 75);
+            this.HighlightsUploadVideoFile.Name = "HighlightsUploadVideoFile";
+            this.HighlightsUploadVideoFile.Size = new System.Drawing.Size(464, 26);
+            this.HighlightsUploadVideoFile.TabIndex = 39;
+            this.HighlightsUploadVideoFile.TextChanged += new System.EventHandler(this.HighlightsUploadVideoFile_TextChanged);
+            // 
+            // UploadToYouTubeButton
+            // 
+            this.UploadToYouTubeButton.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UploadToYouTubeButton.Location = new System.Drawing.Point(502, 180);
+            this.UploadToYouTubeButton.Margin = new System.Windows.Forms.Padding(4);
+            this.UploadToYouTubeButton.Name = "UploadToYouTubeButton";
+            this.UploadToYouTubeButton.Size = new System.Drawing.Size(163, 64);
+            this.UploadToYouTubeButton.TabIndex = 38;
+            this.UploadToYouTubeButton.Text = "Upload to YouTube";
+            this.UploadToYouTubeButton.UseVisualStyleBackColor = true;
+            this.UploadToYouTubeButton.Click += new System.EventHandler(this.UploadToYouTubeButton_Click);
+            // 
+            // MainUploadVideoFileButton
+            // 
+            this.MainUploadVideoFileButton.Location = new System.Drawing.Point(601, 30);
+            this.MainUploadVideoFileButton.Name = "MainUploadVideoFileButton";
+            this.MainUploadVideoFileButton.Size = new System.Drawing.Size(64, 26);
+            this.MainUploadVideoFileButton.TabIndex = 37;
+            this.MainUploadVideoFileButton.Text = "browse";
+            this.MainUploadVideoFileButton.UseVisualStyleBackColor = true;
+            this.MainUploadVideoFileButton.Click += new System.EventHandler(this.MainUploadVideoFileButton_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(1, 30);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(79, 18);
+            this.label6.TabIndex = 36;
+            this.label6.Text = "Main Video";
+            // 
+            // MainUploadVideoFile
+            // 
+            this.MainUploadVideoFile.Location = new System.Drawing.Point(131, 30);
+            this.MainUploadVideoFile.Name = "MainUploadVideoFile";
+            this.MainUploadVideoFile.Size = new System.Drawing.Size(464, 26);
+            this.MainUploadVideoFile.TabIndex = 35;
+            this.MainUploadVideoFile.TextChanged += new System.EventHandler(this.MainUploadVideoFile_TextChanged);
             // 
             // pictureBox3
             // 
@@ -410,6 +505,7 @@ namespace iRacingReplayOverlay
             this.UploadVideoToYouTube.TabIndex = 47;
             this.UploadVideoToYouTube.Text = "Upload Video to YouTube";
             this.UploadVideoToYouTube.UseVisualStyleBackColor = true;
+            this.UploadVideoToYouTube.Visible = false;
             // 
             // EncodeVideoAfterCapture
             // 
@@ -421,11 +517,34 @@ namespace iRacingReplayOverlay
             this.EncodeVideoAfterCapture.Text = "Encode Video After Capture";
             this.EncodeVideoAfterCapture.UseVisualStyleBackColor = true;
             // 
+            // youTubeCredentialsRequired
+            // 
+            this.youTubeCredentialsRequired.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.youTubeCredentialsRequired.ForeColor = System.Drawing.Color.DarkRed;
+            this.youTubeCredentialsRequired.Location = new System.Drawing.Point(418, 375);
+            this.youTubeCredentialsRequired.Name = "youTubeCredentialsRequired";
+            this.youTubeCredentialsRequired.Size = new System.Drawing.Size(279, 28);
+            this.youTubeCredentialsRequired.TabIndex = 48;
+            this.youTubeCredentialsRequired.Text = "*Must enter your YouTube username and password before uploading";
+            this.youTubeCredentialsRequired.Visible = false;
+            // 
+            // uploadingFileLabel
+            // 
+            this.uploadingFileLabel.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uploadingFileLabel.ForeColor = System.Drawing.Color.DarkRed;
+            this.uploadingFileLabel.Location = new System.Drawing.Point(12, 121);
+            this.uploadingFileLabel.Name = "uploadingFileLabel";
+            this.uploadingFileLabel.Size = new System.Drawing.Size(556, 21);
+            this.uploadingFileLabel.TabIndex = 49;
+            this.uploadingFileLabel.Text = "Uploading ...";
+            this.uploadingFileLabel.Visible = false;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 412);
+            this.Controls.Add(this.youTubeCredentialsRequired);
             this.Controls.Add(this.UploadVideoToYouTube);
             this.Controls.Add(this.EncodeVideoAfterCapture);
             this.Controls.Add(this.pictureBox3);
@@ -446,6 +565,8 @@ namespace iRacingReplayOverlay
             this.tabCapture.PerformLayout();
             this.tabTranscoding.ResumeLayout(false);
             this.tabTranscoding.PerformLayout();
+            this.tabUploading.ResumeLayout(false);
+            this.tabUploading.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -486,5 +607,15 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.CheckBox UploadVideoToYouTube;
         private System.Windows.Forms.CheckBox EncodeVideoAfterCapture;
+        private System.Windows.Forms.Button HighlightsUploadVideoButton;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox HighlightsUploadVideoFile;
+        private System.Windows.Forms.Button UploadToYouTubeButton;
+        private System.Windows.Forms.Button MainUploadVideoFileButton;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox MainUploadVideoFile;
+        private System.Windows.Forms.ProgressBar UploadProgress;
+        private System.Windows.Forms.Label youTubeCredentialsRequired;
+        private System.Windows.Forms.Label uploadingFileLabel;
     }
 }

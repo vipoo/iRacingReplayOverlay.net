@@ -1,5 +1,4 @@
 ﻿// This file is part of iRacingReplayOverlay.
-
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingReplayOverlay.net
@@ -17,25 +16,22 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Phases.Transcoding;
-using iRacingReplayOverlay.Support;
-using iRacingReplayOverlay;
+using Google.GData.Client;
+using Google.GData.Client.ResumableUpload;
+using Google.GData.Extensions.MediaRss;
+using Google.GData.YouTube;
 using iRacingReplayOverlay.Phases;
+using iRacingReplayOverlay.Support;
 using iRacingReplayOverlay.Video;
+using iRacingSDK;
 using MediaFoundation.Net;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
-using iRacingSDK;
 
 namespace iRacingReplayOverlay
 {
-
     public partial class Main : Form
     {
         System.Windows.Forms.Timer aTimer;
@@ -128,7 +124,9 @@ namespace iRacingReplayOverlay
         void Main_Load(object sender, EventArgs e)
         {
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
-            
+
+            youTubeCredentialsRequired.Visible = Settings.Default.YouTubeCredentials == null || Settings.Default.YouTubeCredentials.Blank;
+
             logMessagges = new LogMessages();
             Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
 
@@ -283,7 +281,7 @@ namespace iRacingReplayOverlay
                 transcodeVideoButton.Enabled = IsReadyForTranscoding();
         }
 
-        private void videoBitRate_TextChanged(object sender, EventArgs e)
+        void videoBitRate_TextChanged(object sender, EventArgs e)
         {
             if(int.TryParse(videoBitRate.Text, out videoBitRateNumber))
             {
@@ -292,7 +290,7 @@ namespace iRacingReplayOverlay
             }
         }
 
-        private void BeginProcessButton_Click(object sender, EventArgs e)
+        void BeginProcessButton_Click(object sender, EventArgs e)
         {
             BeginProcessButton.Enabled = false;
             AnalysingRaceLabel.Visible = true;
@@ -334,24 +332,25 @@ namespace iRacingReplayOverlay
                 });
         }
 
-        private void SettingsButton_Click(object sender, EventArgs e)
+        void SettingsButton_Click(object sender, EventArgs e)
         {
             var settings = new ConfigureTrackCameras();
             settings.ShowDialog();
         }
 
-        private void configureVideoCaptureButton_Click(object sender, EventArgs e)
+        void configureVideoCaptureButton_Click(object sender, EventArgs e)
         {
             var settings = new ConfigureGeneralSettings();
             settings.ShowDialog();
+            youTubeCredentialsRequired.Visible = Settings.Default.YouTubeCredentials.Blank;
         }
 
-        private void logMessagesButton_Click(object sender, EventArgs e)
+        void logMessagesButton_Click(object sender, EventArgs e)
         {
             logMessagges.Show();
         }
 
-        private void workingFolderTextBox_TextChanged(object sender, EventArgs e)
+        void workingFolderTextBox_TextChanged(object sender, EventArgs e)
         {
             Settings.Default.WorkingFolder = workingFolderTextBox.Text;
             Settings.Default.Save();
@@ -359,7 +358,103 @@ namespace iRacingReplayOverlay
             StateUpdated();
         }
 
+        void MainUploadVideoFileButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new OpenFileDialog();
+            fbd.Filter = "WMV|*.wmv|All files (*.*)|*.*";
+            fbd.FileName = sourceVideoTextBox.Text;
 
+            if (fbd.ShowDialog() == DialogResult.OK)
+                MainUploadVideoFile.Text = fbd.FileName;
+        }
 
+        void HighlightsUploadVideoButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new OpenFileDialog();
+            fbd.Filter = "Highlights WMV|*.highlights.wmv|All files (*.*)|*.*";
+            fbd.FileName = sourceVideoTextBox.Text;
+
+            if (fbd.ShowDialog() == DialogResult.OK)
+                HighlightsUploadVideoFile.Text = fbd.FileName;
+        }
+
+        void UploadToYouTubeButton_Click(object sender, EventArgs e)
+        {
+            UploadToYouTube(HighlightsUploadVideoFile.Text, 
+                () => UploadToYouTube(MainUploadVideoFile.Text));
+        }
+
+        void UploadToYouTube(string filename, Action completed = null)
+        {
+            var createUploadUrl = new Uri("http://uploads.gdata.youtube.com/resumable/feeds/api/users/default/uploads");
+            var link = new AtomLink(createUploadUrl.AbsoluteUri) { Rel = ResumableUploader.CreateMediaRelation };
+
+            var newVideo = new Google.YouTube.Video
+            {
+                Title = Path.GetFileNameWithoutExtension(filename),
+                Keywords = "SimLimitedRacing, SimLimitediRacing, Sim Limited Racing, Sim Limited iRacing, iRacing, SLR, SimRacing, Gaming, Racing"
+            };
+            newVideo.Tags.Add(new MediaCategory("Autos", YouTubeNameTable.CategorySchema));
+            newVideo.YouTubeEntry.Private = true;
+            newVideo.YouTubeEntry.MediaSource = new MediaFileSource(filename, "video/x-ms-wmv");
+            newVideo.YouTubeEntry.Links.Add(link);
+
+            var cred = Settings.Default.YouTubeCredentials;
+            var cla = new ClientLoginAuthenticator("iRacingReplayOverlay", ServiceNames.YouTube, cred.UserName, cred.FreePassword)
+            {
+                DeveloperKey = YouTubeKey.ClientId
+            };
+
+            var ru = new ResumableUploader(chunkSize: 1);
+            ru.AsyncOperationCompleted += (s, e) => {
+                ru_AsyncOperationCompleted(s, e);
+                if (completed != null)
+                    completed();
+            };
+            ru.AsyncOperationProgress += ru_AsyncOperationProgress;
+            ru.InsertAsync(cla, newVideo.YouTubeEntry, "inserter");
+            
+            EnableForUpload(false);
+            UploadProgress.Visible = true;
+            uploadingFileLabel.Text = "Uploading " + Path.GetFileName(filename);
+            uploadingFileLabel.Visible = true;
+        }
+
+        void ru_AsyncOperationProgress(object sender, AsyncOperationProgressEventArgs e)
+        {
+            UploadProgress.Value = e.ProgressPercentage;
+        }
+
+        void ru_AsyncOperationCompleted(object sender, AsyncOperationCompletedEventArgs e)
+        {
+            EnableForUpload(true);
+            UploadProgress.Visible = false;
+            uploadingFileLabel.Visible = false;
+        }
+
+        void MainUploadVideoFile_TextChanged(object sender, System.EventArgs e)
+        {
+            EnableUploadButton();
+            HighlightsUploadVideoFile.Text = Path.ChangeExtension(MainUploadVideoFile.Text, ".highlights.wmv");
+        }
+
+        void HighlightsUploadVideoFile_TextChanged(object sender, System.EventArgs e)
+        {
+            EnableUploadButton();
+        }
+
+        void EnableForUpload(bool enabled)
+        {
+            MainUploadVideoFile.Enabled = enabled;
+            HighlightsUploadVideoFile.Enabled = enabled;
+            MainUploadVideoFileButton.Enabled = enabled;
+            HighlightsUploadVideoButton.Enabled = enabled;
+            UploadToYouTubeButton.Enabled = enabled;
+        }
+
+        void EnableUploadButton()
+        {
+            UploadToYouTubeButton.Enabled = MainUploadVideoFile.Text.Length > 0 && HighlightsUploadVideoFile.Text.Length > 0;
+        }
     }
 }

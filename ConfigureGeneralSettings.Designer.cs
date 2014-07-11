@@ -37,13 +37,17 @@
             this.MaxTimeForInterestingEventTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.youTubeUserName = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.youTubePassword = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.okButton.Location = new System.Drawing.Point(390, 108);
+            this.okButton.Location = new System.Drawing.Point(391, 182);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(109, 37);
             this.okButton.TabIndex = 10;
@@ -120,11 +124,48 @@
             this.label5.TabIndex = 19;
             this.label5.Text = "Time between cars for interesting event";
             // 
+            // youTubeUserName
+            // 
+            this.youTubeUserName.Location = new System.Drawing.Point(300, 115);
+            this.youTubeUserName.Name = "youTubeUserName";
+            this.youTubeUserName.Size = new System.Drawing.Size(134, 22);
+            this.youTubeUserName.TabIndex = 21;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 118);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(133, 16);
+            this.label6.TabIndex = 20;
+            this.label6.Text = "YouTube Username:";
+            // 
+            // youTubePassword
+            // 
+            this.youTubePassword.Location = new System.Drawing.Point(300, 143);
+            this.youTubePassword.Name = "youTubePassword";
+            this.youTubePassword.PasswordChar = '*';
+            this.youTubePassword.Size = new System.Drawing.Size(134, 22);
+            this.youTubePassword.TabIndex = 23;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(13, 146);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(130, 16);
+            this.label7.TabIndex = 22;
+            this.label7.Text = "YouTube Password:";
+            // 
             // ConfigureGeneralSettings
             // 
             this.AcceptButton = this.okButton;
             this.CancelButton = this.okButton;
-            this.ClientSize = new System.Drawing.Size(511, 157);
+            this.ClientSize = new System.Drawing.Size(512, 231);
+            this.Controls.Add(this.youTubePassword);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.youTubeUserName);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.MaxTimeForInterestingEventTextBox);
@@ -156,6 +197,10 @@
         private System.Windows.Forms.TextBox MaxTimeForInterestingEventTextBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox youTubeUserName;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox youTubePassword;
+        private System.Windows.Forms.Label label7;
 
     }
 }

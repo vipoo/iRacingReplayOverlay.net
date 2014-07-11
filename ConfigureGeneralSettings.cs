@@ -36,10 +36,18 @@ namespace iRacingReplayOverlay
             MaxTimeBetweenCameraChangesTextBox.Text = Settings.Default.MaxTimeBetweenCameraChanges.TotalSeconds.ToString();
             MaxTimeForInterestingEventTextBox.Text = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds.ToString();
             PreferredDriverNameTextBox.Text = Settings.Default.PreferredDriverNames;
+
+            var cred = Settings.Default.YouTubeCredentials ?? new Credentials();
+            this.youTubeUserName.Text = cred.UserName;
+            this.youTubePassword.Text = cred.FreePassword;
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
+            var cred = Settings.Default.YouTubeCredentials = Settings.Default.YouTubeCredentials ?? new Credentials();
+            cred.UserName = this.youTubeUserName.Text;
+            cred.FreePassword = this.youTubePassword.Text;
+            Settings.Default.Save();
         }
 
         private void MaxTimeBetweenCameraSwitchesTextBox_TextChanged(object sender, EventArgs e)
