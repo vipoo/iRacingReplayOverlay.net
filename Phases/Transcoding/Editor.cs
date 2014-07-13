@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Support;
 using MediaFoundation.Net;
 using System;
@@ -28,11 +27,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 {
     public static class SourceReaderExtension
     {
-        public static IEnumerable<SourceReaderSample> SamplesAfterEditing(this SourceReader sourceReader, List<OverlayData.BoringBit> edits, long offset = 0)
+        public static IEnumerable<SourceReaderSample> SamplesAfterEditing(this SourceReader sourceReader, List<VideoEdit> edits, long offset = 0)
         {
             long skippingFrom = 0;
             bool justSkipped = false;
-            Capturing.OverlayData.BoringBit currentSkip = null;
+            VideoEdit currentSkip = null;
             bool isFadingOut = false;
             long fadingOutFrom = 0;
             var isFadingIn = false;

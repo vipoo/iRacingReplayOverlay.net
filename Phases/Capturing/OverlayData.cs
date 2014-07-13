@@ -28,27 +28,14 @@ namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class OverlayData
     {
-        public class BoringBit
+        public class RaceEvent
         {
             public double StartTime;
             public double EndTime;
+            public InterestState Interest;
+            public int CarIdx;
+
             public double Duration { get { return EndTime - StartTime; } }
-
-            public TimeSpan StartTimeSpan
-            {
-                get
-                {
-                    return TimeSpan.FromSeconds(StartTime);
-                }
-            }
-
-            public TimeSpan DurationSpan
-            {
-                get
-                {
-                    return TimeSpan.FromSeconds(Duration);
-                }
-            }
         }
 
         public class MessageState
@@ -127,8 +114,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public List<CamDriver> CamDrivers = new List<CamDriver>();
         public List<FastLap> FastestLaps = new List<FastLap>();
         public List<MessageState> MessageStates = new List<MessageState>();
-        public List<BoringBit> EditCuts = new List<BoringBit>();
         public SessionData SessionData;
+        public List<RaceEvent> RaceEvents = new List<RaceEvent>();
 
         public void SaveTo(string fileName)
         {

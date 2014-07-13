@@ -22,6 +22,7 @@ using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Video;
 using MediaFoundation.Net;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -59,18 +60,39 @@ namespace iRacingReplayOverlay.Phases
         {
             var overlayData = OverlayData.FromFile(gameDataFile);
 
-            var transcodeHigh = new Task(() => ApplyTransformationsToVideo(overlayData, destinationHighlightsFile, true));
-            var transcodeFull = new Task(() => ApplyTransformationsToVideo(overlayData, destinationFile, false, next => MonitorProgress(progress, readFramesCompleted, next)));
+            const bool TranscodeHightlights = true;
+            const bool TranscodeFull = true;
+            
+            Task transcodeHigh;
+            Task transcodeFull;
+
+            Func<ProcessSample, ProcessSample> monitor = null;
+            if( !TranscodeFull)
+                monitor = next => MonitorProgress(progress, readFramesCompleted, next);
+
+            transcodeHigh = new Task(() => ApplyTransformationsToVideo(overlayData, destinationHighlightsFile, true, monitor));
+            transcodeFull = new Task(() => ApplyTransformationsToVideo(overlayData, destinationFile, false, next => MonitorProgress(progress, readFramesCompleted, next)));
 
             using (MFSystem.Start())
             {
-                transcodeHigh.Start();
+                var waits = new List<Task>();
+
+                if (TranscodeHightlights)
+                {
+                    transcodeHigh.Start();
+                    waits.Add(transcodeHigh);
+                }
+                
                 //Seem to have some kind of bug in MediaFoundation - where if two threads attempt to open source Readers to the same file, we get exception raised.
                 //To work around issue, delay the start of the second transcoder - so we dont have two threads opening at the same time.
-                Thread.Sleep(10000);
-                transcodeFull.Start();
+                if (TranscodeFull)
+                {
+                    Thread.Sleep(10000);
+                    transcodeFull.Start();
+                    waits.Add(transcodeFull);
+                }
 
-                Task.WaitAll(transcodeHigh, transcodeFull);
+                Task.WaitAll(waits.ToArray());
             }
             completed();
         }
@@ -94,7 +116,7 @@ namespace iRacingReplayOverlay.Phases
                 {
                     Action<ProcessSample> mainFeed;
 
-                    if (highlightsOnly)
+                    if (monitorProgress == null)
                         mainFeed = next => sourceReader.Samples(OverlayRaceDataToVideo(leaderBoard, next));
                     else
                         mainFeed = next => sourceReader.Samples(monitorProgress(OverlayRaceDataToVideo(leaderBoard, next)));
@@ -154,9 +176,9 @@ namespace iRacingReplayOverlay.Phases
 
         ProcessSample ApplyEdits(LeaderBoard leaderBoard, ProcessSample next)
         {
-            ProcessSample cut = next;
+            var cut = next;
 
-            foreach (var editCut in leaderBoard.OverlayData.EditCuts)
+            foreach (var editCut in leaderBoard.OverlayData.RaceEvents.GetRaceEdits())
                 cut = AVOperation.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
 
             return cut;

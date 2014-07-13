@@ -60,20 +60,20 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case IncidentPosition.Started:
                     directionAction = () =>
                     {
-                        removalEdits.InterestingThingHappend(InterestLevel.INCIDENT);
+                        removalEdits.InterestingThingHappend(InterestState.Incident, nextIncident.Current.Car.CarIdx);
                         SwitchToIncident(data);
                     };
                     return true;
 
                 case IncidentPosition.Inside:
-                    directionAction = () => removalEdits.InterestingThingHappend(InterestLevel.INCIDENT);
+                    directionAction = () => removalEdits.InterestingThingHappend(InterestState.Incident, nextIncident.Current.Car.CarIdx);
                     return true;
 
                 case IncidentPosition.Finished:
                     directionAction = () =>
                     {
                         WatchForNextIncident(data);
-                        removalEdits.InterestingThingHappend(InterestLevel.INCIDENT);
+                        removalEdits.InterestingThingHappend(InterestState.Incident, nextIncident.Current.Car.CarIdx);
                     };
                     return true;
 

@@ -26,87 +26,80 @@ using iRacingSDK.Support;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
+    public enum InterestState  { None = 0, FirstLap = 1, LastLap = 2, Incident = 3, Battle = 4 /*, Overtake = 5, Pitstp = 6 */ };
     public class InterestLevel
     {
         public TimeSpan Time;
-        public short Interest;
-
-        internal bool Interesting;
-        internal int Index;
-
-        public const short FIRST_LAP = 100;
-        public const short LAST_LAP = 100;
-        public const short INCIDENT = 80;
-        public const short BATTLE = 60;
-        public const short OVERTAKE = 55;
-        public const short PITSTOP = 50;
+        public InterestState Interest;
+        public int CarIdx;
     }
 
     public class RemovalEdits
     {
-        readonly List<OverlayData.BoringBit> boringBits;
+        readonly List<OverlayData.RaceEvent> raceEvents;
+        readonly List<InterestLevel> interestLevels = new List<InterestLevel>();
 
-        short lastInterest = 0;
-        List<InterestLevel> interestLevels = new List<InterestLevel>();
+        InterestState lastInterest = 0;
+        int carIdx = -1;
 
         public RemovalEdits(OverlayData overlayData)
         {
-            this.boringBits = overlayData.EditCuts;
+            this.raceEvents = overlayData.RaceEvents;
         }
 
-        public void InterestingThingHappend(short interest)
+        public void InterestingThingHappend(InterestState interest, long carIdx)
         {
-            lastInterest = Math.Max(interest, lastInterest);
+            InterestingThingHappend(interest, (int)carIdx);
+        }
+
+        public void InterestingThingHappend(InterestState interest, int carIdx)
+        {
+            if (interest > lastInterest)
+            {
+                lastInterest = interest;
+                this.carIdx = carIdx;
+            }
         }
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
-            interestLevels.Add(new InterestLevel { Time = relativeTime, Interest = lastInterest, Index = interestLevels.Count });
+            interestLevels.Add(new InterestLevel { Time = relativeTime, Interest = lastInterest, CarIdx = carIdx });
             lastInterest = 0;
         }
-        
+
         public void Stop()
         {
-            const int TenMinutes = 36000;
-
-            var startTime = interestLevels.First().Time;
-            var endTime = interestLevels.Last().Time;
-
-            foreach (var il in interestLevels.OrderByDescending(i => i.Interest).ThenByDescending(i => i.Time.TotalSeconds).Take(TenMinutes))
-                il.Interesting = true;
-
-            OverlayData.BoringBit boringBit = null;
-            int lastIndex = -1;
-
-            foreach (var il in interestLevels.OrderBy(i => i.Index).Where(i => !i.Interesting))
-            {
-                if( boringBit != null && lastIndex + 1 != il.Index )
-                    AddBoringBit(ref boringBit);
-
-                if (boringBit == null)
-                    boringBit = new OverlayData.BoringBit { StartTime = il.Time.TotalSeconds };
-                else
-                    boringBit.EndTime = il.Time.TotalSeconds;
-                
-                lastIndex = il.Index;
-            }
-
-            if (boringBit != null)
-                AddBoringBit(ref boringBit);
-
-            Trace.WriteLine("Total edited out time is {0}".F(TimeSpan.FromSeconds(boringBits.Sum(b => b.Duration))), "INFO");
+            foreach (var re in GetRaceEvents())
+                raceEvents.Add(re);
         }
 
-        private void AddBoringBit(ref OverlayData.BoringBit boringBit)
+        IEnumerable<OverlayData.RaceEvent> GetRaceEvents()
         {
-            if (boringBit.Duration < 10d)
-                Trace.WriteLine("Not applying edit of less then 10 seconds. From {0} for {1}".F(boringBit.StartTimeSpan, boringBit.DurationSpan));
-            else
+            InterestState lastInterest = InterestState.None;
+            int lastCarIdx = -2;
+            TimeSpan lastTime = new TimeSpan();
+            OverlayData.RaceEvent raceEvent = null;
+            
+            foreach (var il in interestLevels)
             {
-                this.boringBits.Add(boringBit);
-                Trace.WriteLine("Applying edit: from {0} for {1}".F(boringBit.StartTimeSpan, boringBit.DurationSpan));
+                lastTime = il.Time;
+
+                if (lastInterest != il.Interest || lastCarIdx != il.CarIdx)
+                {
+                    if (raceEvent != null)
+                    {
+                        raceEvent.EndTime = il.Time.TotalSeconds;
+                        yield return raceEvent;
+                    }
+                    raceEvent = new OverlayData.RaceEvent { StartTime = il.Time.TotalSeconds, Interest = il.Interest, CarIdx = il.CarIdx };
+                }
+
+                lastInterest = il.Interest;
+                lastCarIdx = il.CarIdx;
             }
-            boringBit = null;
+
+            raceEvent.EndTime = lastTime.TotalSeconds;
+            yield return raceEvent;
         }
     }
 }

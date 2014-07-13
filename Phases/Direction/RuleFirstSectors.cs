@@ -54,7 +54,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         void SwitchToLeader(DataSample data)
         {
-            removalEdits.InterestingThingHappend(InterestLevel.FIRST_LAP);
+            removalEdits.InterestingThingHappend(InterestState.FirstLap, -1);
 
             if (reselectLeaderAt < DateTime.Now)
             {
