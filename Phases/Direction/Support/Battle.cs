@@ -43,17 +43,15 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             }
         }
 
-        public static SessionData._DriverInfo._Drivers Find(DataSample data, TimeSpan battleGap)
+        public static SessionData._DriverInfo._Drivers Find(DataSample data, TimeSpan battleGap, double factor)
         {
             var allBattles = All(data, battleGap);
 
-            return SelectABattle(data, allBattles, random.Next(101));
+            return SelectABattle(data, allBattles, random.Next(101), factor);
         }
 
         internal static IEnumerable<GapMetric> All(DataSample data, TimeSpan battleGap)
         {
-            var range = battleGap.TotalSeconds;
-
             var distances = data.Telemetry.CarIdxDistance
                     .Select((d, i) => new { CarIdx = i, Distance = d })
                     .Skip(1)
@@ -62,7 +60,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                     .ToList();
 
             if (distances.Count == 0)
-                return null;
+                return new GapMetric[0];
 
             var gap = Enumerable.Range(1, distances.Count - 1)
                     .Select(i => new
@@ -81,12 +79,17 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
 
             return timeGap
                 .OrderByDescending(d => d.Position)
-                .Where(d => d.Time < range);
+                .Where(d => d.Time < battleGap.TotalSeconds);
         }
 
-        internal static SessionData._DriverInfo._Drivers SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice)
+        internal static SessionData._DriverInfo._Drivers SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor )
         {
-            var numberOfX = Math.Pow(2, all.Count()) - 1.0;
+            if (all.Count() == 0)
+                return null;
+
+            //const double factor = 1.5d;
+
+            var numberOfX = Math.Pow(2d, all.Count() * factor) - factor;
             var x = 95.0 / (double)numberOfX;
             var ddice = (double)dice;
 
@@ -97,11 +100,11 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             }
 
             var divide = 5.0;
-            var factor = 1.0;
+            var currentFactor = factor;
 
             foreach (var battle in all)
             {
-                var upper = ((Math.Pow(2, factor) - 1.0) * x) + 5.0;
+                var upper = ((Math.Pow(2, currentFactor) - factor) * x) + 5.0;
 
                 if (ddice < upper)
                 {
@@ -111,11 +114,23 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 }
 
                 divide = upper;
-                factor++;
+                currentFactor += factor;
             }
-
+            
             Trace.WriteLine("WARNING!  did not find battle by chance!", "DEBUG");
-            return null;
+            return data.SessionData.DriverInfo.Drivers[all.Last().CarIdx];
+        }
+
+        internal static bool IsInBattle(DataSample data, TimeSpan battleGap, SessionData._DriverInfo._Drivers follower, SessionData._DriverInfo._Drivers leader)
+        {
+            var leaderCar = data.Telemetry.Cars[leader.CarIdx];
+            var followerCar = data.Telemetry.Cars[follower.CarIdx];
+
+            if (leaderCar.Position == followerCar.Position + 1)
+                return false;
+
+            var timeGap = (leaderCar.TotalDistance - followerCar.TotalDistance) * data.Telemetry.Session.ResultsAverageLapTime;
+            return timeGap < battleGap.TotalSeconds;
         }
     }
 }

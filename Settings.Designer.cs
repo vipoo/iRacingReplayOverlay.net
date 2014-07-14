@@ -97,12 +97,12 @@ namespace iRacingReplayOverlay {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:00:20")]
-        public global::System.TimeSpan MaxTimeBetweenCameraChanges {
+        public global::System.TimeSpan CameraStickyPeriod {
             get {
-                return ((global::System.TimeSpan)(this["MaxTimeBetweenCameraChanges"]));
+                return ((global::System.TimeSpan)(this["CameraStickyPeriod"]));
             }
             set {
-                this["MaxTimeBetweenCameraChanges"] = value;
+                this["CameraStickyPeriod"] = value;
             }
         }
         
@@ -121,12 +121,12 @@ namespace iRacingReplayOverlay {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:00:01")]
-        public global::System.TimeSpan MaxTimeForInterestingEvent {
+        public global::System.TimeSpan BattleGap {
             get {
-                return ((global::System.TimeSpan)(this["MaxTimeForInterestingEvent"]));
+                return ((global::System.TimeSpan)(this["BattleGap"]));
             }
             set {
-                this["MaxTimeForInterestingEvent"] = value;
+                this["BattleGap"] = value;
             }
         }
         
@@ -138,6 +138,30 @@ namespace iRacingReplayOverlay {
             }
             set {
                 this["YouTubeCredentials"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:02:00")]
+        public global::System.TimeSpan BattleStickyPeriod {
+            get {
+                return ((global::System.TimeSpan)(this["BattleStickyPeriod"]));
+            }
+            set {
+                this["BattleStickyPeriod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.25")]
+        public double BattleFactor {
+            get {
+                return ((double)(this["BattleFactor"]));
+            }
+            set {
+                this["BattleFactor"] = value;
             }
         }
     }

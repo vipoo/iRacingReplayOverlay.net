@@ -41,7 +41,17 @@ namespace iRacingReplayOverlay.Phases
             iRacing.Replay.MoveToFrame(f + 60 * 4);
             iRacing.Replay.SetSpeed(1);
 
-            var scenicCameras = data.SessionData.CameraInfo.Groups.First( c => c.GroupName == "Scenic").GroupNum;
+            var camera = data.SessionData.CameraInfo.Groups.FirstOrDefault( c => c.GroupName == "Scenic");
+            if( camera == null )
+                camera = data.SessionData.CameraInfo.Groups.FirstOrDefault( c => c.GroupName == "Pit Lane 2");
+            if( camera == null )
+                camera = data.SessionData.CameraInfo.Groups.FirstOrDefault( c => c.GroupName == "Chopper");
+            if( camera == null)
+                camera = data.SessionData.CameraInfo.Groups.FirstOrDefault( c => c.GroupName == "TV3");
+            if( camera == null)
+                throw new Exception("Cant find a camera to use for pre-race capture");
+
+            var scenicCameras = camera.GroupNum;
             var aCar = data.SessionData.DriverInfo.Drivers[1].CarNumber;
             iRacing.Replay.CameraOnDriver((short)aCar, (short)scenicCameras);
 

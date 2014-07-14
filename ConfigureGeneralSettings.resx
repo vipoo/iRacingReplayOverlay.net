@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="battleFactor.Tag" xml:space="preserve">
+    <value>A factor to bias the random selection of battles.  Larger numbers will tend to focus on battles at front.  Smaller numbers will increase the chance of battles futher down the order to be selected.  Recommend values between 0.9 and 1.5</value>
+  </data>
 </root>

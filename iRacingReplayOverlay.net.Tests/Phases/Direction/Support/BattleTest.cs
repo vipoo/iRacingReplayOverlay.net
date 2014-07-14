@@ -61,9 +61,9 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
                 new Battle.GapMetric { CarIdx = 1, Position = 1 },
             };
 
-            AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i), Is.Null);
-            AssertThatFor(5, 36, i => Battle.SelectABattle(data, all, i).UserName, Is.EqualTo("Driver1"));
-            AssertThatFor(37, 99, i => Battle.SelectABattle(data, all, i).UserName, Is.EqualTo("Driver2"));
+            AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i, 1.5d), Is.Null);
+            AssertThatFor(5, 24, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver1"));
+            AssertThatFor(25, 99, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver2"));
         }
 
         [Test]
@@ -77,10 +77,10 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
                 new Battle.GapMetric { CarIdx = 0, Position = 1 },
             };
 
-            AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i), Is.Null);
-            AssertThatFor(5, 18, i => Battle.SelectABattle(data, all, i).UserName, Is.EqualTo("Driver3"));
-            AssertThatFor(19, 45, i => Battle.SelectABattle(data, all, i).UserName, Is.EqualTo("Driver2"));
-            AssertThatFor(46, 99, i => Battle.SelectABattle(data, all, i).UserName, Is.EqualTo("Driver1"));
+            AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i, 1.5d), Is.Null);
+            AssertThatFor(5, 10, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver3"));
+            AssertThatFor(11, 34, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver2"));
+            AssertThatFor(35, 99, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver1"));
         }
 
         static void AssertThatFor<T>(int from, int to, Func<int, T> driver, Constraint constraint)

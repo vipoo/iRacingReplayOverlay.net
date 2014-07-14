@@ -329,6 +329,11 @@ namespace iRacingReplayOverlay
                     ProcessErrorMessageLabel.Text = errorMessage;
 
                     LogListener.ToFile(GetDefaultLogFileName());
+
+                    WindowState = FormWindowState.Minimized;
+                    Show();
+                    WindowState = FormWindowState.Normal;
+                    this.BringToFront();
                 });
         }
 

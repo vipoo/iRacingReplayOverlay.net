@@ -20,17 +20,23 @@
     <Setting Name="lastVideoFile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="MaxTimeBetweenCameraChanges" Type="System.TimeSpan" Scope="User">
+    <Setting Name="CameraStickyPeriod" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:00:20</Value>
     </Setting>
     <Setting Name="PreferredDriverNames" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="MaxTimeForInterestingEvent" Type="System.TimeSpan" Scope="User">
+    <Setting Name="BattleGap" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:00:01</Value>
     </Setting>
     <Setting Name="YouTubeCredentials" Type="iRacingReplayOverlay.Credentials" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="BattleStickyPeriod" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">00:02:00</Value>
+    </Setting>
+    <Setting Name="BattleFactor" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1.25</Value>
     </Setting>
   </Settings>
 </SettingsFile>

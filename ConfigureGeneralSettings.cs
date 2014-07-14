@@ -18,6 +18,7 @@
 
 using iRacingReplayOverlay.Support;
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -33,9 +34,11 @@ namespace iRacingReplayOverlay
 
         private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
         {
-            MaxTimeBetweenCameraChangesTextBox.Text = Settings.Default.MaxTimeBetweenCameraChanges.TotalSeconds.ToString();
-            MaxTimeForInterestingEventTextBox.Text = Settings.Default.MaxTimeForInterestingEvent.TotalSeconds.ToString();
-            PreferredDriverNameTextBox.Text = Settings.Default.PreferredDriverNames;
+            cameraStickyPeriod.Text = Settings.Default.CameraStickyPeriod.TotalSeconds.ToString();
+            battleStickyPeriod.Text = Settings.Default.BattleStickyPeriod.TotalSeconds.ToString();
+            battleGap.Text = Settings.Default.BattleGap.TotalSeconds.ToString();
+            battleFactor.Text = Settings.Default.BattleFactor.ToString();
+            preferredDriverNameTextBox.Text = Settings.Default.PreferredDriverNames;
 
             var cred = Settings.Default.YouTubeCredentials ?? new Credentials();
             this.youTubeUserName.Text = cred.UserName;
@@ -53,9 +56,9 @@ namespace iRacingReplayOverlay
         private void MaxTimeBetweenCameraSwitchesTextBox_TextChanged(object sender, EventArgs e)
         {
             var newSeconds = 0.0;
-            if (double.TryParse(MaxTimeBetweenCameraChangesTextBox.Text, out newSeconds))
+            if (double.TryParse(cameraStickyPeriod.Text, out newSeconds))
             {
-                Settings.Default.MaxTimeBetweenCameraChanges = TimeSpan.FromSeconds(newSeconds);
+                Settings.Default.CameraStickyPeriod = newSeconds.Seconds();
                 Settings.Default.Save();
             }
         }
@@ -63,17 +66,44 @@ namespace iRacingReplayOverlay
         private void MaxTimeForInterestingEventTextBox_TextChanged(object sender, EventArgs e)
         {
             var newSeconds = 0.0;
-            if (double.TryParse(MaxTimeForInterestingEventTextBox.Text, out newSeconds))
+            if (double.TryParse(battleGap.Text, out newSeconds))
             {
-                Settings.Default.MaxTimeForInterestingEvent = TimeSpan.FromSeconds(newSeconds);
+                Settings.Default.BattleGap = newSeconds.Seconds();
                 Settings.Default.Save();
             }
         }
 
         private void PreferredDriverNameTextBox_TextChanged(object sender, EventArgs e)
         {
-            Settings.Default.PreferredDriverNames = PreferredDriverNameTextBox.Text;
+            Settings.Default.PreferredDriverNames = preferredDriverNameTextBox.Text;
             Settings.Default.Save();
+        }
+
+        private void battleStickyPeriod_TextChanged(object sender, EventArgs e)
+        {
+            var newSeconds = 0.0;
+            if (double.TryParse(battleStickyPeriod.Text, out newSeconds))
+            {
+                Settings.Default.BattleStickyPeriod = newSeconds.Seconds();
+                Settings.Default.Save();
+            }
+        }
+
+        private void OnFocus(object sender, EventArgs e)
+        {
+            helpText.Text = "";
+            if (this.ActiveControl.Tag != null )
+                helpText.Text = this.ActiveControl.Tag.ToString();
+        }
+
+        private void battleFactor_TextChanged(object sender, EventArgs e)
+        {
+            var factor = 0.0d;
+            if (double.TryParse(battleFactor.Text, out factor))
+            {
+                Settings.Default.BattleFactor = factor;
+                Settings.Default.Save();
+            }
         }
     }
 }

@@ -16,13 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction.Support;
 using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -45,23 +43,28 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         readonly CameraControl cameraControl;
         readonly RemovalEdits removalEdits;
-        readonly TimeSpan battleStickyTime;
+        readonly TimeSpan battleStickyPeriod;
+        readonly TimeSpan battleCameraChangePeriod;
         readonly TimeSpan battleGap;
+        readonly double battleFactor;
 
         bool isInBattle = false;
         TimeSpan battleEndTime;
+        TimeSpan cameraChangeTime;
         Car battleFollower;
         Car battleLeader;
         Action directionAction;
         TrackCamera camera;
         SessionData._DriverInfo._Drivers car;
 
-        public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan battleStickyTime, TimeSpan battleGap)
+        public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan cameraStickyPeriod, TimeSpan battleStickyPeriod, TimeSpan battleGap, double battleFactor)
         {
             this.cameraControl = cameraControl;
             this.removalEdits = removalEdits;
-            this.battleStickyTime = battleStickyTime;
+            this.battleStickyPeriod = battleStickyPeriod;
+            this.battleCameraChangePeriod = cameraStickyPeriod;
             this.battleGap = battleGap;
+            this.battleFactor = battleFactor;
         }
 
         public bool IsActive(DataSample data)
@@ -81,6 +84,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case BattlePosition.Inside:
                     directionAction = () =>
                     {
+                        UpdateBattleCamera(data);
                         UpdateCameraIfOvertake(data);
                         removalEdits.InterestingThingHappend(InterestState.Battle, car.CarIdx);
                     };
@@ -96,6 +100,20 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
 
             throw new Exception("Invalid Battle state {0}".F(state));
+        }
+
+        void UpdateBattleCamera(DataSample data)
+        {
+            if (data.Telemetry.SessionTimeSpan <= cameraChangeTime)
+                return;
+
+            cameraChangeTime = data.Telemetry.SessionTimeSpan + this.battleCameraChangePeriod;
+
+            camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar, CameraAngle.LookingAtCar);
+            car = ChangeCarForCamera(data, camera, battleFollower.Driver);
+
+            Trace.WriteLine("{0} Changing camera to driver: {1}; camera: {2}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName), "INFO");
+            iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
         public void Direct(DataSample data)
@@ -125,7 +143,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (BattlersHaveSwappedPositions(data))
             {
-                battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyTime;
+                battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyPeriod;
                 Trace.WriteLine("{0} {1} has overtaken {2}".F(data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName), "INFO");
                 SwitchToBattle(data, battleLeader.Driver);
             }
@@ -171,7 +189,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         BattleState SearchForNextBattle(DataSample data, Func<BattleState> notFound)
         {
-            var battleDriver = Battle.Find(data, battleGap);
+            var battleDriver = Battle.Find(data, battleGap, battleFactor);
             if (battleDriver == null)
             {
                 isInBattle = false;
@@ -179,15 +197,20 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
 
             isInBattle = true;
-            battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyTime;
-
+            battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyPeriod;
+            cameraChangeTime = data.Telemetry.SessionTimeSpan + this.battleCameraChangePeriod;
             return new BattleState(BattlePosition.Started, battleDriver);
         }
 
         bool HasBattleTimeout(DataSample data)
         {
+            if (data.Telemetry.SessionTimeSpan > cameraChangeTime && !Battle.IsInBattle(data, battleGap, battleFollower.Driver, battleLeader.Driver))
+            {
+                Trace.WriteLine("Battle has stopped.", "INFO");
+                return true;
+            }
+
             return data.Telemetry.SessionTimeSpan > battleEndTime;
         }
-
     }
 }
