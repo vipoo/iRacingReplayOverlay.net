@@ -24,6 +24,7 @@ using iRacingReplayOverlay.Phases;
 using iRacingReplayOverlay.Support;
 using iRacingReplayOverlay.Video;
 using iRacingSDK;
+using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
 using System.Diagnostics;

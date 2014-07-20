@@ -18,6 +18,7 @@
 
 using iRacingReplayOverlay.Support;
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
 using System.Diagnostics;
 using System.Linq;

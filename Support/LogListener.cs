@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using iRacingSDK.Support;
 using System;
 using System.Diagnostics;
 using System.IO;

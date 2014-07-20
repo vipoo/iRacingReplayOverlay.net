@@ -20,6 +20,7 @@
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Video;
+using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
 using System.Collections.Generic;

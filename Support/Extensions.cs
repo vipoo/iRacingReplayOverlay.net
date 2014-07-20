@@ -52,11 +52,6 @@ namespace iRacingReplayOverlay.Support
             }
         }
 
-        public static string F(this string self, params object[] args)
-        {
-            return string.Format(self, args);
-        }
-
         public static int IndexOf<T>(this IEnumerable<T> self, Func<T, bool> fn)
         {
             int i = 0;
