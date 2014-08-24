@@ -57,12 +57,12 @@ namespace iRacingReplayOverlay.Phases
             this.gameDataFile = Path.ChangeExtension(sourceFile, "xml");
         }
 
-        public void _OverlayRaceDataOntoVideo(_Progress progress, Action completed, Action readFramesCompleted)
+        public void _OverlayRaceDataOntoVideo(_Progress progress, Action completed, Action readFramesCompleted, bool highlightOnly)
         {
             var overlayData = OverlayData.FromFile(gameDataFile);
 
             const bool TranscodeHightlights = true;
-            const bool TranscodeFull = true;
+            bool TranscodeFull = !highlightOnly;
             
             Task transcodeHigh;
             Task transcodeFull;
