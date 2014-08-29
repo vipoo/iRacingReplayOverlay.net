@@ -18,7 +18,6 @@
 
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
@@ -46,7 +45,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             nextIncident = incidents.GetEnumerator();
             nextIncident.MoveNext();
-            if(nextIncident.Current != null)
+            if (nextIncident.Current != null)
                 Trace.WriteLine("First incident at {0}".F(nextIncident.Current.StartSessionTime), "INFO");
             TV2 = cameras.First(tc => tc.CameraName == "TV2");
         }
@@ -55,7 +54,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             var position = GetIncidentPosition(data);
 
-            switch( position)
+            switch (position)
             {
                 case IncidentPosition.Started:
                     directionAction = () =>
@@ -72,8 +71,8 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case IncidentPosition.Finished:
                     directionAction = () =>
                     {
-                        WatchForNextIncident(data);
                         removalEdits.InterestingThingHappend(InterestState.Incident, nextIncident.Current.Car.CarIdx);
+                        WatchForNextIncident(data);
                     };
                     return true;
 
@@ -120,7 +119,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return IncidentPosition.Finished;
             }
 
-            return isInside ?  IncidentPosition.Inside : IncidentPosition.Outside;
+            return isInside ? IncidentPosition.Inside : IncidentPosition.Outside;
         }
 
         bool IsInPits(DataSample data)
@@ -146,7 +145,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             nextIncident.MoveNext();
 
-            if(nextIncident.Current != null)
+            if (nextIncident.Current != null)
                 Trace.WriteLine("{0} (Move) Next incident at {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime), "INFO");
         }
 

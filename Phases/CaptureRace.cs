@@ -35,7 +35,7 @@ namespace iRacingReplayOverlay.Phases
     {
         string workingFolder;
         string introVideoFileName;
-        
+
         void _WithWorkingFolder(string workingFolder)
         {
             this.workingFolder = workingFolder;
@@ -47,13 +47,13 @@ namespace iRacingReplayOverlay.Phases
         }
 
         void _CaptureRace(Action<string, string> onComplete)
-		{
-			_CaptureRaceTest(onComplete, new iRacingConnection().GetBufferedDataFeed());
-		}
+        {
+            _CaptureRaceTest(onComplete, new iRacingConnection().GetBufferedDataFeed());
+        }
 
-		internal void _CaptureRaceTest(Action<string, string> onComplete, IEnumerable<DataSample> samples)
-		{
-			iRacing.Replay.MoveToFrame(raceStartFrameNumber);
+        internal void _CaptureRaceTest(Action<string, string> onComplete, IEnumerable<DataSample> samples)
+        {
+            iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
             Thread.Sleep(2000);
             iRacing.Replay.SetSpeed(1);
@@ -68,7 +68,7 @@ namespace iRacingReplayOverlay.Phases
             var replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
             var sessionDataCapture = new SessionDataCapture(overlayData);
 
-            var captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5), 
+            var captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5),
                 new CaptureLeaderBoard(overlayData, commentaryMessages, removalEdits).Process);
 
             var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
@@ -90,14 +90,14 @@ namespace iRacingReplayOverlay.Phases
             if (shortTestOnly)
                 samples = samples.AtSpeed(2);
 
-			foreach (var data in samples)
+            foreach (var data in samples)
             {
                 if (shortTestOnly && !haveSkipForTesting && ReturnIfSkipping(data))
                 {
                     haveSkipForTesting = true;
                     continue;
                 }
-            
+
                 var relativeTime = DateTime.Now - startTime;
 
                 sessionDataCapture.Process(data);
@@ -120,12 +120,10 @@ namespace iRacingReplayOverlay.Phases
             var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
             Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_MINIMIZE);
 
-
-            
             _WithFiles(fileName);
 
             string errorMessage = null;
-            if(fileName == null)
+            if (fileName == null)
                 errorMessage = "Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder);
 
             onComplete(fileName, errorMessage);
@@ -133,7 +131,7 @@ namespace iRacingReplayOverlay.Phases
 
         private bool ReturnIfSkipping(DataSample data)
         {
-            if( data.Telemetry.RaceLaps <= 2)
+            if (data.Telemetry.RaceLaps <= 2)
                 return false;
 
             var lapSkip = data.Telemetry.Session.ResultsLapsComplete - data.Telemetry.RaceLaps - 2;
