@@ -22,20 +22,29 @@ This is where it joins the introduction scenic views recorded above and the main
 You still need a conventional capture software to capture your game video to a video file - I use Nvidia's ShadowPlay.  
 The program will send the required keystroke to the video capture software, once its position the replay to the start of the race.
 
+Installation
+============
 
-Whats next
+The application can be installed at: https://iracingreplaydirector.s3-ap-southeast-2.amazonaws.com/index.html
 
-* I want to get more editing going - Its not identifying enough boring bits - so depending on the replay I only get 10-15mins chomped.
-* I want to add the number of pits stops each drivers done to the leaderboard - and add them to the race commentary section
-* Fix some bugs
-* Perhaps provide a way to add the championship standings
+How to use
+===================
 
-Compiling/Building
+1. Start iRacing with the replay you wish to convert. (Make sure iRacing is running at a optimal resolution for video encoding. eg: 720p or 1080p)
+2. With iRacing still running, switch back to the desktop and start iRacing Replay Director
+3. Click the button "Configure Track Cameras"
+4. Select the track of your replay currently loaded.
+5. Select % options for the cameras you would like to use during the replay.
+6. Ensure your video capture software is configured to respond to the key press ALT+F9 or at least F9 to activate and deactivate video capture
+7. Press the Begin Capture button when ready to capture 
+8. (You may need to press spacebar in iRacing to remove iRacing's replay controls) 
+9. Once race capture is completed, you can then Encode your full race and highlight videos
 
-As all development is pushed to the master branch - it is possible that at any point in time this code will not compile or will have
-bugs.  Tags are created for 'stable' versions of the code. Review the message of each of the tags to find the versions
-of dependent projects and other release notes.  
+Known Issues
+============
 
-```git tag -l -n5```
+* Only support MPEG/H.264 codec for capture
+* Video capture software must respond to ALT+F9 or F9 keypress to start/stop recording
+* Upon completion of capture, iRacing may not minimised
 
-The tagged versions should compile OK.
+
