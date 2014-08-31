@@ -3,7 +3,7 @@ iRacingReplayOverlay.net
 
 This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
 
-It creates 2 videos from your replays.  The full replay and a 10 minute highlight video.
+It creates 2 videos from your replays; the full replay and a 10 minute highlight video.
 
 The highlight video will contain the battles, incidents and remove any boring bits from the final video.
 
@@ -14,6 +14,7 @@ https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be
 
 https://www.youtube.com/watch?v=Zs4VyBPOCHw&list=UUjHTFbxIv3vi7KGreofr8Aw
 
+Please feel free to log feature requests, or bug issues in github issues tracker for the repo at: https://github.com/vipoo/iRacingReplayOverlay.net/issues
 
 You configure the rules for cameras selection - then with iRacing replay loaded, you press the big button saying 'Begin'.
 
