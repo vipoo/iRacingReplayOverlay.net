@@ -19,8 +19,6 @@ After the race is finish the program stops your video capture program - and then
 
 This is where it joins the introduction scenic views recorded above and the main race - cuts the boring bits, and adds the overlays.
 
-There was a lot of work to get quality data from iRacing - there were a few bugs in the data stream I had to work around!
-
 You still need a conventional capture software to capture your game video to a video file - I use Nvidia's ShadowPlay.  
 The program will send the required keystroke to the video capture software, once its position the replay to the start of the race.
 
