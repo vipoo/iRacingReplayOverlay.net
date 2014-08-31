@@ -20,6 +20,7 @@ using iRacingReplayOverlay.Phases.Capturing;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
@@ -30,6 +31,8 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly TrackCamera TV3;
 
         DateTime reselectLeaderAt = DateTime.Now;
+        bool wasFirstSectors = false;
+        bool completedFirstSectors = false;
 
         public RuleFirstSectors(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
@@ -39,7 +42,27 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public bool IsActive(DataSample data)
         {
-            return OnFirstSecotrs(data);
+            if (!wasFirstSectors)
+            {
+                if (OnFirstSecotrs(data))
+                {
+                    Trace.WriteLine("{0}.  Showing leader for first two sectors".F(data.Telemetry.SessionTimeSpan));
+                    wasFirstSectors = true;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (OnFirstSecotrs(data))
+                return true;
+
+            if (!completedFirstSectors)
+            {
+                Trace.WriteLine("{0}  Leader has completed first 2 sectors".F(data.Telemetry.SessionTimeSpan));
+                completedFirstSectors = true;
+            }
+            return false;
         }
 
         public void Direct(DataSample data)
