@@ -26,7 +26,7 @@ using iRacingSDK.Support;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
-    public enum InterestState  { None = 0, FirstLap = 1, LastLap = 2, Incident = 3, Battle = 4 /*, Overtake = 5, Pitstp = 6 */ };
+    public enum InterestState { None = 0, FirstLap = 1, LastLap = 2, Incident = 3, Restart = 4, Battle = 5 /*, Overtake = 5, Pitstp = 6 */};
     public class InterestLevel
     {
         public TimeSpan Time;

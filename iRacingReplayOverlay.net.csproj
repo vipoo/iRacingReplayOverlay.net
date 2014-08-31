@@ -98,6 +98,7 @@
     <Compile Include="ConfigureGeneralSettings.Designer.cs">
       <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Phases\Direction\RulePaceLaps.cs" />
     <Compile Include="Phases\Transcoding\VideoCut.cs" />
     <Compile Include="Phases\Transcoding\RaceHighlightEdits.cs" />
     <Compile Include="Properties\Credentials.cs" />
