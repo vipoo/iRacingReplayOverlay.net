@@ -167,7 +167,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             if (camera.CameraAngle == CameraAngle.LookingBehindCar)
             {
-                Trace.WriteLine("{0} Changing to forward car, with reverse camera".F(data.Telemetry.SessionTimeSpan));
+                Trace.WriteLine("{0} Changing to forward car, with reverse camera".F(data.Telemetry.SessionTimeSpan), "INFO");
                 car = data.Telemetry.Cars.First(c => c.Position == car.Position - 1);
                 return data.SessionData.DriverInfo.Drivers[car.CarIdx];
             }
