@@ -66,14 +66,16 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var timeRemaing = (10.Minutes() - totalTime.Seconds()).TotalSeconds / 2;
 
             var incidentRaceEvents = GetRaceEvents(raceEvents, middleTime, timeRemaing, InterestState.Incident);
+            totalTime = totalTime + incidentRaceEvents.Sum(re => re.Duration);
+            timeRemaing = (10.Minutes() - totalTime.Seconds()).TotalSeconds;
 
+            var restartRaceEvents = GetRaceEvents(raceEvents, middleTime, timeRemaing, InterestState.Restart);
             totalTime = totalTime + incidentRaceEvents.Sum(re => re.Duration);
             timeRemaing = (10.Minutes() - totalTime.Seconds()).TotalSeconds;
 
             var battleIncidents = GetRaceEvents(raceEvents, middleTime, timeRemaing, InterestState.Battle);
 
-            var totalRaceEvents = firstAndLastLapRaceEvents.Concat(incidentRaceEvents).Concat(battleIncidents).OrderBy(re => re.StartTime);
-            return totalRaceEvents;
+            return firstAndLastLapRaceEvents.Concat(incidentRaceEvents).Concat(restartRaceEvents).Concat(battleIncidents).OrderBy(re => re.StartTime);
         }
 
         static List<OverlayData.RaceEvent> GetRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, double middleTime, double timeRemaing, InterestState interest)
