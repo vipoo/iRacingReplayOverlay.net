@@ -17,6 +17,8 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK;
+using iRacingSDK.Support;
+using System.Diagnostics;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
@@ -46,11 +48,17 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (isVetoed = vetoRule.IsActive(data))
             {
+                Trace.WriteLineIf(!wasVetored, "{0}. Vetoing rule {1} with {2}".F(data.Telemetry.SessionTimeSpan, mainRule.Name, vetoRule.Name));
                 wasVetored = true;
                 return true;
             }
 
             return mainRule.IsActive(data);
+        }
+
+        public string Name
+        {
+            get { return isVetoed ? vetoRule.Name : mainRule.Name; }
         }
 
         public void Direct(DataSample data)

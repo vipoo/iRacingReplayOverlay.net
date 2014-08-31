@@ -213,5 +213,10 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             return data.Telemetry.SessionTimeSpan > battleEndTime;
         }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
     }
 }

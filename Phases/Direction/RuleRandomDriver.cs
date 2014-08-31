@@ -100,5 +100,10 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             return sessionData.DriverInfo.Drivers[activeDrivers[next]];
         }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
     }
 }

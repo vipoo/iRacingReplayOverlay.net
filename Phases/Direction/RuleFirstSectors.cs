@@ -63,5 +63,10 @@ namespace iRacingReplayOverlay.Phases.Direction
                 reselectLeaderAt = DateTime.Now + 5.Seconds(); ;
             }
         }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
     }
 }

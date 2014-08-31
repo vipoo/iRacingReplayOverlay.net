@@ -99,5 +99,10 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, TV2.CameraNumber);
         }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
     }
 }

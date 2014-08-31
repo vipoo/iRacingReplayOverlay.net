@@ -24,6 +24,7 @@ namespace iRacingReplayOverlay.Phases.Direction
     {
         bool IsActive(DataSample data);
         void Direct(DataSample data);
+        string Name { get; }
     }
 
     public interface IVetoRule : IDirectionRule
