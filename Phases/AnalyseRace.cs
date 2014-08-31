@@ -30,7 +30,7 @@ namespace iRacingReplayOverlay.Phases
     public partial class IRacingReplay
     {
         int raceStartFrameNumber = 0;
-		internal Incidents incidents;
+        internal Incidents incidents;
 
         public void _AnalyseRace(Action onComplete)
         {
@@ -42,9 +42,9 @@ namespace iRacingReplayOverlay.Phases
                 .WithCorrectedPercentages()
                 .AtSpeed(16)
                 .RaceOnly()
-                .First( d => d.Telemetry.SessionState == SessionState.Racing);
+                .First(d => d.Telemetry.SessionState == SessionState.Racing);
 
-            raceStartFrameNumber = data.Telemetry.ReplayFrameNum - (60*20);
+            raceStartFrameNumber = data.Telemetry.ReplayFrameNum - (60 * 20);
 
             if (raceStartFrameNumber < 0)
             {
@@ -66,7 +66,7 @@ namespace iRacingReplayOverlay.Phases
             var incidentSamples = iRacing.GetDataFeed().RaceIncidents(shortTestOnly ? 12 : int.MaxValue);
 
             foreach (var data in incidentSamples)
-			    incidents.Process(data);
+                incidents.Process(data);
 
             incidents.Stop();
         }
