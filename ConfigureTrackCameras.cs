@@ -30,6 +30,7 @@ namespace iRacingReplayOverlay
     public partial class ConfigureTrackCameras : Form
     {
         private TrackCameras trackCameras;
+        private DataSample lastSample;
 
         public ConfigureTrackCameras()
         {
@@ -106,7 +107,9 @@ namespace iRacingReplayOverlay
                 Settings.Default.trackCameras = trackCameras;
                 Settings.Default.Save();
             }
-            
+
+            lastSample = new iRacingConnection().GetDataFeed().First();
+
             DiscoverAnyNewTrackCameras();
 
             InitialiseDropDownListOfTracks();
@@ -117,7 +120,10 @@ namespace iRacingReplayOverlay
             foreach (var track in trackCameras.Select(tc => tc.TrackName).Distinct().OrderBy(t => t))
                 trackList.Items.Add(track);
 
-            trackList.SelectedItem = Settings.Default.lastSelectedTrackName;
+            if (lastSample.IsConnected)
+                trackList.SelectedItem = lastSample.SessionData.WeekendInfo.TrackDisplayName;
+            else
+                trackList.SelectedItem = Settings.Default.lastSelectedTrackName;
         }
 
         /// <summary>
@@ -126,20 +132,23 @@ namespace iRacingReplayOverlay
         /// </summary>
         private void DiscoverAnyNewTrackCameras()
         {
-            var sample = iRacing.GetDataFeed().First();
-            if (!sample.IsConnected)
+            if (!lastSample.IsConnected)
                 return;
 
-            if (trackCameras.Any(tc => tc.TrackName == sample.SessionData.WeekendInfo.TrackDisplayName))
-                return;
+            var allCamerasForTrack = trackCameras.Where(tc => tc.TrackName == lastSample.SessionData.WeekendInfo.TrackDisplayName).ToList();
+            trackCameras.RemoveAll(tc => tc.TrackName == lastSample.SessionData.WeekendInfo.TrackDisplayName);
 
-            foreach (var camera in sample.SessionData.CameraInfo.Groups)
+            foreach (var camera in lastSample.SessionData.CameraInfo.Groups)
             {
-                TrackCamera trackCamera = new TrackCamera();
+                var trackCamera = allCamerasForTrack.FirstOrDefault(tc => tc.TrackName == lastSample.SessionData.WeekendInfo.TrackDisplayName && tc.CameraName == camera.GroupName);
+                if (trackCamera == null)
+                {
+                    trackCamera = new TrackCamera();
 
-                trackCamera.TrackName = sample.SessionData.WeekendInfo.TrackDisplayName;
-                trackCamera.CameraName = camera.GroupName;
-
+                    trackCamera.TrackName = lastSample.SessionData.WeekendInfo.TrackDisplayName;
+                    trackCamera.CameraName = camera.GroupName;
+                }
+                
                 trackCameras.Add(trackCamera);
             }
         }
@@ -165,6 +174,7 @@ namespace iRacingReplayOverlay
 
             totalRatio.Text = total.ToString();
             TotalErrorLabel.Visible = total > 100;
+            noCameraAssignedErrorLabel.Visible = total < 25;
         }
     }
 }

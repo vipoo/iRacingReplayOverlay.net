@@ -30,6 +30,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace iRacingReplayOverlay
 {
@@ -49,6 +50,8 @@ namespace iRacingReplayOverlay
         System.Windows.Forms.Timer lookForAudioBitRates;
         LogMessages logMessagges;
         const string DefaultLogFileName = "general.log";
+        SessionData lastSession;
+        bool isConnected;
 
         States State
         {
@@ -65,10 +68,17 @@ namespace iRacingReplayOverlay
 
         void StateUpdated()
         {
+
+            var trackCamerasDefined = 
+                Settings.Default.trackCameras != null && 
+                lastSession != null && 
+                Settings.Default.trackCameras.Any(tc => tc.TrackName == lastSession.WeekendInfo.TrackDisplayName);
+
             switch (_states)
             {
                 case States.Idle:
-                    BeginProcessButton.Enabled = Directory.Exists(workingFolderTextBox.Text) && iRacing.IsConnected;
+                    BeginProcessButton.Enabled = Directory.Exists(workingFolderTextBox.Text) && isConnected && trackCamerasDefined;
+                    configureTrackCamerasLabel.Visible = isConnected && !trackCamerasDefined;
                     transcodeVideoButton.Enabled = IsReadyForTranscoding();
                     transcodeCancelButton.Visible = false;
                     transcodeProgressBar.Visible = false;
@@ -95,7 +105,8 @@ namespace iRacingReplayOverlay
                     break;
 
                 case States.Transcoding:
-                    BeginProcessButton.Enabled = Directory.Exists(workingFolderTextBox.Text) && iRacing.IsConnected;
+                    BeginProcessButton.Enabled = Directory.Exists(workingFolderTextBox.Text) && isConnected && trackCamerasDefined;
+                    configureTrackCamerasLabel.Visible = isConnected && !trackCamerasDefined;
                     transcodeVideoButton.Enabled = false;
                     transcodeCancelButton.Visible = true;
                     transcodeProgressBar.Visible = true;
@@ -111,6 +122,8 @@ namespace iRacingReplayOverlay
 
         public Main()
         {
+            iracingEvents = new iRacingEvents();
+
             InitializeComponent();
         }
 
@@ -124,6 +137,11 @@ namespace iRacingReplayOverlay
 
         void Main_Load(object sender, EventArgs e)
         {
+            iracingEvents.NewSessionData += iracingEvents_NewSessionData;
+            iracingEvents.Connected += iracingEvents_Connected;
+            iracingEvents.Disconnected += iracingEvents_Disconnected;
+            iracingEvents.StartListening();
+
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
 
             youTubeCredentialsRequired.Visible = Settings.Default.YouTubeCredentials == null || Settings.Default.YouTubeCredentials.Blank;
@@ -132,6 +150,9 @@ namespace iRacingReplayOverlay
             Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
 
             LogListener.ToFile(GetDefaultLogFileName());
+
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
+            Trace.WriteLine("Local user config path: {0}".F(config.FilePath), "INFO");
 
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
@@ -156,6 +177,24 @@ namespace iRacingReplayOverlay
                     WaitingForIRacingLabel.Visible = false;
                 })
                 .InTheBackground(errorMessage => { });
+        }
+
+        void iracingEvents_Disconnected()
+        {
+            isConnected = false;
+            StateUpdated();
+        }
+
+        void iracingEvents_Connected()
+        {
+            isConnected = true;
+            StateUpdated();
+        }
+
+        void iracingEvents_NewSessionData(DataSample data)
+        {
+            lastSession = data.SessionData;
+            StateUpdated();
         }
 
         void workingFolderButton_Click(object sender, EventArgs e)
@@ -342,6 +381,7 @@ namespace iRacingReplayOverlay
         {
             var settings = new ConfigureTrackCameras();
             settings.ShowDialog();
+            StateUpdated();
         }
 
         void configureVideoCaptureButton_Click(object sender, EventArgs e)
@@ -462,5 +502,7 @@ namespace iRacingReplayOverlay
         {
             UploadToYouTubeButton.Enabled = MainUploadVideoFile.Text.Length > 0 && HighlightsUploadVideoFile.Text.Length > 0;
         }
+
+        public iRacingEvents iracingEvents { get; set; }
     }
 }

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
             "TV1",
             "3"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "TV2",
             "3"}, -1);
             this.trackList = new System.Windows.Forms.ComboBox();
@@ -48,6 +48,7 @@
             this.okButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.noCameraAssignedErrorLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // trackList
@@ -85,8 +86,8 @@
             this.cameraList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.cameraList.HideSelection = false;
             this.cameraList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2});
+            listViewItem3,
+            listViewItem4});
             this.cameraList.Location = new System.Drawing.Point(17, 70);
             this.cameraList.Margin = new System.Windows.Forms.Padding(4);
             this.cameraList.Name = "cameraList";
@@ -201,13 +202,27 @@
             this.label5.Text = "To load the cameras for your track, you need to have iRacing running, with your r" +
     "equired track, before opening this settings dialog box.";
             // 
-            // TrackCameraPerferences
+            // noCameraAssignedErrorLabel
+            // 
+            this.noCameraAssignedErrorLabel.AutoSize = true;
+            this.noCameraAssignedErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.noCameraAssignedErrorLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.noCameraAssignedErrorLabel.Location = new System.Drawing.Point(224, 435);
+            this.noCameraAssignedErrorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.noCameraAssignedErrorLabel.Name = "noCameraAssignedErrorLabel";
+            this.noCameraAssignedErrorLabel.Size = new System.Drawing.Size(262, 16);
+            this.noCameraAssignedErrorLabel.TabIndex = 12;
+            this.noCameraAssignedErrorLabel.Text = "* Must assign cameras % upto at least 25%";
+            this.noCameraAssignedErrorLabel.Visible = false;
+            // 
+            // ConfigureTrackCameras
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.okButton;
             this.ClientSize = new System.Drawing.Size(679, 480);
+            this.Controls.Add(this.noCameraAssignedErrorLabel);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.okButton);
@@ -223,7 +238,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "TrackCameraPerferences";
+            this.Name = "ConfigureTrackCameras";
             this.Text = "TrackCameraPerferences";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TrackCameraPerferences_FormClosing);
             this.Load += new System.EventHandler(this.TrackCameraPerferences_Load);
@@ -248,6 +263,7 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label noCameraAssignedErrorLabel;
 
     }
 }

@@ -62,6 +62,7 @@ namespace iRacingReplayOverlay
             this.label5 = new System.Windows.Forms.Label();
             this.workingFolderTextBox = new System.Windows.Forms.TextBox();
             this.tabTranscoding = new System.Windows.Forms.TabPage();
+            this.highlightVideoOnly = new System.Windows.Forms.CheckBox();
             this.VideoDetailLabel = new System.Windows.Forms.Label();
             this.audioBitRate = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -88,7 +89,7 @@ namespace iRacingReplayOverlay
             this.UploadVideoToYouTube = new System.Windows.Forms.CheckBox();
             this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.youTubeCredentialsRequired = new System.Windows.Forms.Label();
-            this.highlightVideoOnly = new System.Windows.Forms.CheckBox();
+            this.configureTrackCamerasLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -140,6 +141,7 @@ namespace iRacingReplayOverlay
             // 
             // tabCapture
             // 
+            this.tabCapture.Controls.Add(this.configureTrackCamerasLabel);
             this.tabCapture.Controls.Add(this.TestOnlyCheckBox);
             this.tabCapture.Controls.Add(this.WaitingForIRacingLabel);
             this.tabCapture.Controls.Add(this.ProcessErrorMessageLabel);
@@ -153,7 +155,7 @@ namespace iRacingReplayOverlay
             this.tabCapture.Location = new System.Drawing.Point(4, 30);
             this.tabCapture.Name = "tabCapture";
             this.tabCapture.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCapture.Size = new System.Drawing.Size(676, 264);
+            this.tabCapture.Size = new System.Drawing.Size(676, 287);
             this.tabCapture.TabIndex = 0;
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
@@ -278,6 +280,17 @@ namespace iRacingReplayOverlay
             this.tabTranscoding.TabIndex = 1;
             this.tabTranscoding.Text = "Video Encoding";
             this.tabTranscoding.UseVisualStyleBackColor = true;
+            // 
+            // highlightVideoOnly
+            // 
+            this.highlightVideoOnly.AutoSize = true;
+            this.highlightVideoOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.highlightVideoOnly.Location = new System.Drawing.Point(355, 87);
+            this.highlightVideoOnly.Name = "highlightVideoOnly";
+            this.highlightVideoOnly.Size = new System.Drawing.Size(155, 22);
+            this.highlightVideoOnly.TabIndex = 47;
+            this.highlightVideoOnly.Text = "Highlight Video Only";
+            this.highlightVideoOnly.UseVisualStyleBackColor = true;
             // 
             // VideoDetailLabel
             // 
@@ -408,7 +421,7 @@ namespace iRacingReplayOverlay
             this.tabUploading.Controls.Add(this.MainUploadVideoFile);
             this.tabUploading.Location = new System.Drawing.Point(4, 30);
             this.tabUploading.Name = "tabUploading";
-            this.tabUploading.Size = new System.Drawing.Size(676, 264);
+            this.tabUploading.Size = new System.Drawing.Size(676, 287);
             this.tabUploading.TabIndex = 2;
             this.tabUploading.Text = "Video Publishing";
             this.tabUploading.UseVisualStyleBackColor = true;
@@ -541,16 +554,17 @@ namespace iRacingReplayOverlay
             this.youTubeCredentialsRequired.Text = "*Must enter your YouTube username and password before uploading";
             this.youTubeCredentialsRequired.Visible = false;
             // 
-            // highlightVideoOnly
+            // configureTrackCamerasLabel
             // 
-            this.highlightVideoOnly.AutoSize = true;
-            this.highlightVideoOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.highlightVideoOnly.Location = new System.Drawing.Point(355, 87);
-            this.highlightVideoOnly.Name = "highlightVideoOnly";
-            this.highlightVideoOnly.Size = new System.Drawing.Size(155, 22);
-            this.highlightVideoOnly.TabIndex = 47;
-            this.highlightVideoOnly.Text = "Highlight Video Only";
-            this.highlightVideoOnly.UseVisualStyleBackColor = true;
+            this.configureTrackCamerasLabel.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.configureTrackCamerasLabel.ForeColor = System.Drawing.Color.DarkRed;
+            this.configureTrackCamerasLabel.Location = new System.Drawing.Point(6, 195);
+            this.configureTrackCamerasLabel.Name = "configureTrackCamerasLabel";
+            this.configureTrackCamerasLabel.Size = new System.Drawing.Size(279, 28);
+            this.configureTrackCamerasLabel.TabIndex = 49;
+            this.configureTrackCamerasLabel.Text = "You need to configure the Track Cameras before you can begin to capture this race" +
+    ".";
+            this.configureTrackCamerasLabel.Visible = false;
             // 
             // Main
             // 
@@ -631,5 +645,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label youTubeCredentialsRequired;
         private System.Windows.Forms.Label uploadingFileLabel;
         private System.Windows.Forms.CheckBox highlightVideoOnly;
+        private System.Windows.Forms.Label configureTrackCamerasLabel;
     }
 }
