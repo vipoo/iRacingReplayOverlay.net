@@ -78,6 +78,7 @@ namespace iRacingReplayOverlay.Phases
             var startTime = DateTime.Now;
 
             samples = samples
+                .VerifyReplayFrames()
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances()
                 .WithFastestLaps()
