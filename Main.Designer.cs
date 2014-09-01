@@ -51,6 +51,7 @@ namespace iRacingReplayOverlay
             this.logMessagesButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCapture = new System.Windows.Forms.TabPage();
+            this.configureTrackCamerasLabel = new System.Windows.Forms.Label();
             this.TestOnlyCheckBox = new System.Windows.Forms.CheckBox();
             this.WaitingForIRacingLabel = new System.Windows.Forms.Label();
             this.ProcessErrorMessageLabel = new System.Windows.Forms.Label();
@@ -89,7 +90,6 @@ namespace iRacingReplayOverlay
             this.UploadVideoToYouTube = new System.Windows.Forms.CheckBox();
             this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.youTubeCredentialsRequired = new System.Windows.Forms.Label();
-            this.configureTrackCamerasLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -123,7 +123,7 @@ namespace iRacingReplayOverlay
             this.logMessagesButton.Name = "logMessagesButton";
             this.logMessagesButton.Size = new System.Drawing.Size(181, 26);
             this.logMessagesButton.TabIndex = 32;
-            this.logMessagesButton.Text = "Log Messages";
+            this.logMessagesButton.Text = "View Log Messages";
             this.logMessagesButton.UseVisualStyleBackColor = true;
             this.logMessagesButton.Click += new System.EventHandler(this.logMessagesButton_Click);
             // 
@@ -159,6 +159,18 @@ namespace iRacingReplayOverlay
             this.tabCapture.TabIndex = 0;
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
+            // 
+            // configureTrackCamerasLabel
+            // 
+            this.configureTrackCamerasLabel.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.configureTrackCamerasLabel.ForeColor = System.Drawing.Color.DarkRed;
+            this.configureTrackCamerasLabel.Location = new System.Drawing.Point(6, 195);
+            this.configureTrackCamerasLabel.Name = "configureTrackCamerasLabel";
+            this.configureTrackCamerasLabel.Size = new System.Drawing.Size(279, 28);
+            this.configureTrackCamerasLabel.TabIndex = 49;
+            this.configureTrackCamerasLabel.Text = "You need to configure the Track Cameras before you can begin to capture this race" +
+    ".";
+            this.configureTrackCamerasLabel.Visible = false;
             // 
             // TestOnlyCheckBox
             // 
@@ -553,18 +565,6 @@ namespace iRacingReplayOverlay
             this.youTubeCredentialsRequired.TabIndex = 48;
             this.youTubeCredentialsRequired.Text = "*Must enter your YouTube username and password before uploading";
             this.youTubeCredentialsRequired.Visible = false;
-            // 
-            // configureTrackCamerasLabel
-            // 
-            this.configureTrackCamerasLabel.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.configureTrackCamerasLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.configureTrackCamerasLabel.Location = new System.Drawing.Point(6, 195);
-            this.configureTrackCamerasLabel.Name = "configureTrackCamerasLabel";
-            this.configureTrackCamerasLabel.Size = new System.Drawing.Size(279, 28);
-            this.configureTrackCamerasLabel.TabIndex = 49;
-            this.configureTrackCamerasLabel.Text = "You need to configure the Track Cameras before you can begin to capture this race" +
-    ".";
-            this.configureTrackCamerasLabel.Visible = false;
             // 
             // Main
             // 
