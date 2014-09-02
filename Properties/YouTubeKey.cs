@@ -23,6 +23,7 @@ namespace iRacingReplayOverlay
         //Add your key here.  Do not check in your google api key
         //Run the following to avoid commit file:
         //git update-index --assume-unchanged Properties/YouTubeKey.cs
+        //http://code.google.com/apis/youtube/dashboard/
         public const string ClientId = Add Your Google Key Here;
     }
 }
