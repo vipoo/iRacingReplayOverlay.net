@@ -29,8 +29,8 @@ using MediaFoundation.Net;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
@@ -504,5 +504,13 @@ namespace iRacingReplayOverlay
         }
 
         public iRacingEvents iracingEvents { get; set; }
+
+        private void verifyVideoCaptureButton_Click(object sender, EventArgs e)
+        {
+            var f = new TestVideoCapture();
+            f.ShowDialog();
+
+            workingFolderTextBox.Text = Settings.Default.WorkingFolder;
+        }
     }
 }

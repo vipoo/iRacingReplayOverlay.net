@@ -135,6 +135,12 @@
     <Compile Include="Support\LogListener.cs" />
     <Compile Include="Support\Messages.cs" />
     <Compile Include="Support\SimpleProfiler.cs" />
+    <Compile Include="TestVideoCapture.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestVideoCapture.Designer.cs">
+      <DependentUpon>TestVideoCapture.cs</DependentUpon>
+    </Compile>
     <Compile Include="TrackCameras.cs" />
     <Compile Include="DllImports\Win32\Messages.cs" />
     <Compile Include="Main.cs">
@@ -233,6 +239,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigureTrackCameras.resx">
       <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestVideoCapture.resx">
+      <DependentUpon>TestVideoCapture.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ProjectExtensions>
