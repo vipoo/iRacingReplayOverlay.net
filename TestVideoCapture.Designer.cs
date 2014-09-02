@@ -62,19 +62,19 @@
             // testVideoCaptureButton
             // 
             this.testVideoCaptureButton.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.testVideoCaptureButton.Location = new System.Drawing.Point(594, 13);
+            this.testVideoCaptureButton.Location = new System.Drawing.Point(571, 13);
             this.testVideoCaptureButton.Margin = new System.Windows.Forms.Padding(4);
             this.testVideoCaptureButton.Name = "testVideoCaptureButton";
-            this.testVideoCaptureButton.Size = new System.Drawing.Size(163, 47);
+            this.testVideoCaptureButton.Size = new System.Drawing.Size(186, 47);
             this.testVideoCaptureButton.TabIndex = 54;
-            this.testVideoCaptureButton.Text = "Test Video Capture";
+            this.testVideoCaptureButton.Text = "Verify Video Capture";
             this.testVideoCaptureButton.UseVisualStyleBackColor = true;
             this.testVideoCaptureButton.Click += new System.EventHandler(this.testVideoCaptureButton_Click);
             // 
             // workingFolderButton
             // 
             this.workingFolderButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.workingFolderButton.Location = new System.Drawing.Point(523, 18);
+            this.workingFolderButton.Location = new System.Drawing.Point(500, 17);
             this.workingFolderButton.Name = "workingFolderButton";
             this.workingFolderButton.Size = new System.Drawing.Size(64, 26);
             this.workingFolderButton.TabIndex = 53;
@@ -95,7 +95,7 @@
             // 
             this.workingFolderTextBox.Location = new System.Drawing.Point(167, 18);
             this.workingFolderTextBox.Name = "workingFolderTextBox";
-            this.workingFolderTextBox.Size = new System.Drawing.Size(350, 24);
+            this.workingFolderTextBox.Size = new System.Drawing.Size(327, 24);
             this.workingFolderTextBox.TabIndex = 51;
             this.workingFolderTextBox.TextChanged += new System.EventHandler(this.workingFolderTextBox_TextChanged);
             // 
@@ -135,7 +135,7 @@
             this.MaximizeBox = false;
             this.Name = "TestVideoCapture";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "TestVideoCapture";
+            this.Text = "Verify Video Capture";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TestVideoCapture_FormClosed);
             this.Load += new System.EventHandler(this.TestVideoCapture_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
