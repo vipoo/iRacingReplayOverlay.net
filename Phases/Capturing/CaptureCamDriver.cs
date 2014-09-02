@@ -48,11 +48,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
                     var position = camDriver.CurrentDriver.Position != null ? camDriver.CurrentDriver.Position.Value.ToString() : "";
                     var indicator = camDriver.CurrentDriver.Position != null ? camDriver.CurrentDriver.Position.Value.Ordinal() : "";
 
-                    Trace.WriteLine("{0} Camera on {1} {2} in position {3}{4}".F(
+                    TraceInfo.WriteLine("{0} Camera on {1} {2} in position {3}{4}",
                         data.Telemetry.SessionTimeSpan,
                         camDriver.CurrentDriver.UserName,
                         camDriver.CurrentDriver.CarNumber,
-                        position, indicator), "INFO");
+                        position, indicator);
 
                     lastCamDriver = camDriver.CurrentDriver;
                 }

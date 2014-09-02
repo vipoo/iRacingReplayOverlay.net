@@ -95,7 +95,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
 
             if (ddice < 5.0)
             {
-                Trace.WriteLine("{0} Ignoring active battles".F(data.Telemetry.SessionTimeSpan), "INFO");
+                TraceInfo.WriteLine("{0} Ignoring active battles", data.Telemetry.SessionTimeSpan);
                 return null;
             }
 
@@ -109,7 +109,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 if (ddice < upper)
                 {
                     var driver = data.SessionData.DriverInfo.Drivers[battle.CarIdx];
-                    Trace.WriteLine("{0} Found battle {1} by chance {2}".F(data.Telemetry.SessionTimeSpan, driver.UserName, ddice), "INFO");
+                    TraceInfo.WriteLine("{0} Found battle {1} by chance {2}", data.Telemetry.SessionTimeSpan, driver.UserName, ddice);
                     return driver;
                 }
 

@@ -90,7 +90,7 @@ namespace iRacingReplayOverlay.Support
         {
             if( logFile != null)
             {
-                Trace.WriteLine("Moving logging to file {0}".F(filename), "INFO");
+                TraceInfo.WriteLine("Moving logging to file {0}", filename);
                 Trace.Listeners.Remove(logFile);
                 logFile.Dispose();
             }
@@ -104,7 +104,7 @@ namespace iRacingReplayOverlay.Support
             if (logFile == null)
                 throw new Exception("Attempt to rename non-existing log file to {0}".F(filename));
 
-            Trace.WriteLine("Renaming logging to file {0}".F(filename), "INFO");
+            TraceInfo.WriteLine("Renaming logging to file {0}", filename);
             Trace.Listeners.Remove(logFile);
             logFile.Dispose();
 

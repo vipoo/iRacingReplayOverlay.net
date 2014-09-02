@@ -40,19 +40,19 @@ namespace iRacingReplayOverlay
             var ex = e.ExceptionObject as Exception;
             if (ex != null)
             {
-                Trace.WriteLine(ex.Message, "INFO");
+                TraceInfo.WriteLine(ex.Message);
                 Trace.WriteLine(ex.StackTrace, "DEBUG");
             }
             else
             {
-                Trace.WriteLine("Un unknown error occured. {0}, {1}".F(e.ExceptionObject.GetType().Name, e.ExceptionObject.ToString()));
+                Trace.WriteLine("An unknown error occured. {0}, {1}".F(e.ExceptionObject.GetType().Name, e.ExceptionObject.ToString()));
             }
         }
 
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             MessageBox.Show("An error occured.  Details have been logged.\n\n{0}".F(e.Exception.Message), "Error");
-            Trace.WriteLine(e.Exception.Message, "INFO");
+            TraceInfo.WriteLine(e.Exception.Message);
             Trace.WriteLine(e.Exception.StackTrace, "DEBUG");
         }
     }

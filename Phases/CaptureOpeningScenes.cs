@@ -64,7 +64,7 @@ namespace iRacingReplayOverlay.Phases
 
             var fileName = videoCapture.Deactivate();
 
-            Trace.WriteLine("Captured intro video into file {0}".F(fileName), "INFO");
+            TraceInfo.WriteLine("Captured intro video into file {0}", fileName);
             _WithIntroVideo(fileName);
         }
     }

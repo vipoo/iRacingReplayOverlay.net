@@ -58,13 +58,13 @@ namespace iRacingReplayOverlay.Phases.Direction
                 .OrderByDescending(f => f.CreationTime)
                 .FirstOrDefault();
 
-            Trace.WriteLineIf(guessedFileName == null, "Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder), "INFO");
+            TraceInfo.WriteLineIf(guessedFileName == null, "Unable to determine video file name in '{0}' - possible wrong working folder", workingFolder);
             return guessedFileName == null ? null : guessedFileName.FileName;
         }
 
         private static void SendKeyStroke()
         {
-            Trace.WriteLine("Sending key event ALT+F9", "INFO");
+            TraceInfo.WriteLine("Sending key event ALT+F9");
 
             keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
             Thread.Sleep(200);

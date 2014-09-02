@@ -66,7 +66,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 restartEndTime = data.Telemetry.SessionTimeSpan + RestartStickyTime;
                 restarting = true;
 
-                Trace.WriteLine("{0} Race restarting".F(data.Telemetry.SessionTimeSpan), "INFO");
+                TraceInfo.WriteLine("{0} Race restarting", data.Telemetry.SessionTimeSpan);
                 wasUnderPaceCar = false;
                 removalEdits.InterestingThingHappend(InterestState.Restart, data.Telemetry.CamCarIdx);
                 return true;
@@ -75,7 +75,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             wasUnderPaceCar = data.Telemetry.UnderPaceCar;
             if (wasUnderPaceCar)
             {
-                Trace.WriteLineIf(wasUnderPaceCar, "{0} Double Yellows. Pace Car".F(data.Telemetry.SessionTimeSpan), "INFO");
+                TraceInfo.WriteLineIf(wasUnderPaceCar, "{0} Double Yellows. Pace Car", data.Telemetry.SessionTimeSpan);
                 iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
             }
 

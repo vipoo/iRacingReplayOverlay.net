@@ -113,7 +113,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar, CameraAngle.LookingAtCar);
             car = ChangeCarForCamera(data, camera, battleFollower.Driver);
 
-            Trace.WriteLine("{0} Changing camera to driver: {1}; camera: {2}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName), "INFO");
+            TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName);
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
@@ -124,7 +124,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public void Redirect(DataSample data)
         {
-            Trace.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}; within {3}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap), "INFO");
+            TraceInfo.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}; within {3}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap);
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
@@ -136,7 +136,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar,  CameraAngle.LookingAtCar);
             car = ChangeCarForCamera(data, camera, follower);
 
-            Trace.WriteLine("{0} Changing camera to driver: {1}; camera: {2}; within {3}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap), "INFO");
+            TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}; within {3}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap);
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
@@ -145,7 +145,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (BattlersHaveSwappedPositions(data))
             {
                 battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyPeriod;
-                Trace.WriteLine("{0} {1} has overtaken {2}".F(data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName), "INFO");
+                TraceInfo.WriteLine("{0} {1} has overtaken {2}", data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName);
                 SwitchToBattle(data, battleLeader.Driver);
             }
         }
@@ -167,7 +167,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             if (camera.CameraAngle == CameraAngle.LookingBehindCar)
             {
-                Trace.WriteLine("{0} Changing to forward car, with reverse camera".F(data.Telemetry.SessionTimeSpan), "INFO");
+                TraceInfo.WriteLine("{0} Changing to forward car, with reverse camera", data.Telemetry.SessionTimeSpan);
                 car = data.Telemetry.Cars.First(c => c.Position == car.Position - 1);
                 return data.SessionData.DriverInfo.Drivers[car.CarIdx];
             }
@@ -207,7 +207,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (data.Telemetry.SessionTimeSpan > cameraChangeTime && !Battle.IsInBattle(data, battleGap, battleFollower.Driver, battleLeader.Driver))
             {
-                Trace.WriteLine("Battle has stopped.", "INFO");
+                TraceInfo.WriteLine("{0} Battle has stopped.", data.Telemetry.SessionTimeSpan);
                 return true;
             }
 

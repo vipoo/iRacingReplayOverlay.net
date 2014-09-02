@@ -78,13 +78,13 @@ namespace iRacingReplayOverlay.Phases.Direction
             camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar, CameraAngle.LookingAtTrack);
             car = FindADriver(data);
 
-            Trace.WriteLine("{0} Changing camera to random driver: {1}; camera: {2}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName), "INFO");
+            TraceInfo.WriteLine("{0} Changing camera to random driver: {1}; camera: {2}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName);
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 
         public void Redirect(DataSample data)
         {
-            Trace.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}".F(data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName), "INFO");
+            TraceInfo.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName);
             iRacing.Replay.CameraOnDriver((short)car.CarNumber, camera.CameraNumber);
         }
 

@@ -46,7 +46,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident = incidents.GetEnumerator();
             nextIncident.MoveNext();
             if (nextIncident.Current != null)
-                Trace.WriteLine("First incident at {0}".F(nextIncident.Current.StartSessionTime), "INFO");
+                TraceInfo.WriteLine("First incident at {0}", nextIncident.Current.StartSessionTime);
             TV2 = cameras.First(tc => tc.CameraName == "TV2");
         }
 
@@ -141,12 +141,12 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         void WatchForNextIncident(DataSample data)
         {
-            Trace.WriteLine("{0} Finishing incident from {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime), "INFO");
+            TraceInfo.WriteLine("{0} Finishing incident from {1}", data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime);
 
             nextIncident.MoveNext();
 
             if (nextIncident.Current != null)
-                Trace.WriteLine("{0} (Move) Next incident at {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime), "INFO");
+                TraceInfo.WriteLine("{0} (Move) Next incident at {1}", data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime);
         }
 
         void SkipMissedIncidents(DataSample data)
@@ -155,12 +155,12 @@ namespace iRacingReplayOverlay.Phases.Direction
             while (nextIncident.Current != null && (nextIncident.Current.StartSessionTime + 1.Seconds()) < data.Telemetry.SessionTimeSpan)
             {
                 hasSkipped = true;
-                Trace.WriteLine("{0} Skipping incident at time {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime), "INFO");
+                TraceInfo.WriteLine("{0} Skipping incident at time {1}", data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime);
                 nextIncident.MoveNext();
             }
 
             if (nextIncident.Current != null && hasSkipped)
-                Trace.WriteLine("{0} (Skip) Next incident at {1}".F(data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime), "INFO");
+                TraceInfo.WriteLine("{0} (Skip) Next incident at {1}", data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime);
         }
 
         void SwitchToIncident(DataSample data)
@@ -169,7 +169,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var incidentCar = nextIncident.Current.Car;
 
-            Trace.WriteLine("{0} Showing incident with {1} starting from {2}".F(data.Telemetry.SessionTimeSpan, incidentCar.UserName, nextIncident.Current.StartSessionTime), "INFO");
+            TraceInfo.WriteLine("{0} Showing incident with {1} starting from {2}", data.Telemetry.SessionTimeSpan, incidentCar.UserName, nextIncident.Current.StartSessionTime);
 
             iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
         }

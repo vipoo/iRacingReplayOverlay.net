@@ -152,7 +152,7 @@ namespace iRacingReplayOverlay
             LogListener.ToFile(GetDefaultLogFileName());
 
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
-            Trace.WriteLine("Local user config path: {0}".F(config.FilePath), "INFO");
+            TraceInfo.WriteLine("Local user config path: {0}", config.FilePath);
 
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;

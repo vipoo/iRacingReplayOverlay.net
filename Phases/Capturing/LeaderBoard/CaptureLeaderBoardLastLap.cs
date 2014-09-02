@@ -81,7 +81,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
             leaderBoard = captureLeaderBoard.CreateLeaderBoard(data, relativeTime, drivers.ToArray());
 
             var msg = string.Format("{0} finished in {1}{2}", driver.UserName, position, position.Ordinal());
-            Trace.WriteLine("{0} {1}".F(data.Telemetry.SessionTimeSpan, msg), "INFO");
+            TraceInfo.WriteLine("{0} {1}", data.Telemetry.SessionTimeSpan, msg);
             commentaryMessages.Add(msg, relativeTime.TotalSeconds);
         }
     }

@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using iRacingReplayOverlay.Support;
+using iRacingSDK.Support;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -48,7 +49,7 @@ namespace iRacingReplayOverlay.Phases
 
             if (raceStartFrameNumber < 0)
             {
-                Trace.WriteLine("Unable to start capturing at 20 seconds prior to race start.  Starting at start of replay file.", "INFO");
+                TraceInfo.WriteLine("Unable to start capturing at 20 seconds prior to race start.  Starting at start of replay file.");
                 raceStartFrameNumber = 0;
             }
 

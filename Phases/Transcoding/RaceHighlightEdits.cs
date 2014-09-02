@@ -33,9 +33,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var edits = raceEvents._GetRaceEdits().ToList();
 
             foreach (var e in edits)
-                Trace.WriteLine("Editing from {0} to {1}".F(e.StartTimeSpan, e.EndTimeSpan), "INFO");
+                TraceInfo.WriteLine("Editing from {0} to {1}", e.StartTimeSpan, e.EndTimeSpan);
 
-            Trace.WriteLine("Total Edits time {0}".F(edits.Sum(e => e.Duration).Seconds()), "INFO");
+            TraceInfo.WriteLine("Total Edits time {0}", edits.Sum(e => e.Duration).Seconds());
 
             return edits;
         }

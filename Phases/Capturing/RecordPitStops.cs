@@ -45,7 +45,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 {
                     pitStopState[car.CarIdx] = PitStopState.Entering;
                     var msg = "{0} has pitted".F(car.UserName);
-                    Trace.WriteLine("{0} {1}".F(data.Telemetry.SessionTimeSpan, msg), "INFO");
+                    TraceInfo.WriteLine("{0} {1}", data.Telemetry.SessionTimeSpan, msg);
                     commentaryMessages.Add(msg, relativeTime);
                 }
 

@@ -51,7 +51,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 data.Telemetry.CamCar.TrackSurface == TrackLocation.NotInWorld ||
                 data.Telemetry.CamCar.TrackSurface == TrackLocation.AproachingPits)
             {
-                Trace.WriteLine("{0} Ignoring incident in the pits on lap {1}".F(data.Telemetry.SessionTimeSpan, data.Telemetry.RaceLaps));
+                TraceInfo.WriteLine("{0} Ignoring incident in the pits on lap {1}", data.Telemetry.SessionTimeSpan, data.Telemetry.RaceLaps);
                 return;
             }
 
@@ -80,20 +80,20 @@ namespace iRacingReplayOverlay.Phases.Analysis
         {
             if (lastIncident != null)
             {
-                Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
+                TraceInfo.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ",
                     lastIncident.Car.UserName, lastIncident.LapNumber,
                     lastIncident.StartSessionTime,
-                    lastIncident.EndSessionTime), "INFO");
+                    lastIncident.EndSessionTime);
                 incidents.Add(lastIncident);
             }
         }
         
         void AddLastIncident(Incident i)
         {
-            Trace.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ".F(
+            TraceInfo.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ",
                 lastIncident.Car.UserName, lastIncident.LapNumber,
                 lastIncident.StartSessionTime,
-                lastIncident.EndSessionTime), "INFO");
+                lastIncident.EndSessionTime);
             incidents.Add(lastIncident);
             lastIncident = i;
         }

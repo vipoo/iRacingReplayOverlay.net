@@ -77,7 +77,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
                         var position = d.Position != null ? d.Position.Value.ToString() : "";
                         var indicator = d.Position != null ? d.Position.Value.Ordinal() : "";
                         var msg = "{0} in {1}{2}".F(d.UserName, position, indicator);
-                        Trace.WriteLine("{0} {1}".F(data.Telemetry.SessionTimeSpan, msg), "INFO");
+                        TraceInfo.WriteLine("{0} {1}", data.Telemetry.SessionTimeSpan, msg);
                         commentaryMessages.Add(msg, relativeTime.TotalSeconds);
                     }
                 }

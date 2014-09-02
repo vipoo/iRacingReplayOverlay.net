@@ -90,35 +90,35 @@ namespace iRacingReplayOverlay
         {
             try
             {
-                Trace.WriteLine("Begining Test....", "INFO");
+                TraceInfo.WriteLine("Begining Test....");
                 var videoCapture = new VideoCapture();
 
-                Trace.WriteLine("Broadcasting keypress ALT+F9 to activate your video capture software", "INFO");
+                TraceInfo.WriteLine("Broadcasting keypress ALT+F9 to activate your video capture software");
                 videoCapture.Activate(workingFolder);
 
-                Trace.WriteLine("Expecting video file to be written in folder: {0}".F(workingFolder), "INFO");
+                TraceInfo.WriteLine("Expecting video file to be written in folder: {0}", workingFolder);
 
-                Trace.WriteLine("Waiting for 5 seconds", "INFO");
+                TraceInfo.WriteLine("Waiting for 5 seconds");
 
                 for (var i = 5; i >= 0; i--)
                 {
                     Thread.Sleep(1.Seconds());
-                    Trace.WriteLine("{0} Seconds...".F(i), "INFO");
+                    TraceInfo.WriteLine("{0} Seconds...", i);
                 }
 
-                Trace.WriteLine("Broadcasting keypress ALT+F9 to deactivate your video capture software", "INFO");
+                TraceInfo.WriteLine("Broadcasting keypress ALT+F9 to deactivate your video capture software");
                 var filename = videoCapture.Deactivate();
 
                 if (filename != null)
                 {
-                    Trace.WriteLine("", "INFO");
-                    Trace.WriteLine("Success!", "INFO");
-                    Trace.WriteLine("Found your video file {0}.".F(filename), "INFO");
+                    TraceInfo.WriteLine("");
+                    TraceInfo.WriteLine("Success!");
+                    TraceInfo.WriteLine("Found your video file {0}.", filename);
                 }
                 else
                 {
-                    Trace.WriteLine("", "INFO");
-                    Trace.WriteLine("Failure!", "INFO");
+                    TraceInfo.WriteLine("");
+                    TraceInfo.WriteLine("Failure!");
                 }
             }
             finally
