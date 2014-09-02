@@ -18,6 +18,7 @@
 //
 
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,6 +64,13 @@ namespace iRacingReplayOverlay.Phases
             actions.Add(() => action((a, b) => context.Post(() => onComplete(a, b))));
         }
 
+        private void Add(Action<Action<string>> action, Action<string> onComplete)
+        {
+            var context = SynchronizationContext.Current;
+
+            actions.Add(() => action(a => context.Post(() => onComplete(a))));
+        }
+
         public IRacingReplay WhenIRacingStarts(Action onComplete)
         {
             Add(_WhenIRacingStarts, onComplete);
@@ -90,7 +98,7 @@ namespace iRacingReplayOverlay.Phases
             return this;
         }
 
-        public IRacingReplay CaptureRace(Action<string, string> onComplete)
+        public IRacingReplay CaptureRace(Action<string> onComplete)
         {
             Add((a) => _CaptureRace(a), onComplete);
 
@@ -167,7 +175,7 @@ namespace iRacingReplayOverlay.Phases
                     Trace.WriteLine(e.Message, "INFO");
                     Trace.WriteLine(e.StackTrace, "DEBUG");
                     Trace.WriteLine("Process aborted", "INFO");
-                    context.Post(() => onComplete("There was an error - details in Log Messages"));
+                    context.Post(() => onComplete("There was an error - details in Log Messages\n{0}".F(e.Message)));
                 }
                 finally
                 {

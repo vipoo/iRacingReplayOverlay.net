@@ -342,13 +342,9 @@ namespace iRacingReplayOverlay
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()
-                .CaptureRace((videoFileName, errorMessage) =>
+                .CaptureRace(videoFileName =>
                 {
-                    ProcessErrorMessageLabel.Text = errorMessage;
-                    ProcessErrorMessageLabel.Visible = errorMessage != null;
-                    CapturingRaceLabel.Visible = false;
                     sourceVideoTextBox.Text = videoFileName;
-                    State = States.Idle;
 
                     LogListener.MoveToFile(Path.ChangeExtension(videoFileName, "log"));
                 })
@@ -367,6 +363,8 @@ namespace iRacingReplayOverlay
                     CapturingRaceLabel.Visible = false;
                     ProcessErrorMessageLabel.Visible = true;
                     ProcessErrorMessageLabel.Text = errorMessage;
+                    State = States.Idle;
+                    StateUpdated();
 
                     LogListener.ToFile(GetDefaultLogFileName());
 

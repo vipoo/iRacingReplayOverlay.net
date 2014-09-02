@@ -46,12 +46,12 @@ namespace iRacingReplayOverlay.Phases
             this.introVideoFileName = fileName;
         }
 
-        void _CaptureRace(Action<string, string> onComplete)
+        void _CaptureRace(Action<string> onComplete)
         {
             _CaptureRaceTest(onComplete, new iRacingConnection().GetBufferedDataFeed());
         }
 
-        internal void _CaptureRaceTest(Action<string, string> onComplete, IEnumerable<DataSample> samples)
+        internal void _CaptureRaceTest(Action<string> onComplete, IEnumerable<DataSample> samples)
         {
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
 
@@ -123,11 +123,10 @@ namespace iRacingReplayOverlay.Phases
 
             _WithFiles(fileName);
 
-            string errorMessage = null;
             if (fileName == null)
-                errorMessage = "Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder);
+                throw new Exception("Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder));
 
-            onComplete(fileName, errorMessage);
+            onComplete(fileName);
         }
 
         private bool ReturnIfSkipping(DataSample data)

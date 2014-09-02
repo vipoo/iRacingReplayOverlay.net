@@ -210,7 +210,7 @@ namespace iRacingReplayOverlay
             this.ProcessErrorMessageLabel.ForeColor = System.Drawing.Color.DarkRed;
             this.ProcessErrorMessageLabel.Location = new System.Drawing.Point(192, 111);
             this.ProcessErrorMessageLabel.Name = "ProcessErrorMessageLabel";
-            this.ProcessErrorMessageLabel.Size = new System.Drawing.Size(467, 47);
+            this.ProcessErrorMessageLabel.Size = new System.Drawing.Size(547, 47);
             this.ProcessErrorMessageLabel.TabIndex = 41;
             this.ProcessErrorMessageLabel.Text = "Error ...";
             this.ProcessErrorMessageLabel.Visible = false;

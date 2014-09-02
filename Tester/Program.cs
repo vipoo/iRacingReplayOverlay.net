@@ -44,7 +44,7 @@ namespace Tester
                 .AnalyseRace(() => { })
                 .WithWorkingFolder(workingFolder)
                 .CaptureOpeningScenes()
-                .CaptureRace((f, e) => { })
+                .CaptureRace(f => { })
                 .CloseIRacing()
                 .WithEncodingOf(videoBitRate: 5000000, audioBitRate: 48000/8)
                 .OverlayRaceDataOntoVideo((c, d) => { }, () => { }, () => { }, false)
