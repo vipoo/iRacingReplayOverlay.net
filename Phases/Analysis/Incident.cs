@@ -40,6 +40,12 @@ namespace iRacingReplayOverlay.Phases.Analysis
             {
                 return time >= StartSessionTime && time <= EndSessionTime;
             }
+
+            public override string ToString()
+            {
+                return "LapNumber: {0}, StartSessionTime: {1}, EndSessionTime: {2}, Car: {3}".F(LapNumber, StartSessionTime, EndSessionTime, Car.ToString());
+            }
+
         }
 
         List<Incident> incidents = new List<Incident>();

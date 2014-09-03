@@ -1,29 +1,47 @@
-﻿using NUnit.Framework;
+﻿// This file is part of iRacingReplayOverlay.
+//
+// Copyright 2014 Dean Netherton
+// https://github.com/vipoo/iRacingReplayOverlay.net
+//
+// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+using iRacingSDK;
 using iRacingSDK.Support;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using System;
 using System.Linq;
-using iRacingSDK;
-using iRacingReplayOverlay.Support;
-using NUnit.Framework.Constraints;
 
 namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
 {
-	[TestFixture]
-	public class BattleTest
-	{
+    [TestFixture]
+    public class BattleTest
+    {
         const float PaceCar = 0f;
 
-		[Test]
-		public void ShouldIdentifyASingleBattle()
-		{
+        [Test]
+        public void ShouldIdentifyASingleBattle()
+        {
             var data = BuildDataSample();
             data.Telemetry.CarIdxDistance = new float[] { PaceCar, 0.14f, 0.125f, 0.12f, 0.10f };
             var expected = new[] { new Battle.GapMetric { CarIdx = 3, Position = 2, Time = (0.125f - 0.12f) * 100d } };
-            
+
             var all = Battle.All(data, 1.Seconds()).ToArray();
 
             Assert.That(all, Is.EqualTo(expected));
-		}
+        }
 
         [Test]
         public void ShouldIdentifyTwoBattles()
@@ -127,6 +145,5 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             data.Telemetry.SessionData = data.SessionData;
             return data;
         }
-	}
+    }
 }
-
