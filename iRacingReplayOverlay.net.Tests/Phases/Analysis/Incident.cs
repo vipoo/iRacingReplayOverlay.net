@@ -32,11 +32,11 @@ namespace iRacingReplayOverlay.Phases.Analysis.Tests
         {
             var i = new Incidents();
 
-            var data = CreateIncidentSample("Dino", 4.3d);
+            var session = CreateDrivers("dino");
+
+            var data = CreateIncidentSample(0, 4.3d, session);
 
             i.Process(data);
-
-            i.Stop();
 
             Assert.That(i.Count(), Is.EqualTo(1));
 
@@ -45,7 +45,7 @@ namespace iRacingReplayOverlay.Phases.Analysis.Tests
             Assert.That(actual.LapNumber, Is.EqualTo(3));
             Assert.That(actual.StartSessionTime, Is.EqualTo(3.3.Seconds()));
             Assert.That(actual.EndSessionTime, Is.EqualTo(12.3.Seconds()));
-            Assert.That(actual.Car.UserName, Is.EqualTo("Dino"));
+            Assert.That(actual.Car.UserName, Is.EqualTo("dino"));
         }
 
         [Test]
@@ -53,11 +53,11 @@ namespace iRacingReplayOverlay.Phases.Analysis.Tests
         {
             var i = new Incidents();
 
-            i.Process(CreateIncidentSample("Dino", 4.3d));
-            i.Process(CreateIncidentSample("Dino", 5.2d));
-             
-            i.Stop();
+            var session = CreateDrivers("dino");
 
+            i.Process(CreateIncidentSample(0, 4.3d, session));
+            i.Process(CreateIncidentSample(0, 5.2d, session));
+             
             Assert.That(i.Count(), Is.EqualTo(1));
 
             var actual = i.First();
@@ -66,31 +66,104 @@ namespace iRacingReplayOverlay.Phases.Analysis.Tests
             Assert.That(actual.EndSessionTime, Is.EqualTo(13.2.Seconds()));
         }
 
-        static DataSample CreateIncidentSample(string driverName, double time)
+        public class SpikeTest
+        {
+            private Incidents i;
+
+            [SetUp]
+            public void setup()
+            {
+                i = new Incidents();
+
+                var session = CreateDrivers("dino");
+
+                i.Process(CreateIncidentSample(0, 4.0d, session));
+                i.Process(CreateIncidentSample(0, (4d + 8d + 17d), session));
+            }
+
+            [Test]
+            public void it_should_pass()
+            {
+                Assert.That(i.Count(), Is.EqualTo(2));
+            }
+        }
+        [Test]
+        public void it_should_not_merge_two_incidents_when_more_than_15_seconds_apart()
+        {
+            var i = new Incidents();
+
+            var session = CreateDrivers("dino");
+
+            i.Process(CreateIncidentSample(0, 4.0d, session));
+            i.Process(CreateIncidentSample(0, (4d + 8d + 17d), session));
+
+            Assert.That(i.Count(), Is.EqualTo(2));
+
+            var actual = i.First();
+
+            Assert.That(actual.StartSessionTime, Is.EqualTo(3.Seconds()));
+            Assert.That(actual.EndSessionTime, Is.EqualTo(12.Seconds()));
+
+            actual = i.Skip(1).First();
+
+            Assert.That(actual.StartSessionTime, Is.EqualTo(28.Seconds()));
+            Assert.That(actual.EndSessionTime, Is.EqualTo(37.Seconds()));
+        }
+
+        [Test]
+        public void it_should_merge_two_incidents_across_another_drivers_incident()
+        {
+            var i = new Incidents();
+
+            var session = CreateDrivers("dino", "georg");
+
+            i.Process(CreateIncidentSample(0, 4.3d, session));
+            i.Process(CreateIncidentSample(1, 5.4d, session));
+            i.Process(CreateIncidentSample(0, 6.2d, session));
+
+            Assert.That(i.Count(), Is.EqualTo(2));
+
+            var actual = i.First();
+
+            Assert.That(actual.StartSessionTime, Is.EqualTo(3.3.Seconds()));
+            Assert.That(actual.EndSessionTime, Is.EqualTo(14.2.Seconds()));
+            Assert.That(actual.Car.UserName, Is.EqualTo("dino"));
+
+            actual = i.Skip(1).First();
+
+            Assert.That(actual.StartSessionTime, Is.EqualTo(4.4.Seconds()));
+            Assert.That(actual.EndSessionTime, Is.EqualTo(13.4.Seconds()));
+            Assert.That(actual.Car.UserName, Is.EqualTo("georg"));
+        }
+
+        static SessionData CreateDrivers(params string[] names)
+        {
+            return new SessionData
+                {
+                    DriverInfo = new SessionData._DriverInfo
+                    {
+                        Drivers = names.Select(n => new SessionData._DriverInfo._Drivers { UserName = n }).ToArray()
+                    }
+                };
+        }
+
+        static DataSample CreateIncidentSample(int carIdx, double time, SessionData sessionData)
         {
 
             var data = new DataSample
             {
-                SessionData = new SessionData
-                {
-                    DriverInfo = new SessionData._DriverInfo
-                    {
-                        Drivers = new[] { 
-                                new SessionData._DriverInfo._Drivers { UserName = driverName }
-                            }
-                    }
-                },
+                SessionData = sessionData,
                 IsConnected = true,
                 Telemetry = new Telemetry
                         {
                             { "SessionTime", time },
                             { "RaceLaps", 3 },
-                            { "CarIdxTrackSurface", new [] { TrackLocation.OnTrack } },
-                            { "CamCarIdx", 0 }
+                            { "CarIdxTrackSurface", new [] { TrackLocation.OnTrack, TrackLocation.OnTrack, TrackLocation.OnTrack, TrackLocation.OnTrack } },
+                            { "CamCarIdx", carIdx }
                         }
             };
 
-            data.Telemetry.SessionData = data.SessionData;
+            data.Telemetry.SessionData = sessionData;
             return data;
         }
     }

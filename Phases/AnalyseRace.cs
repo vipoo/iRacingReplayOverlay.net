@@ -68,8 +68,6 @@ namespace iRacingReplayOverlay.Phases
 
             foreach (var data in incidentSamples)
                 incidents.Process(data);
-
-            incidents.Stop();
         }
     }
 }

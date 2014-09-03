@@ -45,11 +45,9 @@ namespace iRacingReplayOverlay.Phases.Analysis
             {
                 return "LapNumber: {0}, StartSessionTime: {1}, EndSessionTime: {2}, Car: {3}".F(LapNumber, StartSessionTime, EndSessionTime, Car.ToString());
             }
-
         }
 
         List<Incident> incidents = new List<Incident>();
-        Incident lastIncident;
 
         public void Process(DataSample data)
         {
@@ -69,39 +67,35 @@ namespace iRacingReplayOverlay.Phases.Analysis
                 EndSessionTime = data.Telemetry.SessionTimeSpan + 8.Seconds()
             };
 
-            if( lastIncident == null )
-                lastIncident = i;
-           
-            else if (lastIncident.Car.CarIdx != i.Car.CarIdx)
-                AddLastIncident(i);
-            
-            else if(lastIncident.EndSessionTime + 15.Seconds() < i.StartSessionTime)
-                AddLastIncident(i);
-            
+            var lastIncidentForCar = incidents.LastOrDefault(li => li.Car.CarIdx == i.Car.CarIdx);
+
+            if (lastIncidentForCar == null || lastIncidentForCar.EndSessionTime + 15.Seconds() < i.StartSessionTime)
+                AddIncident(i);
+
             else
-                lastIncident.EndSessionTime = i.EndSessionTime;
+                ExtendIncident(lastIncidentForCar, i.EndSessionTime);
         }
 
-        public void Stop()
+        static void ExtendIncident(Incident incident, TimeSpan endSessionTime)
         {
-            if (lastIncident != null)
-            {
-                TraceInfo.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ",
-                    lastIncident.Car.UserName, lastIncident.LapNumber,
-                    lastIncident.StartSessionTime,
-                    lastIncident.EndSessionTime);
-                incidents.Add(lastIncident);
-            }
+            incident.EndSessionTime = endSessionTime;
+
+            TraceInfo.WriteLine("Extending end time for incident driver: {0}, start lap: {1}, start time: {2}, end time: {3}",
+                incident.Car.UserName,
+                incident.LapNumber,
+                incident.StartSessionTime,
+                incident.EndSessionTime);
         }
-        
-        void AddLastIncident(Incident i)
+
+        void AddIncident(Incident incident)
         {
-            TraceInfo.WriteLine("Noting incident for driver {0} starting on lap {1} from {2} to {3} ",
-                lastIncident.Car.UserName, lastIncident.LapNumber,
-                lastIncident.StartSessionTime,
-                lastIncident.EndSessionTime);
-            incidents.Add(lastIncident);
-            lastIncident = i;
+            incidents.Add(incident);
+
+            TraceInfo.WriteLine("Noting incident for driver {0} starting on lap {1} from {2}",
+                incident.Car.UserName, 
+                incident.LapNumber,
+                incident.StartSessionTime,
+                incident.EndSessionTime);
         }
 
         public IEnumerator<Incidents.Incident> GetEnumerator()

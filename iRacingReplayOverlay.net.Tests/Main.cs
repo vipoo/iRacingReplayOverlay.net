@@ -24,7 +24,7 @@ namespace iRacingReplayOverlay.net.Tests
     {
         public static void Main()
         {
-            new iRacingReplayOverlay.Phases.Direction.Support.Tests.BattleTest().ShouldSelectOneOfThreeBattles();
+            new iRacingReplayOverlay.Phases.Analysis.Tests.Incident().it_should_merge_two_incidents_across_another_drivers_incident();
         }
     }
 }
