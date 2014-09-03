@@ -17,10 +17,14 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Phases.Direction;
+using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
+using iRacingReplayOverlay.Video;
 using iRacingSDK.Support;
+using MediaFoundation.Net;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -86,7 +90,7 @@ namespace iRacingReplayOverlay
             task.Start();
         }
 
-        private void RunTest(string workingFolder, SynchronizationContext context)
+        void RunTest(string workingFolder, SynchronizationContext context)
         {
             try
             {
@@ -112,8 +116,9 @@ namespace iRacingReplayOverlay
                 if (filename != null)
                 {
                     TraceInfo.WriteLine("");
-                    TraceInfo.WriteLine("Success!");
                     TraceInfo.WriteLine("Found your video file {0}.", filename);
+
+                    TranscodeVideoTest(filename);
                 }
                 else
                 {
@@ -121,9 +126,39 @@ namespace iRacingReplayOverlay
                     TraceInfo.WriteLine("Failure!");
                 }
             }
+            catch(Exception e)
+            {
+                TraceInfo.WriteLine(e.Message);
+                Trace.WriteLine(e.StackTrace, "DEBUG");
+            }
             finally
             {
                 context.Post(ignored => testVideoCaptureButton.Enabled = true, null);
+            }
+        }
+
+        void TranscodeVideoTest(string filename)
+        {
+            using (MFSystem.Start())
+            {
+                var transcoder = new Transcoder
+                {
+                    IntroVideoFile = null,
+                    SourceFile = filename,
+                    DestinationFile = Path.ChangeExtension(filename, "wmv"),
+                    VideoBitRate = 5000000,
+                    AudioBitRate = 48000/8
+                };
+
+                TraceInfo.WriteLine("Begining video re-encoding.");
+
+                transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
+                {
+                    sourceReader.Samples(AVOperation.FadeIn(saveToSink));
+                });
+
+                TraceInfo.WriteLine("Video converted.  Review the video file {0} to confirm it looks OK.", transcoder.DestinationFile);
+                TraceInfo.WriteLine("Success!");
             }
         }
     }

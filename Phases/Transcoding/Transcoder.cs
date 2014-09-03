@@ -80,20 +80,34 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         SourceStream SetAudioMediaType(SourceReader sourceReader)
         {
-            var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
+            try
+            {
+                var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
 
-            sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM };
+                sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM };
 
-            return sourceStream;
+                return sourceStream;
+            }
+            catch(Exception e)
+            {
+                throw new Exception(string.Format("Unable to decode audio stream. {0}", e.Message), e);
+            }
         }
 
         SourceStream SetVideoMediaType(SourceReader sourceReader)
         {
-            var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsVideo);
+            try
+            {
+                var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsVideo);
 
-            sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
+                sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
 
-            return sourceStream;
+                return sourceStream;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format("Unable to decode video stream. {0}", e.Message), e);
+            }
         }
 
         SinkStream AddStream(SinkWriter sinkWriter, MediaType input, MediaType encoding)
