@@ -7,4 +7,5 @@ packages/
 TestResult.xml
 iRacingReplayOverlay.net.Tests.VisualState.xml
 publish/
+publish-beta/
 **/*.csproj.user
