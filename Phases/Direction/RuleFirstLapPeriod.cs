@@ -20,21 +20,22 @@ using iRacingReplayOverlay.Phases.Capturing;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleFirstSectors : IDirectionRule
+    public class RuleFirstLapPeriod : IDirectionRule
     {
         readonly RemovalEdits removalEdits;
         readonly TrackCamera TV3;
 
         DateTime reselectLeaderAt = DateTime.Now;
-        bool wasFirstSectors = false;
-        bool completedFirstSectors = false;
+        bool startedFirstLapPeriod = false;
+        bool completedFirstLapPeriod = false;
+        bool raceHasStarted;
+        TimeSpan raceStartTime;
 
-        public RuleFirstSectors(TrackCamera[] cameras, RemovalEdits removalEdits)
+        public RuleFirstLapPeriod(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
             this.removalEdits = removalEdits;
             TV3 = cameras.First(tc => tc.CameraName == "TV3");
@@ -42,27 +43,14 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public bool IsActive(DataSample data)
         {
-            if (!wasFirstSectors)
-            {
-                if (OnFirstSecotrs(data))
-                {
-                    Trace.WriteLine("{0}.  Showing leader for first two sectors".F(data.Telemetry.SessionTimeSpan));
-                    wasFirstSectors = true;
-                    return true;
-                }
+            var isInFirstPeriod = InFirstLapPeriod(data);
 
-                return false;
-            }
+            if (isInFirstPeriod)
+                OnlyOnce(ref startedFirstLapPeriod, () => TraceInfo.WriteLine("{0} Tracking leader from race start for period of {1}".F(data.Telemetry.SessionTimeSpan, Settings.Default.FollowLeaderAtRaceStartPeriod)));
+            else
+                OnlyOnce(ref completedFirstLapPeriod, () => TraceInfo.WriteLine("{0} Leader has completed first lap period.  Activating normal camera/driver selection rules.".F(data.Telemetry.SessionTimeSpan)));
 
-            if (OnFirstSecotrs(data))
-                return true;
-
-            if (!completedFirstSectors)
-            {
-                Trace.WriteLine("{0}  Leader has completed first 2 sectors".F(data.Telemetry.SessionTimeSpan));
-                completedFirstSectors = true;
-            }
-            return false;
+            return isInFirstPeriod;
         }
 
         public void Direct(DataSample data)
@@ -70,9 +58,16 @@ namespace iRacingReplayOverlay.Phases.Direction
             SwitchToLeader(data);
         }
 
-        bool OnFirstSecotrs(DataSample data)
+        bool InFirstLapPeriod(DataSample data)
         {
-            return data.Telemetry.RaceLapSector.LapNumber < 1 || (data.Telemetry.RaceLapSector.LapNumber == 1 && data.Telemetry.RaceLapSector.Sector < 2);
+            if( !raceHasStarted)
+            {
+                raceHasStarted = data.Telemetry.SessionState == SessionState.Racing;
+                raceStartTime = data.Telemetry.SessionTimeSpan;
+                return true;
+            }
+
+            return data.Telemetry.SessionTimeSpan < raceStartTime + Settings.Default.FollowLeaderAtRaceStartPeriod;
         }
 
         void SwitchToLeader(DataSample data)
@@ -85,6 +80,14 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                 reselectLeaderAt = DateTime.Now + 5.Seconds(); ;
             }
+        }
+
+        void OnlyOnce(ref bool latch, Action action)
+        {
+            if (!latch)
+                action();
+
+            latch = true;
         }
 
         public string Name

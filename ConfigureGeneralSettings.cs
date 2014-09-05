@@ -27,6 +27,7 @@ namespace iRacingReplayOverlay
 {
     public partial class ConfigureGeneralSettings : Form
     {
+        private int nextTabIndex;
         public ConfigureGeneralSettings()
         {
             InitializeComponent();
@@ -39,6 +40,7 @@ namespace iRacingReplayOverlay
             battleGap.Text = Settings.Default.BattleGap.TotalSeconds.ToString();
             battleFactor.Text = Settings.Default.BattleFactor.ToString();
             preferredDriverNameTextBox.Text = Settings.Default.PreferredDriverNames;
+            followLeaderAtRaceStartPeriodTextBox.Text = Settings.Default.FollowLeaderAtRaceStartPeriod.TotalSeconds.ToString();
 
             var cred = Settings.Default.YouTubeCredentials ?? new Credentials();
             this.youTubeUserName.Text = cred.UserName;
@@ -56,8 +58,16 @@ namespace iRacingReplayOverlay
             Save_preferredDriverNameTextBox();
             Save_battleStickyPeriod();
             Save_battleFactor();
+            Save_followLeaderAtRaceStartPeriodTextBox();
 
             Settings.Default.Save();
+        }
+
+        void Save_followLeaderAtRaceStartPeriodTextBox()
+        {
+            var newSeconds = 0.0;
+            if (double.TryParse(followLeaderAtRaceStartPeriodTextBox.Text, out newSeconds))
+                Settings.Default.FollowLeaderAtRaceStartPeriod= newSeconds.Seconds();
         }
 
         void Save_cameraStickyPeriod()

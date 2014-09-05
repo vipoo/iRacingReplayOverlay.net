@@ -53,6 +53,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cameraStickyPeriod = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.followLeaderAtRaceStartPeriodTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +101,9 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.label14);
+            this.panel1.Controls.Add(this.followLeaderAtRaceStartPeriodTextBox);
             this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.label10);
@@ -119,13 +125,13 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(534, 293);
+            this.panel1.Size = new System.Drawing.Size(539, 291);
             this.panel1.TabIndex = 40;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(14, 148);
+            this.label12.Location = new System.Drawing.Point(14, 183);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(162, 16);
             this.label12.TabIndex = 12;
@@ -133,7 +139,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(301, 145);
+            this.textBox1.Location = new System.Drawing.Point(301, 180);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(134, 22);
@@ -147,7 +153,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(14, 100);
+            this.label10.Location = new System.Drawing.Point(14, 126);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(160, 16);
             this.label10.TabIndex = 10;
@@ -155,7 +161,7 @@
             // 
             // battleFactor
             // 
-            this.battleFactor.Location = new System.Drawing.Point(301, 97);
+            this.battleFactor.Location = new System.Drawing.Point(301, 123);
             this.battleFactor.Name = "battleFactor";
             this.battleFactor.Size = new System.Drawing.Size(134, 22);
             this.battleFactor.TabIndex = 11;
@@ -191,7 +197,7 @@
             // 
             // youTubePassword
             // 
-            this.youTubePassword.Location = new System.Drawing.Point(303, 280);
+            this.youTubePassword.Location = new System.Drawing.Point(300, 315);
             this.youTubePassword.Name = "youTubePassword";
             this.youTubePassword.PasswordChar = '*';
             this.youTubePassword.Size = new System.Drawing.Size(134, 22);
@@ -202,7 +208,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(14, 283);
+            this.label7.Location = new System.Drawing.Point(14, 318);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(130, 16);
             this.label7.TabIndex = 18;
@@ -210,7 +216,7 @@
             // 
             // youTubeUserName
             // 
-            this.youTubeUserName.Location = new System.Drawing.Point(301, 252);
+            this.youTubeUserName.Location = new System.Drawing.Point(301, 287);
             this.youTubeUserName.Name = "youTubeUserName";
             this.youTubeUserName.Size = new System.Drawing.Size(134, 22);
             this.youTubeUserName.TabIndex = 17;
@@ -220,7 +226,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 255);
+            this.label6.Location = new System.Drawing.Point(14, 290);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(133, 16);
             this.label6.TabIndex = 16;
@@ -256,7 +262,7 @@
             // 
             // preferredDriverNameTextBox
             // 
-            this.preferredDriverNameTextBox.Location = new System.Drawing.Point(301, 205);
+            this.preferredDriverNameTextBox.Location = new System.Drawing.Point(301, 240);
             this.preferredDriverNameTextBox.Name = "preferredDriverNameTextBox";
             this.preferredDriverNameTextBox.Size = new System.Drawing.Size(134, 22);
             this.preferredDriverNameTextBox.TabIndex = 15;
@@ -266,7 +272,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 208);
+            this.label3.Location = new System.Drawing.Point(14, 243);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(269, 16);
             this.label3.TabIndex = 14;
@@ -298,6 +304,34 @@
             this.label1.Size = new System.Drawing.Size(199, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Time between camera switches:";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(13, 96);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(199, 16);
+            this.label13.TabIndex = 20;
+            this.label13.Text = "Time to track leader at race start";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(440, 96);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(60, 16);
+            this.label14.TabIndex = 22;
+            this.label14.Text = "seconds";
+            // 
+            // followLeaderAtRaceStartPeriodTextBox
+            // 
+            this.followLeaderAtRaceStartPeriodTextBox.Location = new System.Drawing.Point(300, 93);
+            this.followLeaderAtRaceStartPeriodTextBox.Name = "followLeaderAtRaceStartPeriodTextBox";
+            this.followLeaderAtRaceStartPeriodTextBox.Size = new System.Drawing.Size(134, 22);
+            this.followLeaderAtRaceStartPeriodTextBox.TabIndex = 21;
+            this.followLeaderAtRaceStartPeriodTextBox.Tag = "The amount of time, to stay focused on the leader, at race start.  After this per" +
+    "iod, the normal camera and driver tracking rules will apply.";
+            this.followLeaderAtRaceStartPeriodTextBox.Enter += new System.EventHandler(this.OnFocus);
             // 
             // ConfigureGeneralSettings
             // 
@@ -349,6 +383,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox followLeaderAtRaceStartPeriodTextBox;
 
     }
 }

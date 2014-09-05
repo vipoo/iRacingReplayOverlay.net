@@ -164,5 +164,29 @@ namespace iRacingReplayOverlay {
                 this["BattleFactor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:20")]
+        public global::System.TimeSpan FollowLeaderAtRaceStartPeriod {
+            get {
+                return ((global::System.TimeSpan)(this["FollowLeaderAtRaceStartPeriod"]));
+            }
+            set {
+                this["FollowLeaderAtRaceStartPeriod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:20")]
+        public global::System.TimeSpan FollowLeaderBeforeRaceEndPeriod {
+            get {
+                return ((global::System.TimeSpan)(this["FollowLeaderBeforeRaceEndPeriod"]));
+            }
+            set {
+                this["FollowLeaderBeforeRaceEndPeriod"] = value;
+            }
+        }
     }
 }
