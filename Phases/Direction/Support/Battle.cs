@@ -87,8 +87,6 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             if (all.Count() == 0)
                 return null;
 
-            //const double factor = 1.5d;
-
             var numberOfX = Math.Pow(2d, all.Count() * factor) - factor;
             var x = 95.0 / (double)numberOfX;
             var ddice = (double)dice;

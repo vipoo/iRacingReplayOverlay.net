@@ -66,74 +66,88 @@ namespace iRacingReplayOverlay.Phases.Analysis.Tests
             Assert.That(actual.EndSessionTime, Is.EqualTo(13.2.Seconds()));
         }
 
-        public class SpikeTest
+        public class GivenTwoSeperateIncidentsForSameDriver
         {
-            private Incidents i;
+            private Incidents incident;
 
             [SetUp]
             public void setup()
             {
-                i = new Incidents();
+                incident = new Incidents();
 
                 var session = CreateDrivers("dino");
 
-                i.Process(CreateIncidentSample(0, 4.0d, session));
-                i.Process(CreateIncidentSample(0, (4d + 8d + 17d), session));
+                incident.Process(CreateIncidentSample(0, 4.0d, session));
+                incident.Process(CreateIncidentSample(0, (4d + 8d + 17d), session));
             }
 
             [Test]
-            public void it_should_pass()
+            public void it_should_find_the_two_incidents()
             {
-                Assert.That(i.Count(), Is.EqualTo(2));
+                Assert.That(incident.Count(), Is.EqualTo(2));
+            }
+
+            [Test]
+            public void it_should_identify_the_time_period_for_the_first_incident()
+            {
+                var actual = incident.First();
+            
+                Assert.That(actual.StartSessionTime, Is.EqualTo(3.Seconds()));
+                Assert.That(actual.EndSessionTime, Is.EqualTo(12.Seconds()));
+            }
+
+            [Test]
+            public void it_should_identify_the_time_period_for_the_second_incident()
+            {
+                var actual = incident.Last();
+
+                Assert.That(actual.StartSessionTime, Is.EqualTo(28.Seconds()));
+                Assert.That(actual.EndSessionTime, Is.EqualTo(37.Seconds()));
             }
         }
-        [Test]
-        public void it_should_not_merge_two_incidents_when_more_than_15_seconds_apart()
+
+        public class GivenOverlappingIncidentsFrom2Drivers
         {
-            var i = new Incidents();
+            private Incidents incident;
 
-            var session = CreateDrivers("dino");
+            [SetUp]
+            public void setup()
+            {
+                incident = new Incidents();
 
-            i.Process(CreateIncidentSample(0, 4.0d, session));
-            i.Process(CreateIncidentSample(0, (4d + 8d + 17d), session));
+                var session = CreateDrivers("dino", "georg");
 
-            Assert.That(i.Count(), Is.EqualTo(2));
+                incident.Process(CreateIncidentSample(0, 4.3d, session));
+                incident.Process(CreateIncidentSample(1, 5.4d, session));
+                incident.Process(CreateIncidentSample(0, 6.2d, session));
+            }
 
-            var actual = i.First();
+            [Test]
+            public void it_should_find_the_two_incidents()
+            {
+                Assert.That(incident.Count(), Is.EqualTo(2));
+            }
 
-            Assert.That(actual.StartSessionTime, Is.EqualTo(3.Seconds()));
-            Assert.That(actual.EndSessionTime, Is.EqualTo(12.Seconds()));
+            [Test]
+            public void it_should_merge_the_two_incidents_for_dino()
+            {
+                var actual = incident.First();
 
-            actual = i.Skip(1).First();
+                Assert.That(actual.StartSessionTime, Is.EqualTo(3.3.Seconds()));
+                Assert.That(actual.EndSessionTime, Is.EqualTo(14.2.Seconds()));
+                Assert.That(actual.Car.UserName, Is.EqualTo("dino"));
+            }
 
-            Assert.That(actual.StartSessionTime, Is.EqualTo(28.Seconds()));
-            Assert.That(actual.EndSessionTime, Is.EqualTo(37.Seconds()));
-        }
+            [Test]
+            public void it_should_merge_the_two_incidents_for_georg()
+            {
+                var actual = incident.Skip(1).First();
 
-        [Test]
-        public void it_should_merge_two_incidents_across_another_drivers_incident()
-        {
-            var i = new Incidents();
+                Assert.That(actual.StartSessionTime, Is.EqualTo(4.4.Seconds()));
+                Assert.That(actual.EndSessionTime, Is.EqualTo(13.4.Seconds()));
+                Assert.That(actual.Car.UserName, Is.EqualTo("georg"));
+            }
 
-            var session = CreateDrivers("dino", "georg");
-
-            i.Process(CreateIncidentSample(0, 4.3d, session));
-            i.Process(CreateIncidentSample(1, 5.4d, session));
-            i.Process(CreateIncidentSample(0, 6.2d, session));
-
-            Assert.That(i.Count(), Is.EqualTo(2));
-
-            var actual = i.First();
-
-            Assert.That(actual.StartSessionTime, Is.EqualTo(3.3.Seconds()));
-            Assert.That(actual.EndSessionTime, Is.EqualTo(14.2.Seconds()));
-            Assert.That(actual.Car.UserName, Is.EqualTo("dino"));
-
-            actual = i.Skip(1).First();
-
-            Assert.That(actual.StartSessionTime, Is.EqualTo(4.4.Seconds()));
-            Assert.That(actual.EndSessionTime, Is.EqualTo(13.4.Seconds()));
-            Assert.That(actual.Car.UserName, Is.EqualTo("georg"));
         }
 
         static SessionData CreateDrivers(params string[] names)
