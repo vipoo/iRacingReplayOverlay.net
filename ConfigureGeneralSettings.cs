@@ -32,7 +32,7 @@ namespace iRacingReplayOverlay
             InitializeComponent();
         }
 
-        private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
+        void ConfigureGeneralSettings_Load(object sender, EventArgs e)
         {
             cameraStickyPeriod.Text = Settings.Default.CameraStickyPeriod.TotalSeconds.ToString();
             battleStickyPeriod.Text = Settings.Default.BattleStickyPeriod.TotalSeconds.ToString();
@@ -45,65 +45,59 @@ namespace iRacingReplayOverlay
             this.youTubePassword.Text = cred.FreePassword;
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        void okButton_Click(object sender, EventArgs e)
         {
             var cred = Settings.Default.YouTubeCredentials = Settings.Default.YouTubeCredentials ?? new Credentials();
             cred.UserName = this.youTubeUserName.Text;
             cred.FreePassword = this.youTubePassword.Text;
+
+            Save_cameraStickyPeriod();
+            Save_battleGap();
+            Save_preferredDriverNameTextBox();
+            Save_battleStickyPeriod();
+            Save_battleFactor();
+
             Settings.Default.Save();
         }
 
-        private void MaxTimeBetweenCameraSwitchesTextBox_TextChanged(object sender, EventArgs e)
+        void Save_cameraStickyPeriod()
         {
             var newSeconds = 0.0;
             if (double.TryParse(cameraStickyPeriod.Text, out newSeconds))
-            {
                 Settings.Default.CameraStickyPeriod = newSeconds.Seconds();
-                Settings.Default.Save();
-            }
         }
 
-        private void MaxTimeForInterestingEventTextBox_TextChanged(object sender, EventArgs e)
+        void Save_battleGap()
         {
             var newSeconds = 0.0;
             if (double.TryParse(battleGap.Text, out newSeconds))
-            {
                 Settings.Default.BattleGap = newSeconds.Seconds();
-                Settings.Default.Save();
-            }
         }
 
-        private void PreferredDriverNameTextBox_TextChanged(object sender, EventArgs e)
+        void Save_preferredDriverNameTextBox()
         {
             Settings.Default.PreferredDriverNames = preferredDriverNameTextBox.Text;
-            Settings.Default.Save();
         }
 
-        private void battleStickyPeriod_TextChanged(object sender, EventArgs e)
+        void Save_battleStickyPeriod()
         {
             var newSeconds = 0.0;
             if (double.TryParse(battleStickyPeriod.Text, out newSeconds))
-            {
                 Settings.Default.BattleStickyPeriod = newSeconds.Seconds();
-                Settings.Default.Save();
-            }
         }
 
-        private void OnFocus(object sender, EventArgs e)
-        {
-            helpText.Text = "";
-            if (this.ActiveControl.Tag != null )
-                helpText.Text = this.ActiveControl.Tag.ToString();
-        }
-
-        private void battleFactor_TextChanged(object sender, EventArgs e)
+        void Save_battleFactor()
         {
             var factor = 0.0d;
             if (double.TryParse(battleFactor.Text, out factor))
-            {
                 Settings.Default.BattleFactor = factor;
-                Settings.Default.Save();
-            }
+        }
+
+        void OnFocus(object sender, EventArgs e)
+        {
+            helpText.Text = "";
+            if (this.ActiveControl.Tag != null)
+                helpText.Text = this.ActiveControl.Tag.ToString();
         }
     }
 }
