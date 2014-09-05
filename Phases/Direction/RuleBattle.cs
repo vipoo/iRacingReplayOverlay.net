@@ -190,7 +190,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         BattleState SearchForNextBattle(DataSample data, Func<BattleState> notFound)
         {
-            var battleDriver = Battle.Find(data, battleGap, battleFactor);
+            var battleDriver = Battle.Find(data, battleGap, battleFactor, Settings.Default.PreferredDrivers);
             if (battleDriver == null)
             {
                 isInBattle = false;

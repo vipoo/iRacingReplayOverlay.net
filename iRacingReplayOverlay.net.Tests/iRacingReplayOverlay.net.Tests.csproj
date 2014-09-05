@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Phases\Analysis\Incident.cs" />
+    <Compile Include="Phases\Direction\RuleBattle.cs" />
     <Compile Include="Phases\Direction\Support\BattleTest.cs" />
     <Compile Include="Main.cs" />
   </ItemGroup>

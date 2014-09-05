@@ -38,7 +38,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             data.Telemetry.CarIdxDistance = new float[] { PaceCar, 0.14f, 0.125f, 0.12f, 0.10f };
             var expected = new[] { new Battle.GapMetric { CarIdx = 3, Position = 2, Time = (0.125f - 0.12f) * 100d } };
 
-            var all = Battle.All(data, 1.Seconds()).ToArray();
+            var all = Battle.All(data, 1.Seconds(), new long[0]).ToArray();
 
             Assert.That(all, Is.EqualTo(expected));
         }
@@ -53,7 +53,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
                 new Battle.GapMetric { CarIdx = 2, Position = 1, Time = (0.147f - 0.14f) * 100d },
             };
 
-            var all = Battle.All(data, 1.Seconds()).ToArray();
+            var all = Battle.All(data, 1.Seconds(), new long[0]).ToArray();
 
             Assert.That(all, Is.EqualTo(expected));
         }
@@ -64,7 +64,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             var data = BuildDataSample();
             data.Telemetry.CarIdxDistance = new float[] { PaceCar, 0.15f, 0.12f, 0.10f, 0.08f, 0.04f };
 
-            var all = Battle.All(data, 1.Seconds()).ToArray();
+            var all = Battle.All(data, 1.Seconds(), new long[0]).ToArray();
 
             Assert.That(all.Count(), Is.EqualTo(0));
         }
@@ -99,6 +99,31 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             AssertThatFor(5, 10, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver3"));
             AssertThatFor(11, 34, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver2"));
             AssertThatFor(35, 99, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver1"));
+        }
+
+        [Test]
+        public void ShouldConvertListOfDriverNamesIntoListOfCarIdxs()
+        {
+            var data = BuildDataSample();
+
+            var actual = Battle.GetPreferredCarIdxs(data, new[] { "Driver1", "DRIVER2" });
+
+            Assert.That(actual, Is.EqualTo(new[] { 0L, 1L }));
+        }
+
+        [Test]
+        public void ShouldSelectPreferredDriversFirst()
+        {
+            var data = BuildDataSample();
+            data.Telemetry.CarIdxDistance = new float[] { PaceCar, 0.147f, 0.14f, 0.125f, 0.12f, 0.10f };
+            var expected = new[] { 
+                new Battle.GapMetric { CarIdx = 2, Position = 1, Time = (0.147f - 0.14f) * 100d },
+                new Battle.GapMetric { CarIdx = 4, Position = 3, Time = (0.125f - 0.12f) * 100d },
+            };
+
+            var all = Battle.All(data, 1.Seconds(), new long[] { 4 }).ToArray();
+
+            Assert.That(all, Is.EqualTo(expected));
         }
 
         static void AssertThatFor<T>(int from, int to, Func<int, T> driver, Constraint constraint)
@@ -136,9 +161,9 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             {
                 Drivers = new[]
                 { 
-                    new SessionData._DriverInfo._Drivers { UserName = "Driver1"},
-                    new SessionData._DriverInfo._Drivers { UserName = "Driver2"},
-                    new SessionData._DriverInfo._Drivers { UserName = "Driver3"},
+                    new SessionData._DriverInfo._Drivers { UserName = "Driver1", CarIdx = 0},
+                    new SessionData._DriverInfo._Drivers { UserName = "Driver2", CarIdx = 1},
+                    new SessionData._DriverInfo._Drivers { UserName = "Driver3", CarIdx = 2},
                 }
             };
 

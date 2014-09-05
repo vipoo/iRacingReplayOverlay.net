@@ -43,15 +43,27 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             }
         }
 
-        public static SessionData._DriverInfo._Drivers Find(DataSample data, TimeSpan battleGap, double factor)
+        public static SessionData._DriverInfo._Drivers Find(DataSample data, TimeSpan battleGap, double factor, IEnumerable<string> preferredDrivers)
         {
-            var allBattles = All(data, battleGap);
+            var preferredCarIdxs = GetPreferredCarIdxs(data, preferredDrivers);
+
+            var allBattles = All(data, battleGap, preferredCarIdxs);
 
             return SelectABattle(data, allBattles, random.Next(101), factor);
         }
 
-        internal static IEnumerable<GapMetric> All(DataSample data, TimeSpan battleGap)
+        internal static long[] GetPreferredCarIdxs(DataSample data, IEnumerable<string> preferredDrivers)
         {
+            preferredDrivers = preferredDrivers.Select(d => d.ToLower()).ToList();
+
+            return data.SessionData.DriverInfo.Drivers.Where(x => preferredDrivers.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
+        }
+
+        internal static IEnumerable<GapMetric> All(DataSample data, TimeSpan battleGap, long[] preferredCarIdxs)
+        {
+            if (preferredCarIdxs == null)
+                preferredCarIdxs = new long[0];
+
             var distances = data.Telemetry.CarIdxDistance
                     .Select((d, i) => new { CarIdx = i, Distance = d })
                     .Skip(1)
@@ -78,11 +90,12 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             });
 
             return timeGap
-                .OrderByDescending(d => d.Position)
+                .OrderBy(d => preferredCarIdxs.Contains(d.CarIdx))
+                .ThenByDescending(d => d.Position)
                 .Where(d => d.Time < battleGap.TotalSeconds);
         }
 
-        internal static SessionData._DriverInfo._Drivers SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor )
+        internal static SessionData._DriverInfo._Drivers SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor)
         {
             if (all.Count() == 0)
                 return null;
@@ -114,7 +127,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 divide = upper;
                 currentFactor += factor;
             }
-            
+
             Trace.WriteLine("WARNING!  did not find battle by chance!", "DEBUG");
             return data.SessionData.DriverInfo.Drivers[all.Last().CarIdx];
         }

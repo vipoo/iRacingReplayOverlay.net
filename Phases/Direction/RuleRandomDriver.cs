@@ -47,9 +47,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             if (Settings.Default.PreferredDriverNames != null && Settings.Default.PreferredDriverNames.Length > 0)
             {
-                var preferredDriverNames = Settings.Default.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim().ToLower()).ToList();
-
-                preferredCarIndexes = sessionData.DriverInfo.Drivers.Where(x => preferredDriverNames.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
+                preferredCarIndexes = sessionData.DriverInfo.Drivers
+                    .Where(x => Settings.Default.PreferredDrivers.Contains(x.UserName.ToLower()))
+                    .Select(x => x.CarIdx).ToArray();
             }
             else
                 preferredCarIndexes = sessionData.DriverInfo.Drivers.Where(x => !x.IsPaceCar).Select(x => x.CarIdx).ToArray();
