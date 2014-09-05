@@ -260,8 +260,7 @@
             this.preferredDriverNameTextBox.Name = "preferredDriverNameTextBox";
             this.preferredDriverNameTextBox.Size = new System.Drawing.Size(134, 22);
             this.preferredDriverNameTextBox.TabIndex = 15;
-            this.preferredDriverNameTextBox.Tag = "A comma seperated list of names, to preference the random selection of drivers.  " +
-    "Only applicable when no battles are happening.";
+            this.preferredDriverNameTextBox.Tag = "A comma seperated list of driver names, to preference in camera selection.";
             this.preferredDriverNameTextBox.Enter += new System.EventHandler(this.OnFocus);
             // 
             // label3
