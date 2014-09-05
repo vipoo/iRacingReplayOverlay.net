@@ -91,6 +91,7 @@ namespace iRacingReplayOverlay
             this.UploadVideoToYouTube = new System.Windows.Forms.CheckBox();
             this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.youTubeCredentialsRequired = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -580,11 +581,22 @@ namespace iRacingReplayOverlay
             this.youTubeCredentialsRequired.Text = "*Must enter your YouTube username and password before uploading";
             this.youTubeCredentialsRequired.Visible = false;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(681, 38);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(86, 26);
+            this.button1.TabIndex = 49;
+            this.button1.Text = "About ...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 463);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.youTubeCredentialsRequired);
             this.Controls.Add(this.UploadVideoToYouTube);
             this.Controls.Add(this.EncodeVideoAfterCapture);
@@ -661,5 +673,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.CheckBox highlightVideoOnly;
         private System.Windows.Forms.Label configureTrackCamerasLabel;
         private System.Windows.Forms.Button verifyVideoCaptureButton;
+        private System.Windows.Forms.Button button1;
     }
 }

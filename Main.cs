@@ -510,5 +510,16 @@ namespace iRacingReplayOverlay
 
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var version = this.GetType().Assembly.GetName().Version;
+
+            var isBeta = this.GetType().Assembly.GetName().Name.ToLower().Contains("beta");
+
+            var betaText = isBeta ? " beta" : "";
+
+            MessageBox.Show("iRacing Replay Application\nCopyright Dean Netherton\nVersion {0}{1}".F(version, betaText));
+        }
     }
 }
