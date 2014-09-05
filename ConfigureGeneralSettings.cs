@@ -16,91 +16,48 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Support;
-using iRacingSDK;
-using iRacingSDK.Support;
 using System;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
     public partial class ConfigureGeneralSettings : Form
     {
-        private int nextTabIndex;
         public ConfigureGeneralSettings()
         {
             InitializeComponent();
+            AddPanelComponents();
         }
 
-        void ConfigureGeneralSettings_Load(object sender, EventArgs e)
+        void AddPanelComponents()
         {
-            cameraStickyPeriod.Text = Settings.Default.CameraStickyPeriod.TotalSeconds.ToString();
-            battleStickyPeriod.Text = Settings.Default.BattleStickyPeriod.TotalSeconds.ToString();
-            battleGap.Text = Settings.Default.BattleGap.TotalSeconds.ToString();
-            battleFactor.Text = Settings.Default.BattleFactor.ToString();
-            preferredDriverNameTextBox.Text = Settings.Default.PreferredDriverNames;
-            followLeaderAtRaceStartPeriodTextBox.Text = Settings.Default.FollowLeaderAtRaceStartPeriod.TotalSeconds.ToString();
-
             var cred = Settings.Default.YouTubeCredentials ?? new Credentials();
-            this.youTubeUserName.Text = cred.UserName;
-            this.youTubePassword.Text = cred.FreePassword;
+
+            AddTimeField("Time between camera switches:", "The time period that must elapsed before a new random camera is selected.", "CameraStickyPeriod");
+            AddTimeField("Time between battle switches:", "The time period that must elapsed before a new battle is randomly selected.", "BattleStickyPeriod");
+            AddTimeField("Time gap between cars for battle:", "The approximate amount of time between cars to determine if they are battling.  Default 1 second.", "BattleGap");
+            AddTimeField("Time to track leader at race start", "The amount of time, to stay focused on the leader, at race start.  After this period, the normal camera and driver tracking rules will apply.", "FollowLeaderAtRaceStartPeriod");
+            AddNumberField("Factor for battle selection.", "A factor to bias the random selection of battles.  Larger numbers will tend to focus on battles at front.  Smaller numbers will increase the chance of battles futher down the order to be selected.  Recommend values between 0.9 and 1.5", "BattleFactor");
+            
+            AddBlankRow();
+            AddKeyPressField("Hot Key for Video Capture", "The hotkey used by your video capture program.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9 or F9");
+
+            AddBlankRow();
+            AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
+
+            AddBlankRow();
+            AddStringField("YouTube Username:", "Your YouTube username to allow publishing to your youtube account.", s => cred.UserName, (s, u) => cred.UserName = u);
+            AddPasswordField("YouTube Password:", "Your youtube password.", s => cred.FreePassword, (s, u) => cred.FreePassword = u);
         }
 
         void okButton_Click(object sender, EventArgs e)
         {
-            var cred = Settings.Default.YouTubeCredentials = Settings.Default.YouTubeCredentials ?? new Credentials();
-            cred.UserName = this.youTubeUserName.Text;
-            cred.FreePassword = this.youTubePassword.Text;
-
-            Save_cameraStickyPeriod();
-            Save_battleGap();
-            Save_preferredDriverNameTextBox();
-            Save_battleStickyPeriod();
-            Save_battleFactor();
-            Save_followLeaderAtRaceStartPeriodTextBox();
+            Settings.Default.YouTubeCredentials = Settings.Default.YouTubeCredentials ?? new Credentials();
+            
+            foreach (var s in OnSave)
+                s();
 
             Settings.Default.Save();
-        }
-
-        void Save_followLeaderAtRaceStartPeriodTextBox()
-        {
-            var newSeconds = 0.0;
-            if (double.TryParse(followLeaderAtRaceStartPeriodTextBox.Text, out newSeconds))
-                Settings.Default.FollowLeaderAtRaceStartPeriod= newSeconds.Seconds();
-        }
-
-        void Save_cameraStickyPeriod()
-        {
-            var newSeconds = 0.0;
-            if (double.TryParse(cameraStickyPeriod.Text, out newSeconds))
-                Settings.Default.CameraStickyPeriod = newSeconds.Seconds();
-        }
-
-        void Save_battleGap()
-        {
-            var newSeconds = 0.0;
-            if (double.TryParse(battleGap.Text, out newSeconds))
-                Settings.Default.BattleGap = newSeconds.Seconds();
-        }
-
-        void Save_preferredDriverNameTextBox()
-        {
-            Settings.Default.PreferredDriverNames = preferredDriverNameTextBox.Text;
-        }
-
-        void Save_battleStickyPeriod()
-        {
-            var newSeconds = 0.0;
-            if (double.TryParse(battleStickyPeriod.Text, out newSeconds))
-                Settings.Default.BattleStickyPeriod = newSeconds.Seconds();
-        }
-
-        void Save_battleFactor()
-        {
-            var factor = 0.0d;
-            if (double.TryParse(battleFactor.Text, out factor))
-                Settings.Default.BattleFactor = factor;
         }
 
         void OnFocus(object sender, EventArgs e)
