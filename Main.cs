@@ -27,6 +27,7 @@ using iRacingSDK;
 using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
+using System.Deployment.Application;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -513,13 +514,16 @@ namespace iRacingReplayOverlay
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var version = this.GetType().Assembly.GetName().Version;
+            Version myVersion = new Version("1.0.0.0");
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+                myVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
 
             var isBeta = this.GetType().Assembly.GetName().Name.ToLower().Contains("beta");
 
             var betaText = isBeta ? " beta" : "";
 
-            MessageBox.Show("iRacing Replay Application\nCopyright Dean Netherton\nVersion {0}{1}".F(version, betaText));
+            MessageBox.Show("iRacing Replay Application\nCopyright Dean Netherton\nVersion {0}.{1}.{2}.{3}{4}".F(myVersion.Major, myVersion.MajorRevision, myVersion.Minor, myVersion.MinorRevision, betaText));
         }
     }
 }
