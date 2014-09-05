@@ -35,7 +35,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <ApplicationRevision>7</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>1.0.0.7</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -198,6 +198,7 @@
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
     <None Include="packages\repositories.config" />
+    <None Include="publish.sh" />
     <None Include="publish-beta.sh" />
     <None Include="README.md" />
     <None Include="Settings.settings">
