@@ -56,7 +56,7 @@ How to use
 Known Issues
 ============
 
-* Only support MPEG/H.264 video codec for capture
+* Only support MPEG/H.264 video codec for capture (not compatibile with Frap's custom codec)
 * Only tested with audio codec PCM
 * Video capture software must respond to ALT+F9 or F9 keypress to start/stop recording
 * Upon completion of capture, iRacing may not minimised
