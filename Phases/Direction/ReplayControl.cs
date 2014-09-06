@@ -49,7 +49,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var cameraControl = new CameraControl(cameras);
 
-            var ruleLastSectors = new RuleLastSectors(cameras, removalEdits);
+            var ruleLastSectors = new RuleLastLapPeriod(cameras, removalEdits);
             var ruleFirstSectors = new RuleFirstLapPeriod(cameras, removalEdits);
             var ruleIncident = new RuleIncident(cameras, removalEdits, incidents).WithVeto(ruleLastSectors);
             var rulePaceLaps = new RulePaceLaps(cameras, removalEdits).WithVeto(ruleIncident);

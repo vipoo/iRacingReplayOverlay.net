@@ -163,7 +163,6 @@ namespace iRacingReplayOverlay.Phases.Analysis.Tests
 
         static DataSample CreateIncidentSample(int carIdx, double time, SessionData sessionData)
         {
-
             var data = new DataSample
             {
                 SessionData = sessionData,

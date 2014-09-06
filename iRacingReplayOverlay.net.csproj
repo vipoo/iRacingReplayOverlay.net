@@ -128,7 +128,7 @@
     <Compile Include="Phases\Direction\RuleRandomDriver.cs" />
     <Compile Include="Phases\Direction\RuleFirstLapPeriod.cs" />
     <Compile Include="Phases\Direction\RuleIncident.cs" />
-    <Compile Include="Phases\Direction\RuleLastSectors.cs" />
+    <Compile Include="Phases\Direction\RuleLastLapPeriod.cs" />
     <Compile Include="Phases\Direction\RuleVeto.cs" />
     <Compile Include="Phases\Direction\Support\Battle.cs" />
     <Compile Include="Phases\Transcode.cs" />

@@ -17,7 +17,6 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
@@ -26,7 +25,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleLastSectors : IDirectionRule
+    public class RuleLastLapPeriod : IDirectionRule
     {
         readonly RemovalEdits removalEdits;
         readonly TrackCamera[] cameras;
@@ -34,8 +33,11 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         int lastFinisherCarIdx = -1;
         DateTime timeOfFinisher = DateTime.Now;
+        bool lastLapHasStarted;
+        TimeSpan trackLeaderFrom;
+        bool startLastLapPeriod = false;
 
-        public RuleLastSectors(TrackCamera[] cameras, RemovalEdits removalEdits)
+        public RuleLastLapPeriod(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
             this.cameras = cameras;
             this.removalEdits = removalEdits;
@@ -45,18 +47,24 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public bool IsActive(DataSample data)
         {
-            return OnLastSectors(data);
+            if (!lastLapHasStarted && data.Telemetry.RaceLaps == data.Telemetry.Session.ResultsLapsComplete)
+            {
+                lastLapHasStarted = true;
+                trackLeaderFrom = data.Telemetry.SessionTimeSpan + (data.Telemetry.Session.ResultsAverageLapTime.Seconds() - Settings.Default.FollowLeaderBeforeRaceEndPeriod);
+                TraceInfo.WriteLine("{0} On final lap.  Tracking leader from {1}", data.Telemetry.SessionTimeSpan, trackLeaderFrom);
+            }
+
+            var isInLastPeriod = lastLapHasStarted && data.Telemetry.SessionTimeSpan > trackLeaderFrom;
+
+            if (isInLastPeriod)
+                OnlyOnce(ref startLastLapPeriod, () => TraceInfo.WriteLine("{0} Tracking leader on final lap", data.Telemetry.SessionTimeSpan));
+
+            return isInLastPeriod;
         }
         
         public void Direct(DataSample data)
         {
             SwitchToFinishingDrivers(data);
-        }
-
-        bool OnLastSectors(DataSample data)
-        {
-            var totalLaps = data.Telemetry.Session.ResultsLapsComplete;
-            return data.Telemetry.RaceLapSector >= new LapSector((int)totalLaps, 1);
         }
 
         void SwitchToFinishingDrivers(DataSample data)
@@ -98,6 +106,14 @@ namespace iRacingReplayOverlay.Phases.Direction
             TraceInfo.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}", data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position);
 
             iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, TV2.CameraNumber);
+        }
+
+        void OnlyOnce(ref bool latch, Action action)
+        {
+            if (!latch)
+                action();
+
+            latch = true;
         }
 
         public string Name
