@@ -32,7 +32,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         DateTime reselectLeaderAt = DateTime.Now;
         bool startedFirstLapPeriod = false;
         bool completedFirstLapPeriod = false;
-        bool raceHasStarted;
+        bool raceHasStarted = false;
         TimeSpan raceStartTime;
 
         public RuleFirstLapPeriod(TrackCamera[] cameras, RemovalEdits removalEdits)

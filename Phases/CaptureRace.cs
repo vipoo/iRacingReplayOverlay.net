@@ -53,29 +53,20 @@ namespace iRacingReplayOverlay.Phases
 
         internal void _CaptureRaceTest(Action<string> onComplete, IEnumerable<DataSample> samples)
         {
-            iRacing.Replay.MoveToFrame(raceStartFrameNumber);
-
-            Thread.Sleep(2000);
-            iRacing.Replay.SetSpeed(1);
-
             var overlayData = new OverlayData { IntroVideoFileName = introVideoFileName };
             var removalEdits = new RemovalEdits(overlayData);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
-
             var recordPitStop = new RecordPitStop(commentaryMessages);
             var fastestLaps = new RecordFastestLaps(overlayData);
             var replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
             var sessionDataCapture = new SessionDataCapture(overlayData);
-
             var captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5),
                 new CaptureLeaderBoard(overlayData, commentaryMessages, removalEdits).Process);
-
             var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
                  new CaptureCamDriver(overlayData).Process);
 
-            videoCapture.Activate(workingFolder);
-            var startTime = DateTime.Now;
+            ApplyFirstLapCameraDirection(samples, replayControl);
 
             samples = samples
                 .VerifyReplayFrames()
@@ -91,6 +82,9 @@ namespace iRacingReplayOverlay.Phases
             if (shortTestOnly)
                 samples = samples.AtSpeed(2);
 
+            videoCapture.Activate(workingFolder);
+            var startTime = DateTime.Now;
+
             foreach (var data in samples)
             {
                 if (shortTestOnly && !haveSkipForTesting && ReturnIfSkipping(data))
@@ -101,12 +95,12 @@ namespace iRacingReplayOverlay.Phases
 
                 var relativeTime = DateTime.Now - startTime;
 
+                replayControl.Process(data);
                 sessionDataCapture.Process(data);
                 captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
                 captureCamDriverEveryQuaterSecond.Process(data, relativeTime);
                 recordPitStop.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
-                replayControl.Process(data);
                 removalEdits.Process(data, relativeTime);
             }
 
@@ -127,6 +121,20 @@ namespace iRacingReplayOverlay.Phases
                 throw new Exception("Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder));
 
             onComplete(fileName);
+        }
+
+        void ApplyFirstLapCameraDirection(IEnumerable<DataSample> samples, ReplayControl replayControl)
+        {
+            iRacing.Replay.MoveToFrame(raceStartFrameNumber);
+            iRacing.Replay.SetSpeed(1);
+
+            iRacing.Replay.Wait();
+            Thread.Sleep(1000);
+
+            replayControl.Process(samples.First());
+            
+            iRacing.Replay.Wait();
+            Thread.Sleep(1000);
         }
 
         private bool ReturnIfSkipping(DataSample data)
