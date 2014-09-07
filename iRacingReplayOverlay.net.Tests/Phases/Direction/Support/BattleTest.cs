@@ -44,6 +44,18 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
         }
 
         [Test]
+        public void ShouldIgnoreCarsNotOnTrack()
+        {
+            var data = BuildDataSample(carIdxTrackSurface: new [] { TrackLocation.InPitStall, TrackLocation.OnTrack, TrackLocation.OffTrack, TrackLocation.OnTrack, TrackLocation.OnTrack });
+            data.Telemetry.CarIdxDistance = new [] { PaceCar, 0.14f, 0.125f, 0.12f, 0.10f };
+            var expected = new Battle.GapMetric[0];
+
+            var all = Battle.All(data, 1.Seconds(), new long[0]).ToArray();
+
+            Assert.That(all, Is.EqualTo(expected));
+        }
+
+        [Test]
         public void ShouldIdentifyTwoBattles()
         {
             var data = BuildDataSample();
@@ -132,15 +144,19 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
                 Assert.That(driver(i), constraint, "Expected {0} for dice of {1}".F(constraint.ToString(), i));
         }
 
-        static DataSample BuildDataSample()
+        static DataSample BuildDataSample(TrackLocation[] carIdxTrackSurface = null)
         {
+            if (carIdxTrackSurface == null)
+                carIdxTrackSurface = new[] { TrackLocation.InPitStall, TrackLocation.OnTrack, TrackLocation.OnTrack, TrackLocation.OnTrack, TrackLocation.OnTrack, TrackLocation.OnTrack };
+
             var data = new DataSample
             {
                 IsConnected = true,
                 Telemetry = new Telemetry
                 {
                     { "SessionNum", 0 },
-                    { "SessionTime", 1d }
+                    { "SessionTime", 1d },
+                    { "CarIdxTrackSurface", carIdxTrackSurface }
                 },
                 SessionData = new SessionData
                 {
