@@ -42,6 +42,7 @@ namespace iRacingReplayOverlay.Video
             long offset = -1;
             bool isAfterSplit = false;
             long skippingFrom = -1;
+            bool hasJumped = false;
 
             return sample =>
             {
@@ -49,7 +50,14 @@ namespace iRacingReplayOverlay.Video
                     skippingFrom = sample.Timestamp;
 
                 if (sample.Timestamp <= timestamp)
+                {
+                    if(!hasJumped)
+                    {
+                        hasJumped = true;
+                        sample.Reader.SetCurrentPosition(timestamp);
+                    }
                     return true;
+                }
 
                 if (!isAfterSplit)
                 {
