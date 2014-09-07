@@ -132,7 +132,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall && pitBoxStartTime + 2 < data.Telemetry.SessionTime)
             {
-                Trace.WriteLine("{0} Finishing showing incident as car is in pit stall".F(data.Telemetry.SessionTime));
+                Trace.WriteLine("{0} Finishing showing incident as car is in pit stall".F(data.Telemetry.SessionTimeSpan));
                 return true;
             }
 
