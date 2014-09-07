@@ -28,6 +28,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 {
     public static class RaceEventExtension
     {
+        static readonly TimeSpan HighlightVideoDuration = 10.Minutes();
+
         public static List<VideoEdit> GetRaceEdits(this IEnumerable<OverlayData.RaceEvent> raceEvents)
         {
             var edits = raceEvents._GetRaceEdits().ToList();
@@ -56,26 +58,72 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         private static IOrderedEnumerable<OverlayData.RaceEvent> GetInterestingRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents)
         {
+            TraceInfo.WriteLine("Highlight Edits: Total Duration Target: {0}", HighlightVideoDuration);
+
             var middleTime = (raceEvents.Last().EndTime - raceEvents.First().StartTime) /2;
 
+            double totalTime, incidentsRatio, restartsRatio, battlesRatio;
+            var firstAndLastLapRaceEvents = GetAllFirstAndLastLapEvents(raceEvents, out totalTime);
+            var incidentRaceEvents = GetAllRaceEvents(raceEvents, middleTime, InterestState.Incident, 1.8, out incidentsRatio);
+            var restartRaceEvents = GetAllRaceEvents(raceEvents, middleTime, InterestState.Restart, 1.0, out restartsRatio);
+            var battleRaceEvents = GetAllRaceEvents(raceEvents, middleTime, InterestState.Battle, 1.4, out battlesRatio);
+            
+            var totalRatio = incidentsRatio + restartsRatio + battlesRatio;
+
+            var incidentPercentage = incidentsRatio / totalRatio;
+            var restartPercentage = restartsRatio / totalRatio;
+            var battlePercentage = battlesRatio / totalRatio;
+
+            var incidentsEdited = ExtractEditedEvents(totalTime, incidentPercentage, incidentRaceEvents, InterestState.Incident);
+            var restartsEdited = ExtractEditedEvents(totalTime, restartPercentage, restartRaceEvents, InterestState.Restart);
+            var battlessEdited = ExtractEditedEvents(totalTime, battlePercentage, battleRaceEvents, InterestState.Battle);
+
+            var editedEvents = firstAndLastLapRaceEvents.Concat(incidentsEdited).Concat(restartsEdited).Concat(battlessEdited).OrderBy(re => re.StartTime);
+
+            TraceInfo.WriteLine("Highlight Edits: Expected duration of highlight video: {0}", editedEvents.Sum(re => re.Duration).Seconds());
+
+            return editedEvents;
+        }
+
+        static List<OverlayData.RaceEvent> GetAllFirstAndLastLapEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, out double totalTime)
+        {
             var firstAndLastLapRaceEvents = raceEvents
                 .Where(re => re.Interest == InterestState.FirstLap || re.Interest == InterestState.LastLap)
                 .ToList();
+            var firstAndLastLapDuration = firstAndLastLapRaceEvents.Sum(re => re.Duration);
+            totalTime = HighlightVideoDuration.TotalSeconds - firstAndLastLapDuration;
 
-            var totalTime = firstAndLastLapRaceEvents.Sum(re => re.Duration);
-            var timeRemaing = (10.Minutes() - totalTime.Seconds()).TotalSeconds / 2;
+            TraceInfo.WriteLine("Highlight Edits: First & last laps.  Duration: {0}", firstAndLastLapDuration.Seconds());
+        
+            return firstAndLastLapRaceEvents;
+        }
 
-            var incidentRaceEvents = GetRaceEvents(raceEvents, middleTime, timeRemaing, InterestState.Incident);
-            totalTime = totalTime + incidentRaceEvents.Sum(re => re.Duration);
-            timeRemaing = (10.Minutes() - totalTime.Seconds()).TotalSeconds;
+        static List<OverlayData.RaceEvent> ExtractEditedEvents(double totalTime, double percentage, List<_Accumulation<OverlayData.RaceEvent, double>> raceEvents, InterestState interest)
+        {
+            var targetDuration = totalTime * percentage;
+            var result = raceEvents.TakeWhile(re => re.Accumulation < targetDuration).Select(re => re.Value).ToList();
 
-            var restartRaceEvents = GetRaceEvents(raceEvents, middleTime, timeRemaing, InterestState.Restart);
-            totalTime = totalTime + incidentRaceEvents.Sum(re => re.Duration);
-            timeRemaing = (10.Minutes() - totalTime.Seconds()).TotalSeconds;
+            var duration = result.Sum(re => re.Duration);
+            TraceInfo.WriteLine("Highlight Edits: {0}.  Target Duration: {1}, Percentage: {2:00}%, Resolved Duration: {3}",
+                interest.ToString(), targetDuration.Seconds(), (int)(percentage*100), duration.Seconds());
 
-            var battleIncidents = GetRaceEvents(raceEvents, middleTime, timeRemaing, InterestState.Battle);
+            return result;
+        }
 
-            return firstAndLastLapRaceEvents.Concat(incidentRaceEvents).Concat(restartRaceEvents).Concat(battleIncidents).OrderBy(re => re.StartTime);
+        static List<_Accumulation<OverlayData.RaceEvent, double>> GetAllRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, double middleTime, InterestState interest, double factor, out double ratio)
+        {
+            var result = raceEvents
+                .Where(re => re.Interest == interest)
+                .OrderByDescending(re => Math.Abs(re.StartTime - middleTime))
+                .Accumulate(0d, (a, re) => a + re.Duration)
+                .ToList();
+        
+            var duration = result.Sum(re => re.Value.Duration);
+            ratio = duration * factor;
+
+            TraceInfo.WriteLine("Highlight Edits: {0}.  Duration: {1}, Factor: {2}, Ratio: {3}", interest.ToString(), duration.Seconds(), factor, ratio);
+
+            return result;
         }
 
         static List<OverlayData.RaceEvent> GetRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, double middleTime, double timeRemaing, InterestState interest)
