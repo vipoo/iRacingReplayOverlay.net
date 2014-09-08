@@ -21,6 +21,7 @@ using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -28,9 +29,10 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class RuleRandomDriver : IVetoRule
     {
-        readonly CameraControl cameraControl;        
+        readonly CameraControl cameraControl;
         readonly SessionData sessionData;
         readonly TimeSpan stickyTime;
+        readonly long[] allCarIndexes;        
         readonly long[] preferredCarIndexes;
         readonly Random randomDriverNumber;
 
@@ -45,14 +47,17 @@ namespace iRacingReplayOverlay.Phases.Direction
             this.sessionData = sessionData;
             this.stickyTime = stickyTime;
 
+            allCarIndexes = sessionData.DriverInfo.Drivers.Where(x => !x.IsPaceCar).Select(x => x.CarIdx).ToArray();
+
             if (Settings.Default.PreferredDriverNames != null && Settings.Default.PreferredDriverNames.Length > 0)
             {
                 preferredCarIndexes = sessionData.DriverInfo.Drivers
                     .Where(x => Settings.Default.PreferredDrivers.Contains(x.UserName.ToLower()))
-                    .Select(x => x.CarIdx).ToArray();
+                    .Select(x => x.CarIdx)
+                    .ToArray();
             }
             else
-                preferredCarIndexes = sessionData.DriverInfo.Drivers.Where(x => !x.IsPaceCar).Select(x => x.CarIdx).ToArray();
+                preferredCarIndexes = allCarIndexes;
 
             randomDriverNumber = new Random();
         }
@@ -90,15 +95,23 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         SessionData._DriverInfo._Drivers FindADriver(DataSample data)
         {
-            var activeDrivers = preferredCarIndexes
-                .Select(carIdx => data.Telemetry.Cars[carIdx])
-                .Where(c => c.HasData && c.TrackSurface != TrackLocation.InPitStall)
-                .Select(c => c.CarIdx)
-                .ToList();
+            var activeDrivers = GetDriversOnTrack(data, preferredCarIndexes);
+
+            if( activeDrivers.Count == 0)
+                activeDrivers = GetDriversOnTrack(data, allCarIndexes);
 
             var next = randomDriverNumber.Next(activeDrivers.Count);
 
             return sessionData.DriverInfo.Drivers[activeDrivers[next]];
+        }
+
+        private List<int> GetDriversOnTrack(DataSample data, long[] carIndexes)
+        {
+            return carIndexes
+                .Select(carIdx => data.Telemetry.Cars[carIdx])
+                .Where(c => c.HasData && c.TrackSurface != TrackLocation.InPitStall)
+                .Select(c => c.CarIdx)
+                .ToList();
         }
 
         public string Name
