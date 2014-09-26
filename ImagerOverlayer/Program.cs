@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Threading;
 using MediaFoundation.Net;
 using iRacingSDK;
+using System.Linq;
 
 namespace ImagerOverlayer
 {
@@ -37,29 +38,12 @@ namespace ImagerOverlayer
             {
                 DriverInfo = new SessionData._DriverInfo
                 {
-                    Drivers = new [] 
-                    {
-                        new SessionData._DriverInfo._Drivers 
+                    Drivers = Enumerable.Range(0, 22).Select( i => new SessionData._DriverInfo._Drivers 
                         {
-                            CarIdx = 0,
-                            UserName = "Pace Car"
-                        },
-                        new SessionData._DriverInfo._Drivers 
-                        {
-                            CarIdx = 1,
-                            UserName = "Dean Netherton"
-                        },
-                        new SessionData._DriverInfo._Drivers 
-                        {
-                            CarIdx = 2,
-                            UserName = "Mark Webber"
-                        },
-                        new SessionData._DriverInfo._Drivers 
-                        {
-                            CarIdx = 2,
-                            UserName = "bla lbha lbh"
-                        }
-                    }
+                            CarIdx = i,
+                            UserName = "Car " + i.ToString()
+                        }).ToArray()
+                    
                 },
                 WeekendInfo = new SessionData._WeekendInfo
                 {
@@ -74,29 +58,13 @@ namespace ImagerOverlayer
                         new iRacingSDK.SessionData._SessionInfo._Sessions 
                         {
                              SessionType = "Open Qualify",
-                             ResultsPositions = new [] 
-                             {
-                                new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
+                             ResultsPositions = Enumerable.Range(1, 21).Select( i => new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
                                 {
                                      FastestTime = 127.02,
-                                     Position = 1,
-                                     CarIdx = 1,
-                                },
-                                
-                                new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
-                                {
-                                     FastestTime = 128.995,
-                                     Position = 2,
-                                     CarIdx = 3,
-                                },
-                                
-                                new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
-                                {
-                                     FastestTime = 134.47,
-                                     Position = 3,
-                                     CarIdx = 2
-                                },
-                             }
+                                     Position = i,
+                                     CarIdx = i
+                                }).ToArray()
+                             
                         }
                     }
                 }
@@ -142,11 +110,8 @@ namespace ImagerOverlayer
                             {
                                 LapCounter = "Lap 2",
                                 StartTime = 0, 
-                                Drivers = new [] {
-                                    new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton", Position = 1},
-                                    new OverlayData.Driver { CarNumber = 13, UserName = "Matty", Position = 2 },
-                                    new OverlayData.Driver { CarNumber = 3, UserName = "Fred", Position = 3 }
-                                },
+                                Drivers = Enumerable.Range(1, 20).Select( i => 
+                                    new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton", Position = i}).ToArray(),
                                 RacePosition = "39:34",
                             }
                         };
