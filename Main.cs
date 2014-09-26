@@ -154,6 +154,7 @@ namespace iRacingReplayOverlay
 
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
             TraceInfo.WriteLine("Local user config path: {0}", config.FilePath);
+            TraceInfo.WriteLine("Application Version: {0}", GetDeployedVersionString());
 
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
@@ -514,16 +515,18 @@ namespace iRacingReplayOverlay
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Version myVersion = new Version("1.0.0.0");
+            MessageBox.Show("iRacing Replay Application\nCopyright Dean Netherton\nVersion {0}".F(GetDeployedVersionString()));
+        }
 
-            if (ApplicationDeployment.IsNetworkDeployed)
-                myVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+        string GetDeployedVersionString()
+        {
+            var version = ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion : new Version("1.0.0.0");
 
             var isBeta = this.GetType().Assembly.GetName().Name.ToLower().Contains("beta");
 
             var betaText = isBeta ? " beta" : "";
 
-            MessageBox.Show("iRacing Replay Application\nCopyright Dean Netherton\nVersion {0}.{1}.{2}.{3}{4}".F(myVersion.Major, myVersion.MajorRevision, myVersion.Minor, myVersion.MinorRevision, betaText));
+            return "{0}.{1}.{2}.{3}{4}".F(version.Major, version.MajorRevision, version.Minor, version.MinorRevision, betaText);
         }
     }
 }
