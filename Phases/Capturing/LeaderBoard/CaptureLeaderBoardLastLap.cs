@@ -61,6 +61,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
 
             var driver = data.SessionData.DriverInfo.Drivers[i];
             var position = (int)session.ResultsPositions.First(r => r.CarIdx == i).Position;
+            var pitStopCount = data.Telemetry.Cars[i].PitStopCount;
 
             var drivers = leaderBoard.Drivers.Where(d => d.CarIdx != i)
                 .Select(d => d.Clone())
@@ -71,7 +72,9 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
                 CarNumber = (int)driver.CarNumber,
                 UserName = driver.UserName,
                 Position = position,
-                CarIdx = i
+                CarIdx = i,
+                PitStopCount = pitStopCount
+
             });
 
             var p = 1;

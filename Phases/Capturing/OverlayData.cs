@@ -68,6 +68,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public int? Position;
             public int CarNumber;
             public string UserName;
+            public int PitStopCount;
 
             [XmlIgnore]
             public int CarIdx;

@@ -87,7 +87,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 CarIdx = car.CarIdx,
                 CarNumber = car.CarNumber,
                 UserName = car.UserName,
-                Position = position
+                Position = position,
+                PitStopCount = car.PitStopCount
             };
 
             return driver;

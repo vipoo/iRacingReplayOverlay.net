@@ -63,7 +63,8 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
                 UserName = c.UserName,
                 CarNumber = c.CarNumber,
                 Position = c.Position,
-                CarIdx = c.CarIdx
+                CarIdx = c.CarIdx,
+                PitStopCount = c.PitStopCount
             })
             .OrderBy(c => c.Position)
             .ToArray();
