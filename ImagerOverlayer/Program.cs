@@ -38,7 +38,7 @@ namespace ImagerOverlayer
             {
                 DriverInfo = new SessionData._DriverInfo
                 {
-                    Drivers = Enumerable.Range(0, 22).Select( i => new SessionData._DriverInfo._Drivers 
+                    Drivers = Enumerable.Range(0, 24).Select( i => new SessionData._DriverInfo._Drivers 
                         {
                             CarIdx = i,
                             UserName = "Car " + i.ToString()
@@ -58,7 +58,7 @@ namespace ImagerOverlayer
                         new iRacingSDK.SessionData._SessionInfo._Sessions 
                         {
                              SessionType = "Open Qualify",
-                             ResultsPositions = Enumerable.Range(1, 21).Select( i => new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
+                             ResultsPositions = Enumerable.Range(1, 22).Select( i => new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
                                 {
                                      FastestTime = 127.02,
                                      Position = i,
@@ -110,9 +110,10 @@ namespace ImagerOverlayer
                             {
                                 LapCounter = "Lap 2",
                                 StartTime = 0, 
-                                Drivers = Enumerable.Range(1, 20).Select( i => 
-                                    new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton", Position = i}).ToArray(),
+                                Drivers = Enumerable.Range(1, 21).Select( i => 
+                                    new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton", Position = i, PitStopCount = i == 3 ? 1 : 0}).ToArray(),
                                 RacePosition = "39:34",
+                                
                             }
                         };
 
@@ -158,7 +159,7 @@ namespace ImagerOverlayer
                 OverlayData = BuildData()
             };
 
-            for (var i = 24.5; i < 30.0; i += 1.0 / 59.9)
+            for (var i = 24.5; i < 300.0; i += 5.0 / 59.9)
             {
                 using( var bitmap = (Bitmap)Bitmap.FromFile(@"c:\users\dean\documents\image.bmp") )
                     using (var g = Graphics.FromImage(bitmap))
@@ -166,10 +167,17 @@ namespace ImagerOverlayer
                         Console.WriteLine("time is {0}", i);
                         leaderboard.Overlay(g, i.FromSecondsToNano());
                         g.Flush();
-                        bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
+                        try
+                        {
+                            bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
+                        }
+                        catch
+                        {
+
+                        }
                     }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(10);
             }
         }
     }
