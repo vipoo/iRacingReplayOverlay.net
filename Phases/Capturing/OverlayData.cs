@@ -73,15 +73,15 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public int CarIdx;
 
             [XmlIgnore]
-            private Dictionary<string, string> driverNickNames = new Dictionary<string, string>();
+            private Dictionary<string, string> shortNames = new Dictionary<string, string>();
 
             [XmlIgnore]
             public string ShortName
             {
                 get
                 {
-                    if (driverNickNames.ContainsKey(UserName))
-                        return driverNickNames[UserName];
+                    if (shortNames.ContainsKey(UserName))
+                        return shortNames[UserName];
 
                     var names = UserName.Split(' ');
                     var firstName = names.First();
@@ -91,7 +91,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         + lastName.Substring(0, 1).ToUpper()
                         + lastName.Substring(1, Math.Min(3, lastName.Length-1));
 
-                    driverNickNames.Add(UserName, name);
+                    shortNames.Add(UserName, name);
                     return name;
                 }
             }
