@@ -80,16 +80,17 @@ namespace iRacingReplayOverlay.Drawing
 
         const int TEXT_LEFT_OFFSET_MAGIC = -4;
         const int TEXT_RIGHT_PADDING_MAGIC = 10;
-		public virtual GraphicRect DrawText(string text, int leftOffset = 0)
+		public virtual GraphicRect DrawText(string text, int leftOffset = 0, int topOffset = 0)
         {
-            var rect2 = new Rectangle(r.Left + leftOffset + TEXT_LEFT_OFFSET_MAGIC, r.Top, r.Width + TEXT_RIGHT_PADDING_MAGIC, r.Height);
+            g.TextRenderingHint = TextRenderingHint.AntiAlias;
+            var rect2 = new Rectangle(r.Left + leftOffset + TEXT_LEFT_OFFSET_MAGIC, r.Top + topOffset, r.Width + TEXT_RIGHT_PADDING_MAGIC, r.Height);
             g.DrawString(text, f, b, rect2, sf);
             return this;
         }
 
-		public virtual GraphicRect DrawText(int number, int leftOffset = 0)
+		public virtual GraphicRect DrawText(int number, int leftOffset = 0, int topOffset = 0)
         {
-            return DrawText(number.ToString(), leftOffset);
+            return DrawText(number.ToString(), leftOffset, topOffset);
         }
 
         public GraphicRect AfterText(string str, int i = 0)

@@ -50,7 +50,7 @@ namespace iRacingReplayOverlay.Drawing
 
         internal int Width { get { return right-left; } }
 		
-		public override GraphicRect DrawText(string text, int leftOffset = 0)
+		public override GraphicRect DrawText(string text, int leftOffset = 0, int topOffset = 0)
 		{
             var size = TextRenderer.MeasureText(g, text, f, r.Size, TextFormatFlags.NoPadding);
 
