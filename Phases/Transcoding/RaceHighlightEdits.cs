@@ -199,37 +199,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             return result;
         }
 
-        static List<OverlayData.RaceEvent> GetRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, double middleTime, double timeRemaing, InterestState interest)
-        {
-            return raceEvents
-                .Where(re => re.Interest == interest)
-                .OrderByDescending(re => Math.Abs(re.StartTime - middleTime))
-                .Accumulate(0d, (a, re) => a + re.Duration)
-                .TakeWhile(re => re.Accumulation < timeRemaing)
-                .Select(re => re.Value)
-                .ToList();
-        }
-
         struct _RaceEvent
         {
             public OverlayData.RaceEvent RaceEvent;
             public int Level;
-        }
-
-        struct _Accumulation<T1, T2>
-        {
-            public T1 Value;
-            public T2 Accumulation;
-        }
-
-        static IEnumerable<_Accumulation<T1, T2>> Accumulate<T1, T2>(this IEnumerable<T1> list, T2 seed, Func<T2, T1, T2> fn)
-        {
-            T2 accumulator = seed;
-            foreach (var i in list)
-            {
-                accumulator = fn(accumulator, i);
-                yield return new _Accumulation<T1, T2> { Value = i, Accumulation = accumulator };
-            }
         }
     }
 }
