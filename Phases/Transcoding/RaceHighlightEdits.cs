@@ -60,14 +60,15 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             TraceInfo.WriteLine("Highlight Edits: Total Duration Target: {0}", HighlightVideoDuration);
 
-            var middleTime = (raceEvents.Last().EndTime - raceEvents.First().StartTime) /2;
-
             double totalTime, incidentsRatio, restartsRatio, battlesRatio;
             var firstAndLastLapRaceEvents = GetAllFirstAndLastLapEvents(raceEvents, out totalTime);
-            var incidentRaceEvents = GetAllRaceEvents(raceEvents, middleTime, InterestState.Incident, 1.8, out incidentsRatio);
-            var restartRaceEvents = GetAllRaceEvents(raceEvents, middleTime, InterestState.Restart, 1.0, out restartsRatio);
-            var battleRaceEvents = GetAllRaceEvents(raceEvents, middleTime, InterestState.Battle, 1.4, out battlesRatio);
             
+            var incidentRaceEvents = GetAllRaceEvents(raceEvents, InterestState.Incident, 1.8, out incidentsRatio);
+            var restartRaceEvents = GetAllRaceEvents(raceEvents, InterestState.Restart, 1.0, out restartsRatio);
+            var battleRaceEvents = GetAllRaceEvents(raceEvents, InterestState.Battle, 1.4, out battlesRatio);
+
+            battleRaceEvents = NormaliseBattleEvents(battleRaceEvents, Settings.Default.BattleStickyPeriod.TotalSeconds);
+
             var totalRatio = incidentsRatio + restartsRatio + battlesRatio;
 
             var incidentPercentage = incidentsRatio / totalRatio;
@@ -85,6 +86,32 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             return editedEvents;
         }
 
+        private static List<OverlayData.RaceEvent> NormaliseBattleEvents(List<OverlayData.RaceEvent> raceEvents, double maxDuration)
+        {
+            var result = new List<OverlayData.RaceEvent>();
+
+            foreach( var re in raceEvents)
+            {
+                if (re.Duration < maxDuration)
+                    result.Add(re);
+                else
+                {
+                    var segmentCount = (int)(re.Duration / maxDuration) + 1;
+                    var segmentDuration = re.Duration / segmentCount;
+                    var startTime = re.StartTime;
+
+                    for (var i = 0; i < segmentCount; i++)
+                    {
+                        var segment = new OverlayData.RaceEvent { CarIdx = re.CarIdx, Interest = re.Interest, StartTime = startTime, EndTime = startTime + segmentDuration };
+                        result.Add(segment);
+                        startTime += segmentDuration;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         static List<OverlayData.RaceEvent> GetAllFirstAndLastLapEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, out double totalTime)
         {
             var firstAndLastLapRaceEvents = raceEvents
@@ -93,32 +120,78 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var firstAndLastLapDuration = firstAndLastLapRaceEvents.Sum(re => re.Duration);
             totalTime = HighlightVideoDuration.TotalSeconds - firstAndLastLapDuration;
 
-            TraceInfo.WriteLine("Highlight Edits: First & last laps.  Duration: {0}", firstAndLastLapDuration.Seconds());
+            TraceInfo.WriteLine("Highlight Edits: First & last laps.  Duration: {0}. Remaining: {1}", firstAndLastLapDuration.Seconds(), totalTime.Seconds());
         
             return firstAndLastLapRaceEvents;
         }
 
-        static List<OverlayData.RaceEvent> ExtractEditedEvents(double totalTime, double percentage, List<_Accumulation<OverlayData.RaceEvent, double>> raceEvents, InterestState interest)
+        static void SliceEvent(List<_RaceEvent> result, List<OverlayData.RaceEvent> raceEvents, OverlayData.RaceEvent left, OverlayData.RaceEvent right, int level = 1)
         {
-            var targetDuration = totalTime * percentage;
-            var result = raceEvents.TakeWhile(re => re.Accumulation < targetDuration).Select(re => re.Value).ToList();
+            var middleTime = (left.EndTime + right.StartTime) / 2;
 
-            var duration = result.Sum(re => re.Duration);
+            var middleEvent = raceEvents
+                .Where( r => r.StartTime >= left.StartTime && r.StartTime <= right.EndTime)
+                .OrderBy(r => Math.Abs(middleTime - r.StartTime)).FirstOrDefault();
+
+            if( middleEvent == null )
+                return;
+
+            result.Add(new _RaceEvent { RaceEvent = middleEvent, Level = level });
+            raceEvents.Remove(middleEvent);
+
+            SliceEvent(result, raceEvents, left, middleEvent, level + 1);
+            SliceEvent(result, raceEvents, middleEvent, right, level + 1);
+        }
+
+        static List<OverlayData.RaceEvent> ExtractEditedEvents(double totalTime, double percentage, List<OverlayData.RaceEvent> raceEvents, InterestState interest)
+        {
+            var orderRaceEvents = new List<_RaceEvent>();
+
+            var targetDuration = totalTime * percentage;
+
+            raceEvents = raceEvents.ToArray().ToList();
+
+            if( raceEvents.Count <= 2 )
+                return raceEvents;
+
+            var firstEvent = raceEvents.OrderBy(r => r.StartTime).First();
+            var lastEvent = raceEvents.OrderBy(r => r.StartTime).Last();
+
+            orderRaceEvents.Add(new _RaceEvent { RaceEvent = firstEvent, Level = 0 });
+            orderRaceEvents.Add(new _RaceEvent { RaceEvent = lastEvent, Level = 0 });
+
+            SliceEvent(orderRaceEvents, raceEvents, firstEvent, lastEvent, 1);
+
+            var result = new List<OverlayData.RaceEvent>();
+
+            var duration = 0d;
+
+            foreach( var re in orderRaceEvents
+                .OrderBy(r => r.Level)
+                .ThenBy(r => r.RaceEvent.StartTime)
+                .Select(re => re.RaceEvent))
+            {
+                duration = result.Sum(r => r.Duration);
+                if (duration > targetDuration)
+                    break;
+
+                if (duration + re.Duration < targetDuration)
+                    result.Add(re);
+            }
+
             TraceInfo.WriteLine("Highlight Edits: {0}.  Target Duration: {1}, Percentage: {2:00}%, Resolved Duration: {3}",
                 interest.ToString(), targetDuration.Seconds(), (int)(percentage*100), duration.Seconds());
 
             return result;
         }
 
-        static List<_Accumulation<OverlayData.RaceEvent, double>> GetAllRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, double middleTime, InterestState interest, double factor, out double ratio)
+        static List<OverlayData.RaceEvent> GetAllRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, InterestState interest, double factor, out double ratio)
         {
             var result = raceEvents
                 .Where(re => re.Interest == interest)
-                .OrderByDescending(re => Math.Abs(re.StartTime - middleTime))
-                .Accumulate(0d, (a, re) => a + re.Duration)
                 .ToList();
         
-            var duration = result.Sum(re => re.Value.Duration);
+            var duration = result.Sum(re => re.Duration);
             ratio = duration * factor;
 
             TraceInfo.WriteLine("Highlight Edits: {0}.  Duration: {1}, Factor: {2}, Ratio: {3}", interest.ToString(), duration.Seconds(), factor, ratio);
@@ -135,6 +208,12 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .TakeWhile(re => re.Accumulation < timeRemaing)
                 .Select(re => re.Value)
                 .ToList();
+        }
+
+        struct _RaceEvent
+        {
+            public OverlayData.RaceEvent RaceEvent;
+            public int Level;
         }
 
         struct _Accumulation<T1, T2>
