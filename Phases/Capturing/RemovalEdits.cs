@@ -42,9 +42,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
         InterestState lastInterest = 0;
         int carIdx = -1;
 
-        public RemovalEdits(OverlayData overlayData)
+        public RemovalEdits(List<OverlayData.RaceEvent> raceEvents)
         {
-            this.raceEvents = overlayData.RaceEvents;
+            this.raceEvents = raceEvents;
         }
 
         public void InterestingThingHappend(InterestState interest, long carIdx)

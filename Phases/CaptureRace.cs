@@ -54,7 +54,7 @@ namespace iRacingReplayOverlay.Phases
         internal void _CaptureRaceTest(Action<string> onComplete, IEnumerable<DataSample> samples)
         {
             var overlayData = new OverlayData { IntroVideoFileName = introVideoFileName };
-            var removalEdits = new RemovalEdits(overlayData);
+            var removalEdits = new RemovalEdits(overlayData.RaceEvents);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
             var recordPitStop = new RecordPitStop(commentaryMessages);
