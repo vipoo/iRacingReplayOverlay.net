@@ -43,7 +43,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         }
 
         readonly CameraControl cameraControl;
-        readonly RemovalEdits removalEdits;
+        readonly EditMarker editMarker;
         readonly TimeSpan battleStickyPeriod;
         readonly TimeSpan battleCameraChangePeriod;
         readonly TimeSpan battleGap;
@@ -57,12 +57,11 @@ namespace iRacingReplayOverlay.Phases.Direction
         Action directionAction;
         TrackCamera camera;
         SessionData._DriverInfo._Drivers car;
-        long? lastCarIdx = null;
 
         public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan cameraStickyPeriod, TimeSpan battleStickyPeriod, TimeSpan battleGap, double battleFactor)
         {
             this.cameraControl = cameraControl;
-            this.removalEdits = removalEdits;
+            this.editMarker = removalEdits.For(InterestState.Battle);
             this.battleStickyPeriod = battleStickyPeriod;
             this.battleCameraChangePeriod = cameraStickyPeriod;
             this.battleGap = battleGap;
@@ -79,11 +78,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     directionAction = () =>
                     {
                         SwitchToBattle(data, state.Driver);
-                        if (lastCarIdx != null && lastCarIdx.Value != car.CarIdx)
-                            removalEdits.InterestingThingStarted(InterestState.Battle, lastCarIdx.Value);
-
-                        lastCarIdx = car.CarIdx;
-                        removalEdits.InterestingThingStarted(InterestState.Battle, car.CarIdx);
+                        editMarker.Start(battleFollower.CarIdx);
                     };
                     return true;
 
@@ -96,11 +91,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     return true;
 
                 case BattlePosition.Finished:
-                    directionAction = () =>
-                    {
-                        removalEdits.InterestingThingStopped(InterestState.Battle, car.CarIdx);
-                        lastCarIdx = null;
-                    };
+                    directionAction = () => editMarker.Stop(battleFollower.CarIdx);
                     return true;
 
                 case BattlePosition.Outside:
@@ -155,6 +146,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyPeriod;
                 TraceInfo.WriteLine("{0} {1} has overtaken {2}", data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName);
                 SwitchToBattle(data, battleLeader.Driver);
+                editMarker.Start(battleFollower.CarIdx);
             }
         }
 

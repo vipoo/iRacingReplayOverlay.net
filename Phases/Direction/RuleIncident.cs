@@ -31,7 +31,7 @@ namespace iRacingReplayOverlay.Phases.Direction
     {
         enum IncidentPosition { Started, Inside, Finished, Outside };
 
-        readonly RemovalEdits removalEdits;
+        readonly EditMarker editMarker;
         readonly IEnumerator<Incidents.Incident> nextIncident;
         readonly TrackCamera TV2;
 
@@ -41,7 +41,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public RuleIncident(TrackCamera[] cameras, RemovalEdits removalEdits, Incidents incidents)
         {
-            this.removalEdits = removalEdits;
+            this.editMarker = removalEdits.For(InterestState.Incident);
 
             nextIncident = incidents.GetEnumerator();
             nextIncident.MoveNext();
@@ -59,7 +59,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case IncidentPosition.Started:
                     directionAction = () =>
                     {
-                        removalEdits.InterestingThingStarted(InterestState.Incident, nextIncident.Current.Car.CarIdx);
+                        editMarker.Start(nextIncident.Current.Car.CarIdx);
                         SwitchToIncident(data);
                     };
                     return true;
@@ -71,7 +71,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case IncidentPosition.Finished:
                     directionAction = () =>
                     {
-                        removalEdits.InterestingThingStopped(InterestState.Incident, nextIncident.Current.Car.CarIdx);
+                        editMarker.Stop(nextIncident.Current.Car.CarIdx);
                         WatchForNextIncident(data);
                     };
                     return true;

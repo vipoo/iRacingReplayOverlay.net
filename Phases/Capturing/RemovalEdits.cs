@@ -42,8 +42,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void InterestingThingStarted(InterestState interest, int carIdx)
         {
+            var oldAction = nextAction;
+
             nextAction = (d, t) =>
             {
+                oldAction(d, t);
                 if (events.Count > 0)
                 {
                     var le = events.Peek();
@@ -96,6 +99,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 StartTime = lastStartTime.TotalSeconds, 
                 EndTime = lastRelativeTime.TotalSeconds
             });
+        }
+
+        public EditMarker For(InterestState interestState)
+        {
+            return new EditMarker(this, interestState);
         }
     }
 }

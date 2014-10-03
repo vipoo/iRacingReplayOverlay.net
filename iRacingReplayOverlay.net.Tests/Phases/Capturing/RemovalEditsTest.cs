@@ -34,15 +34,15 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
         {
             var ds = CreateSample(30, null);
 
-            var time1 = 10.Seconds();
             var raceEvents = new List<OverlayData.RaceEvent>();
 
             var re = new RemovalEdits(raceEvents);
+            var em = new EditMarker(re, InterestState.Battle);
 
-            re.InterestingThingStarted(InterestState.Battle, 1);
+            em.Start(1);
             re.Process(ds, 10.Seconds());
 
-            re.InterestingThingStopped(InterestState.Battle, 1);
+            em.Stop(1);
             re.Process(ds, 15.Seconds());
 
             Assert.That(raceEvents.Count, Is.EqualTo(1));
@@ -57,37 +57,88 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
         }
 
         [Test]
-        public void it_should_error_when_interest_was_not_started()
+        public void it_should_reset_a_new_battle()
         {
             var ds = CreateSample(30, null);
 
-            var time1 = 10.Seconds();
             var raceEvents = new List<OverlayData.RaceEvent>();
 
             var re = new RemovalEdits(raceEvents);
+            var markerB = re.For(InterestState.Battle);
+            var markerI = re.For(InterestState.Incident);
 
-            re.InterestingThingStarted(InterestState.Battle, 1);
+            markerB.Start(1);
             re.Process(ds, 10.Seconds());
 
-            re.InterestingThingStopped(InterestState.Incident, 1);
+            markerB.Start(2);
+            re.Process(ds, 15.Seconds());
 
-            Assert.Throws(typeof(Exception), () => re.Process(ds, 15.Seconds()));
+            markerB.Stop(2);
+            re.Process(ds, 18.Seconds());
+
+            markerI.Start(3);
+            re.Process(ds, 20.Seconds());
+            markerI.Stop(3);
+            re.Process(ds, 22.Seconds());
+            
+            Assert.That(raceEvents.ToArray(), Is.EqualTo(
+                new[] 
+                {
+                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { CarIdx = 2, StartTime = 15d, EndTime = 18d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { CarIdx = 3, StartTime = 20d, EndTime = 22d, Interest = InterestState.Incident},
+                }));
         }
+
+        [Test]
+        public void it_should_reset_an_existing_battle()
+        {
+            var ds = CreateSample(30, null);
+
+            var raceEvents = new List<OverlayData.RaceEvent>();
+
+            var re = new RemovalEdits(raceEvents);
+            var markerB = re.For(InterestState.Battle);
+            var markerI = re.For(InterestState.Incident);
+
+            markerB.Start(1);
+            re.Process(ds, 10.Seconds());
+
+            markerB.Start(1);
+            re.Process(ds, 15.Seconds());
+
+            markerB.Stop(1);
+            re.Process(ds, 18.Seconds());
+
+            markerI.Start(3);
+            re.Process(ds, 20.Seconds());
+            markerI.Stop(3);
+            re.Process(ds, 22.Seconds());
+
+            Assert.That(raceEvents.ToArray(), Is.EqualTo(
+                new[] 
+                {
+                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 15d, EndTime = 18d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { CarIdx = 3, StartTime = 20d, EndTime = 22d, Interest = InterestState.Incident},
+                }));
+        }
+
 
         [Test]
         public void it_should_error_when_caridx_was_not_started()
         {
             var ds = CreateSample(30, null);
 
-            var time1 = 10.Seconds();
             var raceEvents = new List<OverlayData.RaceEvent>();
 
             var re = new RemovalEdits(raceEvents);
+            var marker = re.For(InterestState.Incident);
 
-            re.InterestingThingStarted(InterestState.Battle, 1);
+            marker.Start(1);
             re.Process(ds, 10.Seconds());
 
-            re.InterestingThingStopped(InterestState.Battle, 2);
+            marker.Stop(2);
 
             Assert.Throws(typeof(Exception), () => re.Process(ds, 15.Seconds()));
         }
@@ -97,21 +148,22 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
         {
             var ds = CreateSample(30, null);
 
-            var time1 = 10.Seconds();
             var raceEvents = new List<OverlayData.RaceEvent>();
 
             var re = new RemovalEdits(raceEvents);
-
-            re.InterestingThingStarted(InterestState.Battle, 1);
+            var markerB = re.For(InterestState.Battle);
+            var markerI = re.For(InterestState .Incident);
+            
+            markerB.Start(1);
             re.Process(ds, 10.Seconds());
 
-            re.InterestingThingStarted(InterestState.Incident, 2);
+            markerI.Start(2);
             re.Process(ds, 14.Seconds());
 
-            re.InterestingThingStopped(InterestState.Incident, 2);
+            markerI.Stop(2);
             re.Process(ds, 16.Seconds());
 
-            re.InterestingThingStopped(InterestState.Battle, 1);
+            markerB.Stop(1);
             re.Process(ds, 18.Seconds());
 
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -129,25 +181,26 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
         {
             var ds = CreateSample(30, null);
 
-            var time1 = 10.Seconds();
             var raceEvents = new List<OverlayData.RaceEvent>();
 
             var re = new RemovalEdits(raceEvents);
+            var markerB = re.For(InterestState.Battle);
+            var markerI = re.For(InterestState.Incident);
 
-            re.InterestingThingStarted(InterestState.Battle, 1);
+            markerB.Start(1);
             re.Process(ds, 10.Seconds());
 
-            re.InterestingThingStarted(InterestState.Incident, 2);
+            markerI.Start(2);
             re.Process(ds, 14.Seconds());
-            re.InterestingThingStopped(InterestState.Incident, 2);
+            markerI.Stop(2);
             re.Process(ds, 16.Seconds());
 
-            re.InterestingThingStarted(InterestState.Incident, 2);
+            markerI.Start(2);
             re.Process(ds, 18.Seconds());
-            re.InterestingThingStopped(InterestState.Incident, 2);
+            markerI.Stop(2);
             re.Process(ds, 20.Seconds());
 
-            re.InterestingThingStopped(InterestState.Battle, 1);
+            markerB.Stop(1);
             re.Process(ds, 22.Seconds());
 
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -158,8 +211,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
                     new OverlayData.RaceEvent { CarIdx = 1, StartTime = 16d, EndTime = 18d, Interest = InterestState.Battle},
                     new OverlayData.RaceEvent { CarIdx = 2, StartTime = 18d, EndTime = 20d, Interest = InterestState.Incident},
                     new OverlayData.RaceEvent { CarIdx = 1, StartTime = 20d, EndTime = 22d, Interest = InterestState.Battle},
-                }
-                ));
+                }));
         }
 
         [Test]
@@ -167,27 +219,29 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
         {
             var ds = CreateSample(30, null);
 
-            var time1 = 10.Seconds();
             var raceEvents = new List<OverlayData.RaceEvent>();
 
             var re = new RemovalEdits(raceEvents);
+            var markerB = re.For(InterestState.Battle);
+            var markerI = re.For(InterestState.Incident);
+            var markerF = re.For(InterestState.FirstLap);
 
-            re.InterestingThingStarted(InterestState.FirstLap, 1);
+            markerF.Start(1);
             re.Process(ds, 10.Seconds());
 
-            re.InterestingThingStarted(InterestState.Battle, 2);
+            markerB.Start(2);
             re.Process(ds, 14.Seconds());
 
-            re.InterestingThingStarted(InterestState.Incident, 3);
+            markerI.Start(3);
             re.Process(ds, 16.Seconds());
 
-            re.InterestingThingStopped(InterestState.Incident, 3);
+            markerI.Stop(3);
             re.Process(ds, 18.Seconds());
 
-            re.InterestingThingStopped(InterestState.Battle, 2);
+            markerB.Stop(2);
             re.Process(ds, 20.Seconds());
 
-            re.InterestingThingStopped(InterestState.FirstLap, 1);
+            markerF.Stop(1);
             re.Process(ds, 22.Seconds());
 
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -198,11 +252,66 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
                     new OverlayData.RaceEvent { CarIdx = 3, StartTime = 16d, EndTime = 18d, Interest = InterestState.Incident},
                     new OverlayData.RaceEvent { CarIdx = 2, StartTime = 18d, EndTime = 20d, Interest = InterestState.Battle},
                     new OverlayData.RaceEvent { CarIdx = 1, StartTime = 20d, EndTime = 22d, Interest = InterestState.FirstLap},
-                }
-                ));
+                }));
         }
 
+        [Test]
+        public void it_should_add_last_lap_event_when_event_active()
+        {
+            var ds = CreateSample(30, null);
 
+            var raceEvents = new List<OverlayData.RaceEvent>();
+
+            var re = new RemovalEdits(raceEvents);
+            var markerB = re.For(InterestState.Battle);
+            var markerL = re.For(InterestState.LastLap);
+            
+            markerB.Start(1);
+            re.Process(ds, 10.Seconds());
+
+            markerL.Start();
+            re.Process(ds, 19.Seconds());
+            
+            re.Process(ds, 20.Seconds());
+            re.Stop();
+
+            Assert.That(raceEvents.ToArray(), Is.EqualTo(
+                new[] 
+                {
+                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 19d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { CarIdx = -1, StartTime = 19d, EndTime = 20d, Interest = InterestState.LastLap},
+                }));
+        }
+
+        public void it_should_add_last_lap_event_when_no_event_is_active()
+        {
+            var ds = CreateSample(30, null);
+
+            var raceEvents = new List<OverlayData.RaceEvent>();
+
+            var re = new RemovalEdits(raceEvents);
+            var markerB = re.For(InterestState.Battle);
+            var markerL = re.For(InterestState.LastLap);
+            
+            markerB.Start(1);
+            re.Process(ds, 10.Seconds());
+
+            markerB.Stop(2);
+            re.Process(ds, 15.Seconds());
+
+            markerL.Start();
+            re.Process(ds, 19.Seconds());
+            
+            re.Process(ds, 20.Seconds());
+            re.Stop();
+
+            Assert.That(raceEvents.ToArray(), Is.EqualTo(
+                new[] 
+                {
+                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { CarIdx = -1, StartTime = 19d, EndTime = 20d, Interest = InterestState.LastLap},
+                }));
+        }
 
         static DataSample CreateSample(double time, SessionData sessionData)
         {

@@ -27,7 +27,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class RulePaceLaps : IVetoRule
     {
-        readonly RemovalEdits removalEdits;
+        readonly EditMarker editMarker;
         readonly TrackCamera TV3;
 
         bool wasUnderPaceCar;
@@ -37,7 +37,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public RulePaceLaps(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
-            this.removalEdits = removalEdits;
+            this.editMarker = removalEdits.For(InterestState.Restart);
 
             TV3 = cameras.First(tc => tc.CameraName == "TV3");
 
@@ -51,7 +51,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 if (data.Telemetry.SessionTimeSpan < restartEndTime)
                     return true;
 
-                removalEdits.InterestingThingStopped(InterestState.Restart, data.Telemetry.CamCarIdx);
+                editMarker.Stop(data.Telemetry.CamCarIdx);
 
                 restarting = false;
                 return false;
@@ -67,7 +67,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                 TraceInfo.WriteLine("{0} Race restarting", data.Telemetry.SessionTimeSpan);
                 wasUnderPaceCar = false;
-                removalEdits.InterestingThingStarted(InterestState.Restart, data.Telemetry.CamCarIdx);
+                editMarker.Start(data.Telemetry.CamCarIdx);
                 return true;
             }
 

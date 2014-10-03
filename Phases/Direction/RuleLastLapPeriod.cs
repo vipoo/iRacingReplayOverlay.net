@@ -27,7 +27,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class RuleLastLapPeriod : IDirectionRule
     {
-        readonly RemovalEdits removalEdits;
+        readonly EditMarker editMarker;
         readonly TrackCamera[] cameras;
         readonly TrackCamera TV2;
 
@@ -40,7 +40,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         public RuleLastLapPeriod(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
             this.cameras = cameras;
-            this.removalEdits = removalEdits;
+            this.editMarker = removalEdits.For(InterestState.LastLap);
 
             TV2 = cameras.First(tc => tc.CameraName == "TV2");
         }
@@ -59,7 +59,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (isInLastPeriod)
                 OnlyOnce(ref startLastLapPeriod, () =>
                 {
-                    removalEdits.InterestingThingStarted(InterestState.LastLap, -1);
+                    editMarker.Start();
                     TraceInfo.WriteLine("{0} Tracking leader on final lap", data.Telemetry.SessionTimeSpan);
                 });
 

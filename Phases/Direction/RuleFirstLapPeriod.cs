@@ -26,7 +26,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class RuleFirstLapPeriod : IDirectionRule
     {
-        readonly RemovalEdits removalEdits;
+        readonly EditMarker editMarker;
         readonly TrackCamera TV3;
 
         DateTime reselectLeaderAt = DateTime.Now;
@@ -37,7 +37,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public RuleFirstLapPeriod(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
-            this.removalEdits = removalEdits;
+            editMarker = removalEdits.For(InterestState.FirstLap);
             TV3 = cameras.First(tc => tc.CameraName == "TV3");
         }
 
@@ -48,13 +48,13 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (isInFirstPeriod)
                 OnlyOnce(ref startedFirstLapPeriod, () => 
                 {
-                    removalEdits.InterestingThingStarted(InterestState.FirstLap, -1);
+                    editMarker.Start();
                     TraceInfo.WriteLine("{0} Tracking leader from race start for period of {1}", data.Telemetry.SessionTimeSpan, Settings.Default.FollowLeaderAtRaceStartPeriod);
                 });
             else
                 OnlyOnce(ref completedFirstLapPeriod, () => 
                 {
-                    removalEdits.InterestingThingStopped(InterestState.FirstLap, -1);
+                    editMarker.Stop();
                     TraceInfo.WriteLine("{0} Leader has completed first lap period.  Activating normal camera/driver selection rules.", data.Telemetry.SessionTimeSpan);
                 });
 
