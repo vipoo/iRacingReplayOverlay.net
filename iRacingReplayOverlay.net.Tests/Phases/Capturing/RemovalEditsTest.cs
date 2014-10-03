@@ -219,6 +219,5 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             data.Telemetry.SessionData = sessionData;
             return data;
         }
-
     }
 }

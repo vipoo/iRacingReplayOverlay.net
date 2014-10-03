@@ -40,11 +40,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.raceEvents = raceEvents;
         }
 
-        public void InterestingThingStarted(InterestState interest, long carIdx)
-        {
-            InterestingThingStarted(interest, (int)carIdx);
-        }
-
         public void InterestingThingStarted(InterestState interest, int carIdx)
         {
             nextAction = (d, t) =>
@@ -62,11 +57,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
             };
         }
 
-        public void InterestingThingStopped(InterestState interest, long carIdx)
-        {
-            InterestingThingStopped(interest, (int)carIdx);
-        }
-        
         public void InterestingThingStopped(InterestState interest, int carIdx)
         {
             nextAction = (d, t) =>
@@ -78,17 +68,16 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 if( le.Item2 != carIdx)
                     throw new Exception("RaceEvent mismatched.  Attempted to close carIdx: {0}, when expecting carIdx: {1}".F(carIdx, le.Item2));
 
-                t = AddEvent(interest, carIdx, d, t);
+                AddEvent(interest, carIdx, d, t);
             };
         }
 
-        private TimeSpan AddEvent(InterestState interest, int carIdx, DataSample d, TimeSpan t)
+        void AddEvent(InterestState interest, int carIdx, DataSample d, TimeSpan t)
         {
             raceEvents.Add(new OverlayData.RaceEvent { CarIdx = carIdx, Interest = interest, StartTime = lastStartTime.TotalSeconds, EndTime = t.TotalSeconds });
             lastStartTime = t;
 
             TraceInfo.WriteLine("{0} Stopping {1}", d.Telemetry.SessionTimeSpan, interest.ToString());
-            return t;
         }
         
         public void Process(DataSample data, TimeSpan relativeTime)
