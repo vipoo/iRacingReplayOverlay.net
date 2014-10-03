@@ -57,6 +57,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         Action directionAction;
         TrackCamera camera;
         SessionData._DriverInfo._Drivers car;
+        long? lastCarIdx = null;
 
         public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan cameraStickyPeriod, TimeSpan battleStickyPeriod, TimeSpan battleGap, double battleFactor)
         {
@@ -78,7 +79,11 @@ namespace iRacingReplayOverlay.Phases.Direction
                     directionAction = () =>
                     {
                         SwitchToBattle(data, state.Driver);
-                        removalEdits.InterestingThingHappend(InterestState.Battle, car.CarIdx);
+                        if (lastCarIdx != null && lastCarIdx.Value != car.CarIdx)
+                            removalEdits.InterestingThingStarted(InterestState.Battle, lastCarIdx.Value);
+
+                        lastCarIdx = car.CarIdx;
+                        removalEdits.InterestingThingStarted(InterestState.Battle, car.CarIdx);
                     };
                     return true;
 
@@ -87,12 +92,15 @@ namespace iRacingReplayOverlay.Phases.Direction
                     {
                         UpdateBattleCamera(data);
                         UpdateCameraIfOvertake(data);
-                        removalEdits.InterestingThingHappend(InterestState.Battle, car.CarIdx);
                     };
                     return true;
 
                 case BattlePosition.Finished:
-                    directionAction = () => removalEdits.InterestingThingHappend(InterestState.Battle, car.CarIdx);
+                    directionAction = () =>
+                    {
+                        removalEdits.InterestingThingStopped(InterestState.Battle, car.CarIdx);
+                        lastCarIdx = null;
+                    };
                     return true;
 
                 case BattlePosition.Outside:

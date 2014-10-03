@@ -46,9 +46,17 @@ namespace iRacingReplayOverlay.Phases.Direction
             var isInFirstPeriod = InFirstLapPeriod(data);
 
             if (isInFirstPeriod)
-                OnlyOnce(ref startedFirstLapPeriod, () => TraceInfo.WriteLine("{0} Tracking leader from race start for period of {1}".F(data.Telemetry.SessionTimeSpan, Settings.Default.FollowLeaderAtRaceStartPeriod)));
+                OnlyOnce(ref startedFirstLapPeriod, () => 
+                {
+                    removalEdits.InterestingThingStarted(InterestState.FirstLap, -1);
+                    TraceInfo.WriteLine("{0} Tracking leader from race start for period of {1}", data.Telemetry.SessionTimeSpan, Settings.Default.FollowLeaderAtRaceStartPeriod);
+                });
             else
-                OnlyOnce(ref completedFirstLapPeriod, () => TraceInfo.WriteLine("{0} Leader has completed first lap period.  Activating normal camera/driver selection rules.".F(data.Telemetry.SessionTimeSpan)));
+                OnlyOnce(ref completedFirstLapPeriod, () => 
+                {
+                    removalEdits.InterestingThingStopped(InterestState.FirstLap, -1);
+                    TraceInfo.WriteLine("{0} Leader has completed first lap period.  Activating normal camera/driver selection rules.", data.Telemetry.SessionTimeSpan);
+                });
 
             return isInFirstPeriod;
         }
@@ -72,8 +80,6 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         void SwitchToLeader(DataSample data)
         {
-            removalEdits.InterestingThingHappend(InterestState.FirstLap, -1);
-
             if (reselectLeaderAt < DateTime.Now)
             {
                 iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);

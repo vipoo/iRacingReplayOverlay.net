@@ -33,6 +33,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\my-packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\my-packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -46,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Phases\Analysis\Incident.cs" />
+    <Compile Include="Phases\Capturing\RemovalEditsTest.cs" />
     <Compile Include="Phases\Direction\RuleLastLapPeriodTest.cs" />
     <Compile Include="Phases\Direction\RuleBattle.cs" />
     <Compile Include="Phases\Direction\Support\BattleTest.cs" />

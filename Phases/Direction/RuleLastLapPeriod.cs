@@ -57,7 +57,11 @@ namespace iRacingReplayOverlay.Phases.Direction
             var isInLastPeriod = lastLapHasStarted && data.Telemetry.SessionTimeSpan > trackLeaderFrom;
 
             if (isInLastPeriod)
-                OnlyOnce(ref startLastLapPeriod, () => TraceInfo.WriteLine("{0} Tracking leader on final lap", data.Telemetry.SessionTimeSpan));
+                OnlyOnce(ref startLastLapPeriod, () =>
+                {
+                    removalEdits.InterestingThingStarted(InterestState.LastLap, -1);
+                    TraceInfo.WriteLine("{0} Tracking leader on final lap", data.Telemetry.SessionTimeSpan);
+                });
 
             return isInLastPeriod;
         }
@@ -69,8 +73,6 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         void SwitchToFinishingDrivers(DataSample data)
         {
-            removalEdits.InterestingThingHappend(InterestState.LastLap, -1);
-
             var session = data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum];
 
             if (lastFinisherCarIdx != -1 && !data.Telemetry.Cars[lastFinisherCarIdx].HasSeenCheckeredFlag)

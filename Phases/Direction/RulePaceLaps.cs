@@ -49,10 +49,9 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (restarting)
             {
                 if (data.Telemetry.SessionTimeSpan < restartEndTime)
-                {
-                    removalEdits.InterestingThingHappend(InterestState.Restart, data.Telemetry.CamCarIdx);
                     return true;
-                }
+
+                removalEdits.InterestingThingStopped(InterestState.Restart, data.Telemetry.CamCarIdx);
 
                 restarting = false;
                 return false;
@@ -68,7 +67,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                 TraceInfo.WriteLine("{0} Race restarting", data.Telemetry.SessionTimeSpan);
                 wasUnderPaceCar = false;
-                removalEdits.InterestingThingHappend(InterestState.Restart, data.Telemetry.CamCarIdx);
+                removalEdits.InterestingThingStarted(InterestState.Restart, data.Telemetry.CamCarIdx);
                 return true;
             }
 

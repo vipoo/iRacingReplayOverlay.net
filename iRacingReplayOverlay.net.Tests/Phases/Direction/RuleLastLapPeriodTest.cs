@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
 using iRacingSDK;
 using iRacingSDK.Support;
@@ -33,11 +34,13 @@ namespace iRacingReplayOverlay.net.Tests.Phases.Direction
         [SetUp]
         public void setup()
         {
+            Settings.Default.FollowLeaderBeforeRaceEndPeriod = 10.Seconds();
+
             session = BuildSession(resultsLapsCompleted: 12, resultsAverageLapTime: 30d);
 
             var cameras = new[] { new TrackCamera { CameraName = "TV2" } };
 
-            ruleLastLapPeriod = new RuleLastLapPeriod(cameras, null);
+            ruleLastLapPeriod = new RuleLastLapPeriod(cameras, new Moq.Mock<RemovalEdits>(null).Object);
         }
 
         [Test]
@@ -59,7 +62,6 @@ namespace iRacingReplayOverlay.net.Tests.Phases.Direction
         [Test]
         public void it_should_return_active_before_leader_crosses_line()
         {
-            Settings.Default.FollowLeaderBeforeRaceEndPeriod = 10.Seconds();
 
             var data = BuildDataSample(session: session, raceLaps: 12, sessionTime: 100.0d);
             ruleLastLapPeriod.IsActive(data);
