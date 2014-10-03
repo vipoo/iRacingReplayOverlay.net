@@ -81,7 +81,7 @@ namespace iRacingReplayOverlay.Phases
             bool haveSkipForTesting = false;
 
             if (shortTestOnly)
-                samples = samples.AtSpeed(2);
+                samples = samples.AtSpeed(Settings.Default.TimingFactorForShortTest);
 
             videoCapture.Activate(workingFolder);
             var startTime = DateTime.Now;

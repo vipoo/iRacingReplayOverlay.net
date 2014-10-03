@@ -28,7 +28,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 {
     public static class RaceEventExtension
     {
-        static readonly TimeSpan HighlightVideoDuration = 10.Minutes();
+        static readonly TimeSpan HighlightVideoDuration = (10.0/Settings.Default.TimingFactorForTesting).Minutes();
 
         public static List<VideoEdit> GetRaceEdits(this IEnumerable<OverlayData.RaceEvent> raceEvents)
         {
