@@ -18,6 +18,7 @@
 //
 
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +35,25 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double EndTime;
             public InterestState Interest;
             public int CarIdx;
+
+            public override int GetHashCode()
+            {
+                return StartTime.GetHashCode() | EndTime.GetHashCode();
+            }
+
+            public override bool Equals(object obj)
+            {
+                var other = obj as RaceEvent;
+                if (other == null)
+                    return false;
+
+                return StartTime.Equals(other.StartTime) && EndTime.Equals(other.EndTime) && Interest.Equals(other.Interest) && CarIdx.Equals(other.CarIdx);
+            }
+
+            public override string ToString()
+            {
+                return "StartTime: {0}, EndTime: {1}, Interest: {2}, CarId: {3}".F(StartTime, EndTime, Interest.ToString(), CarIdx);
+            }
 
             public double Duration { get { return EndTime - StartTime; } }
         }
