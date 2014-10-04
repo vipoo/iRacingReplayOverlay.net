@@ -33,7 +33,8 @@ namespace iRacingReplayOverlay.Phases
         void _CaptureOpeningScenes(Action onComplete)
         {
             var data = iRacing.GetDataFeed().First();
-            if (data.SessionData.SessionInfo.Sessions.Qualifying() == null)
+            var session = data.SessionData.SessionInfo.Sessions.Qualifying();
+            if (session == null || session.ResultsPositions == null)
                 return;
 
             iRacing.Replay.MoveToQualifying();

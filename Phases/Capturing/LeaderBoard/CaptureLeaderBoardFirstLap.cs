@@ -44,7 +44,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
         {
             var session = data.SessionData.SessionInfo.Sessions.Qualifying();
 
-            if (session == null)
+            if (session == null || session.ResultsPositions == null)
                 return new OverlayData.Driver[0];
 
             return session

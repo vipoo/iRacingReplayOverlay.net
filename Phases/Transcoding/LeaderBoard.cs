@@ -26,6 +26,7 @@ using MediaFoundation.Net;
 using iRacingReplayOverlay.Support;
 using iRacingSDK.Support;
 using System.Drawing.Text;
+using iRacingSDK;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
@@ -68,7 +69,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .WithFont(fontName, 20, FontStyle.Bold)
                 .WithStringFormat(StringAlignment.Near);
 
-            var qsession = OverlayData.SessionData.SessionInfo.Sessions.First(s => s.SessionType.ToLower().Contains("qualify"));
+            var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
+            var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
 
             var offset = 5;
             var pen = new Pen(Styles.Black, 2);
@@ -76,7 +78,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .WithPen(pen)
                 .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
 
-            foreach (var qualifier in qsession.ResultsPositions.Take(19))
+            foreach (var qualifier in results.Take(19))
             {
                 var driver = OverlayData.SessionData.DriverInfo.Drivers[qualifier.CarIdx];
                 r

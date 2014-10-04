@@ -100,7 +100,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 return car.Position;
 
             var session = data.SessionData.SessionInfo.Sessions.Qualifying();
-            if (session == null)
+            if (session == null || session.ResultsPositions == null)
                 return null;
 
             var qualifyingResult = session.ResultsPositions.FirstOrDefault(p => p.CarIdx == car.CarIdx);
