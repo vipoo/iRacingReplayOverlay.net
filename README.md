@@ -40,6 +40,8 @@ Installation
 
 The application can be installed at: https://iracingreplaydirector.s3-ap-southeast-2.amazonaws.com/index.html
 
+Or if you a feeling adventurous, you can try ealier releases at: https://iracingreplaydirector-beta.s3.amazonaws.com/index.html
+
 How to use
 ===================
 
