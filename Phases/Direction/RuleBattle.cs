@@ -58,10 +58,10 @@ namespace iRacingReplayOverlay.Phases.Direction
         TrackCamera camera;
         SessionData._DriverInfo._Drivers car;
 
-        public RuleBattle(CameraControl cameraControl, RemovalEdits removalEdits, TimeSpan cameraStickyPeriod, TimeSpan battleStickyPeriod, TimeSpan battleGap, double battleFactor)
+        public RuleBattle(CameraControl cameraControl, EditMarker editMarker, TimeSpan cameraStickyPeriod, TimeSpan battleStickyPeriod, TimeSpan battleGap, double battleFactor)
         {
             this.cameraControl = cameraControl;
-            this.editMarker = removalEdits.For(InterestState.Battle);
+            this.editMarker = editMarker;
             this.battleStickyPeriod = battleStickyPeriod;
             this.battleCameraChangePeriod = cameraStickyPeriod;
             this.battleGap = battleGap;
@@ -91,7 +91,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     return true;
 
                 case BattlePosition.Finished:
-                    directionAction = () => editMarker.Stop(battleFollower.CarIdx);
+                    directionAction = () => editMarker.Stop();
                     return true;
 
                 case BattlePosition.Outside:
@@ -208,6 +208,12 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (data.Telemetry.SessionTimeSpan > cameraChangeTime && !Battle.IsInBattle(data, battleGap, battleFollower.Driver, battleLeader.Driver))
             {
                 TraceInfo.WriteLine("{0} Battle has stopped.", data.Telemetry.SessionTimeSpan);
+                return true;
+            }
+
+            if (data.Telemetry.UnderPaceCar)
+            {
+                TraceInfo.WriteLine("{0} Battle has stopped, due to double yellows.", data.Telemetry.SessionTimeSpan);
                 return true;
             }
 

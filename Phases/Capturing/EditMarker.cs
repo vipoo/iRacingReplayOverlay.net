@@ -16,6 +16,9 @@
 // You should have received a copy of the GNU General Public License333
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
+using System;
+
 namespace iRacingReplayOverlay.Phases.Capturing
 {
     public class EditMarker
@@ -40,9 +43,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
             removalEdits.InterestingThingStarted(interest, carIdx);
         }
 
-        internal void Stop(int carIdx = -1)
+        internal void Stop()
         {
-            removalEdits.InterestingThingStopped(interest, carIdx);
+            if (lastCarIdx == null)
+                return;
+
+            removalEdits.InterestingThingStopped(interest, lastCarIdx.Value);
             lastCarIdx = null;
         }
     }

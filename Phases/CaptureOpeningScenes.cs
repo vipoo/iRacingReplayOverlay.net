@@ -18,11 +18,9 @@
 //
 
 using iRacingReplayOverlay.Phases.Direction;
-using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 

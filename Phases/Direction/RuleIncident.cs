@@ -71,7 +71,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case IncidentPosition.Finished:
                     directionAction = () =>
                     {
-                        editMarker.Stop(nextIncident.Current.Car.CarIdx);
+                        editMarker.Stop();
                         WatchForNextIncident(data);
                     };
                     return true;

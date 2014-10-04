@@ -27,7 +27,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class RulePaceLaps : IVetoRule
     {
-        readonly EditMarker editMarker;
+        readonly EditMarker restartMarker;
+        readonly EditMarker battleMarker;
         readonly TrackCamera TV3;
 
         bool wasUnderPaceCar;
@@ -35,9 +36,10 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly TimeSpan RestartStickyTime = 20.Seconds();
         bool restarting = false;
 
-        public RulePaceLaps(TrackCamera[] cameras, RemovalEdits removalEdits)
+        public RulePaceLaps(TrackCamera[] cameras, EditMarker restartMarker, EditMarker battleMarker)
         {
-            this.editMarker = removalEdits.For(InterestState.Restart);
+            this.restartMarker = restartMarker;
+            this.battleMarker = battleMarker;
 
             TV3 = cameras.First(tc => tc.CameraName == "TV3");
 
@@ -51,7 +53,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 if (data.Telemetry.SessionTimeSpan < restartEndTime)
                     return true;
 
-                editMarker.Stop(data.Telemetry.CamCarIdx);
+                restartMarker.Stop();
 
                 restarting = false;
                 return false;
@@ -67,7 +69,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                 TraceInfo.WriteLine("{0} Race restarting", data.Telemetry.SessionTimeSpan);
                 wasUnderPaceCar = false;
-                editMarker.Start(data.Telemetry.CamCarIdx);
+                restartMarker.Start(data.Telemetry.CamCarIdx);
                 return true;
             }
 
@@ -75,6 +77,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (wasUnderPaceCar)
             {
                 TraceInfo.WriteLineIf(wasUnderPaceCar, "{0} Double Yellows. Pace Car", data.Telemetry.SessionTimeSpan);
+                battleMarker.Stop();
                 iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
             }
 

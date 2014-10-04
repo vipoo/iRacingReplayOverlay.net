@@ -42,7 +42,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             em.Start(1);
             re.Process(ds, 10.Seconds());
 
-            em.Stop(1);
+            em.Stop();
             re.Process(ds, 15.Seconds());
 
             Assert.That(raceEvents.Count, Is.EqualTo(1));
@@ -73,12 +73,12 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             markerB.Start(2);
             re.Process(ds, 15.Seconds());
 
-            markerB.Stop(2);
+            markerB.Stop();
             re.Process(ds, 18.Seconds());
 
             markerI.Start(3);
             re.Process(ds, 20.Seconds());
-            markerI.Stop(3);
+            markerI.Stop();
             re.Process(ds, 22.Seconds());
             
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -107,12 +107,12 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             markerB.Start(1);
             re.Process(ds, 15.Seconds());
 
-            markerB.Stop(1);
+            markerB.Stop();
             re.Process(ds, 18.Seconds());
 
             markerI.Start(3);
             re.Process(ds, 20.Seconds());
-            markerI.Stop(3);
+            markerI.Stop();
             re.Process(ds, 22.Seconds());
 
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -133,12 +133,11 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var raceEvents = new List<OverlayData.RaceEvent>();
 
             var re = new RemovalEdits(raceEvents);
-            var marker = re.For(InterestState.Incident);
 
-            marker.Start(1);
+            re.InterestingThingStarted(InterestState.Battle, 1);
             re.Process(ds, 10.Seconds());
 
-            marker.Stop(2);
+            re.InterestingThingStopped(InterestState.Battle, 2);
 
             Assert.Throws(typeof(Exception), () => re.Process(ds, 15.Seconds()));
         }
@@ -160,10 +159,10 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             markerI.Start(2);
             re.Process(ds, 14.Seconds());
 
-            markerI.Stop(2);
+            markerI.Stop();
             re.Process(ds, 16.Seconds());
 
-            markerB.Stop(1);
+            markerB.Stop();
             re.Process(ds, 18.Seconds());
 
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -192,15 +191,15 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
 
             markerI.Start(2);
             re.Process(ds, 14.Seconds());
-            markerI.Stop(2);
+            markerI.Stop();
             re.Process(ds, 16.Seconds());
 
             markerI.Start(2);
             re.Process(ds, 18.Seconds());
-            markerI.Stop(2);
+            markerI.Stop();
             re.Process(ds, 20.Seconds());
 
-            markerB.Stop(1);
+            markerB.Stop();
             re.Process(ds, 22.Seconds());
 
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -235,13 +234,13 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             markerI.Start(3);
             re.Process(ds, 16.Seconds());
 
-            markerI.Stop(3);
+            markerI.Stop();
             re.Process(ds, 18.Seconds());
 
-            markerB.Stop(2);
+            markerB.Stop();
             re.Process(ds, 20.Seconds());
 
-            markerF.Stop(1);
+            markerF.Stop();
             re.Process(ds, 22.Seconds());
 
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
@@ -296,7 +295,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             markerB.Start(1);
             re.Process(ds, 10.Seconds());
 
-            markerB.Stop(2);
+            markerB.Stop();
             re.Process(ds, 15.Seconds());
 
             markerL.Start();
