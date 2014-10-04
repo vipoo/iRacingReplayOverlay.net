@@ -37,6 +37,7 @@ namespace iRacingReplayOverlay.Phases
         {
             var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
             Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_SHOWNORMAL);
+            Win32.Messages.SetForegroundWindow(hwnd);
             Thread.Sleep(2000);
 
             var data = iRacing.GetDataFeed()

@@ -28,6 +28,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Win32;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -113,8 +114,7 @@ namespace iRacingReplayOverlay.Phases
 
             iRacing.Replay.SetSpeed(0);
 
-            var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
-            Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_MINIMIZE);
+            AltTabBackToApp();
 
             _WithFiles(fileName);
 
@@ -122,6 +122,17 @@ namespace iRacingReplayOverlay.Phases
                 throw new Exception("Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder));
 
             onComplete(fileName);
+        }
+
+        private static void AltTabBackToApp()
+        {
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(200);
+            Keyboard.keybd_event(Keyboard.VK_TAB, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(200);
+            Keyboard.keybd_event(Keyboard.VK_TAB, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            Thread.Sleep(200);
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
 
         void ApplyFirstLapCameraDirection(IEnumerable<DataSample> samples, ReplayControl replayControl)

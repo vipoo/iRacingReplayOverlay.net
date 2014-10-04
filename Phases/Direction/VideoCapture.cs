@@ -23,24 +23,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Win32;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
     public class VideoCapture
     {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-
-        const int KEYEVENTF_KEYUP = 0x02;
-        const byte VK_MENU = 0x12;
-        const byte VK_F9 = 0x78;
         string workingFolder;
         private DateTime started;
 
         public void Activate(string workingFolder)
         {
             this.workingFolder = workingFolder;
-            this.started = DateTime.Now; //.Subtract(TimeSpan.FromSeconds(30));
+            this.started = DateTime.Now;
 
             SendKeyStroke();
         }
@@ -66,14 +61,13 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             TraceInfo.WriteLine("Sending key event ALT+F9");
 
-            keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
             Thread.Sleep(200);
-            keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
+            Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
             Thread.Sleep(200);
-            keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
             Thread.Sleep(200);
-            keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
-
     }
 }
