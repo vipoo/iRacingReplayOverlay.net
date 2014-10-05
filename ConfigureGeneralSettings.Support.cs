@@ -84,6 +84,26 @@ namespace iRacingReplayOverlay
             });
         }
 
+        void AddMinuteField(string caption, string description, string setting)
+        {
+            panel.Controls.Add(new Label
+            {
+                Location = new System.Drawing.Point(440, nextRowPosition),
+                Size = new System.Drawing.Size(60, 16),
+                TabIndex = nextTabIndex++,
+                Text = "Minutes"
+            });
+
+            var startValue = (int)((TimeSpan)Settings.Default[setting]).TotalMinutes;
+
+            AddField(caption, description, startValue.ToString(), tb =>
+            {
+                var newMinutes = 0;
+                if (int.TryParse(tb.Text, out newMinutes))
+                    Settings.Default[setting] = newMinutes.Minutes();
+            });
+        }
+
         TextBox AddField(string caption, string description, string value, Action<TextBox> onSave)
         {
             panel.Controls.Add(new Label

@@ -188,5 +188,17 @@ namespace iRacingReplayOverlay {
                 this["FollowLeaderBeforeRaceEndPeriod"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:10:00")]
+        public global::System.TimeSpan HighlightVideoTargetDuration {
+            get {
+                return ((global::System.TimeSpan)(this["HighlightVideoTargetDuration"]));
+            }
+            set {
+                this["HighlightVideoTargetDuration"] = value;
+            }
+        }
     }
 }

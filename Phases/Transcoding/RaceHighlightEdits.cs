@@ -17,18 +17,19 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Support;
 using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
     public static class RaceEventExtension
     {
-        static readonly TimeSpan HighlightVideoDuration = (10.0/Settings.Default.TimingFactorForTesting).Minutes();
+        static TimeSpan HighlightVideoDuration
+        {
+            get { return (Settings.Default.HighlightVideoTargetDuration.TotalMinutes / Settings.Default.TimingFactorForTesting).Minutes(); }
+        }
 
         public static List<VideoEdit> GetRaceEdits(this IEnumerable<OverlayData.RaceEvent> raceEvents)
         {

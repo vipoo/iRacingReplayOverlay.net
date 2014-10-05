@@ -39,6 +39,9 @@ namespace iRacingReplayOverlay
             AddTimeField("Time to track leader at race start", "The amount of time, to stay focused on the leader, at race start.  After this period, the normal camera and driver tracking rules will apply.", "FollowLeaderAtRaceStartPeriod");
             AddTimeField("Time to track leader on last lap", "The amount of time, to stay focused on the leader, prior to the race finish.", "FollowLeaderBeforeRaceEndPeriod");
             AddNumberField("Factor for battle selection.", "A factor to bias the random selection of battles.  Larger numbers will tend to focus on battles at front.  Smaller numbers will increase the chance of battles futher down the order to be selected.  Recommend values between 0.9 and 1.5", "BattleFactor");
+
+            AddBlankRow();
+            AddMinuteField("Duration of Highlight video", "The duration to target for the length of the edited highlight videos.", "HighlightVideoTargetDuration");
             
             AddBlankRow();
             AddKeyPressField("Hot Key for Video Capture", "The hotkey used by your video capture program.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9 or F9");
