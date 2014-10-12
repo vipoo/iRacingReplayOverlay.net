@@ -28,8 +28,7 @@ namespace iRacingReplayOverlay.Phases.Direction
     public class RuleLastLapPeriod : IDirectionRule
     {
         readonly EditMarker editMarker;
-        readonly TrackCamera[] cameras;
-        readonly TrackCamera TV2;
+        readonly TrackCamera Camera;
 
         int lastFinisherCarIdx = -1;
         DateTime timeOfFinisher = DateTime.Now;
@@ -39,10 +38,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public RuleLastLapPeriod(TrackCamera[] cameras, RemovalEdits removalEdits)
         {
-            this.cameras = cameras;
             this.editMarker = removalEdits.For(InterestState.LastLap);
 
-            TV2 = cameras.First(tc => tc.CameraName == "TV2");
+            Camera = cameras.First(tc => tc.IsLastLap);
         }
 
         public bool IsActive(DataSample data)
@@ -107,7 +105,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TraceInfo.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}", data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position);
 
-            iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, TV2.CameraNumber);
+            iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, Camera.CameraNumber);
         }
 
         void OnlyOnce(ref bool latch, Action action)

@@ -70,10 +70,13 @@ namespace iRacingReplayOverlay
         void StateUpdated()
         {
 
-            var trackCamerasDefined = 
-                Settings.Default.trackCameras != null && 
-                lastSession != null && 
-                Settings.Default.trackCameras.Any(tc => tc.TrackName == lastSession.WeekendInfo.TrackDisplayName);
+            var trackCamerasDefined =
+                Settings.Default.trackCameras != null &&
+                lastSession != null &&
+                Settings.Default.trackCameras.Any(tc => tc.TrackName == lastSession.WeekendInfo.TrackDisplayName) &&
+                Settings.Default.trackCameras.RaceStart[lastSession.WeekendInfo.TrackDisplayName] != null &&
+                Settings.Default.trackCameras.Incident[lastSession.WeekendInfo.TrackDisplayName] != null &&
+                Settings.Default.trackCameras.LastLap[lastSession.WeekendInfo.TrackDisplayName] != null;
 
             switch (_states)
             {

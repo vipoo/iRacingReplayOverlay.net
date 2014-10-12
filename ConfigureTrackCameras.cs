@@ -16,10 +16,10 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,15 +29,19 @@ namespace iRacingReplayOverlay
 {
     public partial class ConfigureTrackCameras : Form
     {
-        private TrackCameras trackCameras;
-        private DataSample lastSample;
+        DataSample lastSample;
+
+        string TrackName
+        {
+            get { return (string)trackList.SelectedItem; }
+        }
 
         public ConfigureTrackCameras()
         {
             InitializeComponent();
         }
 
-        private void cameraList_SelectedIndexChanged(object sender, EventArgs e)
+        void cameraList_SelectedIndexChanged(object sender, EventArgs e)
         {
             ratioTextBox.Enabled = cameraList.SelectedItems.Count != 0;
             if (ratioTextBox.Enabled)
@@ -54,17 +58,15 @@ namespace iRacingReplayOverlay
             }
         }
 
-        private void trackList_SelectedIndexChanged(object sender, EventArgs e)
+        void trackList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cameraList.Items.Clear();
-
             InitaliseListOfCameras();
 
             cameraList_SelectedIndexChanged(sender, e);
             UpdateTotal();
         }
 
-        private void ratioTextBox_TextChanged(object sender, EventArgs e)
+        void ratioTextBox_TextChanged(object sender, EventArgs e)
         {
             if (cameraList.SelectedItems.Count == 0)
                 return;
@@ -82,32 +84,40 @@ namespace iRacingReplayOverlay
             UpdateTotal();
         }
 
-        private System.Collections.Generic.IEnumerable<TrackCamera> GetCamerasForSelectedTrack()
+        IEnumerable<TrackCamera> GetCamerasForSelectedTrack()
         {
             return trackCameras.Where(tc => tc.TrackName == (string)trackList.SelectedItem);
         }
 
-        private void TrackCameraPerferences_FormClosing(object sender, FormClosingEventArgs e)
+        void TrackCameraPerferences_FormClosing(object sender, FormClosingEventArgs e)
         {
             Settings.Default.lastSelectedTrackName = (string)trackList.SelectedItem;
             Settings.Default.Save();
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        void okButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void TrackCameraPerferences_Load(object sender, EventArgs e)
+        TrackCameras trackCameras
         {
-            trackCameras = Settings.Default.trackCameras;
-            if( trackCameras == null)
+            get
             {
-                trackCameras = new TrackCameras();
-                Settings.Default.trackCameras = trackCameras;
-                Settings.Default.Save();
-            }
+                var result = Settings.Default.trackCameras;
+                if (result == null)
+                {
+                    result = new TrackCameras();
+                    Settings.Default.trackCameras = result;
+                    Settings.Default.Save();
+                }
 
+                return result;
+            }
+        }
+        
+        void TrackCameraPerferences_Load(object sender, EventArgs e)
+        {
             lastSample = new iRacingConnection().GetDataFeed().First();
 
             DiscoverAnyNewTrackCameras();
@@ -115,7 +125,7 @@ namespace iRacingReplayOverlay
             InitialiseDropDownListOfTracks();
         }
 
-        private void InitialiseDropDownListOfTracks()
+        void InitialiseDropDownListOfTracks()
         {
             foreach (var track in trackCameras.Select(tc => tc.TrackName).Distinct().OrderBy(t => t))
                 trackList.Items.Add(track);
@@ -130,7 +140,7 @@ namespace iRacingReplayOverlay
         /// Load session data from iRacing and loads the cameras available for the current loaded
         /// track and saves the track/camera combination into the users setting
         /// </summary>
-        private void DiscoverAnyNewTrackCameras()
+        void DiscoverAnyNewTrackCameras()
         {
             if (!lastSample.IsConnected)
                 return;
@@ -153,18 +163,40 @@ namespace iRacingReplayOverlay
             }
         }
 
-        private void InitaliseListOfCameras()
+        void InitaliseListOfCameras()
         {
-            foreach (var tc in GetCamerasForSelectedTrack())
+            cameraList.Items.Clear();
+            raceStartCamera.Items.Clear();
+            incidentCamera.Items.Clear();
+            lastLapCamera.Items.Clear();
+
+            var cameras = GetCamerasForSelectedTrack();
+            foreach (var tc in cameras)
             {
                 var lvi = new ListViewItem { Text = tc.CameraName };
                 lvi.SubItems.Add(tc.Ratio.ToString());
 
                 cameraList.Items.Add(lvi);
+
+                raceStartCamera.Items.Add(tc.CameraName);
+                incidentCamera.Items.Add(tc.CameraName);
+                lastLapCamera.Items.Add(tc.CameraName);
             }
+
+            SetCameraDropDown(cameras, trackCameras.RaceStart, "TV2", raceStartCamera);
+            SetCameraDropDown(cameras, trackCameras.Incident, "TV3", incidentCamera);
+            SetCameraDropDown(cameras, trackCameras.LastLap, "TV2", lastLapCamera);
         }
 
-        private void UpdateTotal()
+        void SetCameraDropDown(System.Collections.Generic.IEnumerable<TrackCamera> cameras, TrackCameras._CameraSelection specialCamera, string defaultName, ComboBox dropDown)
+        {
+            if (specialCamera[TrackName] == null && cameras.Any(tc => tc.CameraName == defaultName))
+                dropDown.SelectedItem = defaultName;
+            else
+                dropDown.SelectedItem = specialCamera[TrackName];
+        }
+
+        void UpdateTotal()
         {
             int total = 0;
             foreach (var tc in GetCamerasForSelectedTrack())
@@ -175,6 +207,24 @@ namespace iRacingReplayOverlay
             totalRatio.Text = total.ToString();
             TotalErrorLabel.Visible = total > 100;
             noCameraAssignedErrorLabel.Visible = total < 25;
+        }
+
+        void raceStartCamera_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trackCameras.RaceStart[TrackName] = raceStartCamera.SelectedItem.ToString();
+            Settings.Default.Save();
+        }
+
+        void incidentCamera_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trackCameras.Incident[TrackName] = incidentCamera.SelectedItem.ToString();
+            Settings.Default.Save();
+        }
+
+        void lastLapCamera_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trackCameras.LastLap[TrackName] = lastLapCamera.SelectedItem.ToString();
+            Settings.Default.Save();
         }
     }
 }

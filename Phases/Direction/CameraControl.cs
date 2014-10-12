@@ -31,16 +31,14 @@ namespace iRacingReplayOverlay.Phases.Direction
     {
         readonly TrackCamera[] cameras;
         readonly Random random;
-        readonly TrackCamera TV2;
-        readonly TrackCamera TV3;
+        readonly TrackCamera defaultCamera;
 
         public CameraControl(TrackCamera[] cameras)
         {
             this.cameras = cameras;
             this.random = new Random();
 
-            TV2 = cameras.First(tc => tc.CameraName == "TV2");
-            TV3 = cameras.First(tc => tc.CameraName == "TV3");
+            defaultCamera = cameras.First(tc => tc.IsRaceStart);
         }
         
         public TrackCamera FindACamera(params CameraAngle[] cameraAngles)
@@ -52,7 +50,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             var rand = 0;
             var offset = 0;
-            var camera = TV2;
+            var camera = defaultCamera;
 
             var selectableCameras = cameras.Where(x => cameraAngles.Contains(x.CameraAngle));
             int total = selectableCameras.Sum(x => x.Ratio);

@@ -33,7 +33,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         readonly EditMarker editMarker;
         readonly IEnumerator<Incidents.Incident> nextIncident;
-        readonly TrackCamera TV2;
+        readonly TrackCamera Camera;
 
         double pitBoxStartTime = 0;
         bool isInside = false;
@@ -47,7 +47,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             nextIncident.MoveNext();
             if (nextIncident.Current != null)
                 TraceInfo.WriteLine("First incident at {0}", nextIncident.Current.StartSessionTime);
-            TV2 = cameras.First(tc => tc.CameraName == "TV2");
+            Camera = cameras.First( tc => tc.IsIncident );
         }
 
         public bool IsActive(DataSample data)
@@ -171,7 +171,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TraceInfo.WriteLine("{0} Showing incident with {1} starting from {2}", data.Telemetry.SessionTimeSpan, incidentCar.UserName, nextIncident.Current.StartSessionTime);
 
-            iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, TV2.CameraNumber);
+            iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, Camera.CameraNumber);
         }
 
         public string Name

@@ -49,6 +49,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.noCameraAssignedErrorLabel = new System.Windows.Forms.Label();
+            this.raceStartCamera = new System.Windows.Forms.ComboBox();
+            this.incidentCamera = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lastLapCamera = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // trackList
@@ -187,9 +192,9 @@
             this.label4.Location = new System.Drawing.Point(325, 219);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(331, 43);
+            this.label4.Size = new System.Drawing.Size(161, 21);
             this.label4.TabIndex = 10;
-            this.label4.Text = "TV1 will default if by chance no other camera activates";
+            this.label4.Text = "Camera For Race Start :";
             // 
             // label5
             // 
@@ -215,6 +220,56 @@
             this.noCameraAssignedErrorLabel.Text = "* Must assign cameras % upto at least 25%";
             this.noCameraAssignedErrorLabel.Visible = false;
             // 
+            // raceStartCamera
+            // 
+            this.raceStartCamera.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.raceStartCamera.FormattingEnabled = true;
+            this.raceStartCamera.Location = new System.Drawing.Point(483, 216);
+            this.raceStartCamera.Name = "raceStartCamera";
+            this.raceStartCamera.Size = new System.Drawing.Size(159, 24);
+            this.raceStartCamera.TabIndex = 13;
+            this.raceStartCamera.SelectedIndexChanged += new System.EventHandler(this.raceStartCamera_SelectedIndexChanged);
+            // 
+            // incidentCamera
+            // 
+            this.incidentCamera.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.incidentCamera.FormattingEnabled = true;
+            this.incidentCamera.Location = new System.Drawing.Point(483, 249);
+            this.incidentCamera.Name = "incidentCamera";
+            this.incidentCamera.Size = new System.Drawing.Size(159, 24);
+            this.incidentCamera.TabIndex = 15;
+            this.incidentCamera.SelectedIndexChanged += new System.EventHandler(this.incidentCamera_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(325, 252);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(161, 27);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "Camera for Incidents:";
+            // 
+            // lastLapCamera
+            // 
+            this.lastLapCamera.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.lastLapCamera.FormattingEnabled = true;
+            this.lastLapCamera.Location = new System.Drawing.Point(483, 282);
+            this.lastLapCamera.Name = "lastLapCamera";
+            this.lastLapCamera.Size = new System.Drawing.Size(159, 24);
+            this.lastLapCamera.TabIndex = 17;
+            this.lastLapCamera.SelectedIndexChanged += new System.EventHandler(this.lastLapCamera_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(325, 285);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(161, 27);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Camera for Last Lap:";
+            // 
             // ConfigureTrackCameras
             // 
             this.AcceptButton = this.okButton;
@@ -222,6 +277,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.okButton;
             this.ClientSize = new System.Drawing.Size(679, 480);
+            this.Controls.Add(this.lastLapCamera);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.incidentCamera);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.raceStartCamera);
             this.Controls.Add(this.noCameraAssignedErrorLabel);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -264,6 +324,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label noCameraAssignedErrorLabel;
+        private System.Windows.Forms.ComboBox raceStartCamera;
+        private System.Windows.Forms.ComboBox incidentCamera;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox lastLapCamera;
+        private System.Windows.Forms.Label label7;
 
     }
 }

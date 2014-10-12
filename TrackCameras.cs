@@ -17,7 +17,9 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace iRacingReplayOverlay
 {
@@ -31,6 +33,62 @@ namespace iRacingReplayOverlay
 
     public class TrackCameras : List<TrackCamera>
     {
+        public class _CameraSelection
+        {
+            TrackCameras trackCameras;
+            Func<TrackCamera, bool> readAttr;
+            Action<TrackCamera, bool> writeAttr;
+
+            public _CameraSelection(TrackCameras trackCameras, Func<TrackCamera, bool> readAttr, Action<TrackCamera, bool> writeAttr)
+            {
+                this.trackCameras = trackCameras;
+                this.readAttr = readAttr;
+                this.writeAttr = writeAttr;
+            }
+
+            public string this[string trackName]
+            {
+                get
+                {
+                    var c = trackCameras.FirstOrDefault(tc => tc.TrackName == trackName &&  readAttr(tc));
+
+                    return c == null ? null : c.CameraName;
+                }
+                set
+                {
+                    foreach (var tc in trackCameras.Where(tc => tc.TrackName == trackName && readAttr(tc)))
+                        writeAttr(tc, false);
+
+                    var c = trackCameras.FirstOrDefault(tc => tc.TrackName == trackName && tc.CameraName == value);
+
+                    writeAttr(c, true);
+                }
+            }
+        }
+
+        public _CameraSelection RaceStart
+        {
+            get
+            {
+                return new _CameraSelection(this, tc => tc.IsRaceStart, (tc, v) => tc.IsRaceStart = v);
+            }
+        }
+
+        public _CameraSelection Incident
+        {
+            get
+            {
+                return new _CameraSelection(this, tc => tc.IsIncident, (tc, v) => tc.IsIncident = v);
+            }
+        }
+
+        public _CameraSelection LastLap
+        {
+            get
+            {
+                return new _CameraSelection(this, tc => tc.IsLastLap, (tc, v) => tc.IsLastLap = v);
+            }
+        }
     }
 
     public class TrackCamera
@@ -60,6 +118,10 @@ namespace iRacingReplayOverlay
         public string CameraName;
         public int Ratio;
         public short CameraNumber;
+        public bool IsRaceStart;
+        public bool IsIncident;
+        public bool IsLastLap;
+
         public CameraAngle CameraAngle
         {
             get
