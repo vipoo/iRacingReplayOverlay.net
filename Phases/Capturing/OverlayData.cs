@@ -34,7 +34,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double StartTime;
             public double EndTime;
             public InterestState Interest;
-            public int CarIdx;
+            public bool WithOvertake;
 
             public override int GetHashCode()
             {
@@ -47,12 +47,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 if (other == null)
                     return false;
 
-                return StartTime.Equals(other.StartTime) && EndTime.Equals(other.EndTime) && Interest.Equals(other.Interest) && CarIdx.Equals(other.CarIdx);
+                return StartTime.Equals(other.StartTime) && EndTime.Equals(other.EndTime) && Interest.Equals(other.Interest);
             }
 
             public override string ToString()
             {
-                return "StartTime: {0}, EndTime: {1}, Interest: {2}, CarId: {3}".F(StartTime, EndTime, Interest.ToString(), CarIdx);
+                return "StartTime: {0}, EndTime: {1}, Interest: {2}".F(StartTime, EndTime, Interest.ToString());
             }
 
             public double Duration { get { return EndTime - StartTime; } }

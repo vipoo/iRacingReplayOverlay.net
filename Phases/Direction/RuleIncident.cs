@@ -59,7 +59,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case IncidentPosition.Started:
                     directionAction = () =>
                     {
-                        editMarker.Start(nextIncident.Current.Car.CarIdx);
+                        editMarker.Start();
                         SwitchToIncident(data);
                     };
                     return true;

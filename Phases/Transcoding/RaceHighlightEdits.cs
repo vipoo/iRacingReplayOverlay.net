@@ -103,7 +103,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                     for (var i = 0; i < segmentCount; i++)
                     {
-                        var segment = new OverlayData.RaceEvent { CarIdx = re.CarIdx, Interest = re.Interest, StartTime = startTime, EndTime = startTime + segmentDuration };
+                        var segment = new OverlayData.RaceEvent { Interest = re.Interest, StartTime = startTime, EndTime = startTime + segmentDuration };
                         result.Add(segment);
                         startTime += segmentDuration;
                     }
@@ -146,6 +146,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         static List<OverlayData.RaceEvent> ExtractEditedEvents(double totalTime, double percentage, List<OverlayData.RaceEvent> raceEvents, InterestState interest)
         {
+            var duration = 0d;
+
             var orderRaceEvents = new List<_RaceEvent>();
 
             var targetDuration = totalTime * percentage;
@@ -161,13 +163,23 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             orderRaceEvents.Add(new _RaceEvent { RaceEvent = firstEvent, Level = 0 });
             orderRaceEvents.Add(new _RaceEvent { RaceEvent = lastEvent, Level = 0 });
 
-            SliceEvent(orderRaceEvents, raceEvents, firstEvent, lastEvent, 1);
-
             var result = new List<OverlayData.RaceEvent>();
 
-            var duration = 0d;
+            SliceEvent(orderRaceEvents, raceEvents.Where( rc => rc.WithOvertake).ToList(), firstEvent, lastEvent, 1);
+            duration = SelectOrderByLevel(orderRaceEvents, targetDuration, result, duration);
 
-            foreach( var re in orderRaceEvents
+            SliceEvent(orderRaceEvents, raceEvents.Where(rc => !rc.WithOvertake).ToList(), firstEvent, lastEvent, 1);
+            duration = SelectOrderByLevel(orderRaceEvents, targetDuration, result, duration);
+
+            TraceInfo.WriteLine("Highlight Edits: {0}.  Target Duration: {1}, Percentage: {2:00}%, Resolved Duration: {3}",
+                interest.ToString(), targetDuration.Seconds(), (int)(percentage*100), duration.Seconds());
+
+            return result;
+        }
+
+        private static double SelectOrderByLevel(List<_RaceEvent> orderRaceEvents, double targetDuration, List<OverlayData.RaceEvent> result, double duration)
+        {
+            foreach (var re in orderRaceEvents
                 .OrderBy(r => r.Level)
                 .ThenBy(r => r.RaceEvent.StartTime)
                 .Select(re => re.RaceEvent))
@@ -179,11 +191,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 if (duration + re.Duration < targetDuration)
                     result.Add(re);
             }
-
-            TraceInfo.WriteLine("Highlight Edits: {0}.  Target Duration: {1}, Percentage: {2:00}%, Resolved Duration: {3}",
-                interest.ToString(), targetDuration.Seconds(), (int)(percentage*100), duration.Seconds());
-
-            return result;
+            return duration;
         }
 
         static List<OverlayData.RaceEvent> GetAllRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, InterestState interest, double factor, out double ratio)

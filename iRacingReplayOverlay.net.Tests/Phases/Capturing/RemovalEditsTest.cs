@@ -39,7 +39,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var re = new RemovalEdits(raceEvents);
             var em = new EditMarker(re, InterestState.Battle);
 
-            em.Start(1);
+            em.Start();
             re.Process(ds, 10.Seconds());
 
             em.Stop();
@@ -49,7 +49,6 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
 
             var e = raceEvents.First();
             Assert.That(e, Is.EqualTo(new OverlayData.RaceEvent {
-                CarIdx = 1,
                 StartTime = 10d,
                 EndTime = 15d,
                 Interest = InterestState.Battle
@@ -67,16 +66,16 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var markerB = re.For(InterestState.Battle);
             var markerI = re.For(InterestState.Incident);
 
-            markerB.Start(1);
+            markerB.Start();
             re.Process(ds, 10.Seconds());
 
-            markerB.Start(2);
+            markerB.Start();
             re.Process(ds, 15.Seconds());
 
             markerB.Stop();
             re.Process(ds, 18.Seconds());
 
-            markerI.Start(3);
+            markerI.Start();
             re.Process(ds, 20.Seconds());
             markerI.Stop();
             re.Process(ds, 22.Seconds());
@@ -84,9 +83,9 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
                 new[] 
                 {
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 2, StartTime = 15d, EndTime = 18d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 3, StartTime = 20d, EndTime = 22d, Interest = InterestState.Incident},
+                    new OverlayData.RaceEvent { StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 15d, EndTime = 18d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 20d, EndTime = 22d, Interest = InterestState.Incident},
                 }));
         }
 
@@ -101,16 +100,16 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var markerB = re.For(InterestState.Battle);
             var markerI = re.For(InterestState.Incident);
 
-            markerB.Start(1);
+            markerB.Start();
             re.Process(ds, 10.Seconds());
 
-            markerB.Start(1);
+            markerB.Start();
             re.Process(ds, 15.Seconds());
 
             markerB.Stop();
             re.Process(ds, 18.Seconds());
 
-            markerI.Start(3);
+            markerI.Start();
             re.Process(ds, 20.Seconds());
             markerI.Stop();
             re.Process(ds, 22.Seconds());
@@ -118,28 +117,10 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
                 new[] 
                 {
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 15d, EndTime = 18d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 3, StartTime = 20d, EndTime = 22d, Interest = InterestState.Incident},
+                    new OverlayData.RaceEvent { StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 15d, EndTime = 18d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 20d, EndTime = 22d, Interest = InterestState.Incident},
                 }));
-        }
-
-
-        [Test]
-        public void it_should_error_when_caridx_was_not_started()
-        {
-            var ds = CreateSample(30, null);
-
-            var raceEvents = new List<OverlayData.RaceEvent>();
-
-            var re = new RemovalEdits(raceEvents);
-
-            re.InterestingThingStarted(InterestState.Battle, 1);
-            re.Process(ds, 10.Seconds());
-
-            re.InterestingThingStopped(InterestState.Battle, 2);
-
-            Assert.Throws(typeof(Exception), () => re.Process(ds, 15.Seconds()));
         }
 
         [Test]
@@ -153,10 +134,10 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var markerB = re.For(InterestState.Battle);
             var markerI = re.For(InterestState .Incident);
             
-            markerB.Start(1);
+            markerB.Start();
             re.Process(ds, 10.Seconds());
 
-            markerI.Start(2);
+            markerI.Start();
             re.Process(ds, 14.Seconds());
 
             markerI.Stop();
@@ -168,9 +149,9 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
                 new[] 
                 {
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 14d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 2, StartTime = 14d, EndTime = 16d, Interest = InterestState.Incident},
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 16d, EndTime = 18d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 10d, EndTime = 14d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 14d, EndTime = 16d, Interest = InterestState.Incident},
+                    new OverlayData.RaceEvent { StartTime = 16d, EndTime = 18d, Interest = InterestState.Battle},
                 }
                 ));
         }
@@ -186,15 +167,15 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var markerB = re.For(InterestState.Battle);
             var markerI = re.For(InterestState.Incident);
 
-            markerB.Start(1);
+            markerB.Start();
             re.Process(ds, 10.Seconds());
 
-            markerI.Start(2);
+            markerI.Start();
             re.Process(ds, 14.Seconds());
             markerI.Stop();
             re.Process(ds, 16.Seconds());
 
-            markerI.Start(2);
+            markerI.Start();
             re.Process(ds, 18.Seconds());
             markerI.Stop();
             re.Process(ds, 20.Seconds());
@@ -205,11 +186,11 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
                 new[] 
                 {
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 14d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 2, StartTime = 14d, EndTime = 16d, Interest = InterestState.Incident},
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 16d, EndTime = 18d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 2, StartTime = 18d, EndTime = 20d, Interest = InterestState.Incident},
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 20d, EndTime = 22d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 10d, EndTime = 14d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 14d, EndTime = 16d, Interest = InterestState.Incident},
+                    new OverlayData.RaceEvent { StartTime = 16d, EndTime = 18d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 18d, EndTime = 20d, Interest = InterestState.Incident},
+                    new OverlayData.RaceEvent { StartTime = 20d, EndTime = 22d, Interest = InterestState.Battle},
                 }));
         }
 
@@ -225,13 +206,13 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var markerI = re.For(InterestState.Incident);
             var markerF = re.For(InterestState.FirstLap);
 
-            markerF.Start(1);
+            markerF.Start();
             re.Process(ds, 10.Seconds());
 
-            markerB.Start(2);
+            markerB.Start();
             re.Process(ds, 14.Seconds());
 
-            markerI.Start(3);
+            markerI.Start();
             re.Process(ds, 16.Seconds());
 
             markerI.Stop();
@@ -246,11 +227,11 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
                 new[] 
                 {
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 14d, Interest = InterestState.FirstLap},
-                    new OverlayData.RaceEvent { CarIdx = 2, StartTime = 14d, EndTime = 16d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 3, StartTime = 16d, EndTime = 18d, Interest = InterestState.Incident},
-                    new OverlayData.RaceEvent { CarIdx = 2, StartTime = 18d, EndTime = 20d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 20d, EndTime = 22d, Interest = InterestState.FirstLap},
+                    new OverlayData.RaceEvent { StartTime = 10d, EndTime = 14d, Interest = InterestState.FirstLap},
+                    new OverlayData.RaceEvent { StartTime = 14d, EndTime = 16d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 16d, EndTime = 18d, Interest = InterestState.Incident},
+                    new OverlayData.RaceEvent { StartTime = 18d, EndTime = 20d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 20d, EndTime = 22d, Interest = InterestState.FirstLap},
                 }));
         }
 
@@ -265,7 +246,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var markerB = re.For(InterestState.Battle);
             var markerL = re.For(InterestState.LastLap);
             
-            markerB.Start(1);
+            markerB.Start();
             re.Process(ds, 10.Seconds());
 
             markerL.Start();
@@ -277,8 +258,8 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
                 new[] 
                 {
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 19d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = -1, StartTime = 19d, EndTime = 20d, Interest = InterestState.LastLap},
+                    new OverlayData.RaceEvent { StartTime = 10d, EndTime = 19d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 19d, EndTime = 20d, Interest = InterestState.LastLap},
                 }));
         }
 
@@ -292,7 +273,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             var markerB = re.For(InterestState.Battle);
             var markerL = re.For(InterestState.LastLap);
             
-            markerB.Start(1);
+            markerB.Start();
             re.Process(ds, 10.Seconds());
 
             markerB.Stop();
@@ -307,8 +288,8 @@ namespace iRacingReplayOverlay.Phases.Capturing.Tests
             Assert.That(raceEvents.ToArray(), Is.EqualTo(
                 new[] 
                 {
-                    new OverlayData.RaceEvent { CarIdx = 1, StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
-                    new OverlayData.RaceEvent { CarIdx = -1, StartTime = 19d, EndTime = 20d, Interest = InterestState.LastLap},
+                    new OverlayData.RaceEvent { StartTime = 10d, EndTime = 15d, Interest = InterestState.Battle},
+                    new OverlayData.RaceEvent { StartTime = 19d, EndTime = 20d, Interest = InterestState.LastLap},
                 }));
         }
 

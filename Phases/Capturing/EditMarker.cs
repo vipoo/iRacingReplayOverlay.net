@@ -26,7 +26,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         readonly RemovalEdits removalEdits;
         readonly InterestState interest;
 
-        int? lastCarIdx = null;
+        bool wasStarted;
 
         public EditMarker(RemovalEdits removalEdits, InterestState interest)
         {
@@ -34,22 +34,27 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.interest = interest;
         }
 
-        internal void Start(int carIdx = -1)
+        internal void Start()
         {
-            if (lastCarIdx != null )
-                removalEdits.InterestingThingStopped(interest, lastCarIdx.Value);
+            if (wasStarted)
+                removalEdits.InterestingThingStopped(interest);
 
-            lastCarIdx = carIdx;
-            removalEdits.InterestingThingStarted(interest, carIdx);
+            wasStarted = true;
+            removalEdits.InterestingThingStarted(interest);
         }
 
         internal void Stop()
         {
-            if (lastCarIdx == null)
+            if (!wasStarted)
                 return;
 
-            removalEdits.InterestingThingStopped(interest, lastCarIdx.Value);
-            lastCarIdx = null;
+            removalEdits.InterestingThingStopped(interest);
+            wasStarted = false;
+        }
+
+        internal void WithOvertake()
+        {
+            removalEdits.WithOvertake();
         }
     }
 }

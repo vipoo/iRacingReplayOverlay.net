@@ -77,8 +77,9 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case BattlePosition.Started:
                     directionAction = () =>
                     {
+                        TraceInfo.Write("Resetting overtaken");
                         SwitchToBattle(data, state.Driver);
-                        editMarker.Start(battleFollower.CarIdx);
+                        editMarker.Start();
                     };
                     return true;
 
@@ -146,7 +147,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyPeriod;
                 TraceInfo.WriteLine("{0} {1} has overtaken {2}", data.Telemetry.SessionTimeSpan, battleFollower.UserName, battleLeader.UserName);
                 SwitchToBattle(data, battleLeader.Driver);
-                editMarker.Start(battleFollower.CarIdx);
+                editMarker.WithOvertake();
             }
         }
 

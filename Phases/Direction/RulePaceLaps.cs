@@ -69,7 +69,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
                 TraceInfo.WriteLine("{0} Race restarting", data.Telemetry.SessionTimeSpan);
                 wasUnderPaceCar = false;
-                restartMarker.Start(data.Telemetry.CamCarIdx);
+                restartMarker.Start();
                 return true;
             }
 

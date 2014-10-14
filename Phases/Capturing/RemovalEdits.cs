@@ -32,57 +32,70 @@ namespace iRacingReplayOverlay.Phases.Capturing
         Action<DataSample, TimeSpan> nextAction = (d, t) => { };
         TimeSpan lastRelativeTime;
         TimeSpan lastStartTime;
+        bool withOvertake = false;
 
-        readonly Stack<Tuple<InterestState, int>> events = new Stack<Tuple<InterestState, int>>();
+        readonly Stack<InterestState> events = new Stack<InterestState>();
 
         public RemovalEdits(List<OverlayData.RaceEvent> raceEvents)
         {
             this.raceEvents = raceEvents;
         }
 
-        public void InterestingThingStarted(InterestState interest, int carIdx)
+        public void InterestingThingStarted(InterestState interest)
         {
             var oldAction = nextAction;
 
             nextAction = (d, t) =>
             {
                 oldAction(d, t);
+
                 if (events.Count > 0)
                 {
                     var le = events.Peek();
 
-                    AddEvent(le.Item1, le.Item2, d, t);
+                    AddEvent(le, d, t);
                 }
-                events.Push(Tuple.Create(interest, carIdx));
+                events.Push(interest);
 
                 lastStartTime = t;
                 TraceInfo.WriteLine("{0} Starting {1}", d.Telemetry.SessionTimeSpan, interest.ToString());
             };
         }
 
-        public void InterestingThingStopped(InterestState interest, int carIdx)
+        public void 
+            InterestingThingStopped(InterestState interest)
         {
             nextAction = (d, t) =>
             {
                 var le = events.Pop();
-                if (le.Item1 != interest)
-                    throw new Exception("RaceEvent mismatched.  Attempted to close {0}, when expecting {1}".F(interest.ToString(), le.Item1.ToString()));
+                if (le != interest)
+                    throw new Exception("RaceEvent mismatched.  Attempted to close {0}, when expecting {1}".F(interest.ToString(), le.ToString()));
 
-                if( le.Item2 != carIdx)
-                    throw new Exception("RaceEvent mismatched.  Attempted to close carIdx: {0}, when expecting carIdx: {1}".F(carIdx, le.Item2));
-
-                AddEvent(interest, carIdx, d, t);
+                AddEvent(interest, d, t);
             };
         }
 
-        void AddEvent(InterestState interest, int carIdx, DataSample d, TimeSpan t)
+        internal void WithOvertake()
         {
-            raceEvents.Add(new OverlayData.RaceEvent { CarIdx = carIdx, Interest = interest, StartTime = lastStartTime.TotalSeconds, EndTime = t.TotalSeconds });
+            withOvertake = true;
+        }
+
+        void AddEvent(InterestState interest, DataSample d, TimeSpan t)
+        {
+            raceEvents.Add(new OverlayData.RaceEvent 
+            {
+                Interest = interest, 
+                StartTime = lastStartTime.TotalSeconds, 
+                EndTime = t.TotalSeconds,
+                WithOvertake = withOvertake
+            });
             lastStartTime = t;
 
-            TraceInfo.WriteLine("{0} Stopping {1}", d.Telemetry.SessionTimeSpan, interest.ToString());
+            TraceInfo.WriteLine("{0} Stopping {1}{2}", d.Telemetry.SessionTimeSpan, interest.ToString(), withOvertake ? " - with Overtake" : "");
+            withOvertake = false;
         }
-        
+
+
         public void Process(DataSample data, TimeSpan relativeTime)
         {
             nextAction(data, relativeTime);
@@ -94,7 +107,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             raceEvents.Add(new OverlayData.RaceEvent 
             {
-                CarIdx = -1, 
                 Interest = InterestState.LastLap, 
                 StartTime = lastStartTime.TotalSeconds, 
                 EndTime = lastRelativeTime.TotalSeconds
@@ -105,5 +117,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             return new EditMarker(this, interestState);
         }
+
     }
 }
