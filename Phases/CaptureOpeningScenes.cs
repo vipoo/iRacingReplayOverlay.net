@@ -35,7 +35,9 @@ namespace iRacingReplayOverlay.Phases
             if (session == null || session.ResultsPositions == null)
                 return;
 
-            iRacing.Replay.MoveToQualifying();
+            if (!iRacing.Replay.AttempToMoveToQualifyingSection())
+                return;
+            
             data = iRacing.GetDataFeed().First();
             var f = data.Telemetry.ReplayFrameNum;
             iRacing.Replay.MoveToFrame(f + 60 * 4);
