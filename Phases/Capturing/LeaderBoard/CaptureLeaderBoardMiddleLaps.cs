@@ -61,7 +61,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
             var drivers = data.Telemetry.Cars.Where(c => !c.IsPaceCar).Select(c => new OverlayData.Driver
             {
                 UserName = c.UserName,
-                CarNumber = c.CarNumber,
+                CarNumber = c.CarNumberDisplay,
                 Position = c.Position,
                 CarIdx = c.CarIdx,
                 PitStopCount = c.PitStopCount

@@ -171,7 +171,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TraceInfo.WriteLine("{0} Showing incident with {1} starting from {2}", data.Telemetry.SessionTimeSpan, incidentCar.UserName, nextIncident.Current.StartSessionTime);
 
-            iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumber, Camera.CameraNumber);
+            iRacing.Replay.CameraOnDriver((short)incidentCar.CarNumberRaw, Camera.CameraNumber);
         }
 
         public string Name

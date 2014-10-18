@@ -105,7 +105,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             TraceInfo.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}", data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position);
 
-            iRacing.Replay.CameraOnDriver(nextFinisher.CarNumber, Camera.CameraNumber);
+            iRacing.Replay.CameraOnDriver(nextFinisher.CarNumberRaw, Camera.CameraNumber);
         }
 
         void OnlyOnce(ref bool latch, Action action)

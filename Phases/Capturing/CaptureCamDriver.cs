@@ -85,7 +85,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             var driver = new OverlayData.Driver
             {
                 CarIdx = car.CarIdx,
-                CarNumber = car.CarNumber,
+                CarNumber = car.CarNumberDisplay,
                 UserName = car.UserName,
                 Position = position,
                 PitStopCount = car.PitStopCount
