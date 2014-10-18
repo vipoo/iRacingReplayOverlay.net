@@ -51,7 +51,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             foreach (var re in totalRaceEvents.Skip(1))
             {
                 if (re.StartTime - previousEvent.EndTime >= 10d)
-                    yield return new VideoEdit { StartTime = previousEvent.EndTime, EndTime = re.StartTime };
+                    yield return new VideoEdit { StartTime = previousEvent.EndTime - 1, EndTime = re.StartTime + 1 };
 
                 previousEvent = re;
             }
