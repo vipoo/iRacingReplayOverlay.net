@@ -130,9 +130,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         void SwitchToBattle(DataSample data, CarDetails newFollower)
         {
-            var x = data.Telemetry.Cars.FirstOrDefault(c => c.Position == newFollower.Car(data).Position - 1);
-            Debug.Assert(x != null);
-            battleLeader = x.Details;
+            var newFollowerPosition = newFollower.Car(data).Position;
+            battleLeader = data.Telemetry.Cars.FirstOrDefault(c => c.Position == newFollowerPosition - 1).Details;
             battleFollower = newFollower;
 
             camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar,  CameraAngle.LookingAtCar);
