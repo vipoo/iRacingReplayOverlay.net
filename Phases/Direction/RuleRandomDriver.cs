@@ -38,7 +38,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         bool isWatchingRandomDriver;
         TimeSpan finishWatchingRandomDriverAt;
-        SessionData._DriverInfo._Drivers car;
+        CarDetails car;
         TrackCamera camera;
 
         public RuleRandomDriver(CameraControl cameraControl, SessionData sessionData, TimeSpan stickyTime)
@@ -93,7 +93,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
         }
 
-        SessionData._DriverInfo._Drivers FindADriver(DataSample data)
+        CarDetails FindADriver(DataSample data)
         {
             var activeDrivers = GetDriversOnTrack(data, preferredCarIndexes);
 
@@ -102,15 +102,15 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var next = randomDriverNumber.Next(activeDrivers.Count);
 
-            return sessionData.DriverInfo.Drivers[activeDrivers[next]];
+            return activeDrivers[next];
         }
 
-        private List<int> GetDriversOnTrack(DataSample data, long[] carIndexes)
+        private List<CarDetails> GetDriversOnTrack(DataSample data, long[] carIndexes)
         {
             return carIndexes
                 .Select(carIdx => data.Telemetry.Cars[carIdx])
                 .Where(c => c.HasData && c.TrackSurface != TrackLocation.InPitStall)
-                .Select(c => c.CarIdx)
+                .Select(c => c.Details)
                 .ToList();
         }
 

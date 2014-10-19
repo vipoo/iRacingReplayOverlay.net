@@ -85,27 +85,32 @@ namespace iRacingReplayOverlay.Phases.Direction
             Car nextFinisher;
 
             if (!data.Telemetry.LeaderHasFinished)
-                nextFinisher = data.Telemetry.Cars.First(c => c.Position == 1);
+                nextFinisher = data.Telemetry.Cars
+                    .OrderBy(c => c.Position)
+                    .Where( c=> c.Details.Driver != null)
+                    .Where( c=> c.HasData)
+                    .First();
             else
                 nextFinisher = data.Telemetry.Cars
                         .Where(c => c.TotalDistance > 0)
                         .Where(c => !c.HasSeenCheckeredFlag)
-                        .Where(c => !c.IsPaceCar)
+                        .Where(c => !c.Details.IsPaceCar)
                         .Where(c => c.HasData)
+                        .Where(c => c.Details.Driver != null)
                         .OrderByDescending(c => c.DistancePercentage)
                         .FirstOrDefault();
 
             if (nextFinisher == null)
                 return;
 
-            Trace.WriteLine("{0} Found {1} in position {2}".F(data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position), "DEBUG");
+            Trace.WriteLine("{0} Found {1} in position {2}".F(data.Telemetry.SessionTimeSpan, nextFinisher.Details.UserName, nextFinisher.Position), "DEBUG");
 
             timeOfFinisher = DateTime.Now;
             lastFinisherCarIdx = nextFinisher.CarIdx;
 
-            TraceInfo.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}", data.Telemetry.SessionTimeSpan, nextFinisher.UserName, nextFinisher.Position);
+            TraceInfo.WriteLine("{0} Switching camera to {1} as they cross finishing line in position {2}", data.Telemetry.SessionTimeSpan, nextFinisher.Details.UserName, nextFinisher.Position);
 
-            iRacing.Replay.CameraOnDriver(nextFinisher.CarNumberRaw, Camera.CameraNumber);
+            iRacing.Replay.CameraOnDriver(nextFinisher.Details.CarNumberRaw, Camera.CameraNumber);
         }
 
         void OnlyOnce(ref bool latch, Action action)

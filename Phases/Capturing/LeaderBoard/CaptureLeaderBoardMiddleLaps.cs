@@ -58,10 +58,10 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
 
         OverlayData.Driver[] LatestRunningOrder(DataSample data, TimeSpan relativeTime)
         {
-            var drivers = data.Telemetry.Cars.Where(c => !c.IsPaceCar).Select(c => new OverlayData.Driver
+            var drivers = data.Telemetry.Cars.Where(c => !c.Details.IsPaceCar).Select(c => new OverlayData.Driver
             {
-                UserName = c.UserName,
-                CarNumber = c.CarNumberDisplay,
+                UserName = c.Details.UserName,
+                CarNumber = c.Details.CarNumberDisplay,
                 Position = c.Position,
                 CarIdx = c.CarIdx,
                 PitStopCount = c.PitStopCount

@@ -76,17 +76,18 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         static OverlayData.Driver GetCurrentDriverDetails(DataSample data)
         {
-            var car = data.Telemetry.CamCar;
-            if (car == null)
+            if (data.Telemetry.CamCar == null)
                 return null;
 
-            var position = GetPositionFor(data, car);
+            var car = data.Telemetry.CamCar;
+
+            var position = GetPositionFor(data, car.Details);
 
             var driver = new OverlayData.Driver
             {
                 CarIdx = car.CarIdx,
-                CarNumber = car.CarNumberDisplay,
-                UserName = car.UserName,
+                CarNumber = car.Details.CarNumberDisplay,
+                UserName = car.Details.UserName,
                 Position = position,
                 PitStopCount = car.PitStopCount
             };
@@ -94,8 +95,10 @@ namespace iRacingReplayOverlay.Phases.Capturing
             return driver;
         }
 
-        private static int? GetPositionFor(DataSample data, Car car)
+        private static int? GetPositionFor(DataSample data, CarDetails carDetails)
         {
+            var car = carDetails.Car(data);
+
             if (data.Telemetry.RaceDistance > 1.10)
                 return car.Position;
 

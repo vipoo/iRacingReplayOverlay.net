@@ -43,7 +43,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             }
         }
 
-        public static SessionData._DriverInfo._Drivers Find(DataSample data, TimeSpan battleGap, double factor, IEnumerable<string> preferredDrivers)
+        public static Car Find(DataSample data, TimeSpan battleGap, double factor, IEnumerable<string> preferredDrivers)
         {
             var preferredCarIdxs = GetPreferredCarIdxs(data, preferredDrivers);
 
@@ -96,7 +96,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 .Where(d => d.Time < battleGap.TotalSeconds);
         }
 
-        internal static SessionData._DriverInfo._Drivers SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor)
+        internal static Car SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor)
         {
             if (all.Count() == 0)
                 return null;
@@ -120,8 +120,8 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
 
                 if (ddice < upper)
                 {
-                    var driver = data.SessionData.DriverInfo.Drivers[battle.CarIdx];
-                    TraceInfo.WriteLine("{0} Found battle {1} by chance {2}", data.Telemetry.SessionTimeSpan, driver.UserName, ddice);
+                    var driver = data.Telemetry.Cars[battle.CarIdx];
+                    TraceInfo.WriteLine("{0} Found battle {1} by chance {2}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, ddice);
                     return driver;
                 }
 
@@ -130,13 +130,13 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             }
 
             Trace.WriteLine("WARNING!  did not find battle by chance!", "DEBUG");
-            return data.SessionData.DriverInfo.Drivers[all.Last().CarIdx];
+            return data.Telemetry.Cars[all.Last().CarIdx];
         }
 
-        internal static bool IsInBattle(DataSample data, TimeSpan battleGap, SessionData._DriverInfo._Drivers follower, SessionData._DriverInfo._Drivers leader)
+        internal static bool IsInBattle(DataSample data, TimeSpan battleGap, CarDetails follower, CarDetails leader)
         {
-            var leaderCar = data.Telemetry.Cars[leader.CarIdx];
-            var followerCar = data.Telemetry.Cars[follower.CarIdx];
+            var leaderCar = leader.Car(data);
+            var followerCar = follower.Car(data);
 
             if (leaderCar.Position == followerCar.Position + 1)
                 return false;

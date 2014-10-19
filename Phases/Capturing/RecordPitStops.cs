@@ -39,12 +39,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void Process(DataSample data, TimeSpan relativeTime)
         {
-            foreach (var car in data.Telemetry.Cars.Where(c => !c.IsPaceCar))
+            foreach (var car in data.Telemetry.Cars.Where(c => !c.Details.IsPaceCar))
             {
                 if (pitStopState[car.CarIdx] == PitStopState.None && car.TrackSurface == TrackLocation.InPitStall)
                 {
                     pitStopState[car.CarIdx] = PitStopState.Entering;
-                    var msg = "{0} has pitted".F(car.UserName);
+                    var msg = "{0} has pitted".F(car.Details.UserName);
                     TraceInfo.WriteLine("{0} {1}", data.Telemetry.SessionTimeSpan, msg);
                     commentaryMessages.Add(msg, relativeTime);
                 }

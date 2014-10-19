@@ -34,7 +34,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
             public int LapNumber;
             public TimeSpan StartSessionTime;
             public TimeSpan EndSessionTime;
-            public Car Car;
+            public CarDetails Car;
 
             public bool IsInside(TimeSpan time)
             {
@@ -62,7 +62,7 @@ namespace iRacingReplayOverlay.Phases.Analysis
             var i = new Incident 
             {
                 LapNumber = data.Telemetry.RaceLaps, 
-                Car = data.Telemetry.CamCar, 
+                Car = data.Telemetry.CamCar.Details, 
                 StartSessionTime = data.Telemetry.SessionTimeSpan - 1.Seconds(),
                 EndSessionTime = data.Telemetry.SessionTimeSpan + 8.Seconds()
             };

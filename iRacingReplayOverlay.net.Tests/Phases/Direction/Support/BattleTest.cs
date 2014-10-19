@@ -92,8 +92,8 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             };
 
             AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i, 1.5d), Is.Null);
-            AssertThatFor(5, 24, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver1"));
-            AssertThatFor(25, 99, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver2"));
+            AssertThatFor(5, 24, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver1"));
+            AssertThatFor(25, 99, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver2"));
         }
 
         [Test]
@@ -108,9 +108,9 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             };
 
             AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i, 1.5d), Is.Null);
-            AssertThatFor(5, 10, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver3"));
-            AssertThatFor(11, 34, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver2"));
-            AssertThatFor(35, 99, i => Battle.SelectABattle(data, all, i, 1.5d).UserName, Is.EqualTo("Driver1"));
+            AssertThatFor(5, 10, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver3"));
+            AssertThatFor(11, 34, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver2"));
+            AssertThatFor(35, 99, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver1"));
         }
 
         [Test]
