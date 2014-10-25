@@ -20,7 +20,7 @@ namespace iRacingReplayOverlay
 {
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
     {
-        public readonly int TimingFactorForShortTest = 1;
-        public readonly double TimingFactorForTesting = 4;
+        public readonly int TimingFactorForShortTest = 4;
+        public readonly double TimingFactorForTesting = 1;
     }
 }
