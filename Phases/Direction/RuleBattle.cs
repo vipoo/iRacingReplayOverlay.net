@@ -124,6 +124,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public void Redirect(DataSample data)
         {
+            if (car == null)
+                return;
+
             TraceInfo.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}; within {3}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap);
             iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
         }
