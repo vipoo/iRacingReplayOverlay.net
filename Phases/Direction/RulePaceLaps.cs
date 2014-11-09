@@ -29,7 +29,7 @@ namespace iRacingReplayOverlay.Phases.Direction
     {
         readonly EditMarker restartMarker;
         readonly EditMarker battleMarker;
-        readonly TrackCamera TV3;
+        readonly TrackCamera raceStartCamera;
 
         bool wasUnderPaceCar;
         TimeSpan restartEndTime;
@@ -41,7 +41,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             this.restartMarker = restartMarker;
             this.battleMarker = battleMarker;
 
-            TV3 = cameras.First(tc => tc.CameraName == "TV3");
+            raceStartCamera = cameras.First(tc => tc.IsRaceStart);
 
             wasUnderPaceCar = false;
         }
@@ -78,7 +78,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             {
                 TraceInfo.WriteLineIf(wasUnderPaceCar, "{0} Double Yellows. Pace Car", data.Telemetry.SessionTimeSpan);
                 battleMarker.Stop();
-                iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
+                iRacing.Replay.CameraOnPositon(1, raceStartCamera.CameraNumber);
             }
 
             return wasUnderPaceCar;
@@ -90,7 +90,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public void Redirect(DataSample data)
         {
-            iRacing.Replay.CameraOnPositon(1, TV3.CameraNumber);
+            iRacing.Replay.CameraOnPositon(1, raceStartCamera.CameraNumber);
         }
 
         public string Name
