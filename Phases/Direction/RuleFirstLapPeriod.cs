@@ -24,7 +24,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class RuleFirstLapPeriod : IDirectionRule
+    public class RuleFirstLapPeriod : IVetoRule
     {
         readonly EditMarker editMarker;
         readonly TrackCamera Camera;
@@ -64,6 +64,12 @@ namespace iRacingReplayOverlay.Phases.Direction
         public void Direct(DataSample data)
         {
             SwitchToLeader(data);
+        }
+
+        public void Redirect(DataSample data)
+        {
+            reselectLeaderAt = DateTime.Now - 1.Second();
+            Direct(data);
         }
 
         bool InFirstLapPeriod(DataSample data)
