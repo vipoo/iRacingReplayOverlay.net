@@ -28,6 +28,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Win32;
 
 namespace iRacingReplayOverlay
 {
@@ -94,6 +95,13 @@ namespace iRacingReplayOverlay
         {
             try
             {
+                TraceInfo.WriteLine("Switching to iRacing ....");
+                 
+                var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
+                Win32.Messages.ShowWindow(hwnd, Win32.Messages.SW_SHOWNORMAL);
+                Win32.Messages.SetForegroundWindow(hwnd);
+                Thread.Sleep(2000);
+
                 TraceInfo.WriteLine("Begining Test....");
                 var videoCapture = new VideoCapture();
 
@@ -112,6 +120,10 @@ namespace iRacingReplayOverlay
 
                 TraceInfo.WriteLine("Broadcasting keypress ALT+F9 to deactivate your video capture software");
                 var filename = videoCapture.Deactivate();
+
+                TraceInfo.WriteLine("Minimising iRacing");
+
+                AltTabBackToApp();
 
                 if (filename != null)
                 {
@@ -136,6 +148,18 @@ namespace iRacingReplayOverlay
                 context.Post(ignored => testVideoCaptureButton.Enabled = true, null);
             }
         }
+
+        private static void AltTabBackToApp()
+        {
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(200);
+            Keyboard.keybd_event(Keyboard.VK_TAB, 0, 0, UIntPtr.Zero);
+            Thread.Sleep(200);
+            Keyboard.keybd_event(Keyboard.VK_TAB, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            Thread.Sleep(200);
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+        }
+
 
         void TranscodeVideoTest(string filename)
         {
