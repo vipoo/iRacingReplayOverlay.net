@@ -62,6 +62,4 @@ Known Issues
 * (not compatibile with Frap's custom codec)
 * Only tested with audio codec PCM
 * Video capture software must respond to ALT+F9 or F9 keypress to start/stop recording
-* Upon completion of capture, iRacing may not minimised
-
-
+* Replays must captured details of all competitors (Under the graphics options, set the Max Cars to a number greater than number of competitors before recording a replay session)
