@@ -55,7 +55,7 @@ How to use
 8. (You may need to press spacebar in iRacing to remove iRacing's replay controls) 
 9. Once race capture is completed, you can then Encode your full race and highlight videos
 
-Known Issues
+Known Issues/Requirements
 ============
 
 * Only support MPEG/H.264 video codec for capture 
@@ -63,3 +63,5 @@ Known Issues
 * Only tested with audio codec PCM
 * Video capture software must respond to ALT+F9 or F9 keypress to start/stop recording
 * Replays must captured details of all competitors (Under the graphics options, set the Max Cars to a number greater than number of competitors before recording a replay session)
+* Tested on Windows 7/Windows 8 only
+* Requires 64x version of windows
