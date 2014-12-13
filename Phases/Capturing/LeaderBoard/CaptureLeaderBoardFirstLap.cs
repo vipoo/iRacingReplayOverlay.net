@@ -49,6 +49,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
 
             return session
                 .ResultsPositions
+                .Where(rp => rp.CarIdx < data.SessionData.DriverInfo.Drivers.Length)
                 .Select((rp, i) => new OverlayData.Driver
                 {
                     CarIdx = (int)rp.CarIdx,
