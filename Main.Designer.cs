@@ -312,6 +312,8 @@ namespace iRacingReplayOverlay
             // 
             this.highlightVideoOnly.AutoSize = true;
             this.highlightVideoOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.highlightVideoOnly.Checked = true;
+            this.highlightVideoOnly.CheckState = System.Windows.Forms.CheckState.Checked;
             this.highlightVideoOnly.Location = new System.Drawing.Point(425, 87);
             this.highlightVideoOnly.Name = "highlightVideoOnly";
             this.highlightVideoOnly.Size = new System.Drawing.Size(155, 22);
