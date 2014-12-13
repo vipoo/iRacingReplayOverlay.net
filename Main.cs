@@ -356,12 +356,6 @@ namespace iRacingReplayOverlay
                 .CloseIRacing()
                 .InTheBackground(errorMessage =>
                 {
-                    if (errorMessage == null && transcodeVideoButton.Enabled && EncodeVideoAfterCapture.Checked)
-                    {
-                        tabControl1.SelectedIndex = 1;
-                        TranscodeVideo_Click(null, null);
-                    }
-
                     workingFolderTextBox_TextChanged(null, null);
                     WaitingForIRacingLabel.Visible = false;
                     AnalysingRaceLabel.Visible = false;
@@ -377,6 +371,12 @@ namespace iRacingReplayOverlay
                     Show();
                     WindowState = FormWindowState.Normal;
                     this.BringToFront();
+
+                    if (errorMessage == null && transcodeVideoButton.Enabled && EncodeVideoAfterCapture.Checked)
+                    {
+                        tabControl1.SelectedIndex = 1;
+                        TranscodeVideo_Click(null, null);
+                    }
                 });
         }
 
