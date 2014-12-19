@@ -21,12 +21,13 @@
 using iRacingReplayOverlay.Phases.Capturing.Tests;
 namespace iRacingReplayOverlay.net.Tests
 {
-    public class Support
+    public class TestRunner
     {
         public static void Main()
         {
-            new RemovalEditsTest().it_should_reset_an_existing_battle();
-//            new iRacingReplayOverlay.Phases.Analysis.Tests.Incident().it_should_merge_two_incidents_across_another_drivers_incident();
+            var t = new iRacingReplayOverlay.Support.LoggingSpecs();
+            t.it_changes_log_file_name();
+            t.it_should_log_to_file();
         }
     }
 }

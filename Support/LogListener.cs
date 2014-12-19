@@ -50,12 +50,17 @@ namespace iRacingReplayOverlay.Support
 
         void Writer()
         {
-            while(!isCancelled)
+            while (!isCancelled)
             {
                 string message;
-                if( items.TryDequeue(out message) )
-                    File.AppendAllText(FileName, message);
-
+                if (items.TryDequeue(out message))
+                {
+                    try { File.AppendAllText(FileName, message); }
+                    catch (Exception e)
+                    {
+                        items.Enqueue(message);
+                    }
+                }
                 Thread.Sleep(1);
             }
         }
@@ -88,15 +93,26 @@ namespace iRacingReplayOverlay.Support
 
         internal static void ToFile(string filename)
         {
-            if( logFile != null)
-            {
-                TraceInfo.WriteLine("Moving logging to file {0}", filename);
-                Trace.Listeners.Remove(logFile);
-                logFile.Dispose();
-            }
-
+            var oldLogFile = logFile;
             logFile = new LogListener(filename);
             Trace.Listeners.Add(logFile);
+
+            if (oldLogFile != null)
+            {
+                TraceInfo.WriteLine("Moving logging to file {0}", filename);
+
+                WaitToQueueEmpty(oldLogFile);
+
+                Trace.Listeners.Remove(oldLogFile);
+                oldLogFile.Dispose();
+            }
+        }
+
+        private static void WaitToQueueEmpty(LogListener oldLogFile)
+        {
+            var count = 10;
+            while (count-- > 0 && oldLogFile.items.Count > 0)
+                Thread.Sleep(10);
         }
 
         internal static void MoveToFile(string filename)
@@ -105,6 +121,9 @@ namespace iRacingReplayOverlay.Support
                 throw new Exception("Attempt to rename non-existing log file to {0}".F(filename));
 
             TraceInfo.WriteLine("Renaming logging to file {0}", filename);
+
+            WaitToQueueEmpty(logFile);
+
             Trace.Listeners.Remove(logFile);
             logFile.Dispose();
 
