@@ -80,7 +80,7 @@ namespace iRacingReplayOverlay.Support
         public override void WriteLine(string message)
         {
             var now = DateTime.Now;
-            if (message == lastMessage && now - lastTime < TimeSpan.FromSeconds(5))
+            if (message == lastMessage && now - lastTime < TimeSpan.FromSeconds(20))
                 return;
 
             lastMessage = message;

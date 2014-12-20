@@ -286,8 +286,29 @@ namespace iRacingReplayOverlay
             OnGameDataFileChanged();
             audioBitRate.Items.Clear();
 
-            if (!File.Exists(sourceVideoTextBox.Text))
+            if (sourceVideoTextBox.Text.Trim() == "")
+            {
+                errorSourceVideoLabel.Visible = false;
+                VideoDetailLabel.Visible = false;
                 return;
+
+            }
+
+            if (!File.Exists(sourceVideoTextBox.Text) ) 
+            {
+                errorSourceVideoLabel.Text = "*Video files does not exist";
+                errorSourceVideoLabel.Visible = true;
+                VideoDetailLabel.Visible = false;
+                return;
+            }
+            
+            if( !File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".xml")))
+            {
+                errorSourceVideoLabel.Text = "*There is no associated captured game data (xml file name based on the name of the source input video)";
+                errorSourceVideoLabel.Visible = true;
+                VideoDetailLabel.Visible = false;
+                return;
+            }
 
             try
             {
@@ -299,9 +320,17 @@ namespace iRacingReplayOverlay
                 audioBitRate.SelectedItem = Settings.Default.audioBitRate;
 
                 VideoDetailLabel.Text = "Frame Rate: {0}, Frame Size: {1}x{2}, Bit Rate: {3}Mb".F(details.FrameRate, details.FrameSize.Width, details.FrameSize.Height, details.BitRate == 0 ? "-- " : details.BitRate.ToString());
+                errorSourceVideoLabel.Visible = false;
+                VideoDetailLabel.Visible = true;
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                TraceDebug.WriteLine("*Error reading the video file. {0}\r\n{1}".F(ex.Message, ex.StackTrace));
+
+                errorSourceVideoLabel.Text = "*Error reading the video file. {0}".F(ex.Message);
+                errorSourceVideoLabel.Visible = true;
+                VideoDetailLabel.Visible = false;
+
                 lookForAudioBitRates = new System.Windows.Forms.Timer();
                 lookForAudioBitRates.Tick += sourceVideoTextBox_TextChanged;
                 lookForAudioBitRates.Interval = 1000;
@@ -316,8 +345,9 @@ namespace iRacingReplayOverlay
 
             var audioBitRateValid = audioBitRate.SelectedItem != null;
 
-            errorSourceVideoLabel.Visible = !File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".xml"));
-            return (!errorSourceVideoLabel.Visible && File.Exists(sourceVideoTextBox.Text)) && audioBitRateValid;
+            var hasXmlFile = File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".xml"));
+
+            return (hasXmlFile && File.Exists(sourceVideoTextBox.Text)) && audioBitRateValid;
         }
 
         void OnGameDataFileChanged()
