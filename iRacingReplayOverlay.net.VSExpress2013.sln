@@ -23,11 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK.Net.Tests", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net.Tests", "iRacingReplayOverlay.net.Tests\iRacingReplayOverlay.net.Tests.csproj", "{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A914931D-5338-42C9-92D8-1EA879C5878C}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "..\SuperMFLib\SuperMFLib\Samples\Samples.csproj", "{88C13055-9370-46E3-851F-2F95AB491479}"
 EndProject
 Global
