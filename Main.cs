@@ -31,6 +31,7 @@ using System.Deployment.Application;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
@@ -405,6 +406,7 @@ namespace iRacingReplayOverlay
                     if (errorMessage == null && transcodeVideoButton.Enabled && EncodeVideoAfterCapture.Checked)
                     {
                         tabControl1.SelectedIndex = 1;
+                        Thread.Sleep(1000);
                         TranscodeVideo_Click(null, null);
                     }
                 });
