@@ -110,9 +110,14 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             cameraChangeTime = data.Telemetry.SessionTimeSpan + this.battleCameraChangePeriod;
 
-            camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar, CameraAngle.LookingAtCar);
-            car = ChangeCarForCamera(data, camera, battleFollower);
+            var otherCar = ChangeCarForCamera(data, battleFollower);
 
+            camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar, CameraAngle.LookingAtCar);
+            if (camera.CameraAngle == CameraAngle.LookingBehindCar && otherCar != null)
+            {
+                TraceInfo.WriteLine("{0} Changing to forward car, with reverse camera", data.Telemetry.SessionTimeSpan);
+                car = otherCar;
+            }
             TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName);
             iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
         }
@@ -134,13 +139,23 @@ namespace iRacingReplayOverlay.Phases.Direction
         void SwitchToBattle(DataSample data, CarDetails newFollower)
         {
             var newFollowerPosition = newFollower.Car(data).Position;
-            battleLeader = data.Telemetry.Cars.FirstOrDefault(c => c.Position == newFollowerPosition - 1).Details;
+            battleLeader = data.Telemetry.Cars.First(c => c.Position == newFollowerPosition - 1).Details;
             battleFollower = newFollower;
 
+            car = newFollower.Car(data).Details;
             camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar,  CameraAngle.LookingAtCar);
-            car = ChangeCarForCamera(data, camera, newFollower);
+            if (camera.CameraAngle == CameraAngle.LookingBehindCar)
+            {
+                TraceInfo.WriteLine("{0} Changing to forward car, with reverse camera", data.Telemetry.SessionTimeSpan);
+                car = battleLeader;
+            }
 
-            TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}; within {3}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap);
+            TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}; within {3}",
+                data.Telemetry.SessionTimeSpan, 
+                car.UserName, 
+                camera.CameraName, 
+                battleGap);
+            
             iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
         }
 
@@ -163,20 +178,18 @@ namespace iRacingReplayOverlay.Phases.Direction
             return followersLatestPosition < leadersLatestPosition;
         }
 
-        static CarDetails ChangeCarForCamera(DataSample data, TrackCamera camera, CarDetails driver)
+        static CarDetails ChangeCarForCamera(DataSample data, CarDetails driver)
         {
             if (driver == null)
                 return null;
 
             var car = driver.Car(data);
 
-            if (camera.CameraAngle == CameraAngle.LookingBehindCar)
-            {
-                TraceInfo.WriteLine("{0} Changing to forward car, with reverse camera", data.Telemetry.SessionTimeSpan);
-                return data.Telemetry.Cars.First(c => c.Position == car.Position - 1).Details;
-            }
+            var otherCar = data.Telemetry.Cars.First(c => c.Position == car.Position - 1);
+            if( otherCar == null)
+                return null;
 
-            return car.Details;
+            return otherCar.Details;
         }
 
         BattleState GetBattlePosition(DataSample data)
