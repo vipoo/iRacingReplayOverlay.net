@@ -49,13 +49,13 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
 
             return session
                 .ResultsPositions
-                .Where(rp => rp.CarIdx < data.SessionData.DriverInfo.Drivers.Length)
+                .Where(rp => rp.CarIdx < data.SessionData.DriverInfo.FixDrivers.Length)
                 .Select((rp, i) => new OverlayData.Driver
                 {
                     CarIdx = (int)rp.CarIdx,
                     Position = i+1,
-                    CarNumber = (int)data.SessionData.DriverInfo.Drivers[rp.CarIdx].CarNumber,
-                    UserName = data.SessionData.DriverInfo.Drivers[rp.CarIdx].UserName,
+                    CarNumber = (int)data.SessionData.DriverInfo.FixDrivers[rp.CarIdx].CarNumber,
+                    UserName = data.SessionData.DriverInfo.FixDrivers[rp.CarIdx].UserName,
                     PitStopCount = data.Telemetry.CarIdxPitStopCount[rp.CarIdx]
                 })
                 .ToArray();

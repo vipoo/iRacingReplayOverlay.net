@@ -56,7 +56,7 @@ namespace iRacingReplayOverlay.Support
                 if (items.TryDequeue(out message))
                 {
                     try { File.AppendAllText(FileName, message); }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         items.Enqueue(message);
                     }

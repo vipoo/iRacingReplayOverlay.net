@@ -77,7 +77,6 @@ namespace iRacingReplayOverlay.Phases.Direction
                 case BattlePosition.Started:
                     directionAction = () =>
                     {
-                        TraceInfo.Write("Resetting overtaken");
                         SwitchToBattle(data, state.Driver);
                         editMarker.Start();
                     };
@@ -112,11 +111,16 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var otherCar = ChangeCarForCamera(data, battleFollower);
 
-            camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar, CameraAngle.LookingAtCar);
-            if (camera.CameraAngle == CameraAngle.LookingBehindCar && otherCar != null)
+            var cameraSet = otherCar == null ? new [] {CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar} : new [] { CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar, CameraAngle.LookingAtCar };
+            camera = cameraControl.FindACamera(cameraSet);
+            if (camera.CameraAngle == CameraAngle.LookingBehindCar)
             {
                 TraceInfo.WriteLine("{0} Changing to forward car, with reverse camera", data.Telemetry.SessionTimeSpan);
                 car = otherCar;
+            }
+            else
+            {
+                car = battleFollower;
             }
             TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName);
             iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
@@ -142,7 +146,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             battleLeader = data.Telemetry.Cars.First(c => c.Position == newFollowerPosition - 1).Details;
             battleFollower = newFollower;
 
-            car = newFollower.Car(data).Details;
+            car = newFollower; //.Car(data).Details;
             camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar,  CameraAngle.LookingAtCar);
             if (camera.CameraAngle == CameraAngle.LookingBehindCar)
             {

@@ -54,7 +54,7 @@ namespace iRacingReplayOverlay.Phases
                 throw new Exception("Cant find a camera to use for pre-race capture");
 
             var scenicCameras = camera.GroupNum;
-            var aCar = data.SessionData.DriverInfo.Drivers[1].CarNumberRaw;
+            var aCar = data.SessionData.DriverInfo.FixDrivers[1].CarNumberRaw;
             iRacing.Replay.CameraOnDriver((short)aCar, (short)scenicCameras);
 
             var videoCapture = new VideoCapture();

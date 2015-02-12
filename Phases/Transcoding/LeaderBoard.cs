@@ -80,7 +80,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             foreach (var qualifier in results.Take(19))
             {
-                var driver = OverlayData.SessionData.DriverInfo.Drivers[qualifier.CarIdx];
+                var driver = OverlayData.SessionData.DriverInfo.FixDrivers[qualifier.CarIdx];
                 r
                     .Center(cg => cg
                             .DrawText(qualifier.Position.ToString())
