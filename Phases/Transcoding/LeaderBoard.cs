@@ -80,7 +80,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             foreach (var qualifier in results.Take(19))
             {
-                var driver = OverlayData.SessionData.DriverInfo.FixDrivers[qualifier.CarIdx];
+                var driver = OverlayData.SessionData.DriverInfo.CompetingDrivers[qualifier.CarIdx];
                 r
                     .Center(cg => cg
                             .DrawText(qualifier.Position.ToString())
@@ -93,7 +93,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     .ToRight(width: 120)
                     .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
                     .ToRight(width: 60)
-                    .DrawText(driver.CarNumber.ToString())
+                    .DrawText(driver.CarNumber)
                     .ToRight(width: 300)
                     .DrawText(driver.UserName);
 

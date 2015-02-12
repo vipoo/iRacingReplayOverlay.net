@@ -86,7 +86,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public class Driver
         {
             public int? Position;
-            public int CarNumber;
+            public string CarNumber;
             public string UserName;
             public int PitStopCount;
 
@@ -103,6 +103,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 {
                     if (shortNames.ContainsKey(UserName))
                         return shortNames[UserName];
+
+                    if (UserName.Length <= 4)
+                    {
+                        shortNames.Add(UserName, UserName);
+                        return UserName;
+                    }
 
                     var names = UserName.Split(' ');
                     var firstName = names.First();

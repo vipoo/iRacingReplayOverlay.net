@@ -66,7 +66,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 Driver = new OverlayData.Driver
                 {
                     UserName = lastFastestLap.Driver.UserName,
-                    CarNumber = (int)lastFastestLap.Driver.CarNumber
+                    CarNumber = lastFastestLap.Driver.CarNumber
                 }
             };
 

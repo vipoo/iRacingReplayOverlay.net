@@ -99,7 +99,7 @@ namespace ImagerOverlayer
                             new OverlayData.FastLap() 
                             {
                                 StartTime = 10,
-                                Driver = new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton" },
+                                Driver = new OverlayData.Driver { CarNumber = "888", UserName = "Dean Netherton" },
                                 Time = TimeSpan.FromSeconds(65.345).TotalSeconds
                             }
                         };
@@ -111,7 +111,7 @@ namespace ImagerOverlayer
                                 LapCounter = "Lap 2",
                                 StartTime = 0, 
                                 Drivers = Enumerable.Range(1, 21).Select( i => 
-                                    new OverlayData.Driver { CarNumber = 888, UserName = "Dean Netherton", Position = i, PitStopCount = i == 3 ? 1 : 0}).ToArray(),
+                                    new OverlayData.Driver { CarNumber = "888", UserName = "Dean Netherton", Position = i, PitStopCount = i == 3 ? 1 : 0}).ToArray(),
                                 RacePosition = "39:34",
                                 
                             }
@@ -122,7 +122,7 @@ namespace ImagerOverlayer
                 new OverlayData.CamDriver
                 {
                     StartTime = 0,
-                    CurrentDriver = new OverlayData.Driver { Position = 13, CarNumber = 888, UserName = "Dean" },
+                    CurrentDriver = new OverlayData.Driver { Position = 13, CarNumber = "888", UserName = "Dean" },
                 }
             };
             return result;

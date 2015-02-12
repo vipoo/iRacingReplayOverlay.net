@@ -46,7 +46,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
 
             leaderBoard = captureLeaderBoard.CreateLeaderBoard(data, relativeTime, leaderBoard.Drivers);
 
-            for (int i = 1; i < data.SessionData.DriverInfo.FixDrivers.Length; i++)
+            for (int i = 1; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
                 AnnounceIfDriverHasFinished(data, relativeTime, session, i, ref leaderBoard);
 
             overlayData.LeaderBoards.Add(leaderBoard);
@@ -59,7 +59,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
 
             haveNotedCheckerdFlag[i] = true;
 
-            var driver = data.SessionData.DriverInfo.FixDrivers[i];
+            var driver = data.SessionData.DriverInfo.CompetingDrivers[i];
             var position = (int)session.ResultsPositions.First(r => r.CarIdx == i).Position;
             var pitStopCount = data.Telemetry.Cars[i].PitStopCount;
 
@@ -69,7 +69,7 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
 
             drivers.Insert((int)position - 1, new OverlayData.Driver
             {
-                CarNumber = (int)driver.CarNumber,
+                CarNumber = driver.CarNumber,
                 UserName = driver.UserName,
                 Position = position,
                 CarIdx = i,

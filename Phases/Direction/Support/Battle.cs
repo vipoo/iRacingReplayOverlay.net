@@ -56,7 +56,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
         {
             preferredDrivers = preferredDrivers.Select(d => d.ToLower()).ToList();
 
-            return data.SessionData.DriverInfo.FixDrivers.Where(x => preferredDrivers.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
+            return data.SessionData.DriverInfo.CompetingDrivers.Where(x => preferredDrivers.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
         }
 
         internal static IEnumerable<GapMetric> All(DataSample data, TimeSpan battleGap, long[] preferredCarIdxs)

@@ -47,11 +47,11 @@ namespace iRacingReplayOverlay.Phases.Direction
             this.sessionData = sessionData;
             this.stickyTime = stickyTime;
 
-            allCarIndexes = sessionData.DriverInfo.FixDrivers.Where(x => !x.IsPaceCar).Select(x => x.CarIdx).ToArray();
+            allCarIndexes = sessionData.DriverInfo.CompetingDrivers.Where(x => !x.IsPaceCar).Select(x => x.CarIdx).ToArray();
 
             if (Settings.Default.PreferredDriverNames != null && Settings.Default.PreferredDriverNames.Length > 0)
             {
-                preferredCarIndexes = sessionData.DriverInfo.FixDrivers
+                preferredCarIndexes = sessionData.DriverInfo.CompetingDrivers
                     .Where(x => Settings.Default.PreferredDrivers.Contains(x.UserName.ToLower()))
                     .Select(x => x.CarIdx)
                     .ToArray();
