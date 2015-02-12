@@ -34,8 +34,8 @@
     <SuiteName>iRacing Apps</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>28</ApplicationRevision>
-    <ApplicationVersion>1.0.0.28</ApplicationVersion>
+    <ApplicationRevision>29</ApplicationRevision>
+    <ApplicationVersion>1.0.0.29</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
