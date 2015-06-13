@@ -189,7 +189,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var car = driver.Car(data);
 
-            var otherCar = data.Telemetry.Cars.First(c => c.Position == car.Position - 1);
+            var otherCar = data.Telemetry.Cars.FirstOrDefault(c => c.Position == car.Position - 1);
             if( otherCar == null)
                 return null;
 

@@ -92,6 +92,7 @@ namespace iRacingReplayOverlay
             this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.youTubeCredentialsRequired = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -287,6 +288,7 @@ namespace iRacingReplayOverlay
             // 
             // tabTranscoding
             // 
+            this.tabTranscoding.Controls.Add(this.button2);
             this.tabTranscoding.Controls.Add(this.highlightVideoOnly);
             this.tabTranscoding.Controls.Add(this.VideoDetailLabel);
             this.tabTranscoding.Controls.Add(this.audioBitRate);
@@ -593,6 +595,18 @@ namespace iRacingReplayOverlay
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(585, 157);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(153, 28);
+            this.button2.TabIndex = 51;
+            this.button2.Text = "Verify Video Conversion";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -676,5 +690,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label configureTrackCamerasLabel;
         private System.Windows.Forms.Button verifyVideoCaptureButton;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }

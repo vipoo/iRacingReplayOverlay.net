@@ -563,5 +563,11 @@ namespace iRacingReplayOverlay
 
             return "{0}.{1}.{2}.{3}{4}".F(version.Major, version.MajorRevision, version.Minor, version.MinorRevision, betaText);
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var f = new TestVideoConversion();
+            f.ShowDialog();
+        }
     }
 }
