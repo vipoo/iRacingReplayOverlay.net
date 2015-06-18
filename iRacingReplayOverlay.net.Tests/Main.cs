@@ -25,9 +25,8 @@ namespace iRacingReplayOverlay.net.Tests
     {
         public static void Main()
         {
-            var t = new iRacingReplayOverlay.Support.LoggingSpecs();
-            t.it_changes_log_file_name();
-            t.it_should_log_to_file();
+            var t = new iRacingReplayOverlay.Phases.Analysis.Tests.Incident();
+            t.it_should_identify_an_incident();
         }
     }
 }

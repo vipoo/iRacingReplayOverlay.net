@@ -156,7 +156,7 @@ namespace iRacingReplayOverlay.Phases.Analysis.Tests
                 {
                     DriverInfo = new SessionData._DriverInfo
                     {
-                        Drivers = names.Select((n,i) => new SessionData._DriverInfo._Drivers { UserName = n, CarIdx = i }).ToArray()
+                        Drivers = names.Select((n,i) => new SessionData._DriverInfo._Drivers { UserName = n, CarIdx = i, CarNumberRaw = i + 1}).ToArray()
                     }
                 };
         }

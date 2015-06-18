@@ -177,9 +177,9 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
             {
                 Drivers = new[]
                 { 
-                    new SessionData._DriverInfo._Drivers { UserName = "Driver1", CarIdx = 0},
-                    new SessionData._DriverInfo._Drivers { UserName = "Driver2", CarIdx = 1},
-                    new SessionData._DriverInfo._Drivers { UserName = "Driver3", CarIdx = 2},
+                    new SessionData._DriverInfo._Drivers { UserName = "Driver1", CarIdx = 0, CarNumberRaw = 1},
+                    new SessionData._DriverInfo._Drivers { UserName = "Driver2", CarIdx = 1, CarNumberRaw = 2},
+                    new SessionData._DriverInfo._Drivers { UserName = "Driver3", CarIdx = 2, CarNumberRaw = 3},
                 }
             };
 
