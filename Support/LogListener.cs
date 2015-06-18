@@ -127,7 +127,16 @@ namespace iRacingReplayOverlay.Support
             Trace.Listeners.Remove(logFile);
             logFile.Dispose();
 
-            File.Move(logFile.FileName, filename);
+            var retryCount = 2;
+            while( retryCount > 0 ) {
+                try {
+                    File.Move(logFile.FileName, filename);
+                    retryCount = 0;
+                } catch(IOException) {
+                    retryCount--;
+                    Thread.Sleep(1000);
+                }
+            }
 
             logFile = new LogListener(filename);
             Trace.Listeners.Add(logFile);
