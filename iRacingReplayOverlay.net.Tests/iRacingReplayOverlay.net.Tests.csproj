@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Phases\Capturing\OverlayDataTest.cs" />
     <Compile Include="Support\logging_spec.cs" />
     <Compile Include="Phases\Analysis\Incident.cs" />
     <Compile Include="Phases\Capturing\RemovalEditsTest.cs" />

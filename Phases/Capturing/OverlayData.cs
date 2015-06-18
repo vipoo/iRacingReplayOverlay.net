@@ -75,7 +75,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double StartTime;
             public Driver[] Drivers;
             public string RacePosition;
-			public string LapCounter; //optional
+			public string LapCounter;
 
             public LeaderBoard Clone()
             {
@@ -94,21 +94,12 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public int CarIdx;
 
             [XmlIgnore]
-            private Dictionary<string, string> shortNames = new Dictionary<string, string>();
-
-            [XmlIgnore]
             public string ShortName
             {
                 get
                 {
-                    if (shortNames.ContainsKey(UserName))
-                        return shortNames[UserName];
-
                     if (UserName.Length <= 4)
-                    {
-                        shortNames.Add(UserName, UserName);
                         return UserName;
-                    }
 
                     var names = UserName.Split(' ');
                     var firstName = names.First();
@@ -118,7 +109,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         + lastName.Substring(0, 1).ToUpper()
                         + lastName.Substring(1, Math.Min(3, lastName.Length-1));
 
-                    shortNames.Add(UserName, name);
                     return name;
                 }
             }
