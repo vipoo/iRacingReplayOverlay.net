@@ -98,11 +98,16 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
 
         internal static Car SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor, long[] preferredCarIdxs)
         {
+            var preferedriversbattles = new List<Car> { };
+            Car driver;
+
             if (preferredCarIdxs == null)
                 preferredCarIdxs = new long[0];
 
             if (all.Count() == 0)
                 return null;
+
+            
 
             //if focusing on prefered drivers
             if (Settings.Default.FocusOnPreferedDriver == true)
@@ -114,9 +119,10 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                     // If driver is in prefered drivers
                     if (preferredCarIdxs.Contains(battle.CarIdx))
                     {
-                        var driver = data.Telemetry.Cars[battle.CarIdx];
+                        driver = data.Telemetry.Cars[battle.CarIdx];
                         TraceInfo.WriteLine("{0} Found battle {1} by Driver preference : Follower", data.Telemetry.SessionTimeSpan, driver.Details.UserName);
-                        return driver;
+                        preferedriversbattles.Add(driver); //Add the driver to battle collection
+                        //return driver;
 
                     };
                 }
@@ -125,16 +131,26 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                     //Testing if a prefered driver is leader of this battle.
                     if (preferredCarIdxs.Contains(data.Telemetry.Cars.First(c => c.Position == data.Telemetry.Cars[battle.CarIdx].Position - 1).Details.CarIdx))
                     {
-                        var driver = data.Telemetry.Cars[battle.CarIdx];
+                        driver = data.Telemetry.Cars[battle.CarIdx];
                         TraceInfo.WriteLine("{0} Found battle {1} by Driver preference : Leader {2}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, data.Telemetry.Cars.First(c => c.Position == data.Telemetry.Cars[battle.CarIdx].Position - 1).Details.UserName);
-                        return driver;
+                        preferedriversbattles.Add(driver); //Add the driver to battle collection
+                        //return driver;
 
                     };
-
                 }
+
+                if (preferedriversbattles.Count() > 0) //if battle collection is not empty getting a random item in the collection
+                {
+                    var battleselected = random.Next(preferedriversbattles.Count());
+                    driver = preferedriversbattles.ElementAt(battleselected);
+                    TraceInfo.WriteLine("{0} Battle choosen {1} within Drivers prefered battles", data.Telemetry.SessionTimeSpan, driver.Details.UserName);
+
+                    return driver;
+                }
+               
             }
 
-            // If not focusing on prefered drivers
+            // If not focusing on prefered drivers or no battle with focus drier detected
             var numberOfX = Math.Pow(2d, all.Count() * factor) - factor;
             var x = 95.0 / (double)numberOfX;
             var ddice = (double)dice;
@@ -155,7 +171,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
 
                 if (ddice < upper)
                 {
-                    var driver = data.Telemetry.Cars[battle.CarIdx];
+                    driver = data.Telemetry.Cars[battle.CarIdx];
                     TraceInfo.WriteLine("{0} Found battle {1} by chance {2}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, ddice);
                     return driver;
                 }
