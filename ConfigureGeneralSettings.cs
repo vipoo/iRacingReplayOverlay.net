@@ -50,9 +50,6 @@ namespace iRacingReplayOverlay
             AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
 
             AddBlankRow();
-            AddStringField("Custom Intro Video Path :", "Path to video intro to use instead of automatically captured scenic scenes","CustomIntroVideoPath");
-
-            AddBlankRow();
             AddStringField("YouTube Username:", "Your YouTube username to allow publishing to your youtube account.", s => cred.UserName, (s, u) => cred.UserName = u);
             AddPasswordField("YouTube Password:", "Your youtube password.", s => cred.FreePassword, (s, u) => cred.FreePassword = u);
         }

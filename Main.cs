@@ -93,7 +93,9 @@ namespace iRacingReplayOverlay
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
-                    sourceVideoButton.Enabled = true;
+                    sourceVideoButton.Enabled =
+                    sourceIntroVideoTextBox.Enabled =
+                    sourceIntroVideoButton.Enabled = true;
                     CheckBoxOnlyDisableIncidents.Enabled = true;
                     CheckBoxOnlyFocusOnPreferedDriver.Enabled = true;
                     checkBoxUseCustomIntro.Enabled = true;
@@ -109,7 +111,9 @@ namespace iRacingReplayOverlay
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
-                    sourceVideoButton.Enabled = false;
+                    sourceVideoButton.Enabled =
+                    sourceIntroVideoTextBox.Enabled =
+                    sourceIntroVideoButton.Enabled = false;
                     CheckBoxOnlyDisableIncidents.Enabled = false;
                     CheckBoxOnlyFocusOnPreferedDriver.Enabled = false;
                     checkBoxUseCustomIntro.Enabled = false;
@@ -126,7 +130,9 @@ namespace iRacingReplayOverlay
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
-                    sourceVideoButton.Enabled = false;
+                    sourceVideoButton.Enabled =
+                    sourceIntroVideoTextBox.Enabled =
+                    sourceIntroVideoButton.Enabled = false;
                     CheckBoxOnlyDisableIncidents.Enabled = false;
                     CheckBoxOnlyFocusOnPreferedDriver.Enabled = false;
                     checkBoxUseCustomIntro.Enabled = false;
@@ -180,6 +186,7 @@ namespace iRacingReplayOverlay
 
             videoBitRate.Text = Settings.Default.videoBitRate.ToString();
             sourceVideoTextBox.Text = Settings.Default.lastVideoFile;
+            sourceIntroVideoTextBox.Text = Settings.Default.CustomIntroVideoPath;
 
             BeginProcessButton.Enabled = false;
 
@@ -229,6 +236,20 @@ namespace iRacingReplayOverlay
 
             if (fbd.ShowDialog() == DialogResult.OK)
                 sourceVideoTextBox.Text = fbd.FileName;
+        }
+
+        void sourceIntroVideoButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new OpenFileDialog();
+            fbd.Filter = "Mpeg 4|*.mp4|AVI Files|*.avi|All files (*.*)|*.*";
+            fbd.FileName = sourceIntroVideoTextBox.Text;
+
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                sourceIntroVideoTextBox.Text = fbd.FileName;
+                Settings.Default.CustomIntroVideoPath = fbd.FileName;
+                Settings.Default.Save();
+            }
         }
 
         void TranscodeVideo_Click(object sender, EventArgs e)
@@ -346,6 +367,12 @@ namespace iRacingReplayOverlay
                 lookForAudioBitRates.Interval = 1000;
                 lookForAudioBitRates.Start();
             }
+        }
+
+        void sourceIntroVideoTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.CustomIntroVideoPath = sourceIntroVideoTextBox.Text;
+            Settings.Default.Save();    
         }
 
         bool IsReadyForTranscoding()
@@ -596,21 +623,9 @@ namespace iRacingReplayOverlay
         private void checkBoxUseCustomIntro_CheckedChanged(object sender, EventArgs e)
         {
             //MessageBox.Show("Custom intro video path : " + Settings.Default.CustomIntroVideoPath);
-            if (Settings.Default.CustomIntroVideoPath == "")
-            {
-                ErrorCustomVideoSourceLabel.Visible = true;
-                Settings.Default.UseCustomIntroVideo = checkBoxUseCustomIntro.Checked;
-                Settings.Default.Save();
-
-            }
-            else
-            {
-                ErrorCustomVideoSourceLabel.Visible = false;
-                Settings.Default.UseCustomIntroVideo = checkBoxUseCustomIntro.Checked;
-                Settings.Default.Save();
-            }
-
+            Settings.Default.UseCustomIntroVideo = checkBoxUseCustomIntro.Checked;
+            Settings.Default.Save();
         }
-        
+
     }
 }
