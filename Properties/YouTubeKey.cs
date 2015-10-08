@@ -24,6 +24,6 @@ namespace iRacingReplayOverlay
         //Run the following to avoid commit file:
         //git update-index --assume-unchanged Properties/YouTubeKey.cs
         //http://code.google.com/apis/youtube/dashboard/
-        public const string ClientId = "AI39si777AL9TeDBiOIHvmqE__OLX9qRmU6W7RDpDaIDEAmeOAFNXrXk7y2cqUYK8TcHqTPBcdS1obwIjii7FIpH8M5K8fca5A";
+        public const string ClientId = "";
     }
 }
