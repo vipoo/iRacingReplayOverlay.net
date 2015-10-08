@@ -47,5 +47,17 @@
     <Setting Name="HighlightVideoTargetDuration" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:10:00</Value>
     </Setting>
+    <Setting Name="FocusOnPreferedDriver" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DisableIncidentsSearch" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CustomIntroVideoPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UseCustomIntroVideo" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

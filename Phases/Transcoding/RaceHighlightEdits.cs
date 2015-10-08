@@ -201,11 +201,24 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         static List<OverlayData.RaceEvent> GetAllRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents, InterestState interest, double factor, double minDuration, out double ratio)
         {
-            var result = raceEvents
-                .Where(re => re.Interest == interest)
-                .Where(re => re.Duration > minDuration)
-                .ToList();
-        
+            var result = new List<OverlayData.RaceEvent>(); //Attention risque de problème sur cette ligne, à tester.
+
+            if (Settings.Default.FocusOnPreferedDriver == true) // if focusing on prefered drivers, taking only battles with prefered drivers
+            {
+                result = raceEvents
+                    //.Where(re => re.Interest == interest)
+                    .Where(re => re.Interest == interest && re.withPreferedDriver == true) // prefered driver
+                    .Where(re => re.Duration > minDuration)
+                    .ToList();
+            }
+            else //Standard behaviour if not focusing.
+            {
+                result = raceEvents
+                    .Where(re => re.Interest == interest)
+                    .Where(re => re.Duration > minDuration)
+                    .ToList();
+            }
+
             var duration = result.Sum(re => re.Duration);
             ratio = duration * factor;
 

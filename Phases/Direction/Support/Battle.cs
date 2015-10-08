@@ -49,7 +49,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
 
             var allBattles = All(data, battleGap, preferredCarIdxs);
 
-            return SelectABattle(data, allBattles, random.Next(101), factor);
+            return SelectABattle(data, allBattles, random.Next(101), factor, preferredCarIdxs);
         }
 
         internal static long[] GetPreferredCarIdxs(DataSample data, IEnumerable<string> preferredDrivers)
@@ -96,11 +96,45 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 .Where(d => d.Time < battleGap.TotalSeconds);
         }
 
-        internal static Car SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor)
+        internal static Car SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor, long[] preferredCarIdxs)
         {
+            if (preferredCarIdxs == null)
+                preferredCarIdxs = new long[0];
+
             if (all.Count() == 0)
                 return null;
 
+            //if focusing on prefered drivers
+            if (Settings.Default.FocusOnPreferedDriver == true)
+            {
+                foreach (var battle in all) // Looking for first prefered driver in a battle as a follower at first
+                {
+                    //position du driver actuel : data.Telemetry.Cars[battle.CarIdx].Position
+                    //TraceInfo.WriteLine("Recherche de bataille : voiture qui précède : {0}", data.Telemetry.Cars.First(c => c.Position == data.Telemetry.Cars[battle.CarIdx].Position - 1).Details.UserName);
+                    // If driver is in prefered drivers
+                    if (preferredCarIdxs.Contains(battle.CarIdx))
+                    {
+                        var driver = data.Telemetry.Cars[battle.CarIdx];
+                        TraceInfo.WriteLine("{0} Found battle {1} by Driver preference : Follower", data.Telemetry.SessionTimeSpan, driver.Details.UserName);
+                        return driver;
+
+                    };
+                }
+                foreach (var battle in all) // Looking for first prefered driver in a battle as a leader in second
+                {
+                    //Testing if a prefered driver is leader of this battle.
+                    if (preferredCarIdxs.Contains(data.Telemetry.Cars.First(c => c.Position == data.Telemetry.Cars[battle.CarIdx].Position - 1).Details.CarIdx))
+                    {
+                        var driver = data.Telemetry.Cars[battle.CarIdx];
+                        TraceInfo.WriteLine("{0} Found battle {1} by Driver preference : Leader {2}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, data.Telemetry.Cars.First(c => c.Position == data.Telemetry.Cars[battle.CarIdx].Position - 1).Details.UserName);
+                        return driver;
+
+                    };
+
+                }
+            }
+
+            // If not focusing on prefered drivers
             var numberOfX = Math.Pow(2d, all.Count() * factor) - factor;
             var x = 95.0 / (double)numberOfX;
             var ddice = (double)dice;
@@ -113,6 +147,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
 
             var divide = 5.0;
             var currentFactor = factor;
+         
 
             foreach (var battle in all)
             {

@@ -51,6 +51,8 @@ namespace iRacingReplayOverlay
             this.logMessagesButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCapture = new System.Windows.Forms.TabPage();
+            this.CheckBoxOnlyFocusOnPreferedDriver = new System.Windows.Forms.CheckBox();
+            this.CheckBoxOnlyDisableIncidents = new System.Windows.Forms.CheckBox();
             this.verifyVideoCaptureButton = new System.Windows.Forms.Button();
             this.configureTrackCamerasLabel = new System.Windows.Forms.Label();
             this.TestOnlyCheckBox = new System.Windows.Forms.CheckBox();
@@ -64,6 +66,9 @@ namespace iRacingReplayOverlay
             this.label5 = new System.Windows.Forms.Label();
             this.workingFolderTextBox = new System.Windows.Forms.TextBox();
             this.tabTranscoding = new System.Windows.Forms.TabPage();
+            this.ErrorCustomVideoSourceLabel = new System.Windows.Forms.Label();
+            this.checkBoxUseCustomIntro = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.highlightVideoOnly = new System.Windows.Forms.CheckBox();
             this.VideoDetailLabel = new System.Windows.Forms.Label();
             this.audioBitRate = new System.Windows.Forms.ComboBox();
@@ -92,7 +97,6 @@ namespace iRacingReplayOverlay
             this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.youTubeCredentialsRequired = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -144,6 +148,8 @@ namespace iRacingReplayOverlay
             // 
             // tabCapture
             // 
+            this.tabCapture.Controls.Add(this.CheckBoxOnlyFocusOnPreferedDriver);
+            this.tabCapture.Controls.Add(this.CheckBoxOnlyDisableIncidents);
             this.tabCapture.Controls.Add(this.verifyVideoCaptureButton);
             this.tabCapture.Controls.Add(this.configureTrackCamerasLabel);
             this.tabCapture.Controls.Add(this.TestOnlyCheckBox);
@@ -163,6 +169,30 @@ namespace iRacingReplayOverlay
             this.tabCapture.TabIndex = 0;
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
+            // 
+            // CheckBoxOnlyFocusOnPreferedDriver
+            // 
+            this.CheckBoxOnlyFocusOnPreferedDriver.AutoSize = true;
+            this.CheckBoxOnlyFocusOnPreferedDriver.Checked = global::iRacingReplayOverlay.Settings.Default.FocusOnPreferedDriver;
+            this.CheckBoxOnlyFocusOnPreferedDriver.Location = new System.Drawing.Point(512, 156);
+            this.CheckBoxOnlyFocusOnPreferedDriver.Name = "CheckBoxOnlyFocusOnPreferedDriver";
+            this.CheckBoxOnlyFocusOnPreferedDriver.Size = new System.Drawing.Size(186, 22);
+            this.CheckBoxOnlyFocusOnPreferedDriver.TabIndex = 52;
+            this.CheckBoxOnlyFocusOnPreferedDriver.Text = "Focus on Prefered Drivers";
+            this.CheckBoxOnlyFocusOnPreferedDriver.UseVisualStyleBackColor = true;
+            this.CheckBoxOnlyFocusOnPreferedDriver.CheckedChanged += new System.EventHandler(this.CheckBoxOnlyFocusOnPreferedDriver_CheckedChanged);
+            // 
+            // CheckBoxOnlyDisableIncidents
+            // 
+            this.CheckBoxOnlyDisableIncidents.AutoSize = true;
+            this.CheckBoxOnlyDisableIncidents.Checked = global::iRacingReplayOverlay.Settings.Default.DisableIncidentsSearch;
+            this.CheckBoxOnlyDisableIncidents.Location = new System.Drawing.Point(321, 156);
+            this.CheckBoxOnlyDisableIncidents.Name = "CheckBoxOnlyDisableIncidents";
+            this.CheckBoxOnlyDisableIncidents.Size = new System.Drawing.Size(185, 22);
+            this.CheckBoxOnlyDisableIncidents.TabIndex = 51;
+            this.CheckBoxOnlyDisableIncidents.Text = "Disable Incidents Capture";
+            this.CheckBoxOnlyDisableIncidents.UseVisualStyleBackColor = true;
+            this.CheckBoxOnlyDisableIncidents.CheckedChanged += new System.EventHandler(this.CheckBoxOnlyDisableIncidents_CheckedChanged);
             // 
             // verifyVideoCaptureButton
             // 
@@ -288,6 +318,8 @@ namespace iRacingReplayOverlay
             // 
             // tabTranscoding
             // 
+            this.tabTranscoding.Controls.Add(this.ErrorCustomVideoSourceLabel);
+            this.tabTranscoding.Controls.Add(this.checkBoxUseCustomIntro);
             this.tabTranscoding.Controls.Add(this.button2);
             this.tabTranscoding.Controls.Add(this.highlightVideoOnly);
             this.tabTranscoding.Controls.Add(this.VideoDetailLabel);
@@ -309,6 +341,40 @@ namespace iRacingReplayOverlay
             this.tabTranscoding.TabIndex = 1;
             this.tabTranscoding.Text = "Video Encoding";
             this.tabTranscoding.UseVisualStyleBackColor = true;
+            // 
+            // ErrorCustomVideoSourceLabel
+            // 
+            this.ErrorCustomVideoSourceLabel.ForeColor = System.Drawing.Color.DarkRed;
+            this.ErrorCustomVideoSourceLabel.Location = new System.Drawing.Point(181, 101);
+            this.ErrorCustomVideoSourceLabel.Name = "ErrorCustomVideoSourceLabel";
+            this.ErrorCustomVideoSourceLabel.Size = new System.Drawing.Size(211, 22);
+            this.ErrorCustomVideoSourceLabel.TabIndex = 54;
+            this.ErrorCustomVideoSourceLabel.Text = "*Custom video intro not defined";
+            this.ErrorCustomVideoSourceLabel.Visible = false;
+            // 
+            // checkBoxUseCustomIntro
+            // 
+            this.checkBoxUseCustomIntro.AutoSize = true;
+            this.checkBoxUseCustomIntro.Checked = global::iRacingReplayOverlay.Settings.Default.UseCustomIntroVideo;
+            this.checkBoxUseCustomIntro.Location = new System.Drawing.Point(6, 100);
+            this.checkBoxUseCustomIntro.Name = "checkBoxUseCustomIntro";
+            this.checkBoxUseCustomIntro.Size = new System.Drawing.Size(169, 22);
+            this.checkBoxUseCustomIntro.TabIndex = 53;
+            this.checkBoxUseCustomIntro.Text = "Use custom intro video";
+            this.checkBoxUseCustomIntro.UseVisualStyleBackColor = true;
+            this.checkBoxUseCustomIntro.CheckedChanged += new System.EventHandler(this.checkBoxUseCustomIntro_CheckedChanged);
+            // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(585, 157);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(153, 28);
+            this.button2.TabIndex = 51;
+            this.button2.Text = "Verify Video Conversion";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // highlightVideoOnly
             // 
@@ -595,18 +661,6 @@ namespace iRacingReplayOverlay
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
-            // 
-            this.button2.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(585, 157);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(153, 28);
-            this.button2.TabIndex = 51;
-            this.button2.Text = "Verify Video Conversion";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -691,5 +745,9 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Button verifyVideoCaptureButton;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox CheckBoxOnlyDisableIncidents;
+        private System.Windows.Forms.CheckBox CheckBoxOnlyFocusOnPreferedDriver;
+        private System.Windows.Forms.CheckBox checkBoxUseCustomIntro;
+        private System.Windows.Forms.Label ErrorCustomVideoSourceLabel;
     }
 }

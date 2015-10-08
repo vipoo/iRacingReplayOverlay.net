@@ -39,13 +39,53 @@ namespace iRacingReplayOverlay.Video
                     return true;
                 });
 
-            second(sample =>
-                {
-                    if (!sample.Flags.EndOfStream)
-                        sample.SetSampleTime(sample.GetSampleTime() + offset);
 
+            second(sample =>
+            {
+                if (!sample.Flags.EndOfStream)
+                    sample.SetSampleTime(sample.GetSampleTime() + offset);
+
+                return next(sample);
+            });
+        }
+
+        public static void Concat3(Action<ProcessSample> first, Action<ProcessSample> second, Action<ProcessSample> third, ProcessSample next)
+        {
+            long offset = 0;
+            long offset2 = 0;
+
+            first(sample =>
+            {
+                if (sample.Timestamp > offset)
+                    offset = sample.Timestamp;
+
+                if (!sample.Flags.EndOfStream)
                     return next(sample);
-                });
+
+                return true;
+            });
+
+            
+            second(sample =>
+            {
+                if (sample.Timestamp > offset2)
+                    offset2 = sample.Timestamp;
+
+                if (!sample.Flags.EndOfStream)
+                {
+                    return next(sample);
+                }
+
+                return true;
+            });
+            
+            third(sample =>
+            {
+                if (!sample.Flags.EndOfStream)
+                    sample.SetSampleTime(sample.GetSampleTime() + offset + offset2);
+
+                return next(sample);
+            });
         }
     }
 }

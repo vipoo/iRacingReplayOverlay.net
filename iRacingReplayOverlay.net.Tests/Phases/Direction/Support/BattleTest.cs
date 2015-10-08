@@ -91,9 +91,9 @@ namespace iRacingReplayOverlay.Phases.Direction.Support.Tests
                 new Battle.GapMetric { CarIdx = 1, Position = 1 },
             };
 
-            AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i, 1.5d), Is.Null);
-            AssertThatFor(5, 24, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver1"));
-            AssertThatFor(25, 99, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver2"));
+            AssertThatFor(0, 4, i => Battle.SelectABattle(data, all, i, 1.5d), Is.Null );
+            AssertThatFor(5, 24, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver1") );
+            AssertThatFor(25, 99, i => Battle.SelectABattle(data, all, i, 1.5d).Details.UserName, Is.EqualTo("Driver2") );
         }
 
         [Test]

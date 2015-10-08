@@ -35,6 +35,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double EndTime;
             public InterestState Interest;
             public bool WithOvertake;
+            public bool withPreferedDriver; // test ajout information de prefered driver
 
             public override int GetHashCode()
             {

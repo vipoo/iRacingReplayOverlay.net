@@ -37,6 +37,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
         static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
+        
 
         internal void ProcessVideo(Action<SourceReader, SourceReader, ProcessSample> process)
         {

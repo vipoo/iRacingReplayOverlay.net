@@ -56,5 +56,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             removalEdits.WithOvertake();
         }
+
+        internal void NextwithPreferedDriver() //test ajout information driver préféré
+        {
+            removalEdits.NextWithPreferedDriver();
+        }
+
     }
 }

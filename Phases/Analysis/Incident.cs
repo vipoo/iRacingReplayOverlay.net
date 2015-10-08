@@ -17,12 +17,10 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Analysis
@@ -89,13 +87,23 @@ namespace iRacingReplayOverlay.Phases.Analysis
 
         void AddIncident(Incident incident)
         {
-            incidents.Add(incident);
-
-            TraceInfo.WriteLine("Noting incident for driver {0} starting on lap {1} from {2}",
-                incident.Car.UserName, 
+            if (Settings.Default.DisableIncidentsSearch == false) //Noting the incident only if disabling option is off
+            {
+                incidents.Add(incident);
+                TraceInfo.WriteLine("Noting incident for driver {0} starting on lap {1} from {2}",
+                incident.Car.UserName,
                 incident.LapNumber,
                 incident.StartSessionTime,
                 incident.EndSessionTime);
+            }
+            else
+            {
+                TraceInfo.WriteLine("Incident for driver {0} starting on lap {1} from {2} skipped by disabling option",
+                incident.Car.UserName,
+                incident.LapNumber,
+                incident.StartSessionTime,
+                incident.EndSessionTime);
+            }
         }
 
         public IEnumerator<Incidents.Incident> GetEnumerator()
