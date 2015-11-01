@@ -62,10 +62,39 @@ namespace iRacingReplayOverlay.Phases
         void AnalyseIncidents()
         {
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
+            //test JDU
+            /*
+            var iracing = new iRacingConnection();
+            var livedata = new iRacingConnection().GetDataFeed();
+            var buffereddata = new iRacingConnection().GetBufferedDataFeed();
 
+            iracing.Replay.MoveToStartOfRace();
+            iracing.Replay.SetSpeed(1);
+
+            foreach (var data in livedata.AtSpeed(1))
+            {
+                
+                Trace.WriteLine("Session State: {0}".F(data.Telemetry.SessionState));
+                Trace.WriteLine("Session Flags: {0}".F(data.Telemetry.SessionFlags));
+                Trace.WriteLine("JDU : racelap {0}".F(data.Telemetry.RaceLaps));
+                Trace.WriteLine("JDU : replayframenum {0}".F(data.Telemetry.ReplayFrameNum));
+                Trace.WriteLine("JDU : positions rank {0}".F(data.Telemetry.Positions));
+                foreach (var car in data.Telemetry.Cars)
+                {
+                    Trace.WriteLine("JDU : carid : {0}".F(car.CarIdx));
+                    Trace.WriteLine("JDU : Driver : {0}".F(car.Details.Driver.UserName));
+                    Trace.WriteLine("JDU : Position : {0}".F(car.Position));
+                }
+
+                Trace.WriteLine("\n\n");
+
+                Thread.Sleep(10);
+            }*/
+            //fin test JDU
             incidents = new Incidents();
 
             var incidentSamples = iRacing.GetDataFeed().RaceIncidents(shortTestOnly ? 12 : int.MaxValue);
+            
 
             foreach (var data in incidentSamples)
                 incidents.Process(data);

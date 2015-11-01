@@ -196,14 +196,14 @@
     <Compile Include="ConfigureTrackCameras.Designer.cs">
       <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
     </Compile>
-    <Compile Include="Video\Attributes.cs" />
+    <Compile Include="Properties\YouTubeKey.cs" />
     <Compile Include="Video\ApplyEdit.cs" />
-    <Compile Include="Video\FadeOut.cs" />
-    <Compile Include="Video\FromFile.cs" />
+    <Compile Include="Video\Attributes.cs" />
     <Compile Include="Video\Concat.cs" />
     <Compile Include="Video\FadeIn.cs" />
+    <Compile Include="Video\FadeOut.cs" />
+    <Compile Include="Video\FromFile.cs" />
     <Compile Include="Video\General.cs" />
-    <Compile Include="Properties\YouTubeKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -238,6 +238,10 @@
     <ProjectReference Include="..\iRacingSDK.Net\iRacingSDK.csproj">
       <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
       <Name>iRacingSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YamlDotNet-master\YamlDotNet\YamlDotNet.csproj">
+      <Project>{bf32de1b-6276-4341-b212-f8862adbba7a}</Project>
+      <Name>YamlDotNet</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -79,6 +79,21 @@ namespace iRacingReplayOverlay.Phases.Direction
                     {
                         SwitchToBattle(data, state.Driver);
                         editMarker.Start();
+                        //test ajout information prefered Driver.
+                        TraceInfo.WriteLine("Battleposition started, state driver is : {0}", state.Driver.UserName);
+                        if (Settings.Default.PreferredDriverNames.Contains(state.Driver.UserName)) //Le prefered Driver est second
+                         {
+                             //TraceInfo.WriteLine("Prefered drivers edit marker placed");
+                             editMarker.NextwithPreferedDriver();
+                         };
+
+                        TraceInfo.WriteLine("Battleposition started, battle leader is : {0}", battleLeader.UserName);
+
+                        if (Settings.Default.PreferredDriverNames.Contains(battleLeader.UserName)) //cas du prefered driver qui mène
+                        {
+                            //TraceInfo.WriteLine("Prefered drivers edit marker placed");
+                            editMarker.NextwithPreferedDriver();
+                        };
                     };
                     return true;
 
@@ -91,7 +106,10 @@ namespace iRacingReplayOverlay.Phases.Direction
                     return true;
 
                 case BattlePosition.Finished:
-                    directionAction = () => editMarker.Stop();
+                    directionAction = () =>
+                    {
+                        editMarker.Stop();
+                    };
                     return true;
 
                 case BattlePosition.Outside:
@@ -144,8 +162,9 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             var newFollowerPosition = newFollower.Car(data).Position;
             battleLeader = data.Telemetry.Cars.First(c => c.Position == newFollowerPosition - 1).Details;
-            battleFollower = newFollower;
 
+            battleFollower = newFollower;
+            
             car = newFollower; //.Car(data).Details;
             camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingBehindCar,  CameraAngle.LookingAtCar);
             if (camera.CameraAngle == CameraAngle.LookingBehindCar)
@@ -153,7 +172,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 TraceInfo.WriteLine("{0} Changing to forward car, with reverse camera", data.Telemetry.SessionTimeSpan);
                 car = battleLeader;
             }
-
+            
             TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}; within {3}",
                 data.Telemetry.SessionTimeSpan, 
                 car.UserName, 
@@ -222,6 +241,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             battleEndTime = data.Telemetry.SessionTimeSpan + this.battleStickyPeriod;
             cameraChangeTime = data.Telemetry.SessionTimeSpan + this.battleCameraChangePeriod;
             return new BattleState(BattlePosition.Started, battleDriver.Details);
+
         }
 
         bool HasBattleTimeout(DataSample data)

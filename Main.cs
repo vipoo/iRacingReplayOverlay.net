@@ -93,7 +93,12 @@ namespace iRacingReplayOverlay
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
-                    sourceVideoButton.Enabled = true;
+                    sourceVideoButton.Enabled =
+                    sourceIntroVideoTextBox.Enabled =
+                    sourceIntroVideoButton.Enabled = true;
+                    CheckBoxOnlyDisableIncidents.Enabled = true;
+                    CheckBoxOnlyFocusOnPreferedDriver.Enabled = true;
+                    checkBoxUseCustomIntro.Enabled = true;
                     break;
 
                 case States.CapturingGameData:
@@ -106,7 +111,12 @@ namespace iRacingReplayOverlay
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
-                    sourceVideoButton.Enabled = false;
+                    sourceVideoButton.Enabled =
+                    sourceIntroVideoTextBox.Enabled =
+                    sourceIntroVideoButton.Enabled = false;
+                    CheckBoxOnlyDisableIncidents.Enabled = false;
+                    CheckBoxOnlyFocusOnPreferedDriver.Enabled = false;
+                    checkBoxUseCustomIntro.Enabled = false;
                     break;
 
                 case States.Transcoding:
@@ -120,7 +130,12 @@ namespace iRacingReplayOverlay
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
-                    sourceVideoButton.Enabled = false;
+                    sourceVideoButton.Enabled =
+                    sourceIntroVideoTextBox.Enabled =
+                    sourceIntroVideoButton.Enabled = false;
+                    CheckBoxOnlyDisableIncidents.Enabled = false;
+                    CheckBoxOnlyFocusOnPreferedDriver.Enabled = false;
+                    checkBoxUseCustomIntro.Enabled = false;
                     break;
             }
         }
@@ -171,6 +186,7 @@ namespace iRacingReplayOverlay
 
             videoBitRate.Text = Settings.Default.videoBitRate.ToString();
             sourceVideoTextBox.Text = Settings.Default.lastVideoFile;
+            sourceIntroVideoTextBox.Text = Settings.Default.CustomIntroVideoPath;
 
             BeginProcessButton.Enabled = false;
 
@@ -220,6 +236,20 @@ namespace iRacingReplayOverlay
 
             if (fbd.ShowDialog() == DialogResult.OK)
                 sourceVideoTextBox.Text = fbd.FileName;
+        }
+
+        void sourceIntroVideoButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new OpenFileDialog();
+            fbd.Filter = "Mpeg 4|*.mp4|AVI Files|*.avi|All files (*.*)|*.*";
+            fbd.FileName = sourceIntroVideoTextBox.Text;
+
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                sourceIntroVideoTextBox.Text = fbd.FileName;
+                Settings.Default.CustomIntroVideoPath = fbd.FileName;
+                Settings.Default.Save();
+            }
         }
 
         void TranscodeVideo_Click(object sender, EventArgs e)
@@ -339,6 +369,12 @@ namespace iRacingReplayOverlay
             }
         }
 
+        void sourceIntroVideoTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.CustomIntroVideoPath = sourceIntroVideoTextBox.Text;
+            Settings.Default.Save();    
+        }
+
         bool IsReadyForTranscoding()
         {
             if (sourceVideoTextBox.Text == null || sourceVideoTextBox.Text.Length == 0)
@@ -373,6 +409,7 @@ namespace iRacingReplayOverlay
             State = States.CapturingGameData;
 
             LogListener.ToFile(workingFolderTextBox.Text + "\\capture.log");
+            //Settings.Default.DisableIncidentsSearch = 
 
             iRacingProcess = new IRacingReplay(shortTestOnly: TestOnlyCheckBox.Checked)
                 .WithWorkingFolder(workingFolderTextBox.Text)
@@ -569,5 +606,26 @@ namespace iRacingReplayOverlay
             var f = new TestVideoConversion();
             f.ShowDialog();
         }
+
+        private void CheckBoxOnlyDisableIncidents_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DisableIncidentsSearch = CheckBoxOnlyDisableIncidents.Checked;
+            Settings.Default.Save();
+        }
+
+        private void CheckBoxOnlyFocusOnPreferedDriver_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.FocusOnPreferedDriver = CheckBoxOnlyFocusOnPreferedDriver.Checked;
+            Settings.Default.Save();
+
+        }
+
+        private void checkBoxUseCustomIntro_CheckedChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Custom intro video path : " + Settings.Default.CustomIntroVideoPath);
+            Settings.Default.UseCustomIntroVideo = checkBoxUseCustomIntro.Checked;
+            Settings.Default.Save();
+        }
+
     }
 }

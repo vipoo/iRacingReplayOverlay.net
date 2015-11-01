@@ -60,7 +60,7 @@ namespace iRacingReplayOverlay.Phases
         public void _OverlayRaceDataOntoVideo(_Progress progress, Action completed, Action readFramesCompleted, bool highlightOnly)
         {
             var overlayData = OverlayData.FromFile(gameDataFile);
-
+            
             const bool TranscodeHightlights = true;
             bool TranscodeFull = !highlightOnly;
             
@@ -104,9 +104,20 @@ namespace iRacingReplayOverlay.Phases
             {
                 var leaderBoard = new LeaderBoard { OverlayData = overlayData };
 
+                // Integration of custom intro video file
+                string VideoIntroFile;
+                if ((Settings.Default.UseCustomIntroVideo == true) && (Settings.Default.CustomIntroVideoPath != ""))
+                {
+                    VideoIntroFile = Settings.Default.CustomIntroVideoPath;
+                }
+                else
+                {
+                    VideoIntroFile = overlayData.IntroVideoFileName;
+                }
+
                 var transcoder = new Transcoder
                 {
-                    IntroVideoFile = overlayData.IntroVideoFileName,
+                    IntroVideoFile = VideoIntroFile,
                     SourceFile = sourceFile,
                     DestinationFile = destFile,
                     VideoBitRate = videoBitRate,
@@ -115,23 +126,30 @@ namespace iRacingReplayOverlay.Phases
 
                 transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
                 {
-                    Action<ProcessSample> mainFeed;
+                Action<ProcessSample> mainFeed;
 
-                    if (monitorProgress == null)
-                        mainFeed = next => sourceReader.Samples(OverlayRaceDataToVideo(leaderBoard, next));
-                    else
-                        mainFeed = next => sourceReader.Samples(monitorProgress(OverlayRaceDataToVideo(leaderBoard, next)));
+                if (monitorProgress == null)
+                    mainFeed = next => sourceReader.Samples(OverlayRaceDataToVideo(leaderBoard, next));
+                else
+                    mainFeed = next => sourceReader.Samples(monitorProgress(OverlayRaceDataToVideo(leaderBoard, next)));
 
-                    var writeToSinks = highlightsOnly ? ApplyEdits(leaderBoard, saveToSink) : saveToSink;
+                var writeToSinks = highlightsOnly ? ApplyEdits(leaderBoard, saveToSink) : saveToSink;
 
-                    if (introSourceReader == null)
-                        mainFeed(writeToSinks);
-                    else
-                    {
-                        Action<ProcessSample> introFeed = next => introSourceReader.Samples(
-                            ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
+                if (introSourceReader == null)
+                    mainFeed(writeToSinks);
+                else
+                {
+                    Action<ProcessSample> introFeed = next => introSourceReader.Samples(
+                        ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
+
+                    Action<ProcessSample> outroFeed = next => introSourceReader.Samples(
+                        ApplyOutroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
 
                         AVOperation.Concat(introFeed, mainFeed, writeToSinks);
+                        //AVOperation.Concat(mainFeed, outroFeed, writeToSinks);
+
+                        //AVOperation.Concat3(introFeed, mainFeed, outroFeed, writeToSinks);
+
                     }
                 });
             }
@@ -148,6 +166,11 @@ namespace iRacingReplayOverlay.Phases
             return AVOperations.SeperateAudioVideo(next, AVOperation.DataSamplesOnly(IntroTitles(leaderBoard, next), next));
         }
 
+        ProcessSample ApplyOutroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        {
+            return AVOperations.SeperateAudioVideo(next, AVOperation.DataSamplesOnly(OutroTitles(leaderBoard, next), next));
+        }
+
         ProcessSample IntroTitles(LeaderBoard leaderBoard, ProcessSample next)
         {
             return sample =>
@@ -157,6 +180,17 @@ namespace iRacingReplayOverlay.Phases
 
                     return next(sample);
                 };
+        }
+
+        ProcessSample OutroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        {
+            return sample =>
+            {
+                using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
+                    leaderBoard.Outro(sampleWithBitmap.Graphic, sampleWithBitmap.Timestamp);
+
+                return next(sample);
+            };
         }
 
         ProcessSample MonitorProgress(_Progress progress, Action readFramesCompleted, ProcessSample next)

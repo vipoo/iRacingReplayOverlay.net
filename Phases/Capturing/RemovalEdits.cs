@@ -33,6 +33,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
         TimeSpan lastRelativeTime;
         TimeSpan lastStartTime;
         bool withOvertake = false;
+        bool NextwithPreferedDriver = false; // test ajout information de prefered driver
+        bool CurrentwithPreferedDriver = false; // test ajout information de prefered driver
 
         readonly Stack<InterestState> events = new Stack<InterestState>();
 
@@ -59,11 +61,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
                 lastStartTime = t;
                 TraceInfo.WriteLine("{0} Starting {1}", d.Telemetry.SessionTimeSpan, interest.ToString());
+
+                
+
             };
         }
 
-        public void 
-            InterestingThingStopped(InterestState interest)
+        public void InterestingThingStopped(InterestState interest)
         {
             nextAction = (d, t) =>
             {
@@ -80,6 +84,11 @@ namespace iRacingReplayOverlay.Phases.Capturing
             withOvertake = true;
         }
 
+        internal void NextWithPreferedDriver() // test ajout information de prefered driver
+        {
+            NextwithPreferedDriver = true;
+        }
+
         void AddEvent(InterestState interest, DataSample d, TimeSpan t)
         {
             raceEvents.Add(new OverlayData.RaceEvent 
@@ -87,12 +96,16 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 Interest = interest, 
                 StartTime = lastStartTime.TotalSeconds, 
                 EndTime = t.TotalSeconds,
-                WithOvertake = withOvertake
+                WithOvertake = withOvertake,
+                withPreferedDriver = CurrentwithPreferedDriver // test ajout information de prefered driver
+
             });
             lastStartTime = t;
 
             TraceInfo.WriteLine("{0} Stopping {1}{2}", d.Telemetry.SessionTimeSpan, interest.ToString(), withOvertake ? " - with Overtake" : "");
             withOvertake = false;
+            CurrentwithPreferedDriver = NextwithPreferedDriver; // test ajout information de prefered driver
+            NextwithPreferedDriver = false;
         }
 
 

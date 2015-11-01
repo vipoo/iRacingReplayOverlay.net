@@ -70,6 +70,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .WithStringFormat(StringAlignment.Near);
 
             var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
+
             var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
 
             var offset = 5;
@@ -105,6 +106,89 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
+        public void Outro(Graphics graphics, long timestamp)
+        {
+            var timeInSeconds = timestamp.FromNanoToSeconds();
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            var totalWidth = 900;
+            var left = (1920 / 2) - totalWidth / 2;
+            var r = graphics.InRectangle(left, 50, totalWidth, 1080 - 100);
+
+            r
+                .WithBrush(new SolidBrush(Color.FromArgb(180, Color.LightBlue)))
+                .WithPen(Styles.BlackPen)
+                .DrawRectangleWithBorder()
+                .WithPen(Styles.BlackPen)
+                .WithBrush(Styles.BlackBrush)
+                .WithFont(fontName, 40, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Center)
+                .DrawText(OverlayData.SessionData.WeekendInfo.TrackDisplayName + "\n" +
+                OverlayData.SessionData.WeekendInfo.TrackCity + ", " + OverlayData.SessionData.WeekendInfo.TrackCountry);
+
+            graphics.InRectangle(left, 190, totalWidth, 400)
+                .WithPen(Styles.BlackPen)
+                .WithBrush(Styles.BlackBrush)
+                .WithFont(fontName, 30, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Center)
+                .DrawText("Race Results");
+
+            r = graphics.InRectangle(left + 30, 270, 60, 40)
+                .WithPen(Styles.BlackPen)
+                .WithBrush(Styles.BlackBrush)
+                .WithFont(fontName, 20, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Near);
+
+            var rsession = OverlayData.SessionData.SessionInfo.Sessions.Race();
+
+            var results = rsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
+
+            var offset = 5;
+            var pen = new Pen(Styles.Black, 2);
+            graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
+                .WithPen(pen)
+                .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
+
+
+            var LeaderTime = new TimeSpan(); //Leader time to create gap from Leader
+            var Gap = new TimeSpan(); //Var to create gap.
+
+            LeaderTime = TimeSpan.FromSeconds(results[0].Time);
+
+            foreach (var racer in results.Take(19))
+            {
+                var driver = OverlayData.SessionData.DriverInfo.CompetingDrivers[racer.CarIdx];
+
+                Gap = TimeSpan.FromSeconds(racer.Time) - LeaderTime; // Gap calculation
+                if (Gap == TimeSpan.Zero) //For the leader we want to display the race duration
+                {
+                    Gap = LeaderTime;
+                }
+                r
+                    .Center(cg => cg
+                            .DrawText(racer.Position.ToString())
+                            .AfterText(racer.Position.ToString())
+                            .MoveRight(1)
+                            .WithFont(fontName, 16, FontStyle.Bold)
+                            .DrawText(racer.Position.Ordinal())
+                    )
+
+                    .ToRight(width: 120)
+                    .DrawText(Gap.ToString("hh\\:mm\\:ss\\.fff")) //Displaying gap between car and leader.
+                    .ToRight(width: 60)
+                    .DrawText(driver.CarNumber)
+                    .ToRight(width: 300)
+                    .DrawText(driver.UserName);
+
+                r = r.ToBelow();
+
+                graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
+                    .WithPen(pen)
+                    .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
+            }
+        }
         public void Overlay(Graphics graphics, long timestamp)
         {
             var timeInSeconds = timestamp.FromNanoToSeconds();

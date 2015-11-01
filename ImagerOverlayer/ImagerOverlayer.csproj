@@ -47,6 +47,10 @@
       <Project>{59d2b4b5-2852-4396-a0d9-9ca546ac3c09}</Project>
       <Name>SuperMFLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\YamlDotNet-master\YamlDotNet\YamlDotNet.csproj">
+      <Project>{bf32de1b-6276-4341-b212-f8862adbba7a}</Project>
+      <Name>YamlDotNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\iRacingReplayOverlay.net.csproj">
       <Project>{0e523573-2972-4dc0-aecb-c4cf746854bb}</Project>
       <Name>iRacingReplayOverlay.net</Name>
