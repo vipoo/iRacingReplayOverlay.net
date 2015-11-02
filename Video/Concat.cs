@@ -40,12 +40,12 @@ namespace iRacingReplayOverlay.Video
                 });
 
             second(sample =>
-                {
-                    if (!sample.Flags.EndOfStream)
-                        sample.SetSampleTime(sample.GetSampleTime() + offset);
+            {
+                if (!sample.Flags.EndOfStream)
+                    sample.SetSampleTime(sample.GetSampleTime() + offset);
 
-                    return next(sample);
-                });
+                return next(sample);
+            });
         }
     }
 }
