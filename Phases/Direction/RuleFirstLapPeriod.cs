@@ -88,9 +88,10 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (reselectLeaderAt < DateTime.Now)
             {
-                iRacing.Replay.CameraOnPositon(1, Camera.CameraNumber);
+                var leader = data.Telemetry.Cars.First(c => c.Position == 1);
+                iRacing.Replay.CameraOnDriver(leader.Details.CarNumberRaw, Camera.CameraNumber);
 
-                reselectLeaderAt = DateTime.Now + 5.Seconds(); ;
+                reselectLeaderAt = DateTime.Now + 1.5.Seconds();
             }
         }
 
