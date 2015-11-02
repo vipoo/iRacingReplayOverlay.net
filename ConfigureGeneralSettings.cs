@@ -47,6 +47,10 @@ namespace iRacingReplayOverlay
             AddKeyPressField("Hot Key for Video Capture", "The hotkey used by your video capture program.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9 or F9");
 
             AddBlankRow();
+            AddCheckboxField("Disable Incidents Capture",
+                @"If this option is selected, then the director will not capture or focus on incidents or crashes",
+                "DisableIncidentsSearch");
+
             AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
 
             AddBlankRow();

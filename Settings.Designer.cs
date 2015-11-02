@@ -200,5 +200,17 @@ namespace iRacingReplayOverlay {
                 this["HighlightVideoTargetDuration"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableIncidentsSearch {
+            get {
+                return ((bool)(this["DisableIncidentsSearch"]));
+            }
+            set {
+                this["DisableIncidentsSearch"] = value;
+            }
+        }
     }
 }

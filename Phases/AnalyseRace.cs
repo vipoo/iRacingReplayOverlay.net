@@ -65,10 +65,13 @@ namespace iRacingReplayOverlay.Phases
 
             incidents = new Incidents();
 
-            var incidentSamples = iRacing.GetDataFeed().RaceIncidents(shortTestOnly ? 12 : int.MaxValue);
+            if (!Settings.Default.DisableIncidentsSearch)
+            {
+                var incidentSamples = iRacing.GetDataFeed().RaceIncidents(shortTestOnly ? 12 : int.MaxValue);
 
-            foreach (var data in incidentSamples)
-                incidents.Process(data);
+                foreach (var data in incidentSamples)
+                    incidents.Process(data);
+            }
         }
     }
 }

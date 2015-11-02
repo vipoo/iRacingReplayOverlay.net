@@ -104,6 +104,35 @@ namespace iRacingReplayOverlay
             });
         }
 
+        void AddCheckboxField(string caption, string description, string setting)
+        {
+            panel.Controls.Add(new Label
+            {
+                Location = new System.Drawing.Point(14, nextRowPosition),
+                Size = new System.Drawing.Size(269, 16),
+                TabIndex = nextTabIndex++,
+                Text = caption
+            });
+
+            var checkBox = new CheckBox
+            {
+                AutoSize = true,
+                Checked = (bool)Settings.Default[setting],
+                Location = new System.Drawing.Point(301, nextRowPosition + 3),
+                Size = new System.Drawing.Size(186, 22),
+                TabIndex = nextTabIndex++,
+                UseVisualStyleBackColor = true,
+                Tag = description
+            };
+
+            checkBox.Enter += new System.EventHandler(this.OnFocus);
+
+            OnSave.Add(() => Settings.Default[setting] = checkBox.Checked);
+
+            panel.Controls.Add(checkBox);
+            nextRowPosition += 28;
+        }
+
         TextBox AddField(string caption, string description, string value, Action<TextBox> onSave)
         {
             panel.Controls.Add(new Label
