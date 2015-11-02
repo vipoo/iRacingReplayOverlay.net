@@ -204,6 +204,18 @@ namespace iRacingReplayOverlay {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FocusOnPreferedDriver {
+            get {
+                return ((bool)(this["FocusOnPreferedDriver"]));
+            }
+            set {
+                this["FocusOnPreferedDriver"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DisableIncidentsSearch {
             get {
                 return ((bool)(this["DisableIncidentsSearch"]));

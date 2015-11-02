@@ -51,7 +51,15 @@ namespace iRacingReplayOverlay
                 @"If this option is selected, then the director will not capture or focus on incidents or crashes",
                 "DisableIncidentsSearch");
 
+            AddBlankRow();
             AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
+            AddCheckboxField("Only select battles for my perferred drivers",
+               @"This option determines what drivers will be selected for battles.  
+
+If selected, then the camera will only focus on battles of your preferred drivers.  All other battles will be ignored and cut from the highlighted video.
+
+If not selected, then all battles can be selected, but your perferred drivers will be prioritised", 
+               "FocusOnPreferedDriver");
 
             AddBlankRow();
             AddStringField("YouTube Username:", "Your YouTube username to allow publishing to your youtube account.", s => cred.UserName, (s, u) => cred.UserName = u);

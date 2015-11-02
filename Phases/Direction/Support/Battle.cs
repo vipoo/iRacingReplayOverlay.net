@@ -22,30 +22,30 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay.Phases.Direction.Support
 {
     public static class Battle
     {
         static readonly Random random = new Random();
+        static long[] preferredCarIdxs = null;
 
         public struct GapMetric
         {
             public int CarIdx;
             public double Time;
             public int Position;
+            public int LeaderCarIdx;
 
             public override string ToString()
             {
-                return "CarIdx: {0}, Time: {1}, Position: {2}".F(CarIdx, Time, Position);
+                return "CarIdx: {0}, Time: {1}, Position: {2}, LeaderCarIdx: {3}".F(CarIdx, Time, Position, LeaderCarIdx);
             }
         }
 
         public static Car Find(DataSample data, TimeSpan battleGap, double factor, IEnumerable<string> preferredDrivers)
         {
-            var preferredCarIdxs = GetPreferredCarIdxs(data, preferredDrivers);
+            preferredCarIdxs = GetPreferredCarIdxs(data, preferredDrivers);
 
             var allBattles = All(data, battleGap, preferredCarIdxs);
 
@@ -78,22 +78,32 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             var gap = Enumerable.Range(1, distances.Count - 1)
                     .Select(i => new
                     {
+                        LeaderCarIdx = distances[i-1].CarIdx,
                         CarIdx = distances[i].CarIdx,
                         Distance = distances[i - 1].Distance - distances[i].Distance,
-                        Position = i
+                        Position = i + 1
                     });
 
             var timeGap = gap.Select(g => new GapMetric
             {
                 CarIdx = g.CarIdx,
+                LeaderCarIdx = g.LeaderCarIdx,
                 Time = g.Distance * data.Telemetry.Session.ResultsAverageLapTime,
                 Position = g.Position
             });
 
-            return timeGap
-                .OrderBy(d => preferredCarIdxs.Contains(d.CarIdx))
-                .ThenByDescending(d => d.Position)
+            var r = timeGap
                 .Where(d => d.Time < battleGap.TotalSeconds);
+
+            if (Settings.Default.FocusOnPreferedDriver)
+                r = r.Where(d => preferredCarIdxs.Contains(d.CarIdx) || preferredCarIdxs.Contains(d.LeaderCarIdx))
+                     .OrderBy(d => d.Position);
+            else
+                r = r
+                .OrderBy(d => preferredCarIdxs.Contains(d.CarIdx) || preferredCarIdxs.Contains(d.LeaderCarIdx))
+                .ThenByDescending(d => d.Position);
+            
+            return r;
         }
 
         internal static Car SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor)
@@ -121,7 +131,8 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 if (ddice < upper)
                 {
                     var driver = data.Telemetry.Cars[battle.CarIdx];
-                    TraceInfo.WriteLine("{0} Found battle {1} by chance {2}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, ddice);
+                    var leaderDriver = data.Telemetry.Cars[battle.LeaderCarIdx];
+                    TraceInfo.WriteLine("{0} Found battle follower: {1}, leader: {2}, by chance {3}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, leaderDriver.Details.UserName, ddice);
                     return driver;
                 }
 
@@ -137,6 +148,15 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
         {
             var leaderCar = leader.Car(data);
             var followerCar = follower.Car(data);
+
+            if (Settings.Default.FocusOnPreferedDriver)
+            {
+                if (!(preferredCarIdxs.Contains(leaderCar.CarIdx) || preferredCarIdxs.Contains(followerCar.CarIdx)))
+                {
+                    Trace.WriteLine("Current race battle does not include drivers within preferred list");
+                    return false;
+                }
+            }
 
             if (leaderCar.Position == followerCar.Position + 1)
                 return false;
