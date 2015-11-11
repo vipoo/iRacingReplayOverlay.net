@@ -76,7 +76,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             var timespan = raceStartTimeOffset == 0 ? TimeSpan.FromSeconds(session._SessionTime) : TimeSpan.FromSeconds(data.Telemetry.SessionTimeRemain + raceStartTimeOffset);
             var raceLapsPosition = string.Format("Lap {0}/{1}", data.Telemetry.RaceLaps, session.ResultsLapsComplete);
-            var raceTimePosition = (timespan.TotalSeconds <= 0 ? TimeSpan.FromSeconds(0) : timespan).ToString(@"mm\:ss");
+            var raceTimePosition = (timespan.TotalSeconds <= 0 ? TimeSpan.FromSeconds(0) : timespan).ToString(@"hh\:mm\:ss");
+            //iRacingSDK.Support.TraceInfo.WriteLine("{0} is raceTimePosition.", raceTimePosition);
             var raceLapCounter = string.Format("Lap {0}", data.Telemetry.RaceLaps);
 
             OverrideRacePositionDetails(data, session, ref raceLapsPosition, ref raceLapCounter);
