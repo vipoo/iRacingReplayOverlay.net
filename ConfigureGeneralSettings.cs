@@ -48,7 +48,6 @@ namespace iRacingReplayOverlay
 
             AddBlankRow();
             AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
-            AddStringField("Addition to prefered drivers in result tables :", "A string which will be added after the name in Qualifying results", "PreferredDriversStringAddition");
 
             AddBlankRow();
             AddStringField("YouTube Username:", "Your YouTube username to allow publishing to your youtube account.", s => cred.UserName, (s, u) => cred.UserName = u);

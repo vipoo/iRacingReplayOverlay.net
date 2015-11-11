@@ -56,7 +56,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .DrawText(OverlayData.SessionData.WeekendInfo.TrackDisplayName + "\n" +
                 OverlayData.SessionData.WeekendInfo.TrackCity + ", " + OverlayData.SessionData.WeekendInfo.TrackCountry);
 
-
             graphics.InRectangle(left, 190, totalWidth, 400)
                 .WithPen(Styles.BlackPen)
                 .WithBrush(Styles.BlackBrush)
@@ -83,53 +82,26 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             foreach (var qualifier in results.Take(19))
             {
                 var driver = OverlayData.SessionData.DriverInfo.CompetingDrivers[qualifier.CarIdx];
-                // Modifying text color if driver is a prefered one.
-                if (Settings.Default.PreferredDriverNames.Contains(driver.UserName))
-                {
-                    r
-                        .WithPen(pen)
-                        .WithBrush(new SolidBrush(Color.Red))
-                        .Center(cg => cg
-                                .DrawText(qualifier.Position.ToString())
-                                .AfterText(qualifier.Position.ToString())
-                                .MoveRight(1)
-                                .WithFont(fontName, 16, FontStyle.Bold)
-                                .DrawText(qualifier.Position.Ordinal())
-
-                        )
-                        .ToRight(width: 120)
-                        .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
-                        .ToRight(width: 60)
-                        .DrawText(driver.CarNumber)
-                        .ToRight(width: 600)
-                        .DrawText(driver.UserName + " " + Settings.Default.PreferredDriversStringAddition);
-                }
-                else
-                {
-                    r
-                        .WithPen(pen)
-                        .WithBrush(new SolidBrush(Color.Black))
-                        .Center(cg => cg
+                r
+                    .Center(cg => cg
                             .DrawText(qualifier.Position.ToString())
                             .AfterText(qualifier.Position.ToString())
                             .MoveRight(1)
                             .WithFont(fontName, 16, FontStyle.Bold)
                             .DrawText(qualifier.Position.Ordinal())
+                    )
 
-                        )
-                        .ToRight(width: 120)
-                        .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
-                        .ToRight(width: 60)
-                        .DrawText(driver.CarNumber)
-                        .ToRight(width: 600)
-                        .DrawText(driver.UserName);
-                }
-                 
+                    .ToRight(width: 120)
+                    .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
+                    .ToRight(width: 60)
+                    .DrawText(driver.CarNumber)
+                    .ToRight(width: 300)
+                    .DrawText(driver.UserName);
+
                 r = r.ToBelow();
 
                 graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
                     .WithPen(pen)
-                    //.WithBrush(new SolidBrush(Color.FromArgb(180, Color.LightGreen))) // test ??
                     .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
             }
         }
@@ -193,17 +165,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 if (Gap == TimeSpan.Zero) //For the leader we want to display the race duration
                 {
                     Gap = LeaderTime;
-                };   
-                             
-                if (Settings.Default.PreferredDriverNames.Contains(driver.UserName))
-                {
-                    r.WithBrush(new SolidBrush(Color.Red));
                 }
-                else
-                {
-                    r.WithBrush(new SolidBrush(Color.Black));
-                }
-
                 r
                     .Center(cg => cg
                             .DrawText(racer.Position.ToString())
@@ -212,6 +174,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                             .WithFont(fontName, 16, FontStyle.Bold)
                             .DrawText(racer.Position.Ordinal())
                     )
+
                     .ToRight(width: 120)
                     .DrawText(Gap.ToString("hh\\:mm\\:ss\\.fff")) //Displaying gap between car and leader.
                     .ToRight(width: 60)
@@ -369,51 +332,22 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 var position = d.Position != null ? d.Position.Value.ToString() : "";
 
-                if (Settings.Default.PreferredDriverNames.Contains(d.UserName))
-                {
-                    var n = r.With(ColourBox(Styles.LightYellow, size))
-                    .WithBrush(new SolidBrush(Color.Red))
-                    .DrawText(position)
-                    .ToRight(width: 58)
-                    .With(SimpleWhiteBox(size))
-                    .WithBrush(new SolidBrush(Color.Red))
-                    .DrawText(d.CarNumber);
-                    
-                    var pitStopCount = d.PitStopCount != 0 ? d.PitStopCount.ToString() : " ";
-                    if (showPitStopCount)
-                        n = n.ToRight(width: 30)
-                        .With(SimpleWhiteBox(size))
-                        .WithBrush(new SolidBrush(Color.Red))
-                        .DrawText(pitStopCount);
-
-                    n.ToRight(width: 95)
-                        .With(SimpleWhiteBox(size))
-                        .WithStringFormat(StringAlignment.Near)
-                        .WithBrush(new SolidBrush(Color.Red))
-                        .DrawText(d.ShortName.ToUpper(), 10);
-                }
-                else
-                {
-                    var n = r.With(ColourBox(Styles.LightYellow, size))
-                    .WithBrush(new SolidBrush(Color.Black))
+                var n = r.With(ColourBox(Styles.LightYellow, size))
                     .DrawText(position)
                     .ToRight(width: 58)
                     .With(SimpleWhiteBox(size))
                     .DrawText(d.CarNumber);
 
-                    var pitStopCount = d.PitStopCount != 0 ? d.PitStopCount.ToString() : " ";
-                    if (showPitStopCount)
-                        n = n.ToRight(width: 30)
-                        .WithBrush(new SolidBrush(Color.Black))
-                        .With(SimpleWhiteBox(size))
-                        .DrawText(pitStopCount);
+                var pitStopCount = d.PitStopCount != 0 ? d.PitStopCount.ToString() : " ";
+                if( showPitStopCount )
+                    n = n.ToRight(width: 30)
+                    .With(SimpleWhiteBox(size))
+                    .DrawText(pitStopCount);
 
-                    n.ToRight(width: 95)
-                        .WithBrush(new SolidBrush(Color.Black))
-                        .With(SimpleWhiteBox(size))
-                        .WithStringFormat(StringAlignment.Near)
-                        .DrawText(d.ShortName.ToUpper(), 10);
-                }
+                n.ToRight(width: 95)
+                    .With(SimpleWhiteBox(size))
+                    .WithStringFormat(StringAlignment.Near)
+                    .DrawText(d.ShortName.ToUpper(), 10);
             }
         }
 
@@ -476,7 +410,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             public readonly Brush BlackBrush = new SolidBrush(Color.Black);
             public readonly Brush YellowBrush = new SolidBrush(Color.Yellow);
             public readonly Brush TransparentLightBlueBrush = new SolidBrush(Color.FromArgb(AlphaLevel, Color.LightBlue));
-            //public readonly Brush TransparentLightBlueBrush = new SolidBrush(Color.FromArgb(AlphaLevel, Color.Aquamarine));
         }
     }
 }
