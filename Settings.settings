@@ -48,7 +48,7 @@
       <Value Profile="(Default)">00:10:00</Value>
     </Setting>
     <Setting Name="FocusOnPreferedDriver" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="DisableIncidentsSearch" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -57,7 +57,10 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="UseCustomIntroVideo" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PreferredDriversStringAddition" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

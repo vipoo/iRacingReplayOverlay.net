@@ -203,7 +203,7 @@ namespace iRacingReplayOverlay {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool FocusOnPreferedDriver {
             get {
                 return ((bool)(this["FocusOnPreferedDriver"]));
@@ -239,13 +239,25 @@ namespace iRacingReplayOverlay {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UseCustomIntroVideo {
             get {
                 return ((bool)(this["UseCustomIntroVideo"]));
             }
             set {
                 this["UseCustomIntroVideo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PreferredDriversStringAddition {
+            get {
+                return ((string)(this["PreferredDriversStringAddition"]));
+            }
+            set {
+                this["PreferredDriversStringAddition"] = value;
             }
         }
     }

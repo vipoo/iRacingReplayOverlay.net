@@ -10,3 +10,5 @@ publish/
 publish-beta/
 **/*.csproj.user
 **/*.log
+
+Properties/YouTubeKey.cs
