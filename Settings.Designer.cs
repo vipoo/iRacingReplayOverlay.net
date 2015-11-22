@@ -144,13 +144,13 @@ namespace iRacingReplayOverlay {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.25")]
-        public double BattleFactor {
+        [global::System.Configuration.DefaultSettingValueAttribute("1.6")]
+        public double BattleFactor2 {
             get {
-                return ((double)(this["BattleFactor"]));
+                return ((double)(this["BattleFactor2"]));
             }
             set {
-                this["BattleFactor"] = value;
+                this["BattleFactor2"] = value;
             }
         }
         

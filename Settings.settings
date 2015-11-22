@@ -32,8 +32,8 @@
     <Setting Name="BattleStickyPeriod" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:02:00</Value>
     </Setting>
-    <Setting Name="BattleFactor" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1.25</Value>
+    <Setting Name="BattleFactor2" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1.6</Value>
     </Setting>
     <Setting Name="FollowLeaderAtRaceStartPeriod" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:00:20</Value>

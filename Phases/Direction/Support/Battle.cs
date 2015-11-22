@@ -36,6 +36,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             public double Time;
             public int Position;
             public int LeaderCarIdx;
+            public double Factor;
 
             public override string ToString()
             {
@@ -47,9 +48,9 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
         {
             preferredCarIdxs = GetPreferredCarIdxs(data, preferredDrivers);
 
-            var allBattles = All(data, battleGap, preferredCarIdxs);
+            var allBattles = All(data, battleGap, preferredCarIdxs, factor);
 
-            return SelectABattle(data, allBattles, random.Next(101), factor);
+            return SelectABattle(data, allBattles, random.Next(10100) / 100.0);
         }
 
         internal static long[] GetPreferredCarIdxs(DataSample data, IEnumerable<string> preferredDrivers)
@@ -59,7 +60,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             return data.SessionData.DriverInfo.CompetingDrivers.Where(x => preferredDrivers.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
         }
 
-        internal static IEnumerable<GapMetric> All(DataSample data, TimeSpan battleGap, long[] preferredCarIdxs)
+        internal static IEnumerable<GapMetric> All(DataSample data, TimeSpan battleGap, long[] preferredCarIdxs, double factor)
         {
             if (preferredCarIdxs == null)
                 preferredCarIdxs = new long[0];
@@ -78,7 +79,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             var gap = Enumerable.Range(1, distances.Count - 1)
                     .Select(i => new
                     {
-                        LeaderCarIdx = distances[i-1].CarIdx,
+                        LeaderCarIdx = distances[i - 1].CarIdx,
                         CarIdx = distances[i].CarIdx,
                         Distance = distances[i - 1].Distance - distances[i].Distance,
                         Position = i + 1
@@ -96,52 +97,73 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 .Where(d => d.Time < battleGap.TotalSeconds);
 
             if (Settings.Default.FocusOnPreferedDriver)
-                r = r.Where(d => preferredCarIdxs.Contains(d.CarIdx) || preferredCarIdxs.Contains(d.LeaderCarIdx))
+                r = r.Where(d => IsAPerferredDriver(d))
                      .OrderBy(d => d.Position);
             else
                 r = r
-                .OrderBy(d => preferredCarIdxs.Contains(d.CarIdx) || preferredCarIdxs.Contains(d.LeaderCarIdx))
-                .ThenByDescending(d => d.Position);
+                .OrderBy(d => IsAPerferredDriver(d) ? 1 : 2)
+                .ThenBy(d => d.Position);
             
+            double[] floor = { 0.0 };
+            var factors = Enumerable.Range(1, r.Count()).Select(index => Math.Pow(factor, index)).ToArray();
+            var totalFactors = factors.Sum();
+            var ratio = 100.0 / totalFactors;
+            var factorsTo100 = factors.Select(f => f * ratio).Reverse().Concat(floor).ToArray();
+
+            TraceInfo.WriteLine("total: {0}, ratio: {1}", totalFactors, ratio);
+
+            for(var i = 0; i < factors.Length; i++)
+                TraceInfo.WriteLine("Factor: {0}, ratio: {1}", factors[i], factorsTo100[i]);
+
+            var currentFactor = 0.0;
+            r = r.Select((d, index) =>
+            {
+                currentFactor += factorsTo100[index];
+                var gapMetric = new GapMetric
+                {
+                    CarIdx = d.CarIdx,
+                    Factor = currentFactor,
+                    LeaderCarIdx = d.LeaderCarIdx,
+                    Position = d.Position,
+                    Time = d.Time
+                };
+                return gapMetric;
+            }).ToArray();
+
+            TraceInfo.WriteLine("Battles:");
+            foreach( var d in r )
+                TraceInfo.WriteLine("{0}: {1} -> {2}, Time: {3}, Pos: {4}",
+                    d.Factor,
+                    data.Telemetry.Cars[d.LeaderCarIdx].Details.Driver.UserName,
+                    data.Telemetry.Cars[d.CarIdx].Details.Driver.UserName,
+                    d.Time, d.Position);
+
             return r;
         }
 
-        internal static Car SelectABattle(DataSample data, IEnumerable<GapMetric> all, int dice, double factor)
+        static bool IsAPerferredDriver(GapMetric d)
+        {
+            return preferredCarIdxs.Contains(d.CarIdx) || preferredCarIdxs.Contains(d.LeaderCarIdx);
+        }
+
+        internal static Car SelectABattle(DataSample data, IEnumerable<GapMetric> all, double dice)
         {
             if (all.Count() == 0)
                 return null;
 
-            var numberOfX = Math.Pow(2d, all.Count() * factor) - factor;
-            var x = 95.0 / (double)numberOfX;
-            var ddice = (double)dice;
-
-            if (ddice < 5.0)
-            {
-                TraceInfo.WriteLine("{0} Ignoring active battles", data.Telemetry.SessionTimeSpan);
-                return null;
-            }
-
-            var divide = 5.0;
-            var currentFactor = factor;
-
             foreach (var battle in all)
             {
-                var upper = ((Math.Pow(2, currentFactor) - factor) * x) + 5.0;
-
-                if (ddice < upper)
+                if (dice < battle.Factor)
                 {
                     var driver = data.Telemetry.Cars[battle.CarIdx];
                     var leaderDriver = data.Telemetry.Cars[battle.LeaderCarIdx];
-                    TraceInfo.WriteLine("{0} Found battle follower: {1}, leader: {2}, by chance {3}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, leaderDriver.Details.UserName, ddice);
+                    TraceInfo.WriteLine("{0} Found battle follower: {1}, leader: {2}, by chance {3}", data.Telemetry.SessionTimeSpan, driver.Details.UserName, leaderDriver.Details.UserName, dice);
                     return driver;
                 }
-
-                divide = upper;
-                currentFactor += factor;
             }
 
             Trace.WriteLine("WARNING!  did not find battle by chance!", "DEBUG");
-            return data.Telemetry.Cars[all.Last().CarIdx];
+            return null;
         }
 
         internal static bool IsInBattle(DataSample data, TimeSpan battleGap, CarDetails follower, CarDetails leader)
