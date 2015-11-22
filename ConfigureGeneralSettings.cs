@@ -31,8 +31,6 @@ namespace iRacingReplayOverlay
 
         void AddPanelComponents()
         {
-            var cred = Settings.Default.YouTubeCredentials ?? new Credentials();
-
             AddTimeField("Time between camera switches:", "The time period that must elapsed before a new random camera is selected.", "CameraStickyPeriod");
             AddTimeField("Time between battle switches:", "The time period that must elapsed before a new battle is randomly selected.", "BattleStickyPeriod");
             AddTimeField("Time gap between cars for battle:", "The approximate amount of time between cars to determine if they are battling.  Default 1 second.", "BattleGap");
@@ -60,16 +58,10 @@ If selected, then the camera will only focus on battles of your preferred driver
 
 If not selected, then all battles can be selected, but your perferred drivers will be prioritised", 
                "FocusOnPreferedDriver");
-
-            AddBlankRow();
-            AddStringField("YouTube Username:", "Your YouTube username to allow publishing to your youtube account.", s => cred.UserName, (s, u) => cred.UserName = u);
-            AddPasswordField("YouTube Password:", "Your youtube password.", s => cred.FreePassword, (s, u) => cred.FreePassword = u);
         }
 
         void okButton_Click(object sender, EventArgs e)
-        {
-            Settings.Default.YouTubeCredentials = Settings.Default.YouTubeCredentials ?? new Credentials();
-            
+        {            
             foreach (var s in OnSave)
                 s();
 

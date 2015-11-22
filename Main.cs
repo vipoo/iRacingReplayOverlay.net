@@ -16,10 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using Google.GData.Client;
-using Google.GData.Client.ResumableUpload;
-using Google.GData.Extensions.MediaRss;
-using Google.GData.YouTube;
 using iRacingReplayOverlay.Phases;
 using iRacingReplayOverlay.Support;
 using iRacingReplayOverlay.Video;
@@ -148,8 +144,6 @@ namespace iRacingReplayOverlay
             iracingEvents.StartListening();
 
             workingFolderTextBox.Text = Settings.Default.WorkingFolder;
-
-            youTubeCredentialsRequired.Visible = Settings.Default.YouTubeCredentials == null || Settings.Default.YouTubeCredentials.Blank;
 
             logMessagges = new LogMessages();
             Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
@@ -423,7 +417,6 @@ namespace iRacingReplayOverlay
         {
             var settings = new ConfigureGeneralSettings();
             settings.ShowDialog();
-            youTubeCredentialsRequired.Visible = Settings.Default.YouTubeCredentials.Blank;
         }
 
         void logMessagesButton_Click(object sender, EventArgs e)
@@ -437,105 +430,6 @@ namespace iRacingReplayOverlay
             Settings.Default.Save();
 
             StateUpdated();
-        }
-
-        void MainUploadVideoFileButton_Click(object sender, EventArgs e)
-        {
-            var fbd = new OpenFileDialog();
-            fbd.Filter = "WMV|*.wmv|All files (*.*)|*.*";
-            fbd.FileName = sourceVideoTextBox.Text;
-
-            if (fbd.ShowDialog() == DialogResult.OK)
-                MainUploadVideoFile.Text = fbd.FileName;
-        }
-
-        void HighlightsUploadVideoButton_Click(object sender, EventArgs e)
-        {
-            var fbd = new OpenFileDialog();
-            fbd.Filter = "Highlights WMV|*.highlights.wmv|All files (*.*)|*.*";
-            fbd.FileName = sourceVideoTextBox.Text;
-
-            if (fbd.ShowDialog() == DialogResult.OK)
-                HighlightsUploadVideoFile.Text = fbd.FileName;
-        }
-
-        void UploadToYouTubeButton_Click(object sender, EventArgs e)
-        {
-            UploadToYouTube(HighlightsUploadVideoFile.Text, 
-                () => UploadToYouTube(MainUploadVideoFile.Text));
-        }
-
-        void UploadToYouTube(string filename, Action completed = null)
-        {
-            var createUploadUrl = new Uri("http://uploads.gdata.youtube.com/resumable/feeds/api/users/default/uploads");
-            var link = new AtomLink(createUploadUrl.AbsoluteUri) { Rel = ResumableUploader.CreateMediaRelation };
-
-            var newVideo = new Google.YouTube.Video
-            {
-                Title = Path.GetFileNameWithoutExtension(filename),
-                Keywords = "SimLimitedRacing, SimLimitediRacing, Sim Limited Racing, Sim Limited iRacing, iRacing, SLR, SimRacing, Gaming, Racing"
-            };
-            newVideo.Tags.Add(new MediaCategory("Autos", YouTubeNameTable.CategorySchema));
-            newVideo.YouTubeEntry.Private = true;
-            newVideo.YouTubeEntry.MediaSource = new MediaFileSource(filename, "video/x-ms-wmv");
-            newVideo.YouTubeEntry.Links.Add(link);
-
-            var cred = Settings.Default.YouTubeCredentials;
-            var cla = new ClientLoginAuthenticator("iRacingReplayOverlay", ServiceNames.YouTube, cred.UserName, cred.FreePassword)
-            {
-                DeveloperKey = YouTubeKey.ClientId
-            };
-
-            var ru = new ResumableUploader(chunkSize: 1);
-            ru.AsyncOperationCompleted += (s, e) => {
-                ru_AsyncOperationCompleted(s, e);
-                if (completed != null)
-                    completed();
-            };
-            ru.AsyncOperationProgress += ru_AsyncOperationProgress;
-            ru.InsertAsync(cla, newVideo.YouTubeEntry, "inserter");
-            
-            EnableForUpload(false);
-            UploadProgress.Visible = true;
-            uploadingFileLabel.Text = "Uploading " + Path.GetFileName(filename);
-            uploadingFileLabel.Visible = true;
-        }
-
-        void ru_AsyncOperationProgress(object sender, AsyncOperationProgressEventArgs e)
-        {
-            UploadProgress.Value = e.ProgressPercentage;
-        }
-
-        void ru_AsyncOperationCompleted(object sender, AsyncOperationCompletedEventArgs e)
-        {
-            EnableForUpload(true);
-            UploadProgress.Visible = false;
-            uploadingFileLabel.Visible = false;
-        }
-
-        void MainUploadVideoFile_TextChanged(object sender, System.EventArgs e)
-        {
-            EnableUploadButton();
-            HighlightsUploadVideoFile.Text = Path.ChangeExtension(MainUploadVideoFile.Text, ".highlights.wmv");
-        }
-
-        void HighlightsUploadVideoFile_TextChanged(object sender, System.EventArgs e)
-        {
-            EnableUploadButton();
-        }
-
-        void EnableForUpload(bool enabled)
-        {
-            MainUploadVideoFile.Enabled = enabled;
-            HighlightsUploadVideoFile.Enabled = enabled;
-            MainUploadVideoFileButton.Enabled = enabled;
-            HighlightsUploadVideoButton.Enabled = enabled;
-            UploadToYouTubeButton.Enabled = enabled;
-        }
-
-        void EnableUploadButton()
-        {
-            UploadToYouTubeButton.Enabled = MainUploadVideoFile.Text.Length > 0 && HighlightsUploadVideoFile.Text.Length > 0;
         }
 
         public iRacingEvents iracingEvents { get; set; }
