@@ -1,6 +1,6 @@
 [submodule "iRacingSDK.Net"]
 	path = iRacingSDK.Net
-	url = https://github.com/vipoo/iRacingSDK.Net
+	url = get://github.com/vipoo/iRacingSDK.Net
 [submodule "SuperMFLib"]
 	path = SuperMFLib
 	url = git://github.com/vipoo/SuperMFLib.git
