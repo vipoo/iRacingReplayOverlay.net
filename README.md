@@ -1,6 +1,8 @@
 iRacingReplayOverlay.net
 ========================
 
+[![Build status](https://ci.appveyor.com/api/projects/status/15batnoaijxhvfjd?svg=true)](https://ci.appveyor.com/project/vipoo/iracingreplayoverlay-net)
+
 This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
 
 It creates 2 videos from your replays; the full replay and a 10 minute highlight video.
