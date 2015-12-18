@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
     <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory>https://iracingreplaydirector-test.s3.amazonaws.com/|\\HORIZE-LAPTOP\Users\dean\projs\iRacingReplayOverlay.net\publish\|https://iracingreplaydirector.s3.amazonaws.com/</InstallUrlHistory>
+    <InstallUrlHistory>https://iracingreplaydirector-test.s3.amazonaws.com/deploy/|https://iracingreplaydirector-test.s3.amazonaws.com/|\\HORIZE-LAPTOP\Users\dean\projs\iRacingReplayOverlay.net\publish\|https://iracingreplaydirector.s3.amazonaws.com/</InstallUrlHistory>
     <SupportUrlHistory>https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md</SupportUrlHistory>
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />

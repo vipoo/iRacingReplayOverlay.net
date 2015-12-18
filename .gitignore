@@ -10,5 +10,5 @@ publish/
 publish-beta/
 **/*.csproj.user
 **/*.log
-deploy-package/*
-!deploy-package/.keep
+deploy/*
+!deploy/.keep
