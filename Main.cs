@@ -452,8 +452,13 @@ namespace iRacingReplayOverlay
             var version = ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion : new Version("1.0.0.0");
 
             var isBeta = this.GetType().Assembly.GetName().Name.ToLower().Contains("beta");
+            var isTest = this.GetType().Assembly.GetName().Name.ToLower().Contains("test");
 
-            var betaText = isBeta ? " beta" : "";
+            var betaText = " stable";
+            if (isBeta)
+                betaText = " beta";
+            if (isTest)
+                betaText = " test";
 
             return "{0}.{1}.{2}.{3}{4}".F(version.Major, version.MajorRevision, version.Minor, version.MinorRevision, betaText);
         }
