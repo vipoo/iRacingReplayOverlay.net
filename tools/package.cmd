@@ -7,16 +7,14 @@ move "bin\x64\Debug\app.publish\setup.exe" setup.exe
 move "bin\x64\Debug\app.publish\iRacingReplayOverlay.test.application" iRacingReplayOverlay.test.application
 move "bin\x64\Debug\app.publish\Application Files" "Application Files"
 
-REM appveyor PushArtifact setup.exe -DeploymentName deploy-test
-REM sappveyor PushArtifact iRacingReplayOverlay.test.application -DeploymentName deploy-test
+appveyor PushArtifact setup.exe -DeploymentName deploy-test
+appveyor PushArtifact iRacingReplayOverlay.test.application -DeploymentName deploy-test
 
-cd "Application Files"
-for /D %%F in (*) do (
-	appveyor PushArtifact "Application Files\%%F\iRacingReplayOverlay.test.exe.config.deploy" -DeploymentName deploy-test 
-	appveyor PushArtifact "Application Files\%%F\iRacingReplayOverlay.test.exe.deploy" -DeploymentName deploy-test 
-	appveyor PushArtifact "Application Files\%%F\iRacingReplayOverlay.test.exe.manifest" -DeploymentName deploy-test 
+for /D %%F in ("Application Files\*") do (
+	echo appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.config.deploy" -DeploymentName deploy-test 
+	echo appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.deploy" -DeploymentName deploy-test 
+	echo appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.manifest" -DeploymentName deploy-test 
 )
 
-cd ..
 
 
