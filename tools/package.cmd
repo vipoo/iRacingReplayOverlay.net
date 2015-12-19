@@ -5,8 +5,10 @@ msbuild iRacingReplayOverlay.net.csproj -t:publish -p:"InstallUrl=http://iracing
 rd /S /Q "deploy\test\Application Files"
 move "bin\x64\Debug\app.publish\*" deploy\test
 move "bin\x64\Debug\app.publish\Application Files" "deploy\test\Application Files"
-cd deploy\test
-7z a .\..\..\deploy-test.zip .\**\*
-cd .\..\..
-appveyor PushArtifact deploy-test.zip
+REM cd deploy\test
+REM 7z a .\..\..\deploy-test.zip .\**\*
+REM cd .\..\..
+
+
+appveyor PushArtifact deploy\test\**\* -DeploymentName deploy-test
 
