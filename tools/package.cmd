@@ -11,9 +11,9 @@ appveyor PushArtifact setup.exe -DeploymentName deploy-test
 appveyor PushArtifact iRacingReplayOverlay.test.application -DeploymentName deploy-test
 
 for /D %%F in ("Application Files\*") do (
-	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.config.deploy" -DeploymentName deploy-test 
-	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.deploy" -DeploymentName deploy-test 
-	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.manifest" -DeploymentName deploy-test 
+	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.config.deploy" -FileName "%%F\iRacingReplayOverlay.test.exe.config.deploy" -DeploymentName deploy-test 
+	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.deploy"        -FileName "%%F\iRacingReplayOverlay.test.exe.deploy"        -DeploymentName deploy-test 
+	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.manifest"      -FileName "%%F\iRacingReplayOverlay.test.exe.manifest"      -DeploymentName deploy-test 
 )
 
 
