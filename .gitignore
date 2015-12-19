@@ -12,3 +12,4 @@ publish-beta/
 **/*.log
 deploy/*
 !deploy/.keep
+!deploy/test/.keep
