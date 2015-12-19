@@ -13,3 +13,6 @@ publish-beta/
 deploy/*
 !deploy/.keep
 !deploy/test/.keep
+Application Files
+setup.exe
+iRacingReplayOverlay.test.application
