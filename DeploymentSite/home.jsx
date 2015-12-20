@@ -2,11 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Listings from './listings.jsx'
 
-
-
 export default React.createClass({
   getInitialState() {
-  return {}
+    return {}
   },
 
   render() {

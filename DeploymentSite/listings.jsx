@@ -31,13 +31,12 @@ const mockedXml = `<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-
 </Contents>
 </ListBucketResult>`
 
-
 export default React.createClass({
   
   getInitialState() {
     return {listings: []}
   },
-  
+
   componentWillMount() {
 
     fetch(request)
