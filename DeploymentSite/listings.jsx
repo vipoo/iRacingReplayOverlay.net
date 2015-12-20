@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import 'whatwg-fetch'
 import xmlToJson from './xmlToJson'
 
-const request = new Request('https://s3-ap-southeast-2.amazonaws.com/iracingreplaydirector-test?delimiter=/&prefix=versions/', {
+const request = new Request('https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director?delimiter=/&prefix=versions/', {
   headers: new Headers({
     'Accept': 'application/json'
   })
