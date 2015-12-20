@@ -223,6 +223,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="DeploymentSite\.gitignore" />
+    <None Include="DeploymentSite\build.sh" />
+    <None Include="DeploymentSite\main.jsx" />
+    <None Include="DeploymentSite\package.json" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
     <None Include="packages\repositories.config" />
@@ -430,5 +434,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DeploymentSite\bundle.js" />
+    <Content Include="DeploymentSite\index.html" />
+    <Content Include="DeploymentSite\xmltojson.js" />
   </ItemGroup>
 </Project>

@@ -12,7 +12,9 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
+    "bootstrap": "^3.3.6",
     "react": "^0.14.3",
+    "react-bootstrap": "^0.28.1",
     "react-dom": "^0.14.3",
     "uglifyify": "^3.0.1",
     "whatwg-fetch": "^0.10.1"

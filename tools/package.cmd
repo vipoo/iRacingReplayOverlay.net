@@ -1,10 +1,10 @@
 @echo off
-echo 'Building test package' %APPVEYOR_BUILD_NUMBER%
+echo 'Building test package' %APPVEYOR_BUILD_VERSION%
 
 msbuild iRacingReplayOverlay.net.csproj -t:rebuild -t:publish -p:"InstallUrl=http://iracingreplaydirector-test.s3-ap-southeast-2.amazonaws.com/" -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:ProductName="iRacing Replay Director (test)" -p:OverrideAssemblyName=iRacingReplayOverlay.test
 rd /S /Q "Application Files"
 
-appveyor PushArtifact bin\x64\Debug\iRacingReplayOverlay.test.exe -FileName "versions\iRacingReplayOverlay.%APPVEYOR_BUILD_NUMBER%.exe" -DeploymentName deploy-test 
+appveyor PushArtifact bin\x64\Debug\iRacingReplayOverlay.test.exe -FileName "versions\iRacingReplayOverlay.%APPVEYOR_BUILD_VERSION%.exe" -DeploymentName deploy-test 
 
 cd bin\x64\Debug\app.publish
 for /D %%F in ("Application Files\*") do (
