@@ -28,17 +28,17 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://iracingreplaydirector-test.s3.amazonaws.com/deploy/</InstallUrl>
+    <InstallUrl>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/</InstallUrl>
     <SupportUrl>https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md</SupportUrl>
     <ErrorReportUrl>https://github.com/vipoo/iRacingReplayOverlay.net/issues</ErrorReportUrl>
     <ProductName>iRacing Replay Director</ProductName>
     <PublisherName>Dean Netherton</PublisherName>
     <SuiteName>iRacing Apps</SuiteName>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <MinimumRequiredVersion>1.0.0.44</MinimumRequiredVersion>
     <WebPage>index.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>10</ApplicationRevision>
-    <ApplicationVersion>1.0.0.10</ApplicationVersion>
+    <ApplicationRevision>44</ApplicationRevision>
+    <ApplicationVersion>1.0.0.44</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>

@@ -3,9 +3,9 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
     <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory>https://iracingreplaydirector-test.s3.amazonaws.com/deploy/|https://iracingreplaydirector-test.s3.amazonaws.com/|\\HORIZE-LAPTOP\Users\dean\projs\iRacingReplayOverlay.net\publish\|https://iracingreplaydirector.s3.amazonaws.com/</InstallUrlHistory>
+    <InstallUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/|http://iracingreplaydirector-test.s3-ap-southeast-2.amazonaws.com/|https://iracingreplaydirector-test.s3.amazonaws.com/deploy/|https://iracingreplaydirector-test.s3.amazonaws.com/|\\HORIZE-LAPTOP\Users\dean\projs\iRacingReplayOverlay.net\publish\</InstallUrlHistory>
     <SupportUrlHistory>https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md</SupportUrlHistory>
-    <UpdateUrlHistory />
+    <UpdateUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/test/|https://iracing-replay-director.s3.amazonaws.com/test/</UpdateUrlHistory>
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory>https://github.com/vipoo/iRacingReplayOverlay.net/issues</ErrorReportUrlHistory>
     <FallbackCulture>en-US</FallbackCulture>
