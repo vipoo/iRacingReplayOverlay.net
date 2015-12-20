@@ -9,6 +9,7 @@ cd bin\x64\Debug\app.publish
 for /D %%F in ("Application Files\*") do (
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.config.deploy" -FileName "test\%%F\iRacingReplayOverlay.test.exe.config.deploy" -DeploymentName deploy-test 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.deploy"        -FileName "test\%%F\iRacingReplayOverlay.test.exe.deploy"        -DeploymentName deploy-test 
+	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.pdb.deploy"        -FileName "test\%%F\iRacingReplayOverlay.test.pdb.deploy"        -DeploymentName deploy-test 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.manifest"      -FileName "test\%%F\iRacingReplayOverlay.test.exe.manifest"      -DeploymentName deploy-test 
 )
 
@@ -25,6 +26,7 @@ cd bin\x64\Debug\app.publish
 for /D %%F in ("Application Files\*") do (
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.beta.exe.config.deploy" -FileName "beta\%%F\iRacingReplayOverlay.beta.exe.config.deploy" -DeploymentName deploy-beta 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.beta.exe.deploy"        -FileName "beta\%%F\iRacingReplayOverlay.beta.exe.deploy"        -DeploymentName deploy-beta 
+	appveyor PushArtifact "%%F\iRacingReplayOverlay.beta.pdb.deploy"        -FileName "beta\%%F\iRacingReplayOverlay.beta.pdb.deploy"        -DeploymentName deploy-beta 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.beta.exe.manifest"      -FileName "beta\%%F\iRacingReplayOverlay.beta.exe.manifest"      -DeploymentName deploy-beta 
 )
 
@@ -41,6 +43,7 @@ cd bin\x64\Debug\app.publish
 for /D %%F in ("Application Files\*") do (
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.exe.config.deploy" -FileName "main\%%F\iRacingReplayOverlay.exe.config.deploy" -DeploymentName deploy-main 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.exe.deploy"        -FileName "main\%%F\iRacingReplayOverlay.exe.deploy"        -DeploymentName deploy-main 
+	appveyor PushArtifact "%%F\iRacingReplayOverlay.pdb.deploy"        -FileName "main\%%F\iRacingReplayOverlay.pdb.deploy"        -DeploymentName deploy-main 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.exe.manifest"      -FileName "main\%%F\iRacingReplayOverlay.exe.manifest"      -DeploymentName deploy-main 
 )
 
