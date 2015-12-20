@@ -320,6 +320,26 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PublishFile Include="DeploymentSite\index.html">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="DeploymentSite\xmltojson.js">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
     <PublishFile Include="iRacingReplayOverlay.pdb">
       <Visible>False</Visible>
       <Group>
