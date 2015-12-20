@@ -24,7 +24,7 @@ var options = { // set up the default options
   grokAttr: true,   // convert truthy attributes to boolean, etc
   grokText: true,   // convert truthy text/attr to boolean, etc
   normalize: true,  // collapse multiple spaces to single space
-  xmlns: true,    // include namespaces as attribute in output
+  xmlns: false,    // include namespaces as attribute in output
   namespaceKey: '_ns',  // tag name for namespace objects
   textKey: '_text',   // tag name for text nodes
   valueKey: '_value',   // tag name for attribute values

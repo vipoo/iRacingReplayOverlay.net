@@ -3,46 +3,55 @@ import ReactDOM from 'react-dom'
 import 'whatwg-fetch'
 import xmlToJson from './xmlToJson'
 
-const request = new Request('https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director?delimiter=/&prefix=versions/', {
+const request = new Request('https://iracing-replay-director.s3.amazonaws.com?delimiter=/&prefix=versions/i', {
   headers: new Headers({
     'Accept': 'application/json'
   })
 })
-const mockedXml = `<ListBucketResult>
-    <Name>iracingreplaydirector-test</Name>
-    <Prefix>versions/</Prefix>
-    <Marker/>
-    <MaxKeys>1000</MaxKeys>
-    <Delimiter>/</Delimiter>
-    <IsTruncated>false</IsTruncated>
-    <Contents>
-    <Key>versions/iRacingReplayOverlay.43.exe</Key>
-    <LastModified>2015-12-19T11:33:02.000Z</LastModified>
-    <ETag>26bc26b548e0a975cddd2e677c8e5209</ETag>
-    <Size>1122304</Size>
-    <StorageClass>STANDARD</StorageClass>
-    </Contents>
-    </ListBucketResult>`
+const mockedXml = `<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<Name>iracing-replay-director</Name>
+<Prefix>versions/</Prefix>
+<Marker/>
+<MaxKeys>1000</MaxKeys>
+<Delimiter>/</Delimiter>
+<IsTruncated>false</IsTruncated>
+<Contents>
+<Key>versions/</Key>
+<LastModified>2015-12-20T00:23:34.000Z</LastModified>
+<ETag>"d41d8cd98f00b204e9800998ecf8427e"</ETag>
+<Size>0</Size>
+<StorageClass>STANDARD</StorageClass>
+</Contents>
+<Contents>
+<Key>versions/iRacingReplayOverlay.1.0.1.45.exe</Key>
+<LastModified>2015-12-20T00:44:59.000Z</LastModified>
+<ETag>"c9dbf4d28d53b8ee2ca3f19bf8228ec1"</ETag>
+<Size>1122304</Size>
+<StorageClass>STANDARD</StorageClass>
+</Contents>
+</ListBucketResult>`
 
 
 export default React.createClass({
   
+  getInitialState() {
+    return {listings: []}
+  },
+  
   componentWillMount() {
-/*
-fetch(request)
-  .then(resp => resp.text())
-  .then(() => mockedXml)
-  .then(json => ReactDOM.render(<Listing listings={json} />, document.getElementById('listing')))
 
-*/
+    fetch(request)
+      .then(resp => resp.text())
+      .then(text => xmlToJson.parseString(text))
+      .then(json => this.setState({listings: json.ListBucketResult[0].Contents}))
 
-    this.setState({listings: xmlToJson.parseString(mockedXml)})
+//    const list = xmlToJson.parseString(mockedXml)
+//    this.setState({listings: list})
   },
 
   render() {
-    const contents = this.state.listings.ListBucketResult[0].Contents
-    const keys = contents.map( c => c.Key[0]._text)
-    const rows = keys.map(key => <tr key={key}><td>{key}</td></tr>)
+    const keys = this.state.listings.map( c => c.Key[0]._text)
+    const rows = keys.map(key => <tr key={key}><td><a href={"https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director/" + key}>{key}</a></td></tr>)
 
     return (
      <table className="table">

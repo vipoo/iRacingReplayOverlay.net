@@ -19,6 +19,54 @@
     integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
     crossorigin="anonymous">
     <style>
+
+      .scrollable {
+          width: 666px;
+          margin: 0 auto;
+          padding: 0;
+          border:10px solid #fff;
+          position: relative;
+          overflow: hidden;
+          text-align: center;
+      }
+      .scrollable img {
+          max-width: 666px;
+          margin: 0;
+          float:left;
+      }
+      .items {
+          width:1332px;
+          -webkit-animation: hscroll 12s infinite;
+          -moz-animation: hscroll 12s infinite;
+          -ms-animation: hscroll 12s infinite;
+      }
+
+      @-webkit-keyframes hscroll {
+        0%      { margin-left: 0; }
+        45%     { margin-left: 0px; }
+        55%     { margin-left: -666px; }
+        90%     { margin-left: -666px; }
+        100%    { margin-left: 0 }
+      }
+
+      @-moz-keyframes hscroll {
+        0%      { margin-left: 0; }
+        45%     { margin-left: 0px; }
+        55%     { margin-left: -666px; }
+        90%     { margin-left: -666px; }
+        100%    { margin-left: 0 }
+      }
+
+      @-ms-keyframes hscroll {
+        0%      { margin-left: 0; }
+        45%     { margin-left: 0px; }
+        55%     { margin-left: -666px; }
+        90%     { margin-left: -666px; }
+        100%    { margin-left: 0 }
+      }​
+
+
+
       body {
         padding-top: 20px;
         padding-bottom: 20px;
