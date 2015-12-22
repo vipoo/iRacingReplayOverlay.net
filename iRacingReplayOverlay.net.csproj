@@ -60,6 +60,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>5</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -256,10 +257,6 @@
     <Message Text="MERGED: @(MainAssembly) and @(IntermediateAssembly)" Importance="High" />
   </Target>
   <ItemGroup>
-    <ProjectReference Include="SuperMFLib\src\MediaFoundation-2010.csproj">
-      <Project>{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}</Project>
-      <Name>MediaFoundation-2010</Name>
-    </ProjectReference>
     <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
       <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
       <Name>iRacingSDK</Name>
@@ -341,16 +338,6 @@
       <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
-    <PublishFile Include="iRacingReplayOverlay.test.pdb">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
     <PublishFile Include="iRacingReplayOverlay.beta.pdb">
       <Visible>False</Visible>
       <Group>
@@ -362,6 +349,16 @@
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="iRacingReplayOverlay.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="iRacingReplayOverlay.test.pdb">
       <Visible>False</Visible>
       <Group>
       </Group>
