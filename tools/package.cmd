@@ -1,11 +1,11 @@
 @echo off
 echo 'Building test package' %APPVEYOR_BUILD_VERSION%
 
-msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\ -t:rebuild -t:publish -p:"InstallUrl=http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/test/" -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:ProductName="iRacing Replay Director (test)" -p:OverrideAssemblyName=iRacingReplayOverlay.test
+msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\ -p:Configuration=Release -t:rebuild -t:publish -p:"InstallUrl=http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/test/" -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:ProductName="iRacing Replay Director (test)" -p:OverrideAssemblyName=iRacingReplayOverlay.test
 
-appveyor PushArtifact bin\x64\Debug\iRacingReplayOverlay.test.exe -FileName "versions\iRacingReplayOverlay.%APPVEYOR_BUILD_VERSION%.exe" -DeploymentName deploy-test 
+appveyor PushArtifact bin\x64\Release\iRacingReplayOverlay.test.exe -FileName "versions\iRacingReplayOverlay.%APPVEYOR_BUILD_VERSION%.exe" -DeploymentName deploy-test 
 
-cd bin\x64\Debug\app.publish
+cd bin\x64\Release\app.publish
 for /D %%F in ("Application Files\*") do (
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.config.deploy" -FileName "test\%%F\iRacingReplayOverlay.test.exe.config.deploy" -DeploymentName deploy-test 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.test.exe.deploy"        -FileName "test\%%F\iRacingReplayOverlay.test.exe.deploy"        -DeploymentName deploy-test 
@@ -20,9 +20,9 @@ cd ..\..\..\..
 
 echo 'Building beta package' %APPVEYOR_BUILD_VERSION%
 
-msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\ -t:rebuild -t:publish -p:"InstallUrl=http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/beta/" -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:ProductName="iRacing Replay Director (beta)" -p:OverrideAssemblyName=iRacingReplayOverlay.beta
+msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\ -p:Configuration=Release -t:rebuild -t:publish -p:"InstallUrl=http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/beta/" -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:ProductName="iRacing Replay Director (beta)" -p:OverrideAssemblyName=iRacingReplayOverlay.beta
 
-cd bin\x64\Debug\app.publish
+cd bin\x64\Release\app.publish
 for /D %%F in ("Application Files\*") do (
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.beta.exe.config.deploy" -FileName "beta\%%F\iRacingReplayOverlay.beta.exe.config.deploy" -DeploymentName deploy-beta 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.beta.exe.deploy"        -FileName "beta\%%F\iRacingReplayOverlay.beta.exe.deploy"        -DeploymentName deploy-beta 
@@ -37,9 +37,9 @@ cd ..\..\..\..
 
 echo 'Building main package' %APPVEYOR_BUILD_VERSION%
 
-msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\ -t:rebuild -t:publish -p:"InstallUrl=http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/" -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:ProductName="iRacing Replay Director" -p:OverrideAssemblyName=iRacingReplayOverlay
+msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\ -p:Configuration=Release -t:rebuild -t:publish -p:"InstallUrl=http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/" -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:ProductName="iRacing Replay Director" -p:OverrideAssemblyName=iRacingReplayOverlay
 
-cd bin\x64\Debug\app.publish
+cd bin\x64\Release\app.publish
 for /D %%F in ("Application Files\*") do (
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.exe.config.deploy" -FileName "main\%%F\iRacingReplayOverlay.exe.config.deploy" -DeploymentName deploy-main 
 	appveyor PushArtifact "%%F\iRacingReplayOverlay.exe.deploy"        -FileName "main\%%F\iRacingReplayOverlay.exe.deploy"        -DeploymentName deploy-main 

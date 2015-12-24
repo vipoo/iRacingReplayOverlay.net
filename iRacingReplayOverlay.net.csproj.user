@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/|http://iracingreplaydirector-test.s3-ap-southeast-2.amazonaws.com/|https://iracingreplaydirector-test.s3.amazonaws.com/deploy/|https://iracingreplaydirector-test.s3.amazonaws.com/|\\HORIZE-LAPTOP\Users\dean\projs\iRacingReplayOverlay.net\publish\</InstallUrlHistory>
+    <InstallUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/|http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/beta/|http://iracingreplaydirector-test.s3-ap-southeast-2.amazonaws.com/|https://iracingreplaydirector-test.s3.amazonaws.com/deploy/|https://iracingreplaydirector-test.s3.amazonaws.com/</InstallUrlHistory>
     <SupportUrlHistory>https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md</SupportUrlHistory>
-    <UpdateUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/test/|https://iracing-replay-director.s3.amazonaws.com/test/</UpdateUrlHistory>
+    <UpdateUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/beta/|http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/test/|https://iracing-replay-director.s3.amazonaws.com/test/</UpdateUrlHistory>
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory>https://github.com/vipoo/iRacingReplayOverlay.net/issues</ErrorReportUrlHistory>
     <FallbackCulture>en-US</FallbackCulture>
