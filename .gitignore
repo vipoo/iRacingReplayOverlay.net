@@ -16,3 +16,4 @@ deploy/*
 Application Files
 setup.exe
 iRacingReplayOverlay.test.application
+.vs/*
