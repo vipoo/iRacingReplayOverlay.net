@@ -16,7 +16,7 @@ export default React.createClass({
             <div className="jumbotron">
               <h1>iRacing Replay Director</h1>
               <p className="lead">Click here to download setup application</p>
-              <p><a className="btn btn-lg btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director/main/setup.exe" role="button">Install ...</a></p>
+              <p><a className="btn btn-lg btn-success" href="https://iracingreplaydirector.s3-ap-southeast-2.amazonaws.com/setup.exe" role="button">Install ...</a></p>
               <p>Create short highlight videos of your favourite races!</p>
             </div>
 
