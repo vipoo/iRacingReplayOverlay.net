@@ -5,7 +5,7 @@
     <PublishUrlHistory>publish\</PublishUrlHistory>
     <InstallUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/|http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/beta/|http://iracingreplaydirector-test.s3-ap-southeast-2.amazonaws.com/|https://iracingreplaydirector-test.s3.amazonaws.com/deploy/|https://iracingreplaydirector-test.s3.amazonaws.com/</InstallUrlHistory>
     <SupportUrlHistory>https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md</SupportUrlHistory>
-    <UpdateUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/beta/|http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/test/|https://iracing-replay-director.s3.amazonaws.com/test/</UpdateUrlHistory>
+    <UpdateUrlHistory>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/|http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/beta/|http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/test/|https://iracing-replay-director.s3.amazonaws.com/test/</UpdateUrlHistory>
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory>https://github.com/vipoo/iRacingReplayOverlay.net/issues</ErrorReportUrlHistory>
     <FallbackCulture>en-US</FallbackCulture>

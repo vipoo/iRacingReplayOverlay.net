@@ -94,7 +94,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyName>iRacingReplayOverlay.beta</AssemblyName>
+    <AssemblyName>iRacingReplayOverlay</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
