@@ -26,10 +26,9 @@
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>true</UpdateRequired>
+    <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/</InstallUrl>
-    <UpdateUrl>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/</UpdateUrl>
     <SupportUrl>https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md</SupportUrl>
     <ErrorReportUrl>https://github.com/vipoo/iRacingReplayOverlay.net/issues</ErrorReportUrl>
     <ProductName>iRacing Replay Director</ProductName>
