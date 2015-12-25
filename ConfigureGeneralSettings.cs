@@ -40,7 +40,7 @@ namespace iRacingReplayOverlay
 
             AddBlankRow();
             AddMinuteField("Duration of Highlight video", "The duration to target for the length of the edited highlight videos.", "HighlightVideoTargetDuration");
-            
+
             AddBlankRow();
             AddKeyPressField("Hot Key for Video Capture", "The hotkey used by your video capture program.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9 or F9");
 
@@ -56,8 +56,25 @@ namespace iRacingReplayOverlay
 
 If selected, then the camera will only focus on battles of your preferred drivers.  All other battles will be ignored and cut from the highlighted video.
 
-If not selected, then all battles can be selected, but your perferred drivers will be prioritised", 
+If not selected, then all battles can be selected, but your perferred drivers will be prioritised",
                "FocusOnPreferedDriver");
+
+            if (AwsKeys.HaveKeys)
+            {
+                AddBlankRow();
+                AddCheckboxField("Allow usage data to be sent to developer",
+                @"Send anonymous usage data to the developer, to assist in fixing bugs and improving the application.
+
+What data is sent? 
+The data sent is the same data that is written to your local log files.
+
+Why should I say yes?
+It will really help me to understand how people use this application, and diagnose common problems people have.
+
+Where does the data go ?
+The data is sent encypted to me - the developer - dean.netherton@gmail.com", "SendUsageData");
+
+            }
         }
 
         void okButton_Click(object sender, EventArgs e)

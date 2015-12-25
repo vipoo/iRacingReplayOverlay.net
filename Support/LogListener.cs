@@ -19,14 +19,16 @@
 
 using iRacingSDK.Support;
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace iRacingReplayOverlay.Support
 {
+
+
     public class LogListener : TraceListener
     {
         static LogListener logFile;

@@ -23,12 +23,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("iRacingReplayOverlay")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("iRacing Replay Director")]
+[assembly: AssemblyDescription("This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("iRacingReplayOverlay")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("iRacing Replay Director")]
+[assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -93,6 +93,14 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.CloudWatchLogs, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>packages\AWSSDK.CloudWatchLogs.3.1.2.2\lib\net35\AWSSDK.CloudWatchLogs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -120,6 +128,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Aws\AwsKey.cs" />
+    <Compile Include="Aws\AwsLogListener.cs" />
     <Compile Include="ConfigureGeneralSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -221,6 +237,12 @@
     <Compile Include="ConfigureTrackCameras.Designer.cs">
       <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
     </Compile>
+    <Compile Include="UsageDataRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UsageDataRequest.Designer.cs">
+      <DependentUpon>UsageDataRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Video\Attributes.cs" />
     <Compile Include="Video\ApplyEdit.cs" />
     <Compile Include="Video\FadeOut.cs" />
@@ -277,6 +299,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigureGeneralSettings.resx">
       <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -299,6 +324,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TestVideoCapture.resx">
       <DependentUpon>TestVideoCapture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UsageDataRequest.resx">
+      <DependentUpon>UsageDataRequest.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ProjectExtensions>
@@ -485,5 +514,8 @@
   <ItemGroup>
     <Content Include="DeploymentSite\index.html" />
     <Content Include="DeploymentSite\xmltojson.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\AWSSDK.CloudWatchLogs.3.1.2.2\analyzers\dotnet\cs\AWSSDK.CloudWatchLogs.CodeAnalysis.dll" />
   </ItemGroup>
 </Project>

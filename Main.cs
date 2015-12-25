@@ -444,7 +444,7 @@ namespace iRacingReplayOverlay
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("iRacing Replay Application\nCopyright Dean Netherton\nVersion {0}".F(GetDeployedVersionString()));
+            (new AboutBox1()).ShowDialog(); 
         }
 
         string GetDeployedVersionString()
@@ -467,6 +467,19 @@ namespace iRacingReplayOverlay
         {
             var f = new TestVideoConversion();
             f.ShowDialog();
+        }
+
+        private void Main_Activated(object sender, EventArgs e)
+        {
+            if(!AwsKeys.HaveKeys)
+                return;
+
+            if(!Settings.Default.HaveAskedAboutUsage)
+            {
+                Settings.Default.HaveAskedAboutUsage = true;
+                Settings.Default.Save();
+                (new UsageDataRequest()).ShowDialog();
+            }
         }
     }
 }
