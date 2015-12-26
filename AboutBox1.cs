@@ -30,11 +30,24 @@ namespace iRacingReplayOverlay
             }
         }
 
-        public string AssemblyVersion
+        public static string AssemblyVersion
         {
             get
             {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var assName = Assembly.GetExecutingAssembly().GetName();
+                var version = assName.Version;
+                var name = assName.Name;
+
+                var isBeta = name.ToLower().Contains("beta");
+                var isTest = name.ToLower().Contains("test");
+
+                var betaText = " stable";
+                if (isBeta)
+                    betaText = " beta";
+                if (isTest)
+                    betaText = " test";
+
+                return "{0}.{1}.{2}.{3}{4}".F(version.Major, version.MajorRevision, version.Minor, version.MinorRevision, betaText);
             }
         }
 

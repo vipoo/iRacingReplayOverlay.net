@@ -152,7 +152,7 @@ namespace iRacingReplayOverlay
 
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
             TraceInfo.WriteLine("Local user config path: {0}", config.FilePath);
-            TraceInfo.WriteLine("Application Version: {0}", GetDeployedVersionString());
+            TraceInfo.WriteLine("Application Version: {0}", AboutBox1.AssemblyVersion);
 
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
@@ -445,22 +445,6 @@ namespace iRacingReplayOverlay
         private void button1_Click(object sender, EventArgs e)
         {
             (new AboutBox1()).ShowDialog(); 
-        }
-
-        string GetDeployedVersionString()
-        {
-            var version = ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion : new Version("1.0.0.0");
-
-            var isBeta = this.GetType().Assembly.GetName().Name.ToLower().Contains("beta");
-            var isTest = this.GetType().Assembly.GetName().Name.ToLower().Contains("test");
-
-            var betaText = " stable";
-            if (isBeta)
-                betaText = " beta";
-            if (isTest)
-                betaText = " test";
-
-            return "{0}.{1}.{2}.{3}{4}".F(version.Major, version.MajorRevision, version.Minor, version.MinorRevision, betaText);
         }
 
         private void button2_Click(object sender, EventArgs e)
