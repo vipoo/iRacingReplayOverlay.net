@@ -37,7 +37,9 @@ namespace iRacingReplayOverlay
                 using (var awsLogListener = new AwsLogListener())
                 {
                     Trace.Listeners.Add(awsLogListener);
+                    TraceInfo.WriteLine("Application Start");
                     Application.Run(new Main());
+                    TraceInfo.WriteLine("Application End");
                 }
             else
                 Application.Run(new Main());

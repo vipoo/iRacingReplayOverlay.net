@@ -23,11 +23,13 @@ using iRacingSDK;
 using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
-using System.Deployment.Application;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
@@ -138,6 +140,7 @@ namespace iRacingReplayOverlay
 
         void Main_Load(object sender, EventArgs e)
         {
+            Settings.Default.SettingChanging += Default_SettingChanging;
             iracingEvents.NewSessionData += iracingEvents_NewSessionData;
             iracingEvents.Connected += iracingEvents_Connected;
             iracingEvents.Disconnected += iracingEvents_Disconnected;
@@ -150,9 +153,7 @@ namespace iRacingReplayOverlay
 
             LogListener.ToFile(GetDefaultLogFileName());
 
-            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
-            TraceInfo.WriteLine("Local user config path: {0}", config.FilePath);
-            TraceInfo.WriteLine("Application Version: {0}", AboutBox1.AssemblyVersion);
+            new Task(LogSystemInformation).Start();
 
             fileWatchTimer = new System.Windows.Forms.Timer();
             fileWatchTimer.Interval = 10;
@@ -177,6 +178,64 @@ namespace iRacingReplayOverlay
                     WaitingForIRacingLabel.Visible = false;
                 })
                 .InTheBackground(errorMessage => { });
+        }
+
+        void LogSystemInformation()
+        {
+            var StringBuilder1 = new StringBuilder(string.Empty);
+            try
+            {
+                var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
+                TraceInfo.WriteLine("Local user config path: {0}", config.FilePath);
+                TraceInfo.WriteLine("Application Version: {0}", AboutBox1.AssemblyVersion);
+
+                TraceInfo.WriteLine(Environment.Is64BitOperatingSystem ? "OS: 64x" : "OS: 32x");
+                TraceInfo.WriteLine("ProcessorCount:  {0}".F(Environment.ProcessorCount));
+
+                foreach (DriveInfo DriveInfo1 in DriveInfo.GetDrives())
+                    TraceInfo.WriteLine("Drive: {0}, Type: {1}, Format: {2}, Size: {3}, AvailableFreeSpace: {4}".F(
+                        GetValue(() => DriveInfo1.Name),
+                        GetValue(() => DriveInfo1.DriveType.ToString()),
+                        GetValue(() => DriveInfo1.DriveFormat),
+                        GetValue(() => DriveInfo1.TotalSize.ToString()), 
+                        GetValue(() => DriveInfo1.AvailableFreeSpace.ToString())));
+
+                Trace.WriteLine("SystemPageSize:  {0}".F(Environment.SystemPageSize));
+                Trace.WriteLine("Version:  {0}".F(Environment.Version));
+
+                LogDeviceInformation("Win32_Processor");
+                LogDeviceInformation("Win32_VideoController");
+            }
+            catch
+            {
+            }
+        }
+
+        private string GetValue(Func<string> fn)
+        {
+            try
+            {
+                return fn();
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        void LogDeviceInformation(string stringIn)
+        {
+            var mc = new ManagementClass(stringIn);
+            var instances = mc.GetInstances();
+            var properties = mc.Properties;
+            foreach (var instance in instances)
+                foreach (var property in properties)
+                    TraceInfo.WriteLine(GetValue(() => "{0}: {1}".F(property.Name, instance.Properties[property.Name].Value.ToString())));
+        }
+
+        private void Default_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
+        {
+            TraceInfo.WriteLine("Setting Changed: key: {0}, name: {1}, value: {2}".F(e.SettingKey, e.SettingName, e.NewValue.ToString()));
         }
 
         void iracingEvents_Disconnected()

@@ -21,6 +21,7 @@ namespace iRacingReplayOverlay
             Settings.Default.SendUsageData = this.sendUsageData.Checked;
             Settings.Default.Save();
 
+           
             TraceInfo.WriteLine(Settings.Default.SendUsageData ? "User has accepted usage data submission" : "user has declined usage data submission");
             this.Close();
         }
