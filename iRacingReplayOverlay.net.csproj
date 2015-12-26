@@ -258,7 +258,6 @@
     <None Include="DeploymentSite\package.json" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
-    <None Include="packages\repositories.config" />
     <None Include="Properties\app.manifest" />
     <None Include="publish.sh" />
     <None Include="publish-beta.sh" />
@@ -538,4 +537,5 @@
   <ItemGroup>
     <Analyzer Include="packages\AWSSDK.CloudWatchLogs.3.1.2.2\analyzers\dotnet\cs\AWSSDK.CloudWatchLogs.CodeAnalysis.dll" />
   </ItemGroup>
+  <ItemGroup />
 </Project>
