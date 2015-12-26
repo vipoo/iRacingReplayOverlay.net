@@ -230,7 +230,7 @@ namespace iRacingReplayOverlay
             var properties = mc.Properties;
             foreach (var instance in instances)
                 foreach (var property in properties)
-                    TraceInfo.WriteLine(GetValue(() => "{0}: {1}".F(property.Name, instance.Properties[property.Name].Value.ToString())));
+                    TraceInfo.WriteLine("{0}: {1}".F(property.Name, GetValue(() => instance.Properties[property.Name].Value.ToString())));
         }
 
         private void Default_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
