@@ -61,7 +61,7 @@ namespace iRacingReplayOverlay
             {
                 var request = new PutLogEventsRequest(AwsKeys.GroupName, AwsKeys.StreamName, logEvents);
 
-                var describeLogStreamsRequest = new DescribeLogStreamsRequest("spike");
+                var describeLogStreamsRequest = new DescribeLogStreamsRequest(AwsKeys.GroupName);
                 var describeLogStreamsResponse = logs.DescribeLogStreams(describeLogStreamsRequest);
                 var logStreams = describeLogStreamsResponse.LogStreams;
                 var token = logStreams.First().UploadSequenceToken;
