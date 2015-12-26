@@ -129,7 +129,7 @@ namespace iRacingReplayOverlay
 
         public override void Write(string message)
         {
-            items.Add(new InputLogEvent { Message = message, Timestamp = DateTime.Now });
+            items.TryAdd(new InputLogEvent { Message = message, Timestamp = DateTime.Now });
         }
 
         public override void WriteLine(string message)
