@@ -50,7 +50,15 @@ namespace iRacingReplayOverlay
             Settings.Default.PropertyChanged += Default_PropertyChanged;
         }
 
-        private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        string LogStreamName
+        {
+            get
+            {
+                return "{0}{1}".F(AboutBox1.BuildType, trackingId);
+            }
+        }
+
+        void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             trackingId = Settings.Default.TrackingID;
         }
@@ -78,12 +86,12 @@ namespace iRacingReplayOverlay
 
                 using (var logs = new AmazonCloudWatchLogsClient(AwsKeys.AccessKey, AwsKeys.SecretKey, RegionEndpoint.APSoutheast2))
                 {
-                    var request = new PutLogEventsRequest(AwsKeys.GroupName, trackingId, logEvents);
+                    var request = new PutLogEventsRequest(AwsKeys.GroupName, LogStreamName, logEvents);
 
                     var describeLogStreamsRequest = new DescribeLogStreamsRequest(AwsKeys.GroupName);
                     var describeLogStreamsResponse = logs.DescribeLogStreams(describeLogStreamsRequest);
                     var logStreams = describeLogStreamsResponse.LogStreams;
-                    var logStream = logStreams.FirstOrDefault(ls => ls.LogStreamName == trackingId);
+                    var logStream = logStreams.FirstOrDefault(ls => ls.LogStreamName == LogStreamName);
                     if (logStream != null)
                     {
                         var token = logStream.UploadSequenceToken;
@@ -92,7 +100,7 @@ namespace iRacingReplayOverlay
                     }
                     else
                     {
-                        var createRequest = new CreateLogStreamRequest(AwsKeys.GroupName, trackingId);
+                        var createRequest = new CreateLogStreamRequest(AwsKeys.GroupName, LogStreamName);
                         checkResponse(logs.CreateLogStream(createRequest));
                         checkResponse(logs.PutLogEvents(request));
                     }
