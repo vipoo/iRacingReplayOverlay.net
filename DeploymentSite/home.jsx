@@ -60,6 +60,27 @@ export default React.createClass({
             </div>
             
             <div className="row marketing">
+              <div className="col-lg-12">
+              <table className="table">
+                <thead><tr><th><h4>Windows Warnings</h4></th></tr></thead>
+                <tbody><tr><td>
+                  <p>As this application and installer have not been certified by any third parties, windows will
+                  present you with warnings about installing and running applications from an 'Unknown Publisher'</p>
+                  <p>For a free open-source application, it does not make sense to purchase a certificate (usually in the hundreds of dollars), to 
+                  allow winodws to install without warnings.  So you will need to accept these warnings from windows</p>
+                  <p>Starting with windows 8, these warnings are presented, with the option to override hidden away.  The following screen images, show how to accept these warnings
+                  to install iRacing Replay Director</p>
+                  <div style={{marginLeft: "50px"}}>
+                  <p><img src="./moreinfo.png" width="600px" height="239px" /></p>
+                  <p><img src="./run.png"  width="600px" eeight="241px" /></p>
+                  </div>
+                  <p>You will need to accept the running of both the setup.exe, and the actual installed exe (iRacingReplayOverlay.exe)</p>
+                </td></tr></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="row marketing">
               <div className="col-lg-6">
                 <Listings />
               </div>
