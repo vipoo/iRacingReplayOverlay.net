@@ -38,7 +38,7 @@ export default React.createClass({
                 <table className="table">
                   <thead><tr><th>Test Stream</th></tr></thead>
                   <tbody>
-                  <tr><td><a className="btn btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director/test/setup.exe" role="button">Install ...</a></td></tr>
+                  <tr><td><a className="btn btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director/stest/setup.exe" role="button">Install ...</a></td></tr>
                   <tr><td>
                     <p>Install and always have the latest test version:</p>
                     <p>This version is updated on all code changes, and has had very limited testing - But its the latest and greatest version</p>
