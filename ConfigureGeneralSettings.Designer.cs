@@ -70,7 +70,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(576, 6);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(174, 20);
+            this.label11.Size = new System.Drawing.Size(135, 16);
             this.label11.TabIndex = 39;
             this.label11.Text = "Description of setting:";
             // 

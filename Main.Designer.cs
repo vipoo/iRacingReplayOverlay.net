@@ -499,6 +499,7 @@ namespace iRacingReplayOverlay
             this.Name = "Main";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Main";
+            this.Activated += new System.EventHandler(this.Main_Activated);
             this.Load += new System.EventHandler(this.Main_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabCapture.ResumeLayout(false);

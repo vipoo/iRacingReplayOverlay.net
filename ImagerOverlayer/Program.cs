@@ -40,6 +40,7 @@ namespace ImagerOverlayer
                 {
                     Drivers = Enumerable.Range(0, 24).Select( i => new SessionData._DriverInfo._Drivers 
                         {
+                        CarNumberRaw = i,
                             CarIdx = i,
                             UserName = "Car " + i.ToString()
                         }).ToArray()
@@ -55,7 +56,7 @@ namespace ImagerOverlayer
                 {
                     Sessions = new[] 
                     { 
-                        new iRacingSDK.SessionData._SessionInfo._Sessions 
+                        new SessionData._SessionInfo._Sessions 
                         {
                              SessionType = "Open Qualify",
                              ResultsPositions = Enumerable.Range(1, 22).Select( i => new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
@@ -65,6 +66,18 @@ namespace ImagerOverlayer
                                      CarIdx = i
                                 }).ToArray()
                              
+                        },
+
+                        new SessionData._SessionInfo._Sessions
+                        {
+                             SessionType = "Race",
+                             ResultsPositions = Enumerable.Range(1, 22).Select( i => new iRacingSDK.SessionData._SessionInfo._Sessions._ResultsPositions
+                                {
+                                     FastestTime = 127.02,
+                                     Position = i,
+                                     CarIdx = i,
+                                     Time =  i * 10
+                                }).ToArray()
                         }
                     }
                 }
@@ -130,8 +143,9 @@ namespace ImagerOverlayer
 
         public static void Main(string[] args)
         {
-            TestRaceDataOverlay();
+            //TestRaceDataOverlay();
             //TestIntroOverlay();
+            TestOutroOverlay();
         }
 
         private static void TestIntroOverlay()
@@ -147,6 +161,24 @@ namespace ImagerOverlayer
             {
                 Console.WriteLine("time is {0}", i);
                 leaderboard.Intro(g, i.FromSecondsToNano());
+                g.Flush();
+                bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
+            }
+        }
+
+        private static void TestOutroOverlay()
+        {
+            var leaderboard = new LeaderBoard
+            {
+                OverlayData = BuildData()
+            };
+
+            int i = 1;
+            using (var bitmap = (Bitmap)Bitmap.FromFile(@"c:\users\dean\documents\image.bmp"))
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                Console.WriteLine("time is {0}", i);
+                leaderboard.Outro(g, i.FromSecondsToNano());
                 g.Flush();
                 bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
             }

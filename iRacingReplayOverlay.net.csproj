@@ -13,9 +13,11 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <TargetFrameworkProfile />
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <IsWebBootstrapper>true</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -26,16 +28,17 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://iracingreplaydirector.s3.amazonaws.com/</InstallUrl>
+    <InstallUrl>http://iracing-replay-director.s3-ap-southeast-2.amazonaws.com/main/</InstallUrl>
     <SupportUrl>https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md</SupportUrl>
     <ErrorReportUrl>https://github.com/vipoo/iRacingReplayOverlay.net/issues</ErrorReportUrl>
     <ProductName>iRacing Replay Director</ProductName>
     <PublisherName>Dean Netherton</PublisherName>
     <SuiteName>iRacing Apps</SuiteName>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <MinimumRequiredVersion>1.0.0.33</MinimumRequiredVersion>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>32</ApplicationRevision>
-    <ApplicationVersion>1.0.0.32</ApplicationVersion>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>34</ApplicationRevision>
+    <ApplicationVersion>1.0.0.34</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -49,6 +52,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <LangVersion>5</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Optimize>true</Optimize>
@@ -56,11 +60,48 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>5</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>01378B2AFD72091FCC704CC336F31F27540033B3</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>deannetherton-signing.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <TargetZone>Internet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.CloudWatchLogs, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>packages\AWSSDK.CloudWatchLogs.3.1.2.2\lib\net35\AWSSDK.CloudWatchLogs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -70,6 +111,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -79,12 +121,23 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Serialization" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="YamlDotNet, Version=2.0.1.20271, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Aws\AwsKey.cs" />
+    <Compile Include="Aws\AwsLogListener.cs" />
     <Compile Include="ConfigureGeneralSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,7 +152,6 @@
     <Compile Include="Phases\Direction\RulePaceLaps.cs" />
     <Compile Include="Phases\Transcoding\VideoCut.cs" />
     <Compile Include="Phases\Transcoding\RaceHighlightEdits.cs" />
-    <Compile Include="Properties\Credentials.cs" />
     <Compile Include="Drawing\CenterGraphicRect.cs" />
     <Compile Include="LogMessages.cs">
       <SubType>Form</SubType>
@@ -187,6 +239,12 @@
     <Compile Include="ConfigureTrackCameras.Designer.cs">
       <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
     </Compile>
+    <Compile Include="UsageDataRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UsageDataRequest.Designer.cs">
+      <DependentUpon>UsageDataRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Video\Attributes.cs" />
     <Compile Include="Video\ApplyEdit.cs" />
     <Compile Include="Video\FadeOut.cs" />
@@ -197,9 +255,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="DeploymentSite\.gitignore" />
+    <None Include="DeploymentSite\main.jsx" />
+    <None Include="DeploymentSite\package.json" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
-    <None Include="packages\repositories.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="publish.sh" />
     <None Include="publish-beta.sh" />
     <None Include="README.md" />
@@ -207,30 +268,42 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="tools\decrypt.cmd" />
+    <None Include="tools\package.cmd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild" BeforeTargets="_DeploymentComputeClickOnceManifestInfo" Condition="'$(Configuration)' == 'Release' ">
+    <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true'">
+      <Output TaskParameter="Include" ItemName="IlmergeAssemblies" />
+    </CreateItem>
+    <Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)')" Importance="High" />
+    <Copy SourceFiles="@(IntermediateAssembly)" DestinationFiles="obj\x64\Release\tmp.exe" />
+    <Exec Command="&quot;packages\ILMerge.2.14.1208\tools\ILMerge.exe&quot; /out:@(IntermediateAssembly) &quot;obj\x64\Release\tmp.exe&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
+    <Message Text="MERGED: @(MainAssembly) and @(IntermediateAssembly)" Importance="High" />
+  </Target>
   <ItemGroup>
-    <ProjectReference Include="..\SuperMFLib\src\MediaFoundation-2010.csproj">
-      <Project>{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}</Project>
-      <Name>MediaFoundation-2010</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SuperMFLib\SuperMFLib\SuperMFLib.csproj">
-      <Project>{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}</Project>
-      <Name>SuperMFLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
+    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
       <Name>iRacingSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="SuperMFLib\mfnet\mflib\src\MediaFoundation.csproj">
+      <Project>{b78c0f3b-071a-4fd2-829d-7a67e0f7bd1c}</Project>
+      <Name>MediaFoundation</Name>
+    </ProjectReference>
+    <ProjectReference Include="SuperMFLib\SuperMFLib\SuperMFLib.csproj">
+      <Project>{59d2b4b5-2852-4396-a0d9-9ca546ac3c09}</Project>
+      <Name>SuperMFLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigureGeneralSettings.resx">
       <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -253,6 +326,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TestVideoCapture.resx">
       <DependentUpon>TestVideoCapture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UsageDataRequest.resx">
+      <DependentUpon>UsageDataRequest.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ProjectExtensions>
@@ -282,78 +359,186 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="iRacingReplayOverlay.beta.pdb">
+    <PublishFile Include="AWSSDK.CloudWatchLogs">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="AWSSDK.Core">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DeploymentSite\index.html">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="DeploymentSite\xmltojson.js">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="iRacingReplayOverlay.beta.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="iRacingReplayOverlay.pdb">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="iRacingReplayOverlay.test.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="iRacingSDK">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="iRacingSDK.pdb">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="MediaFoundation">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="MediaFoundation.Net">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="MediaFoundation.Net.pdb">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="MediaFoundation.pdb">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="Newtonsoft.Json">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Newtonsoft.Json.pdb">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="YamlDotNet">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="YamlDotNet.pdb">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="DeploymentSite\index.html" />
+    <Content Include="DeploymentSite\xmltojson.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\AWSSDK.CloudWatchLogs.3.1.2.2\analyzers\dotnet\cs\AWSSDK.CloudWatchLogs.CodeAnalysis.dll" />
+  </ItemGroup>
+  <ItemGroup />
 </Project>

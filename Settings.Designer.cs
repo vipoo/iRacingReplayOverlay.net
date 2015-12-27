@@ -213,5 +213,41 @@ namespace iRacingReplayOverlay {
                 this["DisableIncidentsSearch"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SendUsageData {
+            get {
+                return ((bool)(this["SendUsageData"]));
+            }
+            set {
+                this["SendUsageData"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HaveAskedAboutUsage {
+            get {
+                return ((bool)(this["HaveAskedAboutUsage"]));
+            }
+            set {
+                this["HaveAskedAboutUsage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TrackingID {
+            get {
+                return ((string)(this["TrackingID"]));
+            }
+            set {
+                this["TrackingID"] = value;
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using iRacingSDK.Support;
+using iRacingReplayOverlay.Support;
 
 namespace iRacingReplayOverlay
 {
@@ -32,7 +33,16 @@ namespace iRacingReplayOverlay
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += Application_ThreadException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            Application.Run(new Main());
+            if( AwsKeys.HaveKeys)
+                using (var awsLogListener = new AwsLogListener())
+                {
+                    Trace.Listeners.Add(awsLogListener);
+                    TraceInfo.WriteLine("Application Start");
+                    Application.Run(new Main());
+                    TraceInfo.WriteLine("Application End");
+                }
+            else
+                Application.Run(new Main());
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
