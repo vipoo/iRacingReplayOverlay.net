@@ -178,7 +178,7 @@ namespace iRacingReplayOverlay
 
                 transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
                 {
-                    sourceReader.Samples(AVOperation.FadeIn(saveToSink));
+                    sourceReader.Samples(AVOperations.FadeIn(saveToSink));
                 });
 
                 TraceInfo.WriteLine("Video converted.  Review the video file {0} to confirm it looks OK.", transcoder.DestinationFile);

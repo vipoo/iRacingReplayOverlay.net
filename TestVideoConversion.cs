@@ -122,7 +122,7 @@ namespace iRacingReplayOverlay
                 transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
                 {
                     int lastSecond = 0;
-                    var fn = AVOperation.FadeIn(saveToSink);
+                    var fn = AVOperations.FadeIn(saveToSink);
 
                     sourceReader.Samples(sample => {
                         if (sample.Stream.CurrentMediaType.IsVideo && sample.Sample != null)

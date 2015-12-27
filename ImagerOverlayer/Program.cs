@@ -143,9 +143,9 @@ namespace ImagerOverlayer
 
         public static void Main(string[] args)
         {
-            //TestRaceDataOverlay();
+            TestRaceDataOverlay();
             //TestIntroOverlay();
-            TestOutroOverlay();
+            //TestOutroOverlay();
         }
 
         private static void TestIntroOverlay()
@@ -160,7 +160,7 @@ namespace ImagerOverlayer
             using (var g = Graphics.FromImage(bitmap))
             {
                 Console.WriteLine("time is {0}", i);
-                leaderboard.Intro(g, i.FromSecondsToNano());
+                leaderboard.Intro(g, i.FromSecondsToNano(), 1);
                 g.Flush();
                 bitmap.Save(@"c:\users\dean\documents\newimage.bmp");
             }

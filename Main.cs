@@ -36,9 +36,6 @@ namespace iRacingReplayOverlay
 {
     public partial class Main : Form
     {
-        System.Windows.Forms.Timer aTimer;
-        int guessedProgessedAmount;
-        const int GuessFinalizationRequiredSeconds = 25;
         System.Windows.Forms.Timer fileWatchTimer;
 
         int videoBitRateNumber = 15;
@@ -160,10 +157,6 @@ namespace iRacingReplayOverlay
             fileWatchTimer.Tick += (s, a) => OnGameDataFileChanged();
             fileWatchTimer.Start();
 
-            aTimer = new System.Windows.Forms.Timer();
-            aTimer.Interval = 500;
-            aTimer.Tick += (s, a) => GuessFinializeProgress();
-
             videoBitRate.Text = Settings.Default.videoBitRate.ToString();
             sourceVideoTextBox.Text = Settings.Default.lastVideoFile;
 
@@ -186,22 +179,22 @@ namespace iRacingReplayOverlay
             try
             {
                 var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
-                TraceInfo.WriteLine("Local user config path: {0}", config.FilePath);
-                TraceInfo.WriteLine("Application Version: {0}", AboutBox1.AssemblyVersion);
+                TraceDebug.WriteLine("Local user config path: {0}", config.FilePath);
+                TraceDebug.WriteLine("Application Version: {0}", AboutBox1.AssemblyVersion);
 
-                TraceInfo.WriteLine(Environment.Is64BitOperatingSystem ? "OS: 64x" : "OS: 32x");
-                TraceInfo.WriteLine("ProcessorCount:  {0}".F(Environment.ProcessorCount));
+                TraceDebug.WriteLine(Environment.Is64BitOperatingSystem ? "OS: 64x" : "OS: 32x");
+                TraceDebug.WriteLine("ProcessorCount:  {0}".F(Environment.ProcessorCount));
 
                 foreach (DriveInfo DriveInfo1 in DriveInfo.GetDrives())
-                    TraceInfo.WriteLine("Drive: {0}, Type: {1}, Format: {2}, Size: {3}, AvailableFreeSpace: {4}".F(
+                    TraceDebug.WriteLine("Drive: {0}, Type: {1}, Format: {2}, Size: {3}, AvailableFreeSpace: {4}".F(
                         GetValue(() => DriveInfo1.Name),
                         GetValue(() => DriveInfo1.DriveType.ToString()),
                         GetValue(() => DriveInfo1.DriveFormat),
                         GetValue(() => DriveInfo1.TotalSize.ToString()), 
                         GetValue(() => DriveInfo1.AvailableFreeSpace.ToString())));
 
-                Trace.WriteLine("SystemPageSize:  {0}".F(Environment.SystemPageSize));
-                Trace.WriteLine("Version:  {0}".F(Environment.Version));
+                TraceDebug.WriteLine("SystemPageSize:  {0}".F(Environment.SystemPageSize));
+                TraceDebug.WriteLine("Version:  {0}".F(Environment.Version));
 
                 LogDeviceInformation("Win32_Processor");
                 LogDeviceInformation("Win32_VideoController");
@@ -230,12 +223,12 @@ namespace iRacingReplayOverlay
             var properties = mc.Properties;
             foreach (var instance in instances)
                 foreach (var property in properties)
-                    TraceInfo.WriteLine("{0}: {1}".F(property.Name, GetValue(() => instance.Properties[property.Name].Value.ToString())));
+                    TraceDebug.WriteLine("{0}: {1}".F(property.Name, GetValue(() => instance.Properties[property.Name].Value.ToString())));
         }
 
         private void Default_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
         {
-            TraceInfo.WriteLine("Setting Changed: key: {0}, name: {1}, value: {2}".F(e.SettingKey, e.SettingName, e.NewValue.ToString()));
+            TraceDebug.WriteLine("Setting Changed: key: {0}, name: {1}, value: {2}".F(e.SettingKey, e.SettingName, e.NewValue.ToString()));
         }
 
         void iracingEvents_Disconnected()
@@ -287,22 +280,15 @@ namespace iRacingReplayOverlay
             iRacingProcess = new IRacingReplay()
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
                 .WithFiles(sourceFile: sourceVideoTextBox.Text)
-                .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, OnTranscoderReadFramesCompleted, highlightVideoOnly.Checked)
+                .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, highlightVideoOnly.Checked)
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
                     LogListener.ToFile(GetDefaultLogFileName());
                 });
         }
 
-        void OnTranscoderReadFramesCompleted()
-        {
-            guessedProgessedAmount = (transcodeProgressBar.Maximum - transcodeProgressBar.Value) / ((int)GuessFinalizationRequiredSeconds * 2);
-            aTimer.Start();
-        }
-
         void OnTranscoderProgress(long timestamp, long duration)
         {
-            duration += GuessFinalizationRequiredSeconds.FromSecondsToNano();
             transcodeProgressBar.Value = (int)(timestamp * transcodeProgressBar.Maximum / duration);
         }
 
@@ -311,19 +297,11 @@ namespace iRacingReplayOverlay
             State = States.Idle;
         }
         
-        void GuessFinializeProgress()
-        {
-            transcodeProgressBar.Value = Math.Min(transcodeProgressBar.Value + guessedProgessedAmount, transcodeProgressBar.Maximum-5);
-            if (transcodeProgressBar.Value == transcodeProgressBar.Maximum - 5)
-                aTimer.Stop();
-        }
-
         void transcodeCancel_Click(object sender, EventArgs e)
         {
             iRacingProcess.RequestAbort();
             State = States.Idle;
         }
-
 
         void sourceVideoTextBox_TextChanged(object sender, EventArgs e)
         {

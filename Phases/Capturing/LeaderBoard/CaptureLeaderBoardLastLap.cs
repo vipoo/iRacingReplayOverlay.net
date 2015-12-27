@@ -47,9 +47,26 @@ namespace iRacingReplayOverlay.Phases.Capturing.LeaderBoard
             leaderBoard = captureLeaderBoard.CreateLeaderBoard(data, relativeTime, leaderBoard.Drivers);
 
             for (int i = 1; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
+            {
                 AnnounceIfDriverHasFinished(data, relativeTime, session, i, ref leaderBoard);
+                MarkResultFlashCardStart(data, relativeTime, session, i);
+            }
 
             overlayData.LeaderBoards.Add(leaderBoard);
+        }
+
+        void MarkResultFlashCardStart(DataSample data, TimeSpan relativeTime, SessionData._SessionInfo._Sessions session, int i)
+        {
+            if (!data.LastSample.Telemetry.Cars[i].HasSeenCheckeredFlag || overlayData.TimeForOutroOverlay != null)
+                return;
+            
+            var position = (int)session.ResultsPositions.First(r => r.CarIdx == i).Position;
+
+            if (position == Settings.Default.ResultsFlashCardPosition)
+            {
+                overlayData.TimeForOutroOverlay = relativeTime.TotalSeconds;
+                TraceInfo.WriteLine("{0} Mark show results flash card.", data.Telemetry.SessionTimeSpan);
+            }
         }
 
         void AnnounceIfDriverHasFinished(DataSample data, TimeSpan relativeTime, SessionData._SessionInfo._Sessions session, int i, ref OverlayData.LeaderBoard leaderBoard)

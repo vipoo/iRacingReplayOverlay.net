@@ -16,11 +16,25 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
+
 namespace iRacingReplayOverlay
 {
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
     {
-        public readonly int TimingFactorForShortTest = 4;
-        public readonly double TimingFactorForTesting = 1;
+        public readonly int TimingFactorForShortTest = 6;
+
+        static double appliedTimingFactor = 1.0;
+        public static double AppliedTimingFactor
+        {
+            get
+            {
+                return appliedTimingFactor;
+            }
+            set
+            {
+                appliedTimingFactor = value;
+            }
+        }
     }
 }

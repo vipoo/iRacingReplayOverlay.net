@@ -133,6 +133,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public List<MessageState> MessageStates = new List<MessageState>();
         public SessionData SessionData;
         public List<RaceEvent> RaceEvents = new List<RaceEvent>();
+        public double? TimeForOutroOverlay = null;
 
         public void SaveTo(string fileName)
         {

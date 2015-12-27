@@ -33,41 +33,68 @@ namespace iRacingReplayOverlay.Phases.Transcoding
     public class LeaderBoard
     {
         public OverlayData OverlayData;
+        const int FlashCardWidth = 900;
+        const int FlashCardLeft = (1920 / 2) - FlashCardWidth / 2;
+        public const int DriversPerPage = 10;
 
-        public void Intro(Graphics graphics, long timestamp)
+        public void DrawFlashCard(string title, Graphics graphics, long timestamp, Action<GraphicRect> drawBody)
         {
             var timeInSeconds = timestamp.FromNanoToSeconds();
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            var totalWidth = 900;
-            var left = (1920 / 2) - totalWidth / 2;
-            var r = graphics.InRectangle(left, 50, totalWidth, 1080 - 100);
+            var totalWidth = FlashCardWidth;
+            var left = FlashCardLeft;
+            var r = graphics.InRectangle(left, 250, totalWidth, 575);
 
             r
-                .WithBrush(new SolidBrush(Color.FromArgb(180, Color.LightBlue)))
+                .WithBrush(new SolidBrush(Color.FromArgb(180, Color.Gray)))
                 .WithPen(Styles.BlackPen)
-                .DrawRectangleWithBorder()
-                .WithPen(Styles.BlackPen)
-                .WithBrush(Styles.BlackBrush)
-                .WithFont(fontName, 40, FontStyle.Bold)
-                .WithStringFormat(StringAlignment.Center)
-                .DrawText(OverlayData.SessionData.WeekendInfo.TrackDisplayName + "\n" +
-                OverlayData.SessionData.WeekendInfo.TrackCity + ", " + OverlayData.SessionData.WeekendInfo.TrackCountry);
+                .DrawRectangleWithBorder();
 
-            graphics.InRectangle(left, 190, totalWidth, 400)
+            graphics.InRectangle(left - 10, 240, totalWidth - 100, 72)
+                .WithLinearGradientBrush(Color.DarkGray, Color.White, LinearGradientMode.Vertical)
                 .WithPen(Styles.BlackPen)
+                .DrawRoundRectangle(5)
+                .MoveDown(7)
+                .MoveRight(20)
                 .WithBrush(Styles.BlackBrush)
-                .WithFont(fontName, 30, FontStyle.Bold)
-                .WithStringFormat(StringAlignment.Center)
-                .DrawText("Qualifying Results");
+                .WithFont(fontName, 23, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Near)
+                .DrawText(OverlayData.SessionData.WeekendInfo.TrackDisplayName.ToUpper())
+                .MoveDown(32)
+                .WithFont(fontName, 17, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Near)
+                .DrawText(OverlayData.SessionData.WeekendInfo.TrackCity.ToUpper() + ", " + OverlayData.SessionData.WeekendInfo.TrackCountry.ToUpper());
 
-            r = graphics.InRectangle(left + 30, 270, 60, 40)
+            var darkRed = Color.DarkRed;
+            Func<byte, int> adjust = x => Math.Min((int)(x * 1.4), 255);
+            var lightRed = Color.FromArgb(adjust(darkRed.R), adjust(darkRed.G), adjust(darkRed.B));
+            graphics.InRectangle(left - 10, 311, totalWidth - 100, 48)
+                .WithLinearGradientBrush(darkRed, lightRed, LinearGradientMode.Vertical)
+                .WithPen(Styles.BlackPen)
+                .DrawRoundRectangle(5)
+                .MoveDown(7)
+                .MoveRight(20)
+                .WithBrush(Styles.WhiteBrush)
+                .WithFont(fontName, 23, FontStyle.Bold)
+                .WithStringFormat(StringAlignment.Near)
+                .DrawText(title);
+
+            r = graphics.InRectangle(left + 30, 400, 60, 40)
                 .WithPen(Styles.BlackPen)
                 .WithBrush(Styles.BlackBrush)
                 .WithFont(fontName, 20, FontStyle.Bold)
                 .WithStringFormat(StringAlignment.Near);
+
+            drawBody(r);
+        }
+
+        private void DrawIntroBody(Graphics graphics, GraphicRect r, int page)
+        {
+            var totalWidth = FlashCardWidth;
+            var left = FlashCardLeft;
 
             var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
             var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
@@ -78,7 +105,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .WithPen(pen)
                 .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
 
-            foreach (var qualifier in results.Take(19))
+            foreach (var qualifier in results.Skip(page * DriversPerPage).Take(DriversPerPage))
             {
                 var driver = OverlayData.SessionData.DriverInfo.CompetingDrivers[qualifier.CarIdx];
                 r
@@ -89,8 +116,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                             .WithFont(fontName, 16, FontStyle.Bold)
                             .DrawText(qualifier.Position.Ordinal())
                     )
-
-                    .ToRight(width: 120)
+                    .ToRight(width: 120, left: 30)
                     .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
                     .ToRight(width: 60)
                     .DrawText(driver.CarNumber)
@@ -103,6 +129,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     .WithPen(pen)
                     .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
             }
+        }
+
+        public void Intro(Graphics graphics, long timestamp, int page =0)
+        {
+            DrawFlashCard("Qualifying Results", graphics, timestamp, r => DrawIntroBody(graphics, r, page));
         }
 
         public void Overlay(Graphics graphics, long timestamp)
@@ -129,75 +160,34 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 DrawFastestLap(graphics, fastestLap);
         }
 
-        public void Outro(Graphics graphics, long timestamp)
+        public void Outro(Graphics graphics, long timestamp, int page = 0)
         {
-            var timeInSeconds = timestamp.FromNanoToSeconds();
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            DrawFlashCard("Race Results", graphics, timestamp, r => DrawOutroBody(graphics, r, page));
+        }
 
-            var totalWidth = 900;
-            var left = (1920 / 2) - totalWidth / 2;
-            var r = graphics.InRectangle(left, 50, totalWidth, 1080 - 100);
-
-            r
-                .WithBrush(new SolidBrush(Color.FromArgb(180, Color.LightBlue)))
-                .WithPen(Styles.BlackPen)
-                .DrawRectangleWithBorder()
-                .WithPen(Styles.BlackPen)
-                .WithBrush(Styles.BlackBrush)
-                .WithFont(fontName, 40, FontStyle.Bold)
-                .WithStringFormat(StringAlignment.Center)
-                .DrawText(OverlayData.SessionData.WeekendInfo.TrackDisplayName + "\n" +
-                OverlayData.SessionData.WeekendInfo.TrackCity + ", " + OverlayData.SessionData.WeekendInfo.TrackCountry);
-
-            graphics.InRectangle(left, 190, totalWidth, 400)
-                .WithPen(Styles.BlackPen)
-                .WithBrush(Styles.BlackBrush)
-                .WithFont(fontName, 30, FontStyle.Bold)
-                .WithStringFormat(StringAlignment.Center)
-                .DrawText("Race Results");
-
-            r = graphics.InRectangle(left + 30, 270, 60, 40)
-                .WithPen(Styles.BlackPen)
-                .WithBrush(Styles.BlackBrush)
-                .WithFont(fontName, 20, FontStyle.Bold)
-                .WithStringFormat(StringAlignment.Near);
-
+        public void DrawOutroBody(Graphics graphics, GraphicRect r, int page)
+        { 
             var rsession = OverlayData.SessionData.SessionInfo.Sessions.Race();
 
             var results = rsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
 
             var offset = 5;
             var pen = new Pen(Styles.Black, 2);
-            graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
+            graphics.InRectangle(FlashCardLeft, r.Rectangle.Top, FlashCardWidth, 10)
                 .WithPen(pen)
-                .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
+                .DrawLine(FlashCardLeft, r.Rectangle.Top - offset, FlashCardLeft + FlashCardWidth, r.Rectangle.Top - offset);
 
+            var LeaderTime = TimeSpan.FromSeconds(results[0].Time);
 
-            var LeaderTime = new TimeSpan(); //Leader time to create gap from Leader
-            var Gap = new TimeSpan(); //Var to create gap.
-
-            LeaderTime = TimeSpan.FromSeconds(results[0].Time);
-
-            foreach (var racer in results.Take(19))
+            foreach (var racer in results.Skip(DriversPerPage * page).Take(DriversPerPage))
             {
                 var driver = OverlayData.SessionData.DriverInfo.CompetingDrivers[racer.CarIdx];
 
-                Gap = TimeSpan.FromSeconds(racer.Time) - LeaderTime; // Gap calculation
+                var Gap = TimeSpan.FromSeconds(racer.Time) - LeaderTime; // Gap calculation
                 if (Gap == TimeSpan.Zero) //For the leader we want to display the race duration
-                {
                     Gap = LeaderTime;
-                };
 
-                if (Settings.Default.PreferredDriverNames.Contains(driver.UserName))
-                {
-                    r.WithBrush(new SolidBrush(Color.Red));
-                }
-                else
-                {
-                    r.WithBrush(new SolidBrush(Color.Black));
-                }
+                r.WithBrush(Settings.Default.PreferredDriverNames.Contains(driver.UserName) ? Styles.RedBrush : Styles.BlackBrush);
 
                 r
                     .Center(cg => cg
@@ -207,8 +197,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                             .WithFont(fontName, 16, FontStyle.Bold)
                             .DrawText(racer.Position.Ordinal())
                     )
-                    .ToRight(width: 120)
-                    .DrawText(Gap.ToString("hh\\:mm\\:ss\\.fff")) //Displaying gap between car and leader.
+                    .ToRight(width: 170, left: 30)
+                    .DrawText(Gap.ToString("hh\\:mm\\:ss\\.fff"))
                     .ToRight(width: 60)
                     .DrawText(driver.CarNumber)
                     .ToRight(width: 300)
@@ -216,9 +206,9 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
                 r = r.ToBelow();
 
-                graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
+                graphics.InRectangle(FlashCardLeft, r.Rectangle.Top, FlashCardWidth, 10)
                     .WithPen(pen)
-                    .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
+                    .DrawLine(FlashCardLeft, r.Rectangle.Top - offset, FlashCardLeft + FlashCardWidth, r.Rectangle.Top - offset);
             }
         }
 
@@ -287,7 +277,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             .WithStringFormat(StringAlignment.Center);
         }
 
-        const string fontName = "Calibri";
+        const string fontName = "Arial";
 
         public Func<GraphicRect, GraphicRect> ColourBox(Color color, int fontSize = 20)
         {
@@ -300,40 +290,41 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                     .WithStringFormat(StringAlignment.Center);
         }
 
-        void DrawLeaderboard(Graphics g, Capturing.OverlayData.LeaderBoard sample, TimeSpan timeInSeconds)
+        void DrawLeaderboard(Graphics g, OverlayData.LeaderBoard sample, TimeSpan timeInSeconds)
         {
             var maxRows = sample.LapCounter == null ? 22 : 21;
             var showPitStopCount = timeInSeconds.Minutes % 3 == 0 && timeInSeconds.Seconds < 30 && sample.Drivers.Take(maxRows).Any(d => d.PitStopCount > 0);
 
             var r = g.InRectangle(80, 80, showPitStopCount ? 219 : 189, 35)
                 .With(SimpleWhiteBox())
-                .DrawText(sample.RacePosition, topOffset: 0);
+                .DrawText(sample.RacePosition, topOffset: 3);
 
             if (sample.LapCounter != null)
                 r = r.ToBelow()
                     .With(SimpleWhiteBox())
-                    .DrawText(sample.LapCounter, topOffset: 0);
+                    .DrawText(sample.LapCounter, topOffset: 3);
 
             r = r.ToBelow(width: 36, height: 23);
 
             var headerSize = 12;
-            var size = 18;
+            var size = 17;
+            var offset = 4;
 
             var n1 = r.With(ColourBox(Styles.LightYellow, headerSize))
-                .DrawText("Pos")
+                .DrawText("Pos", topOffset: offset)
                 .ToRight(width: 58)
                 .With(SimpleWhiteBox(headerSize))
-                .DrawText("Num");
+                .DrawText("Num", topOffset: offset);
 
             if (showPitStopCount)
                 n1 = n1.ToRight(width: 30)
                 .With(SimpleWhiteBox(headerSize))
-                .DrawText("Pit");
+                .DrawText("Pit", topOffset: offset);
 
             n1.ToRight(width: 95)
                 .With(SimpleWhiteBox(headerSize))
                 .WithStringFormat(StringAlignment.Near)
-                .DrawText("Name", 10);
+                .DrawText("Name", leftOffset: 10, topOffset: offset);
 
             foreach (var d in sample.Drivers.Take(maxRows))
             {
@@ -342,21 +333,21 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var position = d.Position != null ? d.Position.Value.ToString() : "";
 
                 var n = r.With(ColourBox(Styles.LightYellow, size))
-                    .DrawText(position)
+                    .DrawText(position, topOffset: offset)
                     .ToRight(width: 58)
                     .With(SimpleWhiteBox(size))
-                    .DrawText(d.CarNumber);
+                    .DrawText(d.CarNumber, topOffset: offset);
 
                 var pitStopCount = d.PitStopCount != 0 ? d.PitStopCount.ToString() : " ";
                 if( showPitStopCount )
                     n = n.ToRight(width: 30)
                     .With(SimpleWhiteBox(size))
-                    .DrawText(pitStopCount);
+                    .DrawText(pitStopCount, topOffset: offset);
 
                 n.ToRight(width: 95)
                     .With(SimpleWhiteBox(size))
                     .WithStringFormat(StringAlignment.Near)
-                    .DrawText(d.ShortName.ToUpper(), 10);
+                    .DrawText(d.ShortName.ToUpper(), leftOffset: 10,  topOffset: offset);
             }
         }
 
@@ -364,6 +355,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             var position = p.Position != null ? p.Position.Value.ToString() : "";
             var indicator = p.Position != null ? p.Position.Value.Ordinal() : "";
+
+            var offset = 2;
 
             g.InRectangle(1920 / 2 - 440 / 2, 980, 70, 40)
                 .WithBrush(Styles.YellowBrush)
@@ -373,11 +366,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .WithBrush(Styles.BlackBrush)
                 .WithStringFormat(StringAlignment.Near)
                 .Center(cg => cg
-                            .DrawText(position)
+                            .DrawText(position, topOffset: offset)
                             .AfterText(position)
                             .MoveRight(3)
                             .WithFont(fontName, 18, FontStyle.Bold)
-                            .DrawText(indicator)
+                            .DrawText(indicator, topOffset: offset)
                 )
 
                 .ToRight(width: 70)
@@ -385,14 +378,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
                 .WithBrush(Styles.BlackBrush)
-                .DrawText(p.CarNumber)
+                .DrawText(p.CarNumber, topOffset: offset)
 
                 .ToRight(width: 300)
                 .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
                 .DrawRectangleWithBorder()
                 .WithStringFormat(StringAlignment.Center)
                 .WithBrush(Styles.BlackBrush)
-                .DrawText(p.UserName);
+                .DrawText(p.UserName, topOffset: offset);
         }
 
         private readonly _Styles Styles = new _Styles();
@@ -417,6 +410,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
 
             public readonly Brush BlackBrush = new SolidBrush(Color.Black);
+            public readonly Brush RedBrush = new SolidBrush(Color.Red);
+            public readonly Brush WhiteBrush = new SolidBrush(Color.White);
             public readonly Brush YellowBrush = new SolidBrush(Color.Yellow);
             public readonly Brush TransparentLightBlueBrush = new SolidBrush(Color.FromArgb(AlphaLevel, Color.LightBlue));
         }

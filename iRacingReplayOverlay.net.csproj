@@ -181,7 +181,6 @@
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
     <Compile Include="Phases\Direction\VideoCapture.cs" />
-    <Compile Include="Phases\Transcoding\Editor.cs" />
     <Compile Include="SettingsAdditional.cs" />
     <Compile Include="SettingsExtensions.cs" />
     <Compile Include="Support\LogListener.cs" />
@@ -230,7 +229,6 @@
     <Compile Include="Drawing\GraphicsExtension.cs" />
     <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
     <Compile Include="Phases\Direction\ReplayControl.cs" />
-    <Compile Include="Phases\Transcoding\SourceReaderSampleWithBitmap.cs" />
     <Compile Include="Phases\Capturing\OverlayData.cs" />
     <Compile Include="Phases\Transcoding\Transcoder.cs" />
     <Compile Include="ConfigureTrackCameras.cs">
@@ -246,12 +244,6 @@
       <DependentUpon>UsageDataRequest.cs</DependentUpon>
     </Compile>
     <Compile Include="Video\Attributes.cs" />
-    <Compile Include="Video\ApplyEdit.cs" />
-    <Compile Include="Video\FadeOut.cs" />
-    <Compile Include="Video\FromFile.cs" />
-    <Compile Include="Video\Concat.cs" />
-    <Compile Include="Video\FadeIn.cs" />
-    <Compile Include="Video\General.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

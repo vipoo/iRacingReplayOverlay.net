@@ -107,6 +107,11 @@ namespace iRacingReplayOverlay.Drawing
             return New(g, new Rectangle(r.Left + right, r.Top, r.Width + right, r.Height), b, p, f, sf);
         }
 
+        public GraphicRect MoveDown(int top)
+        {
+            return New(g, new Rectangle(r.Left, r.Top + top, r.Width, r.Height + top), b, p, f, sf);
+        }
+
         internal GraphicRect WithBrush(Brush brush)
         {
 			return New(g, r, brush, p, f, sf);
@@ -125,12 +130,12 @@ namespace iRacingReplayOverlay.Drawing
 			return New(g, new Rectangle(r.Left, r.Top + r.Height, w, h), b, p, f, sf);
         }
 
-        internal GraphicRect ToRight(int? width = null, int? height = null)
+        internal GraphicRect ToRight(int? width = null, int? height = null, int left = 0)
         {
             var w = width == null ? r.Width : width.Value;
             var h = height == null ? r.Height : height.Value;
 
-			return New(g, new Rectangle(r.Left + r.Width, r.Top, w, h), b, p, f, sf);
+			return New(g, new Rectangle(r.Left + r.Width + left, r.Top, w, h), b, p, f, sf);
         }
 
         internal GraphicRect WithStringFormat(StringAlignment alignment, StringAlignment lineAlignment = StringAlignment.Near)
@@ -162,5 +167,84 @@ namespace iRacingReplayOverlay.Drawing
 
 			return this;
 		}
+
+        public GraphicRect DrawRoundRectangle(float radius)
+        {
+            var rectangle = new RectangleF(r.Left, r.Top, r.Width, r.Height);
+            var path = this.GetRoundedRect(rectangle, radius);
+            g.FillPath(b, path);
+
+            return this;
+        }
+
+        GraphicsPath GetRoundedRect(RectangleF baseRect, float radius)
+        {
+            if (radius <= 0.0F)
+            {
+                var mPath = new GraphicsPath();
+                mPath.AddRectangle(baseRect);
+                mPath.CloseFigure();
+                return mPath;
+            }
+
+            if (radius >= (Math.Min(baseRect.Width, baseRect.Height)) / 2.0)
+                return GetCapsule(baseRect);
+
+            var diameter = radius * 2.0F;
+            var sizeF = new SizeF(diameter, diameter);
+            var arc = new RectangleF(baseRect.Location, sizeF);
+            var path = new GraphicsPath();
+
+            path.AddArc(arc, 180, 90);
+
+            arc.X = baseRect.Right - diameter;
+            path.AddArc(arc, 270, 90);
+
+            arc.Y = baseRect.Bottom - diameter;
+            path.AddArc(arc, 0, 90);
+
+            arc.X = baseRect.Left;
+            path.AddArc(arc, 90, 90);
+
+            path.CloseFigure();
+            return path;
+        }
+
+        GraphicsPath GetCapsule(RectangleF baseRect)
+        {
+            var path = new GraphicsPath();
+            try
+            {
+                if (baseRect.Width > baseRect.Height)
+                {
+                    var diameter = baseRect.Height;
+                    var sizeF = new SizeF(diameter, diameter);
+                    var arc = new RectangleF(baseRect.Location, sizeF);
+                    path.AddArc(arc, 90, 180);
+                    arc.X = baseRect.Right - diameter;
+                    path.AddArc(arc, 270, 180);
+                }
+                else if (baseRect.Width < baseRect.Height)
+                {
+                    var diameter = baseRect.Width;
+                    var sizeF = new SizeF(diameter, diameter);
+                    var arc = new RectangleF(baseRect.Location, sizeF);
+                    path.AddArc(arc, 180, 180);
+                    arc.Y = baseRect.Bottom - diameter;
+                    path.AddArc(arc, 0, 180);
+                }
+                else
+                    path.AddEllipse(baseRect);
+            }
+            catch (Exception)
+            {
+                path.AddEllipse(baseRect);
+            }
+            finally
+            {
+                path.CloseFigure();
+            }
+            return path;
+        }
     }
 }

@@ -66,6 +66,16 @@ namespace iRacingReplayOverlay
             });
         }
 
+        void AddIntField(string caption, string description, string setting)
+        {
+            AddField(caption, description, Settings.Default[setting].ToString(), tb =>
+            {
+                var number = 0;
+                if (int.TryParse(tb.Text, out number))
+                    Settings.Default[setting] = number;
+            });
+        }
+
         void AddTimeField(string caption, string description, string setting)
         {
             panel.Controls.Add(new Label

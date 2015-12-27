@@ -75,7 +75,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             if (lastFinisherCarIdx != -1 && !data.Telemetry.Cars[lastFinisherCarIdx].HasSeenCheckeredFlag)
             {
-                timeOfFinisher = DateTime.Now.AddSeconds(2.0/Settings.Default.TimingFactorForTesting);
+                timeOfFinisher = DateTime.Now.AddSeconds(2.0 * Settings.AppliedTimingFactor);
                 return;
             }
 

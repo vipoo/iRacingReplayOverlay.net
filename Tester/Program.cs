@@ -47,7 +47,7 @@ namespace Tester
                 .CaptureRace(f => { })
                 .CloseIRacing()
                 .WithEncodingOf(videoBitRate: 5000000, audioBitRate: 48000/8)
-                .OverlayRaceDataOntoVideo((c, d) => { }, () => { }, () => { }, false)
+                .OverlayRaceDataOntoVideo((c, d) => { }, () => { }, false)
                 .InTheForeground();
         }
 

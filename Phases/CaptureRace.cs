@@ -78,23 +78,18 @@ namespace iRacingReplayOverlay.Phases
                 .WithPitStopCounts()
                 .TakeUntil(3.Seconds()).After(d => d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface == TrackLocation.InPitStall))
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
-
-            bool haveSkipForTesting = false;
-
+            
             if (shortTestOnly)
+            {
                 samples = samples.AtSpeed(Settings.Default.TimingFactorForShortTest);
+                Settings.AppliedTimingFactor = 1.0 / Settings.Default.TimingFactorForShortTest;
+            }
 
             videoCapture.Activate(workingFolder);
             var startTime = DateTime.Now;
 
             foreach (var data in samples)
             {
-                if (shortTestOnly && !haveSkipForTesting && ReturnIfSkipping(data))
-                {
-                    haveSkipForTesting = true;
-                    continue;
-                }
-
                 var relativeTime = DateTime.Now - startTime;
 
                 replayControl.Process(data);
@@ -124,7 +119,7 @@ namespace iRacingReplayOverlay.Phases
             onComplete(fileName);
         }
 
-        private static void AltTabBackToApp()
+        static void AltTabBackToApp()
         {
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
             Thread.Sleep(200);
@@ -149,19 +144,7 @@ namespace iRacingReplayOverlay.Phases
             Thread.Sleep(1000);
         }
 
-        private bool ReturnIfSkipping(DataSample data)
-        {
-            if (data.Telemetry.RaceLaps <= 2)
-                return false;
-
-            var lapSkip = data.Telemetry.Session.ResultsLapsComplete - data.Telemetry.RaceLaps - 2;
-            var skipFrames = 60 * data.Telemetry.Session.ResultsAverageLapTime * lapSkip;
-            iRacing.Replay.MoveToFrame((int)skipFrames, ReplayPositionMode.Current);
-            iRacing.Replay.SetSpeed(1);
-            return true;
-        }
-
-        private void SaveOverlayData(OverlayData overlayData, string fileName)
+        void SaveOverlayData(OverlayData overlayData, string fileName)
         {
             if (fileName == null)
                 fileName = workingFolder + "/unknown_capture-{0}".F(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));

@@ -19,8 +19,6 @@
 
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
-using iRacingReplayOverlay.Video;
-using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
 using System.Collections.Generic;
@@ -28,6 +26,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -41,7 +40,9 @@ namespace iRacingReplayOverlay.Phases
         string destinationFile;
         string destinationHighlightsFile;
         string gameDataFile;
-        
+        long totalDuration;
+        LeaderBoard leaderBoard;
+
         public void _WithEncodingOf(int videoBitRate, int audioBitRate)
         {
             this.videoBitRate = videoBitRate;
@@ -51,16 +52,15 @@ namespace iRacingReplayOverlay.Phases
         public void _WithFiles(string sourceFile)
         {
             this.sourceFile = sourceFile;
-            this.destinationFile = Path.ChangeExtension(sourceFile, "wmv");
-            this.destinationHighlightsFile = Path.ChangeExtension(sourceFile, ".highlights.wmv");
+            destinationFile = Path.ChangeExtension(sourceFile, "wmv");
+            destinationHighlightsFile = Path.ChangeExtension(sourceFile, ".highlights.wmv");
 
-            this.gameDataFile = Path.ChangeExtension(sourceFile, "xml");
+            gameDataFile = Path.ChangeExtension(sourceFile, "xml");
+            leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile) };
         }
 
-        public void _OverlayRaceDataOntoVideo(_Progress progress, Action completed, Action readFramesCompleted, bool highlightOnly)
+        public void _OverlayRaceDataOntoVideo(_Progress progress, Action completed, bool highlightOnly)
         {
-            var overlayData = OverlayData.FromFile(gameDataFile);
-
             const bool TranscodeHightlights = true;
             bool TranscodeFull = !highlightOnly;
             
@@ -69,10 +69,10 @@ namespace iRacingReplayOverlay.Phases
 
             Func<ProcessSample, ProcessSample> monitor = null;
             if( !TranscodeFull)
-                monitor = next => MonitorProgress(progress, readFramesCompleted, next);
+                monitor = next => MonitorProgress(progress, next);
 
-            transcodeHigh = new Task(() => ApplyTransformationsToVideo(overlayData, destinationHighlightsFile, true, monitor));
-            transcodeFull = new Task(() => ApplyTransformationsToVideo(overlayData, destinationFile, false, next => MonitorProgress(progress, readFramesCompleted, next)));
+            transcodeHigh = new Task(() => ApplyTransformationsToVideo(destinationHighlightsFile, true, monitor));
+            transcodeFull = new Task(() => ApplyTransformationsToVideo(destinationFile, false, next => MonitorProgress(progress, next)));
 
             using (MFSystem.Start())
             {
@@ -98,15 +98,13 @@ namespace iRacingReplayOverlay.Phases
             completed();
         }
 
-        void ApplyTransformationsToVideo(OverlayData overlayData, string destFile, bool highlightsOnly, Func<ProcessSample, ProcessSample> monitorProgress = null)
+        void ApplyTransformationsToVideo(string destFile, bool highlightsOnly, Func<ProcessSample, ProcessSample> monitorProgress = null)
         {
             try
             {
-                var leaderBoard = new LeaderBoard { OverlayData = overlayData };
-
                 var transcoder = new Transcoder
                 {
-                    IntroVideoFile = overlayData.IntroVideoFileName,
+                    IntroVideoFile = leaderBoard.OverlayData.IntroVideoFileName,
                     SourceFile = sourceFile,
                     DestinationFile = destFile,
                     VideoBitRate = videoBitRate,
@@ -115,23 +113,24 @@ namespace iRacingReplayOverlay.Phases
 
                 transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
                 {
-                    Action<ProcessSample> mainFeed;
+                    var writeToSink = monitorProgress == null ? saveToSink : monitorProgress(saveToSink);
 
-                    if (monitorProgress == null)
-                        mainFeed = next => sourceReader.Samples(OverlayRaceDataToVideo(leaderBoard, next));
-                    else
-                        mainFeed = next => sourceReader.Samples(monitorProgress(OverlayRaceDataToVideo(leaderBoard, next)));
+                    var fadeSegments = AVOperations.FadeIn(AVOperations.FadeOut(writeToSink));
+                    var edits = AVOperations.Overlay(applyRaceDataOverlay, ApplyEdits(writeToSink));
+                    var introOverlay = AVOperations.Overlay(applyIntroOverlay, fadeSegments);
 
-                    var writeToSinks = highlightsOnly ? ApplyEdits(leaderBoard, saveToSink) : saveToSink;
+                    if (introSourceReader != null)
+                    {
+                        totalDuration += (long)introSourceReader.MediaSource.Duration + (long)sourceReader.MediaSource.Duration;
 
-                    if (introSourceReader == null)
-                        mainFeed(writeToSinks);
+                        AVOperations.StartConcat(introSourceReader, introOverlay,
+                            AVOperations.Concat(sourceReader, edits));
+                    }
                     else
                     {
-                        Action<ProcessSample> introFeed = next => introSourceReader.Samples(
-                            ApplyIntroTitles(leaderBoard, AVOperation.FadeIn(AVOperation.FadeOut(introSourceReader.MediaSource, next))));
+                        totalDuration += (long)sourceReader.MediaSource.Duration;
 
-                        AVOperation.Concat(introFeed, mainFeed, writeToSinks);
+                        sourceReader.Samples(edits);
                     }
                 });
             }
@@ -143,64 +142,89 @@ namespace iRacingReplayOverlay.Phases
             }
         }
 
-        ProcessSample ApplyIntroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        void applyRaceDataOverlay(SourceReaderSampleWithBitmap sample)
         {
-            return AVOperations.SeperateAudioVideo(next, AVOperation.DataSamplesOnly(IntroTitles(leaderBoard, next), next));
+            if (showClosingFlashCard(sample))
+            {
+                var duration = sample.Duration - (long)leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
+                duration = Math.Min(duration, 30.FromSecondsToNano());
+                var period = sample.Timestamp - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
+                var page = GetPageNumber((float)period / duration);
+
+                leaderBoard.Outro(sample.Graphic, sample.Timestamp, page);
+            }
+            else
+                leaderBoard.Overlay(sample.Graphic, sample.Timestamp);
         }
 
-        ProcessSample IntroTitles(LeaderBoard leaderBoard, ProcessSample next)
+        void applyIntroOverlay(SourceReaderSampleWithBitmap sample)
         {
-            return sample =>
-                {
-                    using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                        leaderBoard.Intro(sampleWithBitmap.Graphic, sampleWithBitmap.Timestamp);
+            var pagePeriod = (float)sample.Timestamp / sample.Duration;
 
-                    return next(sample);
-                };
+            int page = GetPageNumber( pagePeriod);
+
+            leaderBoard.Intro(sample.Graphic, sample.Timestamp, page);
         }
-
-        ProcessSample MonitorProgress(_Progress progress, Action readFramesCompleted, ProcessSample next)
+        
+        ProcessSample MonitorProgress(_Progress progress, ProcessSample next)
         {
             return sample =>
             {
-                if (sample.Flags.EndOfStream)
-                    readFramesCompleted();
-                else
-                {
-                    if (sample.Timestamp != 0)
-                        progress(sample.Timestamp, sample.Duration);
-                }
+                if (!sample.Flags.EndOfStream)
+                    progress(sample.SampleTime, totalDuration);
 
                 return !requestAbort && next(sample);
             };
         }
 
-        ProcessSample ApplyEdits(LeaderBoard leaderBoard, ProcessSample next)
+        ProcessSample ApplyEdits(ProcessSample next)
         {
             var cut = next;
 
+            var firstEdit = leaderBoard.OverlayData.RaceEvents.GetRaceEdits().First();
+            var lastEdit = leaderBoard.OverlayData.RaceEvents.GetRaceEdits().Last();
+
             foreach (var editCut in leaderBoard.OverlayData.RaceEvents.GetRaceEdits())
-                cut = AVOperation.ApplyEditWithFade(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), cut);
+            {
+                cut = AVOperations.Cut(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), AVOperations.FadeInOut(cut));
+                totalDuration -= editCut.EndTime.FromSecondsToNano() - editCut.StartTime.FromSecondsToNano();
+            }
 
             return cut;
         }
-
-        ProcessSample OverlayRaceDataToVideo(LeaderBoard leaderBoard, ProcessSample next)
+       
+        bool showClosingFlashCard( SourceReaderSample sample)
         {
-            var overlays = AVOperation.DataSamplesOnly(OverlayRaceData(leaderBoard, AVOperation.FadeIn(next)), next);
+            if (!leaderBoard.OverlayData.TimeForOutroOverlay.HasValue)
+                return false;
 
-            return AVOperations.SeperateAudioVideo(next, overlays);
+            return sample.Timestamp >= leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
         }
 
-        ProcessSample OverlayRaceData(LeaderBoard leaderBoard, ProcessSample next)
+        int GetNumberOfPages()
         {
-            return sample =>
-            {
-                using (var sampleWithBitmap = new SourceReaderSampleWithBitmap(sample))
-                    leaderBoard.Overlay(sampleWithBitmap.Graphic, sampleWithBitmap.Timestamp);
+            var numberOfDrivers = leaderBoard.OverlayData.SessionData.DriverInfo.CompetingDrivers.Length;
+            var numberOfPages = Math.Min(numberOfDrivers / LeaderBoard.DriversPerPage, 3);
+            if (((float)numberOfDrivers % LeaderBoard.DriversPerPage) != 0)
+                numberOfPages++;
 
-                return next(sample);
-            };
+            return numberOfPages;
+        }
+
+        int GetPageNumber(float pagePeriod)
+        {
+            var numberOfPages = GetNumberOfPages();
+
+            var page = (int)Math.Floor(pagePeriod * numberOfPages);
+            return Math.Min(page, numberOfPages);
+        }
+
+        bool showClosingFlashCard(LeaderBoard leaderBoard, SourceReaderSample sample)
+        {
+            if (!leaderBoard.OverlayData.TimeForOutroOverlay.HasValue)
+                return false;
+
+            return sample.Timestamp >= leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
         }
     }
 }
