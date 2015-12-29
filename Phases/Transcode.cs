@@ -116,7 +116,8 @@ namespace iRacingReplayOverlay.Phases
                     var writeToSink = monitorProgress == null ? saveToSink : monitorProgress(saveToSink);
 
                     var fadeSegments = AVOperations.FadeIn(AVOperations.FadeOut(writeToSink));
-                    var edits = AVOperations.Overlay(applyRaceDataOverlay, ApplyEdits(writeToSink));
+                    var edits = highlightsOnly ? ApplyEdits(writeToSink) : writeToSink;
+                    var mainBodyOverlays = AVOperations.Overlay(applyRaceDataOverlay, edits);
                     var introOverlay = AVOperations.Overlay(applyIntroOverlay, fadeSegments);
 
                     if (introSourceReader != null)
@@ -124,13 +125,13 @@ namespace iRacingReplayOverlay.Phases
                         totalDuration += (long)introSourceReader.MediaSource.Duration + (long)sourceReader.MediaSource.Duration;
 
                         AVOperations.StartConcat(introSourceReader, introOverlay,
-                            AVOperations.Concat(sourceReader, edits));
+                            AVOperations.Concat(sourceReader, mainBodyOverlays));
                     }
                     else
                     {
                         totalDuration += (long)sourceReader.MediaSource.Duration;
 
-                        sourceReader.Samples(edits);
+                        sourceReader.Samples(mainBodyOverlays);
                     }
                 });
             }
@@ -147,14 +148,18 @@ namespace iRacingReplayOverlay.Phases
             if (showClosingFlashCard(sample))
             {
                 var duration = sample.Duration - (long)leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
+                if (duration >= 30.FromSecondsToNano())
+                    return;
+
                 duration = Math.Min(duration, 30.FromSecondsToNano());
                 var period = sample.Timestamp - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
                 var page = FlashCardPaging.GetPageNumber(leaderBoard.OverlayData.SessionData.DriverInfo, (float)period / duration);
 
                 leaderBoard.Outro(sample.Graphic, sample.Timestamp, page);
+                return;
             }
-            else
-                leaderBoard.Overlay(sample.Graphic, sample.Timestamp);
+
+            leaderBoard.Overlay(sample.Graphic, sample.Timestamp);
         }
 
         void applyIntroOverlay(SourceReaderSampleWithBitmap sample)
