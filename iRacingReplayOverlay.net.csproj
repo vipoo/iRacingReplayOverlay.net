@@ -150,6 +150,7 @@
     </Compile>
     <Compile Include="Phases\Capturing\EditMarker.cs" />
     <Compile Include="Phases\Direction\RulePaceLaps.cs" />
+    <Compile Include="Phases\Transcoding\FlashCardPaging.cs" />
     <Compile Include="Phases\Transcoding\VideoCut.cs" />
     <Compile Include="Phases\Transcoding\RaceHighlightEdits.cs" />
     <Compile Include="Drawing\CenterGraphicRect.cs" />

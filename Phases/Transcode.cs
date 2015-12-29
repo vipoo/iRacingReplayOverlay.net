@@ -149,7 +149,7 @@ namespace iRacingReplayOverlay.Phases
                 var duration = sample.Duration - (long)leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
                 duration = Math.Min(duration, 30.FromSecondsToNano());
                 var period = sample.Timestamp - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
-                var page = GetPageNumber((float)period / duration);
+                var page = FlashCardPaging.GetPageNumber(leaderBoard.OverlayData.SessionData.DriverInfo, (float)period / duration);
 
                 leaderBoard.Outro(sample.Graphic, sample.Timestamp, page);
             }
@@ -161,7 +161,7 @@ namespace iRacingReplayOverlay.Phases
         {
             var pagePeriod = (float)sample.Timestamp / sample.Duration;
 
-            int page = GetPageNumber( pagePeriod);
+            int page = FlashCardPaging.GetPageNumber(leaderBoard.OverlayData.SessionData.DriverInfo, pagePeriod);
 
             leaderBoard.Intro(sample.Graphic, sample.Timestamp, page);
         }
@@ -194,32 +194,6 @@ namespace iRacingReplayOverlay.Phases
         }
        
         bool showClosingFlashCard( SourceReaderSample sample)
-        {
-            if (!leaderBoard.OverlayData.TimeForOutroOverlay.HasValue)
-                return false;
-
-            return sample.Timestamp >= leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
-        }
-
-        int GetNumberOfPages()
-        {
-            var numberOfDrivers = leaderBoard.OverlayData.SessionData.DriverInfo.CompetingDrivers.Length;
-            var numberOfPages = Math.Min(numberOfDrivers / LeaderBoard.DriversPerPage, 3);
-            if (((float)numberOfDrivers % LeaderBoard.DriversPerPage) != 0)
-                numberOfPages++;
-
-            return numberOfPages;
-        }
-
-        int GetPageNumber(float pagePeriod)
-        {
-            var numberOfPages = GetNumberOfPages();
-
-            var page = (int)Math.Floor(pagePeriod * numberOfPages);
-            return Math.Min(page, numberOfPages-1);
-        }
-
-        bool showClosingFlashCard(LeaderBoard leaderBoard, SourceReaderSample sample)
         {
             if (!leaderBoard.OverlayData.TimeForOutroOverlay.HasValue)
                 return false;

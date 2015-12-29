@@ -17,17 +17,27 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 
-using iRacingReplayOverlay.net.Tests.Phases.Transcoding;
-using iRacingReplayOverlay.Phases.Capturing.Tests;
-namespace iRacingReplayOverlay.net.Tests
+namespace iRacingReplayOverlay.Phases.Transcoding
 {
-    public class TestRunner
+    public static class FlashCardPaging
     {
-        public static void Main()
+        public static int GetNumberOfPages(iRacingSDK.SessionData._DriverInfo driverInfo)
         {
-            new FlashCardPagingTest().show_page_2_at_end_for_20_drivers();
+            var numberOfDrivers = driverInfo.CompetingDrivers.Length - 1;
+            var numberOfPages = Math.Min(numberOfDrivers / LeaderBoard.DriversPerPage, 3);
+            if (((float)numberOfDrivers % LeaderBoard.DriversPerPage) != 0)
+                numberOfPages++;
+
+            return numberOfPages;
+        }
+
+        public static int GetPageNumber(iRacingSDK.SessionData._DriverInfo driverInfo, float pagePeriod)
+        {
+            var numberOfPages = GetNumberOfPages(driverInfo);
+            var page = (int)Math.Floor(pagePeriod * numberOfPages);
+            return Math.Min(page, numberOfPages - 1);
         }
     }
 }
-
