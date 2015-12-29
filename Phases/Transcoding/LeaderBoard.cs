@@ -197,11 +197,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                             .WithFont(fontName, 16, FontStyle.Bold)
                             .DrawText(racer.Position.Ordinal())
                     )
-                    .ToRight(width: 170, left: 30)
+                    .ToRight(width: 190, left: 30)
                     .DrawText(Gap.ToString("hh\\:mm\\:ss\\.fff"))
-                    .ToRight(width: 60)
+                    .ToRight(width: 80, left: 20)
                     .DrawText(driver.CarNumber)
-                    .ToRight(width: 300)
+                    .ToRight(width: 350)
                     .DrawText(driver.UserName);
 
                 r = r.ToBelow();

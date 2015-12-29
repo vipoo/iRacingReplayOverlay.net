@@ -40,9 +40,11 @@ namespace ImagerOverlayer
                 {
                     Drivers = Enumerable.Range(0, 24).Select( i => new SessionData._DriverInfo._Drivers 
                         {
-                        CarNumberRaw = i,
+                            CarNumberRaw = i,
+                            CarNumber = i.ToString(),
                             CarIdx = i,
-                            UserName = "Car " + i.ToString()
+                            UserName = "Car " + i.ToString(),
+                            
                         }).ToArray()
                     
                 },
@@ -143,9 +145,9 @@ namespace ImagerOverlayer
 
         public static void Main(string[] args)
         {
-            TestRaceDataOverlay();
+            //TestRaceDataOverlay();
             //TestIntroOverlay();
-            //TestOutroOverlay();
+            TestOutroOverlay();
         }
 
         private static void TestIntroOverlay()
