@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingReplayOverlay.Phases;
+using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Support;
 using iRacingReplayOverlay.Video;
 using iRacingSDK;
@@ -261,7 +262,7 @@ namespace iRacingReplayOverlay
         void sourceVideoButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
-            fbd.Filter = "Mpeg 4|*.mp4|AVI Files|*.avi|All files (*.*)|*.*";
+            fbd.Filter = "XML|*.xml|All files (*.*)|*.*";
             fbd.FileName = sourceVideoTextBox.Text;
 
             if (fbd.ShowDialog() == DialogResult.OK)
@@ -279,7 +280,7 @@ namespace iRacingReplayOverlay
 
             iRacingProcess = new IRacingReplay()
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
-                .WithFiles(sourceFile: sourceVideoTextBox.Text)
+                .WithOverlayFile(overlayFile: sourceVideoTextBox.Text)
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, highlightVideoOnly.Checked)
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
@@ -328,23 +329,17 @@ namespace iRacingReplayOverlay
 
             if (!File.Exists(sourceVideoTextBox.Text) ) 
             {
-                errorSourceVideoLabel.Text = "*Video files does not exist";
+                errorSourceVideoLabel.Text = "*File does not exist";
                 errorSourceVideoLabel.Visible = true;
                 VideoDetailLabel.Visible = false;
                 return;
             }
             
-            if( !File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".xml")))
-            {
-                errorSourceVideoLabel.Text = "*There is no associated captured game data (xml file name based on the name of the source input video)";
-                errorSourceVideoLabel.Visible = true;
-                VideoDetailLabel.Visible = false;
-                return;
-            }
-
             try
             {
-                var details = VideoAttributes.For(sourceVideoTextBox.Text);
+                var data = OverlayData.FromFile(sourceVideoTextBox.Text);
+                var fileName = data.VideoFiles.First().FileName;
+                var details = VideoAttributes.For(fileName);
 
                 foreach (var d in details.SupportedAudioBitRates)
                     audioBitRate.Items.Add(d);
@@ -377,9 +372,9 @@ namespace iRacingReplayOverlay
 
             var audioBitRateValid = audioBitRate.SelectedItem != null;
 
-            var hasXmlFile = File.Exists(Path.ChangeExtension(sourceVideoTextBox.Text, ".xml"));
+            var hasXmlFile = File.Exists(sourceVideoTextBox.Text);
 
-            return (hasXmlFile && File.Exists(sourceVideoTextBox.Text)) && audioBitRateValid;
+            return hasXmlFile && audioBitRateValid;
         }
 
         void OnGameDataFileChanged()
@@ -409,11 +404,11 @@ namespace iRacingReplayOverlay
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()
-                .CaptureRace(videoFileName =>
+                .CaptureRace(overlayFileName =>
                 {
-                    sourceVideoTextBox.Text = videoFileName;
+                    sourceVideoTextBox.Text = overlayFileName;
 
-                    LogListener.MoveToFile(Path.ChangeExtension(videoFileName, "log"));
+                    LogListener.MoveToFile(Path.ChangeExtension(overlayFileName, "log"));
                 })
                 .CloseIRacing()
                 .InTheBackground(errorMessage =>

@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
@@ -27,6 +28,32 @@ using System.Xml.Serialization;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
+    public class CapturedVideoFile
+    {
+        public string FileName;
+
+        public bool isIntroVideo = false;
+
+        public override string ToString()
+        {
+            return isIntroVideo ? "{0} (intro)".F(FileName) : FileName;
+        }
+
+    }
+
+    public static class CapturedVideoFileExtensions
+    {
+        public static CapturedVideoFile Intro(this IEnumerable<CapturedVideoFile> files)
+        {
+            return files.FirstOrDefault(f => f.isIntroVideo);
+        }
+
+        public static IEnumerable<SourceReaderExtra> ToSourceReaderExtra(this IEnumerable<CapturedVideoFile> files)
+        {
+            return files.Select(f => new SourceReaderExtra(f.FileName, f));
+        }
+    }
+
     public class OverlayData
     {
         public class RaceEvent
@@ -126,7 +153,6 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double Time;
         }
 
-        public string IntroVideoFileName;
         public List<LeaderBoard> LeaderBoards = new List<LeaderBoard>();
         public List<CamDriver> CamDrivers = new List<CamDriver>();
         public List<FastLap> FastestLaps = new List<FastLap>();
@@ -134,6 +160,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public SessionData SessionData;
         public List<RaceEvent> RaceEvents = new List<RaceEvent>();
         public double? TimeForOutroOverlay = null;
+        public List<CapturedVideoFile> VideoFiles;
 
         public void SaveTo(string fileName)
         {

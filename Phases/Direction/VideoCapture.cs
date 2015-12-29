@@ -16,45 +16,85 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Support;
 using iRacingSDK.Support;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Win32;
+using System.Timers;
+using System.Collections.Generic;
+using iRacingReplayOverlay.Phases.Capturing;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
     public class VideoCapture
     {
         string workingFolder;
-        private DateTime started;
+        DateTime started;
+        Timer timer;
+        List<CapturedVideoFile> captureFileNames = new List<CapturedVideoFile>();
 
         public void Activate(string workingFolder)
         {
             this.workingFolder = workingFolder;
             this.started = DateTime.Now;
 
+            timer = new Timer(500);
+            timer.Elapsed += CaptureNewFileNames; ;
+            timer.AutoReset = false;
+            timer.Enabled = true;
+
             SendKeyStroke();
         }
 
-        public string Deactivate()
+        private void CaptureNewFileNames(object sender, ElapsedEventArgs e)
         {
+            try
+            {
+                var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
+                    .Concat(Directory.GetFiles(workingFolder, "*.mp4"))
+                    .Select(fn => new { FileName = fn, CreationTime = File.GetCreationTime(fn) })
+                    .Where(f => f.CreationTime >= started)
+                    .OrderByDescending(f => f.CreationTime)
+                    .FirstOrDefault();
+
+                if (!captureFileNames.Any(c => c.FileName == guessedFileName.FileName))
+                {
+                    TraceInfo.WriteLine("Found video file {0}", guessedFileName.FileName);
+                    captureFileNames.Add(new CapturedVideoFile { FileName = guessedFileName.FileName });
+                }
+            }
+            catch (Exception ee)
+            {
+                TraceInfo.WriteLine(ee.Message);
+                TraceDebug.WriteLine(ee.StackTrace);
+            }
+            finally
+            {
+                if (timer != null)
+                    timer.Start();
+            }
+        }
+
+        public List<CapturedVideoFile> Deactivate()
+        {
+            if (timer != null)
+            {
+                var t = timer;
+                timer = null;
+                t.Stop();
+                t.Dispose();
+            }
+
             SendKeyStroke();
 
-            Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(2000);
 
-            var guessedFileName = Directory.GetFiles(workingFolder, "*.avi")
-                .Concat(Directory.GetFiles(workingFolder, "*.mp4"))
-                .Select(fn => new { FileName = fn, CreationTime = File.GetCreationTime(fn) })
-                .Where( f => f.CreationTime >= started)
-                .OrderByDescending(f => f.CreationTime)
-                .FirstOrDefault();
+            CaptureNewFileNames(null, null);
 
-            TraceInfo.WriteLineIf(guessedFileName == null, "Unable to determine video file name in '{0}' - possible wrong working folder", workingFolder);
-            return guessedFileName == null ? null : guessedFileName.FileName;
+            TraceInfo.WriteLineIf(captureFileNames.Count == 0, "Unable to find video files in foler '{0}' - check your Video Working folder", workingFolder);
+
+            return captureFileNames;
         }
 
         private static void SendKeyStroke()
@@ -62,11 +102,11 @@ namespace iRacingReplayOverlay.Phases.Direction
             TraceInfo.WriteLine("Sending key event ALT+F9");
 
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(500);
+            System.Threading.Thread.Sleep(500);
             Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(200);
+            System.Threading.Thread.Sleep(200);
             Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
-            Thread.Sleep(200);
+            System.Threading.Thread.Sleep(200);
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
     }

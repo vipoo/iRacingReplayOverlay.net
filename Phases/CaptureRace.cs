@@ -35,7 +35,7 @@ namespace iRacingReplayOverlay.Phases
     public partial class IRacingReplay
     {
         string workingFolder;
-        string introVideoFileName;
+        string introVideo;
 
         void _WithWorkingFolder(string workingFolder)
         {
@@ -44,7 +44,7 @@ namespace iRacingReplayOverlay.Phases
 
         void _WithIntroVideo(string fileName)
         {
-            this.introVideoFileName = fileName;
+            this.introVideo = fileName;
         }
 
         void _CaptureRace(Action<string> onComplete)
@@ -54,7 +54,7 @@ namespace iRacingReplayOverlay.Phases
 
         internal void _CaptureRaceTest(Action<string> onComplete, IEnumerable<DataSample> samples)
         {
-            var overlayData = new OverlayData { IntroVideoFileName = introVideoFileName };
+            var overlayData = new OverlayData();
             var removalEdits = new RemovalEdits(overlayData.RaceEvents);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
@@ -101,22 +101,22 @@ namespace iRacingReplayOverlay.Phases
                 removalEdits.Process(data, relativeTime);
             }
 
-            var fileName = videoCapture.Deactivate();
+            var files = videoCapture.Deactivate();
 
             removalEdits.Stop();
 
-            SaveOverlayData(overlayData, fileName);
+            var overlayFile = SaveOverlayData(overlayData, files);
 
             iRacing.Replay.SetSpeed(0);
 
             AltTabBackToApp();
 
-            _WithFiles(fileName);
+            if (files.Count == 0)
+                throw new Exception("Unable to find video files in '{0}' - possible wrong working folder".F(workingFolder));
+            
+            _WithOverlayFile(overlayFile);
 
-            if (fileName == null)
-                throw new Exception("Unable to determine video file name in '{0}' - possible wrong working folder".F(workingFolder));
-
-            onComplete(fileName);
+            onComplete(overlayFile);
         }
 
         static void AltTabBackToApp()
@@ -144,14 +144,26 @@ namespace iRacingReplayOverlay.Phases
             Thread.Sleep(1000);
         }
 
-        void SaveOverlayData(OverlayData overlayData, string fileName)
+        string SaveOverlayData(OverlayData overlayData, List<CapturedVideoFile> files)
         {
-            if (fileName == null)
-                fileName = workingFolder + "/unknown_capture-{0}".F(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+            string firstFileName;
 
-            fileName = Path.ChangeExtension(fileName, ".xml");
-            Trace.WriteLine("Saving overlay data to {0}".F(fileName));
-            overlayData.SaveTo(fileName);
+            if (files.Count == 0)
+                firstFileName = workingFolder + "/unknown_capture-{0}".F(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+            else
+                firstFileName = files.First().FileName;
+
+            var overlayFile = Path.ChangeExtension(firstFileName, ".xml");
+            Trace.WriteLine("Saving overlay data to {0}".F(overlayFile));
+
+            if (this.introVideo != null)
+                files = new [] { new CapturedVideoFile { FileName = this.introVideo, isIntroVideo = true } }
+                        .Concat(files).ToList();
+
+            overlayData.VideoFiles = files;
+            overlayData.SaveTo(overlayFile);
+
+            return overlayFile;
         }
     }
 }

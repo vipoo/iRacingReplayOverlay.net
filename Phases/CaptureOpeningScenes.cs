@@ -63,10 +63,10 @@ namespace iRacingReplayOverlay.Phases
 
             Thread.Sleep(shortTestOnly ? 5000 : 20000);
 
-            var fileName = videoCapture.Deactivate();
+            var fileName = videoCapture.Deactivate()[0];
 
             TraceInfo.WriteLine("Captured intro video into file {0}", fileName);
-            _WithIntroVideo(fileName);
+            _WithIntroVideo(fileName.FileName);
         }
     }
 }

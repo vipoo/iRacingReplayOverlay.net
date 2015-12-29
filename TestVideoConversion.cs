@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
@@ -23,8 +24,10 @@ using iRacingReplayOverlay.Video;
 using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -110,8 +113,7 @@ namespace iRacingReplayOverlay
             {
                 var transcoder = new Transcoder
                 {
-                    IntroVideoFile = null,
-                    SourceFile = filename,
+                    VideoFiles = new[] { new SourceReaderExtra(filename, null) },
                     DestinationFile = Path.ChangeExtension(filename, "wmv"),
                     VideoBitRate = 5000000,
                     AudioBitRate = 48000/8
@@ -119,12 +121,12 @@ namespace iRacingReplayOverlay
 
                 TraceInfo.WriteLine("Begining video re-encoding.");
 
-                transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
+                transcoder.ProcessVideo((readers, saveToSink) =>
                 {
                     int lastSecond = 0;
                     var fn = AVOperations.FadeIn(saveToSink);
 
-                    sourceReader.Samples(sample => {
+                    readers.First().SourceReader.Samples(sample => {
                         if (sample.Stream.CurrentMediaType.IsVideo && sample.Sample != null)
                         {
                             var s = (int)sample.Sample.SampleTime.FromNanoToSeconds();

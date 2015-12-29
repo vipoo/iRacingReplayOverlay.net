@@ -116,9 +116,9 @@ namespace iRacingReplayOverlay.Phases
             return this;
         }
 
-        public IRacingReplay WithFiles(string sourceFile)
+        public IRacingReplay WithOverlayFile(string overlayFile)
         {
-            _WithFiles(sourceFile);
+            _WithOverlayFile(overlayFile);
             return this;
         }
 

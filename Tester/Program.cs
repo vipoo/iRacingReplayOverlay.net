@@ -16,17 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Phases.Analysis;
-using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Phases.Direction;
+using iRacingReplayOverlay;
 using iRacingReplayOverlay.Phases;
 using iRacingSDK;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using iRacingReplayOverlay;
 
 namespace Tester
 {

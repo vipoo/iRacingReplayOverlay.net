@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
 using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
@@ -23,8 +24,10 @@ using iRacingReplayOverlay.Video;
 using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -119,18 +122,33 @@ namespace iRacingReplayOverlay
                 }
 
                 TraceInfo.WriteLine("Broadcasting keypress ALT+F9 to deactivate your video capture software");
-                var filename = videoCapture.Deactivate();
+                var filenames = videoCapture.Deactivate();
+
 
                 TraceInfo.WriteLine("Minimising iRacing");
 
                 AltTabBackToApp();
+
+                if (filenames.Count == 0)
+                {
+                    TraceInfo.WriteLine("\nFailure - Did not find any video files");
+                    return;
+                }
+
+                if (filenames.Count != 1)
+                {
+                    TraceInfo.WriteLine("\nFailure - Found more than 1 video file!");
+                    return;
+                }
+
+                var filename = filenames[0];
 
                 if (filename != null)
                 {
                     TraceInfo.WriteLine("");
                     TraceInfo.WriteLine("Found your video file {0}.", filename);
 
-                    TranscodeVideoTest(filename);
+                    TranscodeVideoTest(filename.FileName);
                 }
                 else
                 {
@@ -167,8 +185,7 @@ namespace iRacingReplayOverlay
             {
                 var transcoder = new Transcoder
                 {
-                    IntroVideoFile = null,
-                    SourceFile = filename,
+                    VideoFiles = new [] { new SourceReaderExtra(filename, null)},
                     DestinationFile = Path.ChangeExtension(filename, "wmv"),
                     VideoBitRate = 5000000,
                     AudioBitRate = 48000/8
@@ -176,9 +193,9 @@ namespace iRacingReplayOverlay
 
                 TraceInfo.WriteLine("Begining video re-encoding.");
 
-                transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
+                transcoder.ProcessVideo((readers, saveToSink) =>
                 {
-                    sourceReader.Samples(AVOperations.FadeIn(saveToSink));
+                    readers.First().SourceReader.Samples(AVOperations.FadeIn(saveToSink));
                 });
 
                 TraceInfo.WriteLine("Video converted.  Review the video file {0} to confirm it looks OK.", transcoder.DestinationFile);

@@ -35,7 +35,6 @@ namespace iRacingReplayOverlay.Phases
     {
         int videoBitRate;
         int audioBitRate;
-        string sourceFile;
         string destinationFile;
         string destinationHighlightsFile;
         string gameDataFile;
@@ -46,21 +45,20 @@ namespace iRacingReplayOverlay.Phases
             this.audioBitRate = audioBitRate;
         }
 
-        public void _WithFiles(string sourceFile)
+        public void _WithOverlayFile(string overlayFileName)
         {
-            this.sourceFile = sourceFile;
-            destinationFile = Path.ChangeExtension(sourceFile, "wmv");
-            destinationHighlightsFile = Path.ChangeExtension(sourceFile, ".highlights.wmv");
+            destinationFile = Path.ChangeExtension(overlayFileName, "wmv");
+            destinationHighlightsFile = Path.ChangeExtension(overlayFileName, ".highlights.wmv");
 
-            gameDataFile = Path.ChangeExtension(sourceFile, "xml");
+            gameDataFile = overlayFileName;
         }
 
         public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly)
         {
             bool TranscodeFull = !highlightOnly;
 
-            var transcodeHigh = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, sourceFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null));
-            var transcodeFull = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, sourceFile, videoBitRate, audioBitRate, destinationFile, false, progress));
+            var transcodeHigh = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null));
+            var transcodeFull = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationFile, false, progress));
 
             using (MFSystem.Start())
             {
@@ -96,14 +94,13 @@ namespace iRacingReplayOverlay.Phases
             this.progressReporter = progressReporter;
         }
 
-        public static void Apply(string gameDataFile, string sourceFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter)
+        public static void Apply(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter)
         {
             var leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile) };
 
             var transcoder = new Transcoder
             {
-                IntroVideoFile = leaderBoard.OverlayData.IntroVideoFileName,
-                SourceFile = sourceFile,
+                VideoFiles = leaderBoard.OverlayData.VideoFiles.ToSourceReaderExtra(),
                 DestinationFile = destFile,
                 VideoBitRate = videoBitRate,
                 AudioBitRate = audioBitRate
@@ -119,7 +116,7 @@ namespace iRacingReplayOverlay.Phases
                 TraceInfo.WriteLineIf(highlights, "Transcoding highlights to {0}", transcoder.DestinationFile);
                 TraceInfo.WriteLineIf(!highlights, "Transcoding full replay to {0}", transcoder.DestinationFile);
 
-                transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
+                transcoder.ProcessVideo((readers, saveToSink) =>
                 {
                     var writeToSink = monitorProgress == null ? saveToSink : MonitorProgress(saveToSink);
 
@@ -128,16 +125,21 @@ namespace iRacingReplayOverlay.Phases
                     var mainBodyOverlays = AVOperations.Overlay(applyRaceDataOverlay, edits);
                     var introOverlay = AVOperations.Overlay(applyIntroOverlay, fadeSegments);
 
-                    if (introSourceReader != null)
+                    var sourceReaderExtra = readers.FirstOrDefault(r => ((CapturedVideoFile)r.State).isIntroVideo);
+                    if (sourceReaderExtra != null)
                     {
-                        totalDuration += (long)introSourceReader.MediaSource.Duration + (long)sourceReader.MediaSource.Duration;
+                        var introSourceReader = sourceReaderExtra.SourceReader;
+                        var mainReaders = AVOperations.Combine(readers.Skip(1).Select(r => r.SourceReader).ToArray());
 
+                        totalDuration += introSourceReader.Duration + mainReaders.Duration;
+                        
                         AVOperations.StartConcat(introSourceReader, introOverlay,
-                            AVOperations.Concat(sourceReader, mainBodyOverlays));
+                            AVOperations.Concat(mainReaders, mainBodyOverlays));
                     }
                     else
                     {
-                        totalDuration += (long)sourceReader.MediaSource.Duration;
+                        var sourceReader = readers.Last().SourceReader; //TODO
+                        totalDuration += sourceReader.Duration;
 
                         sourceReader.Samples(mainBodyOverlays);
                     }

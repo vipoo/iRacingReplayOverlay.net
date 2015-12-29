@@ -17,7 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Video;
 using MediaFoundation;
 using MediaFoundation.Net;
 using MediaFoundation.Transform;
@@ -27,18 +26,43 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
+    public class SourceReaderExtra
+    {
+        public readonly string FileName;
+        public readonly SourceReader SourceReader;
+        public readonly object State;
+
+        public SourceReaderExtra(string fileName, object state)
+        {
+            FileName = fileName;
+            State = state;
+        }
+
+        public SourceReaderExtra(string fileName, object state, SourceReader sourceReader)
+        {
+            FileName = fileName;
+            State = state;
+            SourceReader = sourceReader;
+        }
+
+        public SourceReaderExtra CreateSourceReader(ReadWriteClassFactory readWriteFactory, Attributes attributes)
+        {
+            var reader = readWriteFactory.CreateSourceReaderFromURL(this.FileName, attributes);
+            return new SourceReaderExtra(this.FileName,  this.State,  reader);
+        }
+    }
+    
     class Transcoder
     {
-        public string IntroVideoFile;
-        public string SourceFile { get; set; }
-        public string DestinationFile { get; set; }
+        public IEnumerable<SourceReaderExtra> VideoFiles;
+        public string DestinationFile;
         public int AudioBitRate;
         public int VideoBitRate;
 
         static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
         static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
 
-        internal void ProcessVideo(Action<SourceReader, SourceReader, ProcessSample> process)
+        internal void ProcessVideo(Action<IEnumerable<SourceReaderExtra>, ProcessSample> process)
         {
             var readWriteFactory = new ReadWriteClassFactory();
 
@@ -48,26 +72,25 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 SourceReaderEnableVideoProcessing = true
             };
 
-            var introSourceReader = IntroVideoFile == null ? null : readWriteFactory.CreateSourceReaderFromURL(IntroVideoFile, attributes);
-            var sourceReader = readWriteFactory.CreateSourceReaderFromURL(SourceFile, attributes);
+            var readers = VideoFiles.Select(f => f.CreateSourceReader(readWriteFactory, attributes)).ToArray();
             var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);
 
-            var writeToSink = ConnectStreams(introSourceReader, sourceReader, sinkWriter);
+            var writeToSink = ConnectStreams(readers, sinkWriter);
 
             using (sinkWriter.BeginWriting())
-                process(introSourceReader, sourceReader, writeToSink);
+                process(readers, writeToSink);
         }
 
-        private ProcessSample ConnectStreams(SourceReader introSourceReader, SourceReader sourceReader, SinkWriter sinkWriter)
+        private ProcessSample ConnectStreams(IEnumerable<SourceReaderExtra> readers, SinkWriter sinkWriter)
         {
-            if (introSourceReader != null)
+            foreach( var r in readers)
             {
-                SetAudioMediaType(introSourceReader);
-                SetVideoMediaType(introSourceReader);
+                SetAudioMediaType(r.SourceReader);
+                SetVideoMediaType(r.SourceReader);
             }
 
-            var sourceAudioStream = SetAudioMediaType(sourceReader);
-            var sourceVideoStream = SetVideoMediaType(sourceReader);
+            var sourceAudioStream = SetAudioMediaType(readers.First().SourceReader);
+            var sourceVideoStream = SetVideoMediaType(readers.First().SourceReader);
 
             var sinkAudioStream = AddStream(sinkWriter, sourceAudioStream.CurrentMediaType, CreateTargetAudioMediaType(sourceAudioStream.NativeMediaType));
             var sinkVideoStream = AddStream(sinkWriter, sourceVideoStream.CurrentMediaType, CreateTargetVideoMediaType(sourceVideoStream.NativeMediaType));
