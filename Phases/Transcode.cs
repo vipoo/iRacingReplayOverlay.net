@@ -216,7 +216,7 @@ namespace iRacingReplayOverlay.Phases
             var numberOfPages = GetNumberOfPages();
 
             var page = (int)Math.Floor(pagePeriod * numberOfPages);
-            return Math.Min(page, numberOfPages);
+            return Math.Min(page, numberOfPages-1);
         }
 
         bool showClosingFlashCard(LeaderBoard leaderBoard, SourceReaderSample sample)
