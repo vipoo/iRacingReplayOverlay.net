@@ -147,10 +147,10 @@ namespace iRacingReplayOverlay.Phases
         {
             if (showClosingFlashCard(sample))
             {
-                var duration = sample.Duration - (long)leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
-                if (duration >= 30.FromSecondsToNano())
+                if (sample.SampleTime.FromNanoToSeconds() - leaderBoard.OverlayData.TimeForOutroOverlay.Value > 30)
                     return;
 
+                var duration = sample.Duration - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
                 duration = Math.Min(duration, 30.FromSecondsToNano());
                 var period = sample.Timestamp - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
                 var page = FlashCardPaging.GetPageNumber(leaderBoard.OverlayData.SessionData.DriverInfo, (float)period / duration);
