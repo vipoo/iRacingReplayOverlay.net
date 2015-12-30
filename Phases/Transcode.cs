@@ -27,21 +27,18 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using iRacingSDK.Support;
 
 namespace iRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
-        public delegate void _Progress(long count, long duration);
-
         int videoBitRate;
         int audioBitRate;
         string sourceFile;
         string destinationFile;
         string destinationHighlightsFile;
         string gameDataFile;
-        long totalDuration;
-        LeaderBoard leaderBoard;
 
         public void _WithEncodingOf(int videoBitRate, int audioBitRate)
         {
@@ -56,34 +53,22 @@ namespace iRacingReplayOverlay.Phases
             destinationHighlightsFile = Path.ChangeExtension(sourceFile, ".highlights.wmv");
 
             gameDataFile = Path.ChangeExtension(sourceFile, "xml");
-            leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile) };
         }
 
-        public void _OverlayRaceDataOntoVideo(_Progress progress, Action completed, bool highlightOnly)
+        public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly)
         {
-            const bool TranscodeHightlights = true;
             bool TranscodeFull = !highlightOnly;
-            
-            Task transcodeHigh;
-            Task transcodeFull;
 
-            Func<ProcessSample, ProcessSample> monitor = null;
-            if( !TranscodeFull)
-                monitor = next => MonitorProgress(progress, next);
-
-            transcodeHigh = new Task(() => ApplyTransformationsToVideo(destinationHighlightsFile, true, monitor));
-            transcodeFull = new Task(() => ApplyTransformationsToVideo(destinationFile, false, next => MonitorProgress(progress, next)));
+            var transcodeHigh = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, sourceFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null));
+            var transcodeFull = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, sourceFile, videoBitRate, audioBitRate, destinationFile, false, progress));
 
             using (MFSystem.Start())
             {
                 var waits = new List<Task>();
 
-                if (TranscodeHightlights)
-                {
-                    transcodeHigh.Start();
-                    waits.Add(transcodeHigh);
-                }
-                
+                transcodeHigh.Start();
+                waits.Add(transcodeHigh);
+
                 //Seem to have some kind of bug in MediaFoundation - where if two threads attempt to open source Readers to the same file, we get exception raised.
                 //To work around issue, delay the start of the second transcoder - so we dont have two threads opening at the same time.
                 if (TranscodeFull)
@@ -97,26 +82,49 @@ namespace iRacingReplayOverlay.Phases
             }
             completed();
         }
+    }
 
-        void ApplyTransformationsToVideo(string destFile, bool highlightsOnly, Func<ProcessSample, ProcessSample> monitorProgress = null)
+    public class TranscodeAndOverlay
+    {
+        readonly LeaderBoard leaderBoard;
+        long totalDuration;
+        readonly Action<long, long> progressReporter;
+
+        private TranscodeAndOverlay(LeaderBoard leaderBoard, Action<long, long> progressReporter )
+        {
+            this.leaderBoard = leaderBoard;
+            this.progressReporter = progressReporter;
+        }
+
+        public static void Apply(string gameDataFile, string sourceFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter)
+        {
+            var leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile) };
+
+            var transcoder = new Transcoder
+            {
+                IntroVideoFile = leaderBoard.OverlayData.IntroVideoFileName,
+                SourceFile = sourceFile,
+                DestinationFile = destFile,
+                VideoBitRate = videoBitRate,
+                AudioBitRate = audioBitRate
+            };
+
+            new TranscodeAndOverlay(leaderBoard, progressReporter)._Apply(transcoder, highlights, progressReporter);
+        }
+
+        void _Apply(Transcoder transcoder, bool highlights, Action<long, long> monitorProgress)
         {
             try
             {
-                var transcoder = new Transcoder
-                {
-                    IntroVideoFile = leaderBoard.OverlayData.IntroVideoFileName,
-                    SourceFile = sourceFile,
-                    DestinationFile = destFile,
-                    VideoBitRate = videoBitRate,
-                    AudioBitRate = audioBitRate
-                };
+                TraceInfo.WriteLineIf(highlights, "Transcoding highlights to {0}", transcoder.DestinationFile);
+                TraceInfo.WriteLineIf(!highlights, "Transcoding full replay to {0}", transcoder.DestinationFile);
 
                 transcoder.ProcessVideo((introSourceReader, sourceReader, saveToSink) =>
                 {
-                    var writeToSink = monitorProgress == null ? saveToSink : monitorProgress(saveToSink);
+                    var writeToSink = monitorProgress == null ? saveToSink : MonitorProgress(saveToSink);
 
                     var fadeSegments = AVOperations.FadeIn(AVOperations.FadeOut(writeToSink));
-                    var edits = highlightsOnly ? ApplyEdits(writeToSink) : writeToSink;
+                    var edits = highlights ? ApplyEdits(writeToSink) : writeToSink;
                     var mainBodyOverlays = AVOperations.Overlay(applyRaceDataOverlay, edits);
                     var introOverlay = AVOperations.Overlay(applyIntroOverlay, fadeSegments);
 
@@ -134,6 +142,10 @@ namespace iRacingReplayOverlay.Phases
                         sourceReader.Samples(mainBodyOverlays);
                     }
                 });
+
+
+                TraceInfo.WriteLineIf(highlights, "Done Transcoding highlights to {0}", transcoder.DestinationFile);
+                TraceInfo.WriteLineIf(!highlights, "Done Transcoding full replay to {0}", transcoder.DestinationFile);
             }
             catch (Exception e)
             {
@@ -171,17 +183,6 @@ namespace iRacingReplayOverlay.Phases
             leaderBoard.Intro(sample.Graphic, sample.Timestamp, page);
         }
         
-        ProcessSample MonitorProgress(_Progress progress, ProcessSample next)
-        {
-            return sample =>
-            {
-                if (!sample.Flags.EndOfStream)
-                    progress(sample.SampleTime, totalDuration);
-
-                return !requestAbort && next(sample);
-            };
-        }
-
         ProcessSample ApplyEdits(ProcessSample next)
         {
             var cut = next;
@@ -204,6 +205,17 @@ namespace iRacingReplayOverlay.Phases
                 return false;
 
             return sample.Timestamp >= leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
+        }
+
+        ProcessSample MonitorProgress(ProcessSample next)
+        {
+            return sample =>
+            {
+                if (!sample.Flags.EndOfStream && progressReporter != null)
+                    progressReporter(sample.SampleTime, totalDuration);
+
+                return next(sample);
+            };
         }
     }
 }

@@ -25,7 +25,6 @@ using System.Linq;
 using MediaFoundation.Net;
 using iRacingReplayOverlay.Support;
 using iRacingSDK.Support;
-using System.Drawing.Text;
 using iRacingSDK;
 
 namespace iRacingReplayOverlay.Phases.Transcoding

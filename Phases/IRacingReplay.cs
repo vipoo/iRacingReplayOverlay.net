@@ -122,7 +122,7 @@ namespace iRacingReplayOverlay.Phases
             return this;
         }
 
-        public IRacingReplay OverlayRaceDataOntoVideo(_Progress progress, Action completed, bool highlightsOnly)
+        public IRacingReplay OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightsOnly)
         {
             var context = SynchronizationContext.Current;
 
