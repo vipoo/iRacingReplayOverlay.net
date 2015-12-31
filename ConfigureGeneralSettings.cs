@@ -49,6 +49,14 @@ namespace iRacingReplayOverlay
                 @"If this option is selected, then the director will not capture or focus on incidents or crashes",
                 "DisableIncidentsSearch");
 
+            AddIntField("Incident Scan wait",
+                @"Advanced: The number of 'samples' the application will wait for the replay to have been reposition, upon requesting to move to the next incident.
+
+Smaller values will risk false positives for incident detections.
+
+Larger values will cause the incident scanning phase to take longer.",
+                "IncidentScanWait");
+
             AddBlankRow();
             AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
             AddCheckboxField("Only select battles for my perferred drivers",

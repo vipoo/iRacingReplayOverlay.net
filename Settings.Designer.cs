@@ -261,5 +261,17 @@ namespace iRacingReplayOverlay {
                 this["ResultsFlashCardPosition"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int IncidentScanWait {
+            get {
+                return ((int)(this["IncidentScanWait"]));
+            }
+            set {
+                this["IncidentScanWait"] = value;
+            }
+        }
     }
 }

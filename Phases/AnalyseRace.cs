@@ -67,7 +67,7 @@ namespace iRacingReplayOverlay.Phases
 
             if (!Settings.Default.DisableIncidentsSearch)
             {
-                var incidentSamples = iRacing.GetDataFeed().RaceIncidents(shortTestOnly ? 12 : int.MaxValue);
+                var incidentSamples = iRacing.GetDataFeed().RaceIncidents2(Settings.Default.IncidentScanWait, shortTestOnly ? 12 : int.MaxValue);
 
                 foreach (var data in incidentSamples)
                     incidents.Process(data);
