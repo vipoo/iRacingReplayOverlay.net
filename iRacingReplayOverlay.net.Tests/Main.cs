@@ -18,6 +18,7 @@
 //
 
 
+using iRacingReplayOverlay.net.Tests.Phases.Direction;
 using iRacingReplayOverlay.net.Tests.Phases.Transcoding;
 using iRacingReplayOverlay.Phases.Capturing.Tests;
 namespace iRacingReplayOverlay.net.Tests
@@ -26,7 +27,8 @@ namespace iRacingReplayOverlay.net.Tests
     {
         public static void Main()
         {
-            new FlashCardPagingTest().show_page_2_at_end_for_20_drivers();
+            var t = new RuleLastLapPeriodTest();
+            t.setup();
         }
     }
 }

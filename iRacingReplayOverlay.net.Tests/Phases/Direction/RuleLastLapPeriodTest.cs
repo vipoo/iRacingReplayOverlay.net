@@ -40,11 +40,12 @@ namespace iRacingReplayOverlay.net.Tests.Phases.Direction
 
             var cameras = new[] 
             {
+                new TrackCamera { CameraName = "Default", IsRaceStart = true },
                 new TrackCamera { CameraName = "TVX", IsLastLap = true },
                 new TrackCamera { CameraName = "TV2", IsLastLap = false }
             };
 
-            ruleLastLapPeriod = new RuleLastLapPeriod(cameras, new Moq.Mock<RemovalEdits>(null).Object);
+            ruleLastLapPeriod = new RuleLastLapPeriod(new CameraControl(cameras), new Moq.Mock<RemovalEdits>(null).Object);
         }
 
         [Test]

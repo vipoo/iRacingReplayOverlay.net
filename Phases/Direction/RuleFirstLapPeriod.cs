@@ -26,8 +26,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     public class RuleFirstLapPeriod : IVetoRule
     {
+        readonly CameraControl cameraControl;
         readonly EditMarker editMarker;
-        readonly TrackCamera Camera;
 
         DateTime reselectLeaderAt = DateTime.Now;
         bool startedFirstLapPeriod = false;
@@ -35,10 +35,10 @@ namespace iRacingReplayOverlay.Phases.Direction
         bool raceHasStarted = false;
         TimeSpan raceStartTime;
 
-        public RuleFirstLapPeriod(TrackCamera[] cameras, RemovalEdits removalEdits)
+        public RuleFirstLapPeriod(CameraControl cameraControl, RemovalEdits removalEdits)
         {
             editMarker = removalEdits.For(InterestState.FirstLap);
-            Camera = cameras.First(tc => tc.IsRaceStart);
+            this.cameraControl = cameraControl;
         }
 
         public bool IsActive(DataSample data)
@@ -89,7 +89,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             if (reselectLeaderAt < DateTime.Now)
             {
                 var leader = data.Telemetry.Cars.First(c => c.Position == 1);
-                iRacing.Replay.CameraOnDriver(leader.Details.CarNumberRaw, Camera.CameraNumber);
+                cameraControl.CameraOnDriver(leader.Details.CarNumberRaw, cameraControl.RaceStartCameraNumber);
 
                 reselectLeaderAt = DateTime.Now + 1.5.Seconds();
             }

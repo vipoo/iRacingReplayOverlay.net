@@ -29,19 +29,18 @@ namespace iRacingReplayOverlay.Phases.Direction
     {
         readonly EditMarker restartMarker;
         readonly EditMarker battleMarker;
-        readonly TrackCamera raceStartCamera;
+        readonly CameraControl cameraControl;
 
         bool wasUnderPaceCar;
         TimeSpan restartEndTime;
         readonly TimeSpan RestartStickyTime = 20.Seconds();
         bool restarting = false;
 
-        public RulePaceLaps(TrackCamera[] cameras, EditMarker restartMarker, EditMarker battleMarker)
+        public RulePaceLaps(CameraControl cameraControl, EditMarker restartMarker, EditMarker battleMarker)
         {
+            this.cameraControl = cameraControl;
             this.restartMarker = restartMarker;
             this.battleMarker = battleMarker;
-
-            raceStartCamera = cameras.First(tc => tc.IsRaceStart);
 
             wasUnderPaceCar = false;
         }
@@ -78,7 +77,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             {
                 TraceInfo.WriteLineIf(wasUnderPaceCar, "{0} Double Yellows. Pace Car", data.Telemetry.SessionTimeSpan);
                 battleMarker.Stop();
-                iRacing.Replay.CameraOnPositon(1, raceStartCamera.CameraNumber);
+                cameraControl.CameraOnPositon(1, cameraControl.RaceStartCameraNumber);
             }
 
             return wasUnderPaceCar;
@@ -90,7 +89,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         public void Redirect(DataSample data)
         {
-            iRacing.Replay.CameraOnPositon(1, raceStartCamera.CameraNumber);
+            cameraControl.CameraOnPositon(1, cameraControl.RaceStartCameraNumber);
         }
 
         public string Name

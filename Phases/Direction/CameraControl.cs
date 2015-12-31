@@ -16,13 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Phases.Analysis;
-using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
@@ -32,6 +28,30 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly TrackCamera[] cameras;
         readonly Random random;
         readonly TrackCamera defaultCamera;
+
+        public short LastLapCameraNumber
+        {
+            get
+            {
+                return cameras.First(tc => tc.IsLastLap).CameraNumber;
+            }
+        }
+
+        public short IncidentCameraNumber
+        {
+            get
+            {
+                return cameras.First(tc => tc.IsIncident).CameraNumber;
+            }
+        }
+
+        public short RaceStartCameraNumber
+        {
+            get
+            {
+                return cameras.First(tc => tc.IsRaceStart).CameraNumber;
+            }
+        }
 
         public CameraControl(TrackCamera[] cameras)
         {
@@ -77,6 +97,16 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
 
             return camera;
+        }
+
+        public void CameraOnDriver(short carNumber, short group, short camera = 0)
+        {
+            iRacing.Replay.CameraOnDriver(carNumber, group, camera);
+        }
+
+        public void CameraOnPositon(short carPosition, short group, short camera = 0)
+        {
+            iRacing.Replay.CameraOnPositon(carPosition, group, camera);
         }
     }
 }

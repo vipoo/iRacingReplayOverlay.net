@@ -123,7 +123,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 car = battleFollower;
             }
             TraceInfo.WriteLine("{0} Changing camera to driver: {1}; camera: {2}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName);
-            iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
+            cameraControl.CameraOnDriver(car.CarNumberRaw, camera.CameraNumber);
         }
 
         public void Direct(DataSample data)
@@ -137,7 +137,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 return;
 
             TraceInfo.WriteLine("{0} Changing camera back to driver: {1}; camera: {2}; within {3}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName, battleGap);
-            iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
+            cameraControl.CameraOnDriver(car.CarNumberRaw, camera.CameraNumber);
         }
 
         void SwitchToBattle(DataSample data, CarDetails newFollower)
@@ -160,7 +160,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 camera.CameraName, 
                 battleGap);
             
-            iRacing.Replay.CameraOnDriver((short)car.CarNumberRaw, camera.CameraNumber);
+            cameraControl.CameraOnDriver(car.CarNumberRaw, camera.CameraNumber);
         }
 
         void UpdateCameraIfOvertake(DataSample data)

@@ -20,8 +20,6 @@ using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingSDK;
 using iRacingSDK.Support;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -45,18 +43,18 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var camera = cameras.First(tc => tc.IsRaceStart);
             
-            iRacing.Replay.CameraOnPositon(1, camera.CameraNumber);
 
             var cameraControl = new CameraControl(cameras);
+            cameraControl.CameraOnPositon(1, camera.CameraNumber);
 
             var battleMarker = removalEdits.For(InterestState.Battle);
             var restartMarker = removalEdits.For(InterestState.Restart);
 
 
-            var ruleLastSectors = new RuleLastLapPeriod(cameras, removalEdits);
-            var ruleIncident = new RuleIncident(cameras, removalEdits, incidents).WithVeto(ruleLastSectors);
-            var ruleFirstSectors = new RuleFirstLapPeriod(cameras, removalEdits).WithVeto(ruleIncident);
-            var rulePaceLaps = new RulePaceLaps(cameras, restartMarker, battleMarker).WithVeto(ruleIncident);
+            var ruleLastSectors = new RuleLastLapPeriod(cameraControl, removalEdits);
+            var ruleIncident = new RuleIncident(cameraControl, removalEdits, incidents).WithVeto(ruleLastSectors);
+            var ruleFirstSectors = new RuleFirstLapPeriod(cameraControl, removalEdits).WithVeto(ruleIncident);
+            var rulePaceLaps = new RulePaceLaps(cameraControl, restartMarker, battleMarker).WithVeto(ruleIncident);
             var ruleBattle = new RuleBattle(cameraControl, battleMarker, Settings.Default.CameraStickyPeriod, Settings.Default.BattleStickyPeriod, Settings.Default.BattleGap, Settings.Default.BattleFactor2).WithVeto(rulePaceLaps);
             ruleRandom = new RuleRandomDriver(cameraControl, sessionData, Settings.Default.CameraStickyPeriod).WithVeto(ruleIncident);
 
