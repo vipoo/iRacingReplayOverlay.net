@@ -91,11 +91,10 @@ export default React.createClass({
                     <tr><th>Details</th></tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td><a target="_new" href="https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md">View Readme File ...</a></td>
-                    </tr>
+                    <tr><td><a target="_new" href="https://github.com/vipoo/iRacingReplayOverlay.net/blob/master/README.md">View Readme File ...</a></td></tr>
                     <tr><td><a target="_new" href="https://github.com/vipoo/iRacingReplayOverlay.net/issues">View Issues</a></td></tr>
                     <tr><td><a target="_new" href="http://members.iracing.com/jforum/posts/list/3271807.page">iRacing Forum</a></td></tr>
+                    <tr><td><a target="_new" href="https://ci.appveyor.com/project/vipoo/iracingreplayoverlay-net/history">Summary of changes</a></td></tr>
                   </tbody>
                 </table>
               </div>
