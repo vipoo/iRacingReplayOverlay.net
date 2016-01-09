@@ -262,7 +262,7 @@ namespace iRacingReplayOverlay
         void sourceVideoButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
-            fbd.Filter = "XML|*.xml|All files (*.*)|*.*";
+            fbd.Filter = "Replay Script Data|*.replayscript|XML|*.xml|All files (*.*)|*.*";
             fbd.FileName = sourceVideoTextBox.Text;
 
             if (fbd.ShowDialog() == DialogResult.OK)
@@ -338,7 +338,16 @@ namespace iRacingReplayOverlay
             try
             {
                 var data = OverlayData.FromFile(sourceVideoTextBox.Text);
-                var fileName = data.VideoFiles.First().FileName;
+                var fileName = data.VideoFiles.Last().FileName;
+
+                if (!File.Exists(fileName))
+                {
+                    errorSourceVideoLabel.Text = "*Captured video does not exist: " + fileName;
+                    errorSourceVideoLabel.Visible = true;
+                    VideoDetailLabel.Visible = false;
+                    return;
+                }
+
                 var details = VideoAttributes.For(fileName);
 
                 foreach (var d in details.SupportedAudioBitRates)
@@ -352,15 +361,13 @@ namespace iRacingReplayOverlay
             }
             catch(Exception ex)
             {
-                TraceDebug.WriteLine("*Error reading the video file. {0}\r\n{1}".F(ex.Message, ex.StackTrace));
-
                 errorSourceVideoLabel.Text = "*Error reading the video file. {0}".F(ex.Message);
                 errorSourceVideoLabel.Visible = true;
                 VideoDetailLabel.Visible = false;
 
                 lookForAudioBitRates = new System.Windows.Forms.Timer();
                 lookForAudioBitRates.Tick += sourceVideoTextBox_TextChanged;
-                lookForAudioBitRates.Interval = 1000;
+                lookForAudioBitRates.Interval = 5000;
                 lookForAudioBitRates.Start();
             }
         }

@@ -381,7 +381,7 @@ namespace iRacingReplayOverlay
             this.errorSourceVideoLabel.ForeColor = System.Drawing.Color.DarkRed;
             this.errorSourceVideoLabel.Location = new System.Drawing.Point(131, 182);
             this.errorSourceVideoLabel.Name = "errorSourceVideoLabel";
-            this.errorSourceVideoLabel.Size = new System.Drawing.Size(467, 41);
+            this.errorSourceVideoLabel.Size = new System.Drawing.Size(607, 82);
             this.errorSourceVideoLabel.TabIndex = 30;
             this.errorSourceVideoLabel.Text = "*Unable to transcode this video, as there is no associated captured game data (cs" +
     "v file name based on the name of the source input video)";

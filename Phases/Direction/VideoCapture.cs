@@ -58,7 +58,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     .OrderByDescending(f => f.CreationTime)
                     .FirstOrDefault();
 
-                if (!captureFileNames.Any(c => c.FileName == guessedFileName.FileName))
+                if (guessedFileName != null && !captureFileNames.Any(c => c.FileName == guessedFileName.FileName))
                 {
                     TraceInfo.WriteLine("Found video file {0}", guessedFileName.FileName);
                     captureFileNames.Add(new CapturedVideoFile { FileName = guessedFileName.FileName });

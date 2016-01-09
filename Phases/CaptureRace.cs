@@ -153,7 +153,7 @@ namespace iRacingReplayOverlay.Phases
             else
                 firstFileName = files.First().FileName;
 
-            var overlayFile = Path.ChangeExtension(firstFileName, ".xml");
+            var overlayFile = Path.ChangeExtension(firstFileName, ".replayscript");
             Trace.WriteLine("Saving overlay data to {0}".F(overlayFile));
 
             if (this.introVideo != null)
