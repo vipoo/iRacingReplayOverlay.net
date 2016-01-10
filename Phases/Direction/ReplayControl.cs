@@ -50,7 +50,6 @@ namespace iRacingReplayOverlay.Phases.Direction
             var battleMarker = removalEdits.For(InterestState.Battle);
             var restartMarker = removalEdits.For(InterestState.Restart);
 
-
             var ruleLastSectors = new RuleLastLapPeriod(cameraControl, removalEdits);
             var ruleIncident = new RuleIncident(cameraControl, removalEdits, incidents).WithVeto(ruleLastSectors);
             var ruleFirstSectors = new RuleFirstLapPeriod(cameraControl, removalEdits).WithVeto(ruleIncident);

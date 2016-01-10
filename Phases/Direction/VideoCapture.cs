@@ -92,7 +92,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             CaptureNewFileNames(null, null);
 
-            TraceInfo.WriteLineIf(captureFileNames.Count == 0, "Unable to find video files in foler '{0}' - check your Video Working folder", workingFolder);
+            TraceInfo.WriteLineIf(captureFileNames.Count == 0, "Unable to find video files in folder '{0}' - check your Video Working folder", workingFolder);
 
             return captureFileNames;
         }

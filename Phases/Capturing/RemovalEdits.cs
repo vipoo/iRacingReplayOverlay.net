@@ -62,8 +62,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             };
         }
 
-        public void 
-            InterestingThingStopped(InterestState interest)
+        public void InterestingThingStopped(InterestState interest)
         {
             nextAction = (d, t) =>
             {
@@ -117,6 +116,5 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             return new EditMarker(this, interestState);
         }
-
     }
 }
