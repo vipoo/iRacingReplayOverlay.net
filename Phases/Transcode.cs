@@ -161,7 +161,7 @@ namespace iRacingReplayOverlay.Phases
         {
             if (showClosingFlashCard(sample))
             {
-                if (sample.SampleTime.FromNanoToSeconds() - leaderBoard.OverlayData.TimeForOutroOverlay.Value > 30)
+                if (sample.Timestamp.FromNanoToSeconds() - leaderBoard.OverlayData.TimeForOutroOverlay.Value > 30)
                     return;
 
                 var duration = sample.Duration - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
