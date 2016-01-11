@@ -96,11 +96,16 @@ namespace iRacingReplayOverlay.Phases.Direction
                         .Where(c => !c.Details.IsPaceCar)
                         .Where(c => c.HasData)
                         .Where(c => c.Details.Driver != null)
+                        .Where(c => c.TrackSurface == TrackLocation.OnTrack)
                         .OrderByDescending(c => c.DistancePercentage)
+                        .ThenBy(c => c.OfficialPostion == 0 ? int.MaxValue : c.OfficialPostion)
                         .FirstOrDefault();
 
             if (nextFinisher == null)
+            {
+                Trace.WriteLine("{0} Found no more finishers.".F(data.Telemetry.SessionTimeSpan), "DEBUG");
                 return;
+            }
 
             Trace.WriteLine("{0} Found {1} in position {2}".F(data.Telemetry.SessionTimeSpan, nextFinisher.Details.UserName, nextFinisher.Position), "DEBUG");
 
