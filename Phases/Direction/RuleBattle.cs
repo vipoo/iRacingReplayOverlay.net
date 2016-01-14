@@ -198,11 +198,17 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (isInBattle)
             {
+                if (data.Telemetry.UnderPaceCar)
+                    return new BattleState(BattlePosition.Finished);
+
                 if (!HasBattleTimeout(data))
                     return new BattleState(BattlePosition.Inside);
 
                 return SearchForNextBattle(data, notFound: () => new BattleState(BattlePosition.Finished) );
             }
+
+            if (data.Telemetry.UnderPaceCar)
+                return new BattleState(BattlePosition.Outside);
 
             return SearchForNextBattle(data, notFound: () => new BattleState(BattlePosition.Outside));
         }

@@ -28,7 +28,7 @@ namespace iRacingReplayOverlay.Phases.Direction
     public class ReplayControl
     {
         readonly IDirectionRule[] directionRules;
-        readonly IDirectionRule ruleRandom;
+        readonly IVetoRule ruleRandom;
         IDirectionRule currentRule;
 
         public ReplayControl(SessionData sessionData, Incidents incidents, RemovalEdits removalEdits, TrackCameras trackCameras)
@@ -51,17 +51,20 @@ namespace iRacingReplayOverlay.Phases.Direction
             var restartMarker = removalEdits.For(InterestState.Restart);
 
             var ruleLastSectors = new RuleLastLapPeriod(cameraControl, removalEdits);
-            var ruleIncident = new RuleIncident(cameraControl, removalEdits, incidents).WithVeto(ruleLastSectors);
-            var ruleFirstSectors = new RuleFirstLapPeriod(cameraControl, removalEdits).WithVeto(ruleIncident);
-            var rulePaceLaps = new RulePaceLaps(cameraControl, restartMarker, battleMarker).WithVeto(ruleIncident);
-            var ruleBattle = new RuleBattle(cameraControl, battleMarker, Settings.Default.CameraStickyPeriod, Settings.Default.BattleStickyPeriod, Settings.Default.BattleGap, Settings.Default.BattleFactor2).WithVeto(rulePaceLaps);
-            ruleRandom = new RuleRandomDriver(cameraControl, sessionData, Settings.Default.CameraStickyPeriod).WithVeto(ruleIncident);
+            var ruleUnlimitedIncident = new RuleIncident(cameraControl, removalEdits, incidents, 999);
+            var ruleLimitedIncident = new RuleIncident(cameraControl, removalEdits, incidents, Settings.Default.IgnoreIncidentsBelowPosition);
+            var ruleFirstSectors = new RuleFirstLapPeriod(cameraControl, removalEdits);
+            var rulePaceLaps = new RulePaceLaps(cameraControl, restartMarker, battleMarker);
+            var ruleBattle = new RuleBattle(cameraControl, battleMarker, Settings.Default.CameraStickyPeriod, Settings.Default.BattleStickyPeriod, Settings.Default.BattleGap, Settings.Default.BattleFactor2);
+            ruleRandom = new RuleRandomDriver(cameraControl, sessionData, Settings.Default.CameraStickyPeriod);
 
             directionRules = new IDirectionRule[] { 
                 ruleLastSectors,
-                ruleFirstSectors,
-                ruleBattle,
-                ruleRandom
+                ruleFirstSectors.WithVeto(ruleUnlimitedIncident),
+                rulePaceLaps.WithVeto(ruleUnlimitedIncident.WithVeto(ruleLastSectors)),
+                ruleBattle.WithVeto(ruleLimitedIncident.WithVeto(ruleLastSectors)),
+                ruleUnlimitedIncident.WithVeto(ruleLastSectors),
+                ruleRandom.WithVeto(ruleLastSectors)
             };
 
             currentRule = directionRules[0];

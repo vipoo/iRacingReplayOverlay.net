@@ -23,7 +23,6 @@ using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
@@ -34,15 +33,17 @@ namespace iRacingReplayOverlay.Phases.Direction
         readonly CameraControl cameraControl;
         readonly EditMarker editMarker;
         readonly IEnumerator<Incidents.Incident> nextIncident;
+        readonly int limitDownTo;
 
         double pitBoxStartTime = 0;
         bool isInside = false;
         Action directionAction;
 
-        public RuleIncident(CameraControl cameraControl, RemovalEdits removalEdits, Incidents incidents)
+        public RuleIncident(CameraControl cameraControl, RemovalEdits removalEdits, Incidents incidents, int limitDownTo)
         {
             this.editMarker = removalEdits.For(InterestState.Incident);
             this.cameraControl = cameraControl;
+            this.limitDownTo = limitDownTo;
 
             nextIncident = incidents.GetEnumerator();
             nextIncident.MoveNext();
@@ -151,16 +152,21 @@ namespace iRacingReplayOverlay.Phases.Direction
 
         void SkipMissedIncidents(DataSample data)
         {
-            var hasSkipped = false;
-            while (nextIncident.Current != null && (nextIncident.Current.StartSessionTime + 1.Seconds()) < data.Telemetry.SessionTimeSpan)
+            var incident = nextIncident.Current;
+
+            while (incident != null && (incident.StartSessionTime + 1.Seconds()) < data.Telemetry.SessionTimeSpan)
             {
-                hasSkipped = true;
-                TraceInfo.WriteLine("{0} Skipping incident at time {1}", data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime);
+                TraceInfo.WriteLine("{0} Skipping incident with {1} at time {2}", data.Telemetry.SessionTimeSpan, incident.Car.Driver.UserName, nextIncident.Current.StartSessionTime);
                 nextIncident.MoveNext();
+                incident = nextIncident.Current;
             }
 
-            if (nextIncident.Current != null && hasSkipped)
-                TraceInfo.WriteLine("{0} (Skip) Next incident at {1}", data.Telemetry.SessionTimeSpan, nextIncident.Current.StartSessionTime);
+            while(incident != null && incident.IsInside(data.Telemetry.SessionTimeSpan) && incident.Car.Car(data).Position > this.limitDownTo)
+            {
+                TraceInfo.WriteLine("{0} Skipping incident with {1} due to position of {2} below {3}", data.Telemetry.SessionTimeSpan, incident.Car.Driver.UserName, incident.Car.Car(data).Position, this.limitDownTo);
+                nextIncident.MoveNext();
+                incident = nextIncident.Current;
+            }
         }
 
         void SwitchToIncident(DataSample data)

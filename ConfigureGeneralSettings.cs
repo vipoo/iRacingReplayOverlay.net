@@ -57,6 +57,8 @@ Smaller values will risk false positives for incident detections.
 Larger values will cause the incident scanning phase to take longer.",
                 "IncidentScanWait");
 
+            AddIntField("Ignore Incident Below", @"Ignore any incidents below the specified position.", "IgnoreIncidentsBelowPosition");
+
             AddBlankRow();
             AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
             AddCheckboxField("Only select battles for my perferred drivers",

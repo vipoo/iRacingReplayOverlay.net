@@ -65,5 +65,8 @@
     <Setting Name="IncidentScanWait" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="IgnoreIncidentsBelowPosition" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
