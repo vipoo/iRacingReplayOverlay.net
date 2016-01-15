@@ -102,11 +102,11 @@ namespace iRacingReplayOverlay.Phases.Direction
             TraceInfo.WriteLine("Sending key event ALT+F9");
 
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(700);
             Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(700);
             Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(700);
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
     }
