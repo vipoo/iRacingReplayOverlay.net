@@ -285,5 +285,17 @@ namespace iRacingReplayOverlay {
                 this["IgnoreIncidentsBelowPosition"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:06")]
+        public global::System.TimeSpan PeriodWaitForIRacingSwitch {
+            get {
+                return ((global::System.TimeSpan)(this["PeriodWaitForIRacingSwitch"]));
+            }
+            set {
+                this["PeriodWaitForIRacingSwitch"] = value;
+            }
+        }
     }
 }
