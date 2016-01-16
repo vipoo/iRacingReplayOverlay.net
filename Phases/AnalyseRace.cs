@@ -54,6 +54,8 @@ namespace iRacingReplayOverlay.Phases
                 raceStartFrameNumber = 0;
             }
 
+            TraceDebug.WriteLine(data.Telemetry.ToString());
+            
             AnalyseIncidents();
 
             onComplete();
