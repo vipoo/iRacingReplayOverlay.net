@@ -43,14 +43,23 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 return "CarIdx: {0}, Time: {1}, Position: {2}, LeaderCarIdx: {3}".F(CarIdx, Time, Position, LeaderCarIdx);
             }
         }
-
+        
         public static Car Find(DataSample data, TimeSpan battleGap, double factor, IEnumerable<string> preferredDrivers)
         {
             preferredCarIdxs = GetPreferredCarIdxs(data, preferredDrivers);
 
-            var allBattles = All(data, battleGap, preferredCarIdxs, factor);
+            var allBattles = All(data, battleGap, factor);
+
+            allBattles = ApplyFactors(data, factor, allBattles);
 
             return SelectABattle(data, allBattles, random.Next(10100) / 100.0);
+        }
+
+        public static GapMetric[] FindAll(DataSample data, TimeSpan battleGap, double factor, IEnumerable<string> preferredDrivers)
+        {
+            preferredCarIdxs = GetPreferredCarIdxs(data, preferredDrivers);
+
+            return All(data, battleGap, factor);
         }
 
         internal static long[] GetPreferredCarIdxs(DataSample data, IEnumerable<string> preferredDrivers)
@@ -60,11 +69,8 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             return data.SessionData.DriverInfo.CompetingDrivers.Where(x => preferredDrivers.Contains(x.UserName.ToLower())).Select(x => x.CarIdx).ToArray();
         }
 
-        internal static IEnumerable<GapMetric> All(DataSample data, TimeSpan battleGap, long[] preferredCarIdxs, double factor)
+        internal static GapMetric[] All(DataSample data, TimeSpan battleGap, double factor)
         {
-            if (preferredCarIdxs == null)
-                preferredCarIdxs = new long[0];
-
             var distances = data.Telemetry.CarIdxDistance
                     .Select((d, i) => new { CarIdx = i, Distance = d })
                     .Skip(1)
@@ -103,17 +109,22 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
                 r = r
                 .OrderBy(d => IsAPerferredDriver(d) ? 1 : 2)
                 .ThenBy(d => d.Position);
-            
+
+            return r.ToArray();
+        }
+
+        private static GapMetric[] ApplyFactors(DataSample data, double factor, GapMetric[] r)
+        {
             double[] floor = { 0.0 };
             var factors = Enumerable.Range(1, r.Count()).Select(index => Math.Pow(factor, index)).ToArray();
             var totalFactors = factors.Sum();
             var ratio = 100.0 / totalFactors;
             var factorsTo100 = factors.Select(f => f * ratio).Reverse().Concat(floor).ToArray();
 
-            TraceInfo.WriteLine("total: {0}, ratio: {1}", totalFactors, ratio);
+            //TraceInfo.WriteLine("total: {0}, ratio: {1}", totalFactors, ratio);
 
-            for(var i = 0; i < factors.Length; i++)
-                TraceInfo.WriteLine("Factor: {0}, ratio: {1}", factors[i], factorsTo100[i]);
+            //for(var i = 0; i < factors.Length; i++)
+            //    TraceInfo.WriteLine("Factor: {0}, ratio: {1}", factors[i], factorsTo100[i]);
 
             var currentFactor = 0.0;
             r = r.Select((d, index) =>
@@ -131,7 +142,7 @@ namespace iRacingReplayOverlay.Phases.Direction.Support
             }).ToArray();
 
             TraceInfo.WriteLine("Battles:");
-            foreach( var d in r )
+            foreach (var d in r)
                 TraceInfo.WriteLine("{0}: {1} -> {2}, Time: {3}, Pos: {4}",
                     d.Factor,
                     data.Telemetry.Cars[d.LeaderCarIdx].Details.Driver.UserName,

@@ -19,12 +19,10 @@
 
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using iRacingReplayOverlay.Support;
-using iRacingSDK.Support;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -32,6 +30,7 @@ namespace iRacingReplayOverlay.Phases
     {
         int raceStartFrameNumber = 0;
         internal Incidents incidents;
+        internal Battles battles;
 
         public void _AnalyseRace(Action onComplete)
         {
@@ -55,10 +54,38 @@ namespace iRacingReplayOverlay.Phases
             }
 
             TraceDebug.WriteLine(data.Telemetry.ToString());
-            
+
+            AnalyseBattles();
             AnalyseIncidents();
 
             onComplete();
+        }
+
+        void AnalyseBattles()
+        {
+            iRacing.Replay.MoveToFrame(raceStartFrameNumber);
+
+            battles = new Battles();
+
+            var samples = new iRacingConnection().GetBufferedDataFeed()
+                .VerifyReplayFrames()
+                .WithCorrectedPercentages()
+                .WithCorrectedDistances()
+                .WithFastestLaps()
+                .WithFinishingStatus()
+                .WithPitStopCounts()
+                .TakeUntil(3.Seconds()).After(d => d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface != TrackLocation.OnTrack))
+                .TakeUntil(3.Seconds()).AfterReplayPaused().AtSpeed(16);
+
+            foreach(var data in samples)
+                battles.Process(data);
+
+            foreach(var b in battles)
+            {
+                TraceDebug.WriteLine(b.ToString());
+            }
+
+            System.Diagnostics.Debugger.Break();
         }
 
         void AnalyseIncidents()

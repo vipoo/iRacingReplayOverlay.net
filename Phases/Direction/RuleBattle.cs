@@ -56,14 +56,14 @@ namespace iRacingReplayOverlay.Phases.Direction
         TrackCamera camera;
         CarDetails car;
 
-        public RuleBattle(CameraControl cameraControl, EditMarker editMarker, TimeSpan cameraStickyPeriod, TimeSpan battleStickyPeriod, TimeSpan battleGap, double battleFactor)
+        public RuleBattle(CameraControl cameraControl, EditMarker editMarker, TimeSpan cameraStickyPeriod, TimeSpan battleStickyPeriod)
         {
             this.cameraControl = cameraControl;
             this.editMarker = editMarker;
             this.battleStickyPeriod = battleStickyPeriod;
             this.battleCameraChangePeriod = cameraStickyPeriod;
-            this.battleGap = battleGap;
-            this.battleFactor = battleFactor;
+            this.battleGap = Settings.Default.BattleGap;
+            this.battleFactor = Settings.Default.BattleFactor2;
         }
 
         public bool IsActive(DataSample data)

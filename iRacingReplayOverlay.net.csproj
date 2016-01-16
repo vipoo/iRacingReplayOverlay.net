@@ -149,6 +149,7 @@
       <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Phases\Analysis\Battles.cs" />
     <Compile Include="Phases\Capturing\EditMarker.cs" />
     <Compile Include="Phases\Direction\RulePaceLaps.cs" />
     <Compile Include="Phases\Transcoding\FlashCardPaging.cs" />
