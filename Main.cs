@@ -28,6 +28,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +36,15 @@ using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
+    internal static class NativeMethods
+    {
+        [DllImport("kernel32.dll")]
+        public static extern uint SetThreadExecutionState(uint esFlags);
+        public const uint ES_CONTINUOUS = 0x80000000;
+        public const uint ES_SYSTEM_REQUIRED = 0x00000001;
+        public const uint ES_DISPLAY_REQUIRED = 0x00000002;
+    }
+
     public partial class Main : Form
     {
         System.Windows.Forms.Timer fileWatchTimer;
@@ -278,6 +288,8 @@ namespace iRacingReplayOverlay
 
             LogListener.ToFile(Path.ChangeExtension(sourceVideoTextBox.Text, "log"));
 
+            NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED);
+
             iRacingProcess = new IRacingReplay()
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
                 .WithOverlayFile(overlayFile: sourceVideoTextBox.Text)
@@ -285,6 +297,7 @@ namespace iRacingReplayOverlay
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
                     LogListener.ToFile(GetDefaultLogFileName());
+                    NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS);
                 });
         }
 
@@ -407,6 +420,8 @@ namespace iRacingReplayOverlay
 
             LogListener.ToFile(workingFolderTextBox.Text + "\\capture.log");
 
+            NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_DISPLAY_REQUIRED);
+
             iRacingProcess = new IRacingReplay(shortTestOnly: TestOnlyCheckBox.Checked)
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
@@ -442,6 +457,8 @@ namespace iRacingReplayOverlay
                         Thread.Sleep(1000);
                         TranscodeVideo_Click(null, null);
                     }
+                    else
+                        NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS);
                 });
         }
 
