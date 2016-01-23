@@ -11,6 +11,8 @@ msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\                    
                                         -p:ProductName="iRacing Replay Director (test)"                                         ^
                                         -p:OverrideAssemblyName=iRacingReplayOverlay.test
 
+appveyor PushArtifact bin\x64\Release\iRacingReplayOverlay.test.exe -FileName "versions\iRacingReplayOverlay.exe" -DeploymentName deploy-release
+ 
 appveyor PushArtifact bin\x64\Release\iRacingReplayOverlay.test.exe -FileName "versions\iRacingReplayOverlay.%APPVEYOR_BUILD_VERSION%.exe" -DeploymentName deploy-test 
 
 cd bin\x64\Release\app.publish
