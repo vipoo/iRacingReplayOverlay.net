@@ -297,5 +297,18 @@ namespace iRacingReplayOverlay {
                 this["PeriodWaitForIRacingSwitch"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NewSettings {
+            get {
+                return ((bool)(this["NewSettings"]));
+            }
+            set {
+                this["NewSettings"] = value;
+            }
+        }
     }
 }

@@ -183,6 +183,7 @@
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
     <Compile Include="Phases\Direction\VideoCapture.cs" />
+    <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="SettingsAdditional.cs" />
     <Compile Include="SettingsExtensions.cs" />
     <Compile Include="Support\LogListener.cs" />

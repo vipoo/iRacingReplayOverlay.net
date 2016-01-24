@@ -16,11 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Diagnostics;
-using System.Windows.Forms;
 using iRacingSDK.Support;
-using iRacingReplayOverlay.Support;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
@@ -29,6 +31,12 @@ namespace iRacingReplayOverlay
         [STAThread]
         static void Main()
         {
+            if (!Settings.Default.NewSettings)
+                CopyFromOldSettings(Settings.Default);
+            else
+                MakePortable(Settings.Default);
+            
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += Application_ThreadException;
@@ -43,6 +51,37 @@ namespace iRacingReplayOverlay
                 }
             else
                 Application.Run(new Main());
+        }
+
+        private static void MakePortable(Settings settings)
+        {
+            var pp = settings.Providers.OfType<PortableSettingsProvider>().First();
+
+            foreach (SettingsProperty p in settings.Properties)
+                p.Provider = pp;
+            settings.Reload();
+        }
+
+        private static void CopyFromOldSettings(Settings settings)
+        {
+            var pp = settings.Providers.OfType<PortableSettingsProvider>().First();
+
+            var currentValues = new Dictionary<string, object>();
+
+            foreach (SettingsProperty p in settings.Properties)
+            {
+                currentValues[p.Name] = settings[p.Name];
+                TraceDebug.WriteLine("Capturing settings -- {0}: {1}", p.Name, currentValues[p.Name]);
+                p.Provider = pp;
+            }
+            settings.Reload();
+
+            foreach( var kv in currentValues)
+            {
+                settings[kv.Key] = kv.Value;
+            }
+            settings.NewSettings = true;
+            settings.Save();
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
