@@ -239,7 +239,15 @@ namespace iRacingReplayOverlay
 
         private void Default_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
         {
-            TraceDebug.WriteLine("Setting Changed: key: {0}, name: {1}, value: {2}".F(e.SettingKey, e.SettingName, e.NewValue.ToString()));
+            try
+            {
+                TraceDebug.WriteLine("Setting Changed: key: {0}, name: {1}, value: {2}".F(e.SettingKey, e.SettingName, e.NewValue));
+            }
+            catch(Exception ex)
+            {
+                TraceDebug.WriteLine("Unable to log setting change");
+                TraceDebug.WriteLine(ex.Message);
+            }
         }
 
         void iracingEvents_Disconnected()
