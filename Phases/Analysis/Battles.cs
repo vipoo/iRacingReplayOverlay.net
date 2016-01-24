@@ -69,12 +69,11 @@ namespace iRacingReplayOverlay.Phases.Analysis
         List<Battle> battles = new List<Battle>();
         HashSet<BattleKey> previousBattleStates = new HashSet<BattleKey>();
         Dictionary<BattleKey, Battle> latestBattles = new Dictionary<BattleKey, Battle>();
-        private bool raceHasStarted;
-        private TimeSpan raceStartTime;
+        bool raceHasStarted;
+        TimeSpan raceStartTime;
 
         public Battles()
         {
-
         }
 
         public void Process(DataSample data)
@@ -89,44 +88,19 @@ namespace iRacingReplayOverlay.Phases.Analysis
             
             var currentBattleStates = new HashSet<BattleKey>();
             foreach (var d in battles)
-            {
                 currentBattleStates.Add(new BattleKey(d.LeaderCarIdx, d.CarIdx));
-            }
 
             var startedBattles = currentBattleStates.Except(previousBattleStates);
             var finishedBattles = previousBattleStates.Except(currentBattleStates);
 
             foreach(var b in startedBattles)
-            {
                 if (!((latestBattles.ContainsKey(b) && latestBattles[b].EndSessionTime + 15.Seconds() > data.Telemetry.SessionTimeSpan)))
-                    //TraceDebug.WriteLine("Extending Battle {0}", latestBattles[b]);
-                //else
-                {
-                    //if (latestBattles.ContainsKey(b))
-                    //{
-                        //latestBattles[b].EndSessionTime = data.Telemetry.SessionTimeSpan;
-                        //TraceDebug.WriteLine("Finish Battle {0}", latestBattles[b]);
-                   // }
-
                     latestBattles[b] = new Battle { BattleKey = b, StartSessionTime = data.Telemetry.SessionTimeSpan, EndSessionTime = data.Telemetry.SessionTimeSpan };
-                    //TraceDebug.WriteLine("Starting new Battle {0}", latestBattles[b]);
-                }
-            }
 
             foreach(var b in finishedBattles)
-            {
-                //latestBattles[b].EndSessionTime = data.Telemetry.SessionTimeSpan;
                 this.battles.Add(latestBattles[b]);
-                //TraceDebug.WriteLine("Pending battle added {0}", latestBattles[b]);
-            }
 
             var timeOutBattles = latestBattles.Values.Where(b => b.StartSessionTime + 120.Seconds() < data.Telemetry.SessionTimeSpan).ToList();
-
-            //foreach (var b in timeOutBattles)
-            //{
-                //b.EndSessionTime = data.Telemetry.SessionTimeSpan;
-                //TraceDebug.WriteLine("Finish Battle {0} (120Second limit)", b);
-            //}
 
             foreach (var b in timeOutBattles)
                 latestBattles[b.BattleKey] = new Battle { BattleKey = b.BattleKey, StartSessionTime = data.Telemetry.SessionTimeSpan, EndSessionTime = data.Telemetry.SessionTimeSpan };
