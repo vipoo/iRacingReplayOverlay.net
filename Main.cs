@@ -147,6 +147,8 @@ namespace iRacingReplayOverlay
 
         void Main_Load(object sender, EventArgs e)
         {
+            transcodeProgressBar.Value = transcodeProgressBar.Maximum;
+
             Settings.Default.SettingChanging += Default_SettingChanging;
             iracingEvents.NewSessionData += iracingEvents_NewSessionData;
             iracingEvents.Connected += iracingEvents_Connected;
@@ -310,7 +312,7 @@ namespace iRacingReplayOverlay
 
         void OnTranscoderProgress(long timestamp, long duration)
         {
-            transcodeProgressBar.Value = (int)(timestamp * transcodeProgressBar.Maximum / duration);
+            transcodeProgressBar.Value = Math.Min(transcodeProgressBar.Maximum, (int)(timestamp * transcodeProgressBar.Maximum / duration));
         }
 
         void OnTranscoderCompleted()
