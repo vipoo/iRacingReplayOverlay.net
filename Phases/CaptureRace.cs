@@ -76,7 +76,7 @@ namespace iRacingReplayOverlay.Phases
                 .WithFastestLaps()
                 .WithFinishingStatus()
                 .WithPitStopCounts()
-                .TakeUntil(3.Seconds()).After(d => d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface == TrackLocation.InPitStall))
+                .TakeUntil(3.Seconds()).After(d => d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface != TrackLocation.OnTrack))
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
             
             if (shortTestOnly)
