@@ -147,8 +147,6 @@ namespace iRacingReplayOverlay
 
         void Main_Load(object sender, EventArgs e)
         {
-            transcodeProgressBar.Value = transcodeProgressBar.Maximum;
-
             Settings.Default.SettingChanging += Default_SettingChanging;
             iracingEvents.NewSessionData += iracingEvents_NewSessionData;
             iracingEvents.Connected += iracingEvents_Connected;
