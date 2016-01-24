@@ -40,7 +40,7 @@ namespace iRacingReplayOverlay.Phases
             
             data = iRacing.GetDataFeed().First();
             var f = data.Telemetry.ReplayFrameNum;
-            iRacing.Replay.MoveToFrame(f + 60 * 4);
+            iRacing.Replay.MoveToFrame(f + 60 * 4, ReplayPositionMode.Begin, 100);
             iRacing.Replay.SetSpeed(1);
 
             var camera = data.SessionData.CameraInfo.Groups.FirstOrDefault( c => c.GroupName == "Scenic");
