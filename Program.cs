@@ -55,11 +55,16 @@ namespace iRacingReplayOverlay
 
         private static void MakePortable(Settings settings)
         {
-            var pp = settings.Providers.OfType<PortableSettingsProvider>().First();
+            var pp = settings.Providers.OfType<PortableSettingsProvider>().First(p => p.Name == "PortableSettingsProvider");
 
             foreach (SettingsProperty p in settings.Properties)
-                p.Provider = pp;
+                if (p.Name != "MainExecPath")
+                    p.Provider = pp;
+                else
+                    Trace.WriteLine(p);
             settings.Reload();
+
+            Trace.WriteLine(Settings.Default.MainExecPath);
         }
 
         private static void CopyFromOldSettings(Settings settings)

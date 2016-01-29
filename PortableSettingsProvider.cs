@@ -6,6 +6,18 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 
+public class IAVMSettingsProvider : PortableSettingsProvider
+{
+    public override string Name
+    {
+        get { return "IAVMSettingsProvider"; }
+    }
+
+    public override string GetAppSettingsFilename()
+    {
+        return "iracing-application-version-manager.settings";
+    }
+}
 public class PortableSettingsProvider : SettingsProvider
 {
     const string SETTINGSROOT = "Settings";
