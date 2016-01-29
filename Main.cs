@@ -147,6 +147,8 @@ namespace iRacingReplayOverlay
 
         void Main_Load(object sender, EventArgs e)
         {
+            changeVersionButton.Visible = File.Exists(Settings.Default.MainExecPath);
+
             Settings.Default.SettingChanging += Default_SettingChanging;
             iracingEvents.NewSessionData += iracingEvents_NewSessionData;
             iracingEvents.Connected += iracingEvents_Connected;
@@ -527,6 +529,12 @@ namespace iRacingReplayOverlay
                 Settings.Default.Save();
                 (new UsageDataRequest()).ShowDialog();
             }
+        }
+
+        private void changeVersionButton_Click(object sender, EventArgs e)
+        {
+            Process.Start(Settings.Default.MainExecPath, "-update");
+            this.Close();
         }
     }
 }

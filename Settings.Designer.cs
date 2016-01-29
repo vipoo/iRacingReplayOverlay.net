@@ -310,5 +310,18 @@ namespace iRacingReplayOverlay {
                 this["NewSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(IAVMSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MainExecPath {
+            get {
+                return ((string)(this["MainExecPath"]));
+            }
+            set {
+                this["MainExecPath"] = value;
+            }
+        }
     }
 }
