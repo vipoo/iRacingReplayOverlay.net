@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net", "iRacingReplayOverlay.net.csproj", "{0E523573-2972-4DC0-AECB-C4CF746854BB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C} = {5422AE20-F220-4BE1-9E61-5296981ABB5C}
+		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09} = {59D2B4B5-2852-4396-A0D9-9CA546AC3C09}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagerOverlayer", "ImagerOverlayer\ImagerOverlayer.csproj", "{6C5CA680-20D7-48AA-9458-554E18BABFFC}"
