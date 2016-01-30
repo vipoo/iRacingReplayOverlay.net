@@ -21,27 +21,14 @@ export default React.createClass({
             </div>
 
             <div className="row marketing">
-              <div className="col-lg-6">
-                <table className="table">
-                  <thead><tr><th>Beta Stream</th></tr></thead>
+              <div className="col-lg-12">
+               <table className="table">
+                  <thead><tr><th>Versioned Managed Stream *New Beta</th></tr></thead>
                   <tbody>
-                  <tr><td><a className="btn btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director/beta/setup.exe" role="button">Install ...</a></td></tr>
+                  <tr><td style={{textAlign: "Center"}}><a className="btn btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-application-version-manager/release/setup.exe" role="button">Install ...</a></td></tr>
                   <tr><td>
-                    <p>Install and always have the latest beta version:</p>
-                    <p>This version is updated often, and has had less testing/feedback than the main release</p>
-                  </td></tr>
-                  </tbody>
-                </table>
-              </div>
-
-             <div className="col-lg-6">
-                <table className="table">
-                  <thead><tr><th>Test Stream</th></tr></thead>
-                  <tbody>
-                  <tr><td><a className="btn btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director/stest/setup.exe" role="button">Install ...</a></td></tr>
-                  <tr><td>
-                    <p>Install and always have the latest test version:</p>
-                    <p>This version is updated on all code changes, and has had very limited testing - But its the latest and greatest version</p>
+                    <p>Installing with this system, allows you to switch between all available versions of iRacing Director, within the application.</p>
+                    <p>Try a new experimental version, then if you dont like, switch back to a previous stable version - within the application</p>
                   </td></tr>
                   </tbody>
                 </table>
