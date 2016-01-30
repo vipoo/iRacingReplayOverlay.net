@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net", "iRacingReplayOverlay.net.csproj", "{0E523573-2972-4DC0-AECB-C4CF746854BB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C} = {5422AE20-F220-4BE1-9E61-5296981ABB5C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagerOverlayer", "ImagerOverlayer\ImagerOverlayer.csproj", "{6C5CA680-20D7-48AA-9458-554E18BABFFC}"
 EndProject
@@ -51,7 +54,6 @@ Global
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|Any CPU.ActiveCfg = Release|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|Any CPU.Build.0 = Release|x64
 		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.ActiveCfg = Release|x64
-		{6C5CA680-20D7-48AA-9458-554E18BABFFC}.Release|x64.Build.0 = Release|x64
 		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|Any CPU.Build.0 = Debug|x64
 		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.ActiveCfg = Debug|x64
@@ -74,7 +76,6 @@ Global
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Any CPU.ActiveCfg = Release|x64
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Any CPU.Build.0 = Release|x64
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|x64.ActiveCfg = Release|x64
-		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|x64.Build.0 = Release|x64
 		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|Any CPU.Build.0 = Debug|x64
 		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|x64.ActiveCfg = Debug|x64
@@ -82,7 +83,6 @@ Global
 		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|Any CPU.ActiveCfg = Release|x64
 		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|Any CPU.Build.0 = Release|x64
 		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|x64.ActiveCfg = Release|x64
-		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|x64.Build.0 = Release|x64
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -90,7 +90,6 @@ Global
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.ActiveCfg = Release|Any CPU
-		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.Build.0 = Release|Any CPU
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|Any CPU.Build.0 = Debug|x64
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x64.ActiveCfg = Debug|x64
@@ -98,7 +97,6 @@ Global
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|Any CPU.ActiveCfg = Release|x64
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|Any CPU.Build.0 = Release|x64
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x64.ActiveCfg = Release|x64
-		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x64.Build.0 = Release|x64
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -106,7 +104,6 @@ Global
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x64.ActiveCfg = Release|Any CPU
-		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x64.Build.0 = Release|Any CPU
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|Any CPU.Build.0 = Debug|x64
 		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.ActiveCfg = Debug|x64

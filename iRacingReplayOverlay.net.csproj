@@ -47,6 +47,26 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+   <Reference Include="iRacingSDK, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\iRacingSDK.1.0.0.33\lib\net40-client\iRacingSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
+      <Name>iRacingSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
+
+
+
+
+
   <ItemGroup>
     <Reference Include="AWSSDK.CloudWatchLogs, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>packages\AWSSDK.CloudWatchLogs.3.1.2.2\lib\net35\AWSSDK.CloudWatchLogs.dll</HintPath>
@@ -56,6 +76,7 @@
       <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+ 
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -227,10 +248,6 @@
   </Target>
   -->
   <ItemGroup>
-    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
     <ProjectReference Include="SuperMFLib\mfnet\mflib\src\MediaFoundation.csproj">
       <Project>{b78c0f3b-071a-4fd2-829d-7a67e0f7bd1c}</Project>
       <Name>MediaFoundation</Name>
@@ -272,7 +289,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
- 
   <ItemGroup>
     <Content Include="DeploymentSite\index.html" />
     <Content Include="DeploymentSite\xmltojson.js" />
