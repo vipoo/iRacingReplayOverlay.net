@@ -30,25 +30,6 @@ namespace iRacingReplayOverlay
             }
         }
 
-        public static string BuildType
-        {
-            get
-            {
-                var assName = Assembly.GetExecutingAssembly().GetName();
-                var version = assName.Version;
-                var name = assName.Name;
-
-                var isBeta = name.ToLower().Contains("beta");
-                var isTest = name.ToLower().Contains("test");
-
-                if (isBeta)
-                    return " beta";
-                if (isTest)
-                    return " test";
-
-                return " stable";
-            }
-        }
         public static string AssemblyVersion
         {
             get
@@ -56,8 +37,8 @@ namespace iRacingReplayOverlay
                 var assName = Assembly.GetExecutingAssembly().GetName();
                 var version = assName.Version;
                 var name = assName.Name;
-                
-                return "{0}.{1}.{2}.{3}{4}".F(version.Major, version.MajorRevision, version.Minor, version.MinorRevision, BuildType);
+
+                return version.ToString();
             }
         }
 

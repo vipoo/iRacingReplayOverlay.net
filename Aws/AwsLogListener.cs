@@ -54,7 +54,7 @@ namespace iRacingReplayOverlay
         {
             get
             {
-                return "{0}{1}".F(AboutBox1.BuildType, trackingId);
+                return trackingId.ToString();
             }
         }
 
