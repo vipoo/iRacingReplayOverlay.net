@@ -5,7 +5,7 @@ msbuild %ProjectDir%iRacingReplayOverlay.net.Tests\iRacingReplayOverlay.net.Test
 	-p:SolutionDir=%SolutionDir% ^
 	-t:build ^
 	-v:minimal ^
-	-p:Configuration=Debug
+	-p:Configuration=Release
 
 .\packages\NUnit.Runners.2.6.3\tools\nunit-console.exe -nodots -nologo -labels ^
-	.\iRacingReplayOverlay.net.Tests\bin\x64\Debug\iRacingReplayOverlay.net.Tests.exe
+	.\iRacingReplayOverlay.net.Tests\bin\x64\Release\iRacingReplayOverlay.net.Tests.exe
