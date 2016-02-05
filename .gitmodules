@@ -4,3 +4,9 @@
 [submodule "SuperMFLib"]
 	path = SuperMFLib
 	url = git://github.com/vipoo/SuperMFLib.git
+[submodule "plugins/iRacingDirector.Plugin"]
+	path = plugins/iRacingDirector.Plugin
+	url = git://github.com/vipoo/iRacingDirector.Plugin.git
+[submodule "plugins/iRacingDirector.Plugin.StandardOverlays"]
+	path = plugins/iRacingDirector.Plugin.StandardOverlays
+	url = git://github.com/vipoo/iRacingDirector.Plugin.StandardOverlays.git
