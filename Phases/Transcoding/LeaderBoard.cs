@@ -26,15 +26,29 @@ using MediaFoundation.Net;
 using iRacingReplayOverlay.Support;
 using iRacingSDK.Support;
 using iRacingSDK;
+using System.Reflection;
+using iRacingDirector;
+using System.IO;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
     public class LeaderBoard
     {
         public OverlayData OverlayData;
+        public const int DriversPerPage = 10;
+
+        readonly _Styles Styles = new _Styles();
+        PluginProxy plugin;
+
         const int FlashCardWidth = 900;
         const int FlashCardLeft = (1920 / 2) - FlashCardWidth / 2;
-        public const int DriversPerPage = 10;
+
+        
+        public LeaderBoard()
+        {
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            this.plugin = new iRacingDirector.PluginProxy(Path.Combine(path, @"plugins\StandardOverlays\iRacingDirector.Plugin.StandardOverlays.dll"));
+        }
 
         public void DrawFlashCard(string title, Graphics graphics, long timestamp, Action<GraphicRect> drawBody)
         {
@@ -132,7 +146,16 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         public void Intro(Graphics graphics, long timestamp, int page =0)
         {
-            DrawFlashCard("Qualifying Results", graphics, timestamp, r => DrawIntroBody(graphics, r, page));
+            var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
+            var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
+
+            plugin.SetWeekendInfo(OverlayData.SessionData.WeekendInfo);
+            plugin.SetQualifyingResults(results);
+            plugin.SetCompetingDrivers(OverlayData.SessionData.DriverInfo.CompetingDrivers);
+            plugin.SetGraphics(graphics);
+            plugin.DrawIntroFlashCard( timestamp, page);
+
+            //DrawFlashCard("Qualifying Results", graphics, timestamp, r => DrawIntroBody(graphics, r, page));
         }
 
         public void Overlay(Graphics graphics, long timestamp)
@@ -387,7 +410,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 .DrawText(p.UserName, topOffset: offset);
         }
 
-        private readonly _Styles Styles = new _Styles();
 
         public class _Styles
         {

@@ -28,6 +28,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using iRacingSDK.Support;
+using System.Reflection;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -54,6 +55,53 @@ namespace iRacingReplayOverlay.Phases
         }
 
         public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly)
+        {
+            var myLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var info = new AppDomainSetup();
+            var domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
+            try
+            {
+                var a = new Arguments(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progress, completed, highlightOnly);
+
+                domain.DoCallBack(a.OverlayRaceDataOntoVideo);
+            }
+            finally
+            {
+                AppDomain.Unload(domain);
+            }
+        }
+
+        public class Arguments : MarshalByRefObject
+        {
+            string gameDataFile;
+            int videoBitRate;
+            int audioBitRate;
+            string destinationFile;
+            string destinationHighlightsFile;
+            Action<long, long> progressReporter;
+            Action completed;
+            bool highlightOnly;
+
+            public Arguments(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progressReporter, Action completed, bool highlightOnly)
+            {
+                this.gameDataFile = gameDataFile;
+                this.videoBitRate = videoBitRate;
+                this.audioBitRate = audioBitRate;
+                this.destinationHighlightsFile = destinationHighlightsFile;
+                this.destinationFile = destinationFile;
+                this.progressReporter = progressReporter;
+                this.completed = completed;
+                this.highlightOnly = highlightOnly;
+            }
+
+            public void OverlayRaceDataOntoVideo()
+            {
+                __OverlayRaceDataOntoVideo(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progressReporter, completed, highlightOnly);
+            }
+        }
+
+        public static void __OverlayRaceDataOntoVideo(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progress, Action completed, bool highlightOnly)
         {
             bool TranscodeFull = !highlightOnly;
 
@@ -84,6 +132,7 @@ namespace iRacingReplayOverlay.Phases
 
     public class TranscodeAndOverlay
     {
+
         readonly LeaderBoard leaderBoard;
         long totalDuration;
         readonly Action<long, long> progressReporter;
@@ -96,20 +145,29 @@ namespace iRacingReplayOverlay.Phases
 
         public static void Apply(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter)
         {
-            var leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile) };
-
-            var transcoder = new Transcoder
+            try
             {
-                VideoFiles = leaderBoard.OverlayData.VideoFiles.ToSourceReaderExtra(),
-                DestinationFile = destFile,
-                VideoBitRate = videoBitRate,
-                AudioBitRate = audioBitRate
-            };
+                var leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile) };
 
-            new TranscodeAndOverlay(leaderBoard, progressReporter)._Apply(transcoder, highlights, progressReporter);
+                var transcoder = new Transcoder
+                {
+                    VideoFiles = leaderBoard.OverlayData.VideoFiles.ToSourceReaderExtra(),
+                    DestinationFile = destFile,
+                    VideoBitRate = videoBitRate,
+                    AudioBitRate = audioBitRate
+                };
+
+                new TranscodeAndOverlay(leaderBoard, progressReporter).Process(transcoder, highlights, progressReporter);
+            }
+            catch (Exception e)
+            {
+                TraceDebug.WriteLine(e.Message);
+                TraceDebug.WriteLine(e.StackTrace);
+                throw e;
+            }
         }
-
-        void _Apply(Transcoder transcoder, bool highlights, Action<long, long> monitorProgress)
+        
+        void Process(Transcoder transcoder, bool highlights, Action<long, long> monitorProgress)
         {
             try
             {

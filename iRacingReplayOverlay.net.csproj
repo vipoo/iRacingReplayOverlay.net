@@ -251,6 +251,10 @@
   </Target>
   -->
   <ItemGroup>
+    <ProjectReference Include="plugins\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
+      <Project>{4b69ad00-092f-4bca-a0dc-5c7a66870a6a}</Project>
+      <Name>iRacingDirector.Plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AboutBox1.resx">
