@@ -21,7 +21,7 @@ curl -L https://github.com/vipoo/iRacingDirector.Plugin.StandardOverlays/release
 rm release.zip
 cd ..\..
 
-7z a release.zip *.*
+7z a -r release.zip *.*
 
 appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
 
