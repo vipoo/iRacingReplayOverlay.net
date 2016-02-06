@@ -78,7 +78,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\StandardOverlays
-copy $(TargetDir)\* $(SolutionDir)\bin\x64\Debug\plugins\StandardOverlays</PostBuildEvent>
+copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\StandardOverlays</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\StandardOverlays</PreBuildEvent>
