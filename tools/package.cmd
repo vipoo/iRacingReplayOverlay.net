@@ -1,19 +1,17 @@
 @echo off
-echo 'Building test package' %APPVEYOR_BUILD_VERSION%
+echo 'Building package' %APPVEYOR_BUILD_VERSION%
 
-msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\                               ^
+msbuild iRacingDirector.Plugin.StandardOverlays.csproj -p:SolutionDir=%cd%\                ^
                                         -p:Configuration=Release                           ^
                                         -t:rebuild                                         ^
                                         -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION%     ^
-                                        -v:minimal                                         ^
-                                        -p:ProductName="iRacing Replay Director"           ^
-                                        -p:OverrideAssemblyName=iRacingReplayOverlay
+                                        -v:minimal
 
-cd bin\x64\Release
+cd bin\Release
 
-7z a release.zip *.*
+7z a release.zip iRacingDirector.Plugin.StandardOverlays.*
 
 appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
 
-cd ..\..\..
+cd ..\..
  
