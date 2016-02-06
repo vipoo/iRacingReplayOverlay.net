@@ -13,8 +13,9 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <ProductName>iRacing Replay Director</ProductName>
     <PublisherName>Dean Netherton</PublisherName>
     <SuiteName>iRacing Apps</SuiteName>
@@ -31,6 +32,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Optimize>false</Optimize>
@@ -43,6 +45,7 @@
     <DebugSymbols>true</DebugSymbols>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <DefineConstants>TRACE</DefineConstants>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -88,9 +91,11 @@
       <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Octokit">
+      <HintPath>packages\Octokit.0.17.0\lib\net45\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -125,6 +130,7 @@
     </Compile>
     <Compile Include="Aws\AwsKey.cs" />
     <Compile Include="Aws\AwsLogListener.cs" />
+    <Compile Include="Properties\IAVMSettingsProvider.cs" />
     <Compile Include="ConfigureGeneralSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,19 @@
       <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ConfigurePlugins.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigurePlugins.Designer.cs">
+      <DependentUpon>ConfigurePlugins.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\GitHubAccessSettings.cs" />
+    <Compile Include="GitHubReleases\GitHubAccess.cs" />
+    <Compile Include="GitHubReleases\GitHubCachedReleases.cs" />
+    <Compile Include="GitHubReleases\GitHubCachedResult.cs" />
+    <Compile Include="GitHubReleases\PortableSettingsProvider.cs" />
+    <Compile Include="GitHubReleases\RepoKey.cs" />
+    <Compile Include="GitHubReleases\VersionItem.cs" />
     <Compile Include="Phases\Capturing\EditMarker.cs" />
     <Compile Include="Phases\Direction\RulePaceLaps.cs" />
     <Compile Include="Phases\Transcoding\FlashCardPaging.cs" />
@@ -169,7 +188,6 @@
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
     <Compile Include="Phases\Direction\VideoCapture.cs" />
-    <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="SettingsAdditional.cs" />
     <Compile Include="SettingsExtensions.cs" />
     <Compile Include="Support\LogListener.cs" />
@@ -265,6 +283,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigureGeneralSettings.resx">
       <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurePlugins.resx">
+      <DependentUpon>ConfigurePlugins.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LogMessages.resx">
       <DependentUpon>LogMessages.cs</DependentUpon>

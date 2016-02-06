@@ -536,5 +536,11 @@ namespace iRacingReplayOverlay
             Process.Start(Settings.Default.MainExecPath, "-update");
             this.Close();
         }
+
+        private void configurePluginsButton_Click(object sender, EventArgs e)
+        {
+            var f = new ConfigurePlugins();
+            f.ShowDialog();
+        }
     }
 }

@@ -82,6 +82,7 @@ namespace iRacingReplayOverlay
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.changeVersionButton = new System.Windows.Forms.Button();
+            this.configurePluginsButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -90,7 +91,7 @@ namespace iRacingReplayOverlay
             // 
             // SettingsButton
             // 
-            this.SettingsButton.Location = new System.Drawing.Point(210, 12);
+            this.SettingsButton.Location = new System.Drawing.Point(200, 12);
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(181, 26);
             this.SettingsButton.TabIndex = 2;
@@ -110,11 +111,11 @@ namespace iRacingReplayOverlay
             // 
             // logMessagesButton
             // 
-            this.logMessagesButton.Location = new System.Drawing.Point(530, 12);
+            this.logMessagesButton.Location = new System.Drawing.Point(563, 12);
             this.logMessagesButton.Name = "logMessagesButton";
-            this.logMessagesButton.Size = new System.Drawing.Size(145, 26);
+            this.logMessagesButton.Size = new System.Drawing.Size(112, 26);
             this.logMessagesButton.TabIndex = 3;
-            this.logMessagesButton.Text = "View Log Messages";
+            this.logMessagesButton.Text = "Log Messages";
             this.logMessagesButton.UseVisualStyleBackColor = true;
             this.logMessagesButton.Click += new System.EventHandler(this.logMessagesButton_Click);
             // 
@@ -479,11 +480,22 @@ namespace iRacingReplayOverlay
             this.changeVersionButton.UseVisualStyleBackColor = true;
             this.changeVersionButton.Click += new System.EventHandler(this.changeVersionButton_Click);
             // 
+            // configurePluginsButton
+            // 
+            this.configurePluginsButton.Location = new System.Drawing.Point(387, 12);
+            this.configurePluginsButton.Name = "configurePluginsButton";
+            this.configurePluginsButton.Size = new System.Drawing.Size(128, 26);
+            this.configurePluginsButton.TabIndex = 38;
+            this.configurePluginsButton.Text = "Configure Plugins";
+            this.configurePluginsButton.UseVisualStyleBackColor = true;
+            this.configurePluginsButton.Click += new System.EventHandler(this.configurePluginsButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 405);
+            this.Controls.Add(this.configurePluginsButton);
             this.Controls.Add(this.changeVersionButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox3);
@@ -548,5 +560,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox EncodeVideoAfterCapture;
         private System.Windows.Forms.Button changeVersionButton;
+        private System.Windows.Forms.Button configurePluginsButton;
     }
 }

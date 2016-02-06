@@ -10,3 +10,6 @@
 [submodule "plugins/iRacingDirector.Plugin.StandardOverlays"]
 	path = plugins/iRacingDirector.Plugin.StandardOverlays
 	url = git://github.com/vipoo/iRacingDirector.Plugin.StandardOverlays.git
+[submodule "GitHubReleases"]
+	path = GitHubReleases
+	url = git://github.com/vipoo/GitHubReleases.git

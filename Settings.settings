@@ -71,10 +71,16 @@
     <Setting Name="PeriodWaitForIRacingSwitch" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:00:06</Value>
     </Setting>
-    <Setting Name="NewSettings" Provider="PortableSettingsProvider" Type="System.Boolean" Scope="User">
+    <Setting Name="NewSettings" Provider="IracingReplayDirectorProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MainExecPath" Provider="IAVMSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="OverlayPluginId" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="GitHubCachedReleases" Provider="IAVMSettingsProvider" Type="GitHubReleases.GitHubCachedReleases[]" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

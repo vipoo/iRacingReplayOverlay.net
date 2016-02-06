@@ -299,7 +299,7 @@ namespace iRacingReplayOverlay {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(IracingReplayDirectorProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool NewSettings {
@@ -321,6 +321,30 @@ namespace iRacingReplayOverlay {
             }
             set {
                 this["MainExecPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OverlayPluginId {
+            get {
+                return ((string)(this["OverlayPluginId"]));
+            }
+            set {
+                this["OverlayPluginId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(IAVMSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public GitHubReleases.GitHubCachedReleases[] GitHubCachedReleases {
+            get {
+                return ((GitHubReleases.GitHubCachedReleases[])(this["GitHubCachedReleases"]));
+            }
+            set {
+                this["GitHubCachedReleases"] = value;
             }
         }
     }
