@@ -56,6 +56,10 @@
       <HintPath>packages\MediaFoundation.Net.2.0.0.23\lib\net35-client\MediaFoundation.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="iRacingDirector.Plugin, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\iRacingDirector.Plugin.1.0.0.5\lib\net40-client\iRacingDirector.Plugin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
@@ -70,6 +74,10 @@
       <Project>{59d2b4b5-2852-4396-a0d9-9ca546ac3c09}</Project>
       <Name>SuperMFLib</Name>
     </ProjectReference>
+    <ProjectReference Include="plugins\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
+      <Project>{4b69ad00-092f-4bca-a0dc-5c7a66870a6a}</Project>
+      <Name>iRacingDirector.Plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AWSSDK.CloudWatchLogs, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
@@ -80,6 +88,7 @@
       <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -250,12 +259,6 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <ItemGroup>
-    <ProjectReference Include="plugins\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
-      <Project>{4b69ad00-092f-4bca-a0dc-5c7a66870a6a}</Project>
-      <Name>iRacingDirector.Plugin</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
