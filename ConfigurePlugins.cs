@@ -1,10 +1,13 @@
-﻿using iRacingSDK.Support;
+﻿using GitHubReleases;
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -29,13 +32,37 @@ namespace iRacingReplayOverlay
             InitializeComponent();
             //twoColumnDropDown(this.pluginVersions);
             twoColumnDropDown<PluginDetails>(pluginNames, (v, i) => i == 0 ? v.FriendlyName : "by {0}".F(v.Owner));
+            twoColumnDropDown<VersionItem>(pluginVersions, (v, i) => i == 0 ? v.VersionStamp : v.DateTimeStamp);
+        }
+
+        [Serializable]
+        public class Arguments
+        {
+            public string Path;
+            public Action<string> RetrievedVersionCallback;
+
+            public void RetrieveVersion()
+            {
+                var versionStamp = AssemblyName.GetAssemblyName(Path).Version.ToString();
+
+                RetrievedVersionCallback("StandardOverlay: {0}".F(versionStamp));
+            }
         }
 
         private void ConfigurePlugins_Load(object sender, EventArgs e)
         {
             pluginNames.Items.Clear();
 
+            var myLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var info = new AppDomainSetup();
+            var domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
 
+            var a = new Arguments {
+                Path = Path.Combine(myLocation, @"plugins\StandardOverlays\iRacingDirector.Plugin.StandardOverlays.dll"),
+                RetrievedVersionCallback = t => this.currentInstalled.Text = t
+            };
+
+            domain.DoCallBack(a.RetrieveVersion);
         }
 
         private void ConfigurePlugins_Activated(object sender, EventArgs e)
@@ -105,6 +132,15 @@ namespace iRacingReplayOverlay
 
             Settings.Default.OverlayPluginId = selectedItem.Id;
             Settings.Default.Save();
+        }
+
+        private async void pluginNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var versions = await GitHubAccess.GetVersions("vipoo", "iRacingDirector.Plugin.StandardOverlays");
+
+            foreach(var v in versions)
+                this.pluginVersions.Items.Add(v);
+
         }
     }
 }
