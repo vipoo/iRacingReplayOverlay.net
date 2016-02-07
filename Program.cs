@@ -58,7 +58,7 @@ namespace iRacingReplayOverlay
             var pp = settings.Providers.OfType<IracingReplayDirectorProvider>().First();
 
             foreach (SettingsProperty p in settings.Properties)
-                if (p.PropertyType != typeof(IAVMSettingsProvider))
+                if (p.Provider.GetType() != typeof(IAVMSettingsProvider))
                     p.Provider = pp;
             settings.Reload();
         }

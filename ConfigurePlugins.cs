@@ -1,14 +1,11 @@
 ﻿using GitHubReleases;
 using iRacingSDK.Support;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
@@ -30,7 +27,6 @@ namespace iRacingReplayOverlay
         public ConfigurePlugins()
         {
             InitializeComponent();
-            //twoColumnDropDown(this.pluginVersions);
             twoColumnDropDown<PluginDetails>(pluginNames, (v, i) => i == 0 ? v.FriendlyName : "by {0}".F(v.Owner));
             twoColumnDropDown<VersionItem>(pluginVersions, (v, i) => i == 0 ? v.VersionStamp : v.DateTimeStamp);
         }
@@ -141,6 +137,24 @@ namespace iRacingReplayOverlay
             foreach(var v in versions)
                 this.pluginVersions.Items.Add(v);
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var version = (VersionItem)this.pluginVersions.SelectedItem;
+            //this.Enabled = false;
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = Settings.Default.MainExecPath,
+                    Arguments = "-update-plugin -user={0} -repo={1} -version={2}".F(
+                                "vipoo", "iRacingDirector.Plugin.StandardOverlays", version.VersionStamp)
+                }
+            };
+            
+            process.Start();
         }
     }
 }
