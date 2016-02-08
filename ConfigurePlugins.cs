@@ -53,8 +53,9 @@ namespace iRacingReplayOverlay
             var info = new AppDomainSetup();
             var domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
 
-            var a = new Arguments {
-                Path = Path.Combine(myLocation, @"plugins\StandardOverlays\iRacingDirector.Plugin.StandardOverlays.dll"),
+            var a = new Arguments
+            {
+                Path = Path.Combine(myLocation, @"plugins\overlay\iRacingDirector.Plugin.StandardOverlays.dll"),
                 RetrievedVersionCallback = t => this.currentInstalled.Text = t
             };
 
