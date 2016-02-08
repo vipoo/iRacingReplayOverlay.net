@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
@@ -48,7 +49,11 @@ namespace iRacingReplayOverlay
         private void ConfigurePlugins_Load(object sender, EventArgs e)
         {
             pluginNames.Items.Clear();
+            UpdatePluginDetails();
+        }
 
+        private void UpdatePluginDetails()
+        {
             var myLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var info = new AppDomainSetup();
             var domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
@@ -143,7 +148,7 @@ namespace iRacingReplayOverlay
         private void button1_Click(object sender, EventArgs e)
         {
             var version = (VersionItem)this.pluginVersions.SelectedItem;
-            //this.Enabled = false;
+            this.Enabled = false;
 
             var process = new Process
             {
@@ -152,9 +157,15 @@ namespace iRacingReplayOverlay
                     FileName = Settings.Default.MainExecPath,
                     Arguments = "-update-plugin -user={0} -repo={1} -version={2}".F(
                                 "vipoo", "iRacingDirector.Plugin.StandardOverlays", version.VersionStamp)
-                }
+                },
+                 EnableRaisingEvents = true
             };
-            
+
+            var context = SynchronizationContext.Current;
+            process.Exited += (s, ee) => context.Post(i => {
+                this.Enabled = true;
+                UpdatePluginDetails();
+            }, null);
             process.Start();
         }
     }
