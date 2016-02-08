@@ -1,7 +1,7 @@
 @echo off
 echo 'Building test package' %APPVEYOR_BUILD_VERSION%
 
-set STANDARD_OVERLAY_PLUGIN=1.0.0.5
+set STANDARD_OVERLAY_PLUGIN=1.0.0.7
 
 msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\                               ^
                                         -p:Configuration=Release                           ^
@@ -13,9 +13,9 @@ msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\                    
 
 cd bin\x64\Release
 
-mkdir plugins\StandardOverlays
+mkdir plugins\overlay
 
-cd plugins\StandardOverlays
+cd plugins\overlay
 curl -L https://github.com/vipoo/iRacingDirector.Plugin.StandardOverlays/releases/download/%STANDARD_OVERLAY_PLUGIN%/release.zip --output release.zip
 7z e release.zip
 rm release.zip
