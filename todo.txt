@@ -1,0 +1,11 @@
+﻿* Error Handling:
+  * Do not attempt to process overlay, if plugin assembly does not exists
+  * If plugin draw errors, capture and show user the error message
+
+* Shadowcopy the plugin, so it can be updated, whilst in use
+* Auto reload assembly and redraw, on updating of assembly
+* Clean up Form's appearance
+* Extract support code from overlay plugin into support assembly (packaged within same nuget as this project)
+* Update release references to use nuget references
+* Create nuget package for this exe and support assembly.
+* Clean up support code to be more DSL
