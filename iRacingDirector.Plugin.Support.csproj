@@ -44,11 +44,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
+    <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
       <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
       <Name>iRacingSDK</Name>
     </ProjectReference>
-    <ProjectReference Include="plugins\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
+    <ProjectReference Include="..\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
       <Project>{4b69ad00-092f-4bca-a0dc-5c7a66870a6a}</Project>
       <Name>iRacingDirector.Plugin</Name>
     </ProjectReference>
