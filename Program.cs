@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace iRacingDirector.Plugin.OverlaySupport
+namespace iRacingDirector.Plugin.Support
 {
     static class Program
     {

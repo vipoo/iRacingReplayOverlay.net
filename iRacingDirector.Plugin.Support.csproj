@@ -7,8 +7,8 @@
     <ProjectGuid>{5421C4C4-F7C1-4307-98EC-7DF673E9393A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>iRacingDirector.Plugin.OverlaySupport</RootNamespace>
-    <AssemblyName>iRacingDirector.Plugin.OverlaySupport</AssemblyName>
+    <RootNamespace>iRacingDirector.Plugin.Support</RootNamespace>
+    <AssemblyName>iRacingDirector.Plugin.Support</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

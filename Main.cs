@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace iRacingDirector.Plugin.OverlaySupport
+namespace iRacingDirector.Plugin.Support
 {
     
     public class Drawer : MarshalByRefObject

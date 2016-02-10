@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace iRacingDirector.Plugin.OverlaySupport.Properties {
+namespace iRacingDirector.Plugin.Support.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

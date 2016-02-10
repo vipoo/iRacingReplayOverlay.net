@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace iRacingDirector.Plugin.OverlaySupport
+namespace iRacingDirector.Plugin.Support
 {
     public partial class ImageViewer : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace iRacingDirector.Plugin.OverlaySupport
+﻿namespace iRacingDirector.Plugin.Support
 {
     partial class Main
     {
