@@ -13,14 +13,14 @@
       Testing tools and support library for building plugins for iRacing Replay Director application
     </description>
     <copyright>Copyright 2016</copyright>
-    <tags>iRacing, Replay Director, iRacingDirector.Plugin.Support</tags>
+    <tags>iRacing, Replay Director, iRacingDirector.Plugin.Tester</tags>
     <dependencies>
       <dependency id="iRacingSDK" version="1.0.0.33" />
       <dependency id="iRacingDirector.Plugin" version="1.0.0.5" />
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\iRacingDirector.Plugin.Support.exe" target="lib\net40-client" />
-    <file src="bin\Release\iRacingDirector.Plugin.Support.pdb" target="lib\net40-client" />
+    <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.exe" target="lib\net40-client" />
+    <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.pdb" target="lib\net40-client" />
   </files>
 </package>

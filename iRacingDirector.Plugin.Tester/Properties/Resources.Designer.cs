@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace iRacingDirector.Plugin.Support.Properties {
+namespace iRacingDirector.Plugin.Tester.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace iRacingDirector.Plugin.Support.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("iRacingDirector.Plugin.Support.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("iRacingDirector.Plugin.Tester.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

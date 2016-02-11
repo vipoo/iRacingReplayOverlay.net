@@ -7,8 +7,8 @@
     <ProjectGuid>{96FA1C80-396C-4792-9E8B-C7CBFC25833D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>iRacingDirector.Plugin.Support</RootNamespace>
-    <AssemblyName>iRacingDirector.Plugin.Support</AssemblyName>
+    <RootNamespace>iRacingDirector.Plugin.Tester</RootNamespace>
+    <AssemblyName>iRacingDirector.Plugin.Tester</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,27 +33,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+  <ItemGroup>
     <Reference Include="iRacingDirector.Plugin, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingDirector.Plugin.1.0.0.5\lib\net40-client\iRacingDirector.Plugin.dll</HintPath>
+      <HintPath>..\packages\iRacingDirector.Plugin.1.0.0.5\lib\net40-client\iRacingDirector.Plugin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="iRacingSDK, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingSDK.1.0.0.33\lib\net40-client\iRacingSDK.dll</HintPath>
+      <HintPath>..\packages\iRacingSDK.1.0.0.33\lib\net40-client\iRacingSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
-      <Project>{4b69ad00-092f-4bca-a0dc-5c7a66870a6a}</Project>
-      <Name>iRacingDirector.Plugin</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,7 +49,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="YamlDotNet, Version=2.0.1.20271, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
-      <HintPath>packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
+      <HintPath>..\packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -94,7 +82,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -104,7 +94,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="tools\package.cmd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

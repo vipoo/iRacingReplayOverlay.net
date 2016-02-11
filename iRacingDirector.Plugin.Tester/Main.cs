@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace iRacingDirector.Plugin.Support
+namespace iRacingDirector.Plugin.Tester
 {
     
     public class Drawer : MarshalByRefObject

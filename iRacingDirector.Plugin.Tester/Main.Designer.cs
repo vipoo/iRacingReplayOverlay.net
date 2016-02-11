@@ -1,4 +1,4 @@
-﻿namespace iRacingDirector.Plugin.Support
+﻿namespace iRacingDirector.Plugin.Tester
 {
     partial class Main
     {
