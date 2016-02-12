@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="iRacingDirector.Plugin, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\iRacingDirector.Plugin.1.0.0.5\lib\net40-client\iRacingDirector.Plugin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="iRacingSDK, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\iRacingSDK.1.0.0.33\lib\net40-client\iRacingSDK.dll</HintPath>
       <Private>True</Private>
@@ -97,6 +93,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
+      <Project>{4b69ad00-092f-4bca-a0dc-5c7a66870a6a}</Project>
+      <Name>iRacingDirector.Plugin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Reference Include="iRacingDirector.Plugin, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\iRacingDirector.Plugin.1.0.0.5\lib\net40-client\iRacingDirector.Plugin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

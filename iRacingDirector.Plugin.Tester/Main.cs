@@ -15,7 +15,7 @@ namespace iRacingDirector.Plugin.Tester
 
         public void _IntroFlashCard()
         {
-            var p = new iRacingDirector.PluginProxy(PluginFileName);
+            var p = new PluginProxy(PluginFileName);
 
             p.SetGraphics(g);
             p.SetWeekendInfo(new SessionData._WeekendInfo
