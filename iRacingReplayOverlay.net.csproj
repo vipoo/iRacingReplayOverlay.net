@@ -51,8 +51,8 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Reference Include="iRacingSDK, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingSDK.1.0.0.33\lib\net40-client\iRacingSDK.dll</HintPath>
+    <Reference Include="iRacingSDK, Version=1.0.0.34, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\iRacingSDK.1.0.0.34\lib\net40-client\iRacingSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MediaFoundation.Net, Version=2.0.0.23, Culture=neutral, processorArchitecture=AMD64">
