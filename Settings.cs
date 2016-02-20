@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace iRacingDirector.Plugin.StandardOverlays
+﻿namespace iRacingDirector.Plugin.StandardOverlays
 {
     public static class Settings
     {
