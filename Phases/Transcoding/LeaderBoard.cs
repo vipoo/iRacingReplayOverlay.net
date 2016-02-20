@@ -27,7 +27,6 @@ using iRacingReplayOverlay.Support;
 using iRacingSDK.Support;
 using iRacingSDK;
 using System.Reflection;
-using iRacingDirector;
 using System.IO;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
@@ -47,7 +46,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         public LeaderBoard()
         {
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            this.plugin = new iRacingDirector.PluginProxy(Path.Combine(path, @"plugins\overlay\iRacingDirector.Plugin.StandardOverlays.dll"));
+            this.plugin = new PluginProxy(Path.Combine(path, @"plugins\overlay\iRacingDirector.Plugin.StandardOverlays.dll"));
         }
 
         public void DrawFlashCard(string title, Graphics graphics, long timestamp, Action<GraphicRect> drawBody)
