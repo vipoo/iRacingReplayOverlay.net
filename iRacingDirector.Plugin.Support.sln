@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{042C5E84
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.StandardOverlays", "iRacingDirector.Plugin.StandardOverlays\iRacingDirector.Plugin.StandardOverlays.csproj", "{5916B84C-0264-4102-9CCC-28006D84E4FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Support", "iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj", "{CEC2BB31-324D-41E3-83C8-A5C35C63129B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

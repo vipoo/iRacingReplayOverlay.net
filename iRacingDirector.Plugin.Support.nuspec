@@ -19,7 +19,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.exe" target="lib\net40-client" />
-    <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.pdb" target="lib\net40-client" />
+    <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.exe" target="tools" />
+    <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.pdb" target="tools" />
+    <file src="iRacingDirector.Plugin.Support\bin\Release\iRacingDirector.Plugin.Support.dll" target="lib\net40-client" />
+    <file src="iRacingDirector.Plugin.Support\bin\Release\iRacingDirector.Plugin.Support.pdb" target="lib\net40-client" />
   </files>
 </package>
