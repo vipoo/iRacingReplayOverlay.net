@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace iRacingDirector.Plugin.Tester
+namespace iRacingDirector
 {
     public class LogListener : TraceListener
     {
