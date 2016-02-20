@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iRacingSDK;
+using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -7,7 +9,21 @@ namespace iRacingDirector.Plugin.Tester
 {
     public partial class ImageViewer : Form
     {
-        public Action<Graphics> drawAction = g => { };
+        PluginProxy PluginProxy;
+
+        public void SetPluginFileName(string value)
+        {
+            PluginProxy = new PluginProxy(value);
+
+            PluginProxy.SetWeekendInfo(new SessionData._WeekendInfo
+            {
+                TrackDisplayName = "Sample Track Name",
+                TrackCity = "Track City",
+                TrackCountry = "Track Country"
+            });
+            PluginProxy.SetQualifyingResults(new SessionData._SessionInfo._Sessions._ResultsPositions[0]);
+
+        }
 
         public ImageViewer()
         {
@@ -27,7 +43,16 @@ namespace iRacingDirector.Plugin.Tester
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            this.drawAction(e.Graphics);
+            DrawAction(e.Graphics);
+        }
+
+        void DrawAction(Graphics g)
+        {
+            if (PluginProxy == null)
+                return;
+
+            PluginProxy.SetGraphics(g);
+            PluginProxy.DrawIntroFlashCard(0, 0);
         }
 
         private void ImageViewer_FormClosing(object sender, FormClosingEventArgs e)

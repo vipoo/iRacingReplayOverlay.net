@@ -1,51 +1,25 @@
-﻿using iRacingSDK;
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace iRacingDirector.Plugin.Tester
 {
-    
-    public class Drawer : MarshalByRefObject
-    {
-        public Graphics g;
-        public string PluginFileName;
-
-        public void _IntroFlashCard()
-        {
-            var p = new PluginProxy(PluginFileName);
-
-            p.SetGraphics(g);
-            p.SetWeekendInfo(new SessionData._WeekendInfo
-            {
-                TrackDisplayName = "Sample Track Name",
-                TrackCity = "Track City",
-                TrackCountry = "Track Country"
-            });
-            p.SetQualifyingResults(new SessionData._SessionInfo._Sessions._ResultsPositions[0]);
-
-            p.DrawIntroFlashCard(0, 0);
-        }
-    }
-
     public partial class Main : Form
     {
-        private ImageViewer frm;
-        private AppDomain domain;
+        DomainForm domainForm;
 
         public Main()
         {
             InitializeComponent();
-            frm = new ImageViewer();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        void browseBackgroundImageButton_Click(object sender, EventArgs e)
         {
-            var fbd = new OpenFileDialog();
-            fbd.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
-
+            var fbd = new OpenFileDialog
+            {
+                Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
+            };
             if (backgroundTestImageFileName.Text != "")
             {
                 fbd.FileName = Path.GetFileName(backgroundTestImageFileName.Text);
@@ -58,37 +32,34 @@ namespace iRacingDirector.Plugin.Tester
                 backgroundTestImageFileName_Leave(null, null);
             }
 
-            frm.BackgroundImage = Image.FromFile(backgroundTestImageFileName.Text);
-            frm.Show();
-            frm.Activate();
+            domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void fullSizeButton_Click(object sender, EventArgs e)
         {
-            frm.ClientSize = new Size(1920, 1080);
+            domainForm.SetClientSize(new Size(1920, 1080));
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void halfSizeButton_Click(object sender, EventArgs e)
         {
-            frm.ClientSize = new Size(1920 / 2 , 1080 / 2);
+            domainForm.SetClientSize(new Size(1920 / 2 , 1080 / 2));
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void thirdSizeButton_Click(object sender, EventArgs e)
         {
-            frm.ClientSize = new Size(1920 / 3, 1080 / 3);
+            domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void introFlashCardButton_Click(object sender, EventArgs e)
         {
-            frm.drawAction = g =>
-            {
-                var d = new Drawer { g = g, PluginFileName = this.pluginAssemblyFileName.Text };
-                domain.DoCallBack(d._IntroFlashCard);
-            };
-            frm.Refresh();
+            domainForm.Recreate();
+            domainForm.SetPluginFileName(this.pluginAssemblyFileName.Text);
+            domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
+            domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
+            domainForm.SetPosition(this.Left, this.Top + this.Height);
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void browsePluginButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
             fbd.Filter = "Assembly (*.dll)|*.dll";
@@ -106,16 +77,21 @@ namespace iRacingDirector.Plugin.Tester
 
         private void Main_Load(object sender, EventArgs e)
         {
+            this.Left = Screen.PrimaryScreen.WorkingArea.Width / 24;
+            this.Top = Screen.PrimaryScreen.WorkingArea.Height / 16;
+
             pluginAssemblyFileName.Text = Properties.Settings.Default.PluginAssemblyFileName;
             backgroundTestImageFileName.Text = Properties.Settings.Default.BackgroundTestImageFileName;
 
-            if(File.Exists(backgroundTestImageFileName.Text))
-                frm.BackgroundImage = Image.FromFile(backgroundTestImageFileName.Text);
+            domainForm = DomainForm.CreateRemote();
+            domainForm.SetPluginFileName(pluginAssemblyFileName.Text);
 
-
-            var myLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var info = new AppDomainSetup();
-            domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
+            if (File.Exists(backgroundTestImageFileName.Text))
+            {
+                domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
+                domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
+                domainForm.SetPosition(this.Left, this.Top + this.Height);
+            }
         }
 
         private void pluginAssemblyFileName_Leave(object sender, EventArgs e)
@@ -129,10 +105,6 @@ namespace iRacingDirector.Plugin.Tester
             Properties.Settings.Default.BackgroundTestImageFileName = backgroundTestImageFileName.Text;
             Properties.Settings.Default.Save();
         }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            frm.Show();
-        }
+        
     }
 }
