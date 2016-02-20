@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="Exists('.\packages')">
+    <PackagesFolder>.\packages\</PackagesFolder>
+  </PropertyGroup>
   <PropertyGroup Condition="Exists('.\..\packages')">
     <PackagesFolder>.\..\packages\</PackagesFolder>
   </PropertyGroup>
