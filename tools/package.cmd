@@ -9,7 +9,7 @@ msbuild iRacingDirector.Plugin.StandardOverlays.csproj -p:SolutionDir=%cd%\     
 
 cd bin\Release
 
-7z a release.zip iRacingDirector.Plugin.StandardOverlays.*
+7z a release.zip iRacingDirector.Plugin.StandardOverlays.* iRacingDirector.Plugin.Support.*
 
 appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
 

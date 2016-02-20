@@ -57,6 +57,18 @@
       <Name>iRacingSDK</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">
+    <ProjectReference Include="..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj">
+      <Project>{cec2bb31-324d-41e3-83c8-a5c35c63129b}</Project>
+      <Name>iRacingDirector.Plugin.Support</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="!Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.16, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.16\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,7 +80,6 @@
     <Compile Include="CenterGraphicRect.cs" />
     <Compile Include="Styles.cs" />
     <Compile Include="MyPlugin.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="GraphicRect.cs" />
     <Compile Include="GraphicsExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
