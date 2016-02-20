@@ -31,14 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release' ">
-    <Reference Include="iRacingDirector.Plugin, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingDirector.Plugin.1.0.0.5\lib\net40-client\iRacingDirector.Plugin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="iRacingSDK, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\iRacingSDK.1.0.0.33\lib\net40-client\iRacingSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="YamlDotNet, Version=2.0.1.20271, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
       <HintPath>packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
@@ -48,10 +46,6 @@
     <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
       <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
       <Name>iRacingSDK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\iRacingDirector.Plugin\iRacingDirector.Plugin.csproj">
-      <Project>{4b69ad00-092f-4bca-a0dc-5c7a66870a6a}</Project>
-      <Name>iRacingDirector.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

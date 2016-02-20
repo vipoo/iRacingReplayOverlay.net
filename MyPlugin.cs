@@ -13,7 +13,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
         public static string FontName = "Arial";
     }
 
-    public class MyPlugin : IPlugin
+    public class MyPlugin //: IPlugin
     {
         public Graphics Graphics;
 
