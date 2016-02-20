@@ -49,6 +49,11 @@ namespace iRacingDirector.Plugin.Tester
             frm.SetPluginFileName(fileName);
         }
 
+        public void SetOnError(Action<string, string> onError)
+        {
+            frm.SetOnError(onError);
+        }
+
         internal void SetPosition(int left, int top)
         {
             frm.Left = left;

@@ -10,6 +10,12 @@ namespace iRacingDirector.Plugin.Tester
     public partial class ImageViewer : Form
     {
         PluginProxy PluginProxy;
+        Action<string, string> onError;
+
+        public void SetOnError(Action<string, string> onError)
+        {
+            this.onError = onError;
+        }
 
         public void SetPluginFileName(string value)
         {
@@ -21,29 +27,53 @@ namespace iRacingDirector.Plugin.Tester
                 TrackCity = "Track City",
                 TrackCountry = "Track Country"
             });
-            PluginProxy.SetQualifyingResults(new SessionData._SessionInfo._Sessions._ResultsPositions[0]);
 
+            var x = new[]
+            {
+                new SessionData._SessionInfo._Sessions._ResultsPositions
+                {
+                     Position = 1,
+                     CarIdx = 1
+                }
+            };
+
+            PluginProxy.SetQualifyingResults(x);
+
+            PluginProxy.SetCompetingDrivers(new[] {
+                new SessionData._DriverInfo._Drivers
+                {
+                    CarIdx = 0
+                },
+                new SessionData._DriverInfo._Drivers
+                {
+                    CarIdx = 1,
+                    UserName = "John Smith"
+                },
+            });
         }
 
         public ImageViewer()
         {
             InitializeComponent();
         }
-
-        private void ImageViewer_Load(object sender, EventArgs e)
-        {
-
-        }
-
+        
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            base.OnPaintBackground(e);
+            try
+            {
+                base.OnPaintBackground(e);
 
-            e.Graphics.ScaleTransform(this.ClientSize.Width / 1920f, this.ClientSize.Height / 1080f);
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
-            e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            DrawAction(e.Graphics);
+                e.Graphics.ScaleTransform(this.ClientSize.Width / 1920f, this.ClientSize.Height / 1080f);
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
+                e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                DrawAction(e.Graphics);
+            }
+            catch(Exception ex)
+            {
+                if (onError != null)
+                    onError(ex.Message, ex.StackTrace);
+            }
         }
 
         void DrawAction(Graphics g)
@@ -59,6 +89,11 @@ namespace iRacingDirector.Plugin.Tester
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void ImageViewer_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

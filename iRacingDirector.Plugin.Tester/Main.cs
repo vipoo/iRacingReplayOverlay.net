@@ -85,7 +85,9 @@ namespace iRacingDirector.Plugin.Tester
 
             domainForm = DomainForm.CreateRemote();
             domainForm.SetPluginFileName(pluginAssemblyFileName.Text);
-
+            domainForm.SetOnError((s, m) => {
+                this.errorDetailsTextBox.Text = s + "\r\n" + m;
+            });
             if (File.Exists(backgroundTestImageFileName.Text))
             {
                 domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);

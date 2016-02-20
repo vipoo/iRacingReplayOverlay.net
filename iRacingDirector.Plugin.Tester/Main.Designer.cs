@@ -39,6 +39,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.browsePluginButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.errorDetailsTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // browseBackgroundImageButton
@@ -87,7 +89,7 @@
             // 
             // introFlashCardButton
             // 
-            this.introFlashCardButton.Location = new System.Drawing.Point(260, 162);
+            this.introFlashCardButton.Location = new System.Drawing.Point(221, 162);
             this.introFlashCardButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.introFlashCardButton.Name = "introFlashCardButton";
             this.introFlashCardButton.Size = new System.Drawing.Size(186, 48);
@@ -153,11 +155,35 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "Show Test Image:";
             // 
+            // errorDetailsTextBox
+            // 
+            this.errorDetailsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.errorDetailsTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.errorDetailsTextBox.Location = new System.Drawing.Point(488, 126);
+            this.errorDetailsTextBox.Multiline = true;
+            this.errorDetailsTextBox.Name = "errorDetailsTextBox";
+            this.errorDetailsTextBox.ReadOnly = true;
+            this.errorDetailsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.errorDetailsTextBox.Size = new System.Drawing.Size(349, 174);
+            this.errorDetailsTextBox.TabIndex = 11;
+            this.errorDetailsTextBox.WordWrap = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(484, 103);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(101, 20);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Error Details:";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(849, 312);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.errorDetailsTextBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pluginAssemblyFileName);
             this.Controls.Add(this.label2);
@@ -196,6 +222,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button browsePluginButton;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox errorDetailsTextBox;
+        private System.Windows.Forms.Label label4;
     }
 }
 

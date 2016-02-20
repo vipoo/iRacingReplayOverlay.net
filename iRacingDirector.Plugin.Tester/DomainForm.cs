@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -40,6 +41,13 @@ namespace iRacingDirector.Plugin.Tester
 
             domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
             frm = (RemoteImageViewer)domain.CreateInstanceFromAndUnwrap(typeof(RemoteImageViewer).Assembly.Location, typeof(RemoteImageViewer).FullName);
+        }
+
+        public void SetOnError(Action<string, string> onError)
+        {
+            Create();
+
+            frm.SetOnError(onError);
         }
 
         public void SetPluginFileName(string fileName)
