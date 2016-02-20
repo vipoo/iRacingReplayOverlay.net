@@ -1,7 +1,7 @@
 @echo off
 echo 'Building test package' %APPVEYOR_BUILD_VERSION%
 
-set STANDARD_OVERLAY_PLUGIN=1.0.0.7
+set STANDARD_OVERLAY_PLUGIN=1.0.0.15
 
 msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\                               ^
                                         -p:Configuration=Release                           ^
