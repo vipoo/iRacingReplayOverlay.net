@@ -1,19 +1,12 @@
 ﻿using iRacingSDK;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace iRacingDirector.Plugin.StandardOverlays
 {
-    public static class Settings
-    {
-        [Description("The font to use for the flash cards")]
-        public static string FontName = "Arial";
-    }
-
-    public class MyPlugin //: IPlugin
+    public class MyPlugin
     {
         public Graphics Graphics;
 

@@ -68,8 +68,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(SupportProject)' == ''">
-    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.16, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.16\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.21, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.21\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -81,13 +81,10 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CenterGraphicRect.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Styles.cs" />
     <Compile Include="MyPlugin.cs" />
-    <Compile Include="GraphicRect.cs" />
-    <Compile Include="GraphicsExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimingExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
