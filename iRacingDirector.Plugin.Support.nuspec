@@ -16,7 +16,6 @@
     <tags>iRacing, Replay Director, iRacingDirector.Plugin.Tester</tags>
     <dependencies>
       <dependency id="iRacingSDK" version="1.0.0.33" />
-      <dependency id="iRacingDirector.Plugin" version="1.0.0.5" />
     </dependencies>
   </metadata>
   <files>
