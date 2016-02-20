@@ -32,6 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation", "SuperMFL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.StandardOverlays", "plugins\iRacingDirector.Plugin.StandardOverlays\iRacingDirector.Plugin.StandardOverlays.csproj", "{5916B84C-0264-4102-9CCC-28006D84E4FA}"
 	ProjectSection(ProjectDependencies) = postProject
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B} = {CEC2BB31-324D-41E3-83C8-A5C35C63129B}
 		{0E523573-2972-4DC0-AECB-C4CF746854BB} = {0E523573-2972-4DC0-AECB-C4CF746854BB}
 	EndProjectSection
 EndProject
