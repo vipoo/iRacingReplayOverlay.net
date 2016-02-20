@@ -1,0 +1,3 @@
+[submodule "iRacingDirector.Plugin.StandardOverlays"]
+	path = iRacingDirector.Plugin.StandardOverlays
+	url = git://github.com/vipoo/iRacingDirector.Plugin.StandardOverlays.git
