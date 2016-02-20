@@ -57,13 +57,17 @@
       <Name>iRacingSDK</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">
-    <ProjectReference Include="..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj">
+  <PropertyGroup>
+    <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
+    <SupportProject Condition="Exists('..\aiRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(SupportProject)' != ''">
+    <ProjectReference Include="$(SupportProject)">
       <Project>{cec2bb31-324d-41e3-83c8-a5c35c63129b}</Project>
       <Name>iRacingDirector.Plugin.Support</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup Condition="!Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">
+  <ItemGroup Condition="'$(SupportProject)' == ''">
     <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.16, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.16\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
       <Private>True</Private>
@@ -89,6 +93,7 @@
     <None Include="packages.config" />
     <None Include="tools\package.cmd" />
   </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\overlay
