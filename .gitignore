@@ -19,3 +19,5 @@ iRacingReplayOverlay.test.application
 .vs/*
 tools/encrypt.cmd
 Aws/AwsKeyActual.cs
+iRacingDirector.Plugin.StandardOverlays
+
