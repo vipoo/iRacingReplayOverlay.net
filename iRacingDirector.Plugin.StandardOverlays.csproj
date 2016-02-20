@@ -93,7 +93,6 @@
     <None Include="packages.config" />
     <None Include="tools\package.cmd" />
   </ItemGroup>
-
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\overlay
@@ -101,6 +100,11 @@ copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\StandardOverlays</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\overlay
+copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\overlay
+copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\overlay</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
