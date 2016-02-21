@@ -44,9 +44,9 @@ namespace iRacingDirector.Plugin.Tester
             frm.Refresh();
         }
 
-        public void SetPluginFileName(string fileName)
+        public void InitPlugin(string pluginPath, string sessionDataPath)
         {
-            frm.SetPluginFileName(fileName);
+            frm.InitPlugin(pluginPath, sessionDataPath);
         }
 
         public void SetOnError(Action<string, string> onError)

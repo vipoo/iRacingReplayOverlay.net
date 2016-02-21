@@ -41,7 +41,6 @@
             this.Name = "ImageViewer";
             this.Text = "ImageViewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ImageViewer_FormClosing);
-            this.Load += new System.EventHandler(this.ImageViewer_Load);
             this.ResumeLayout(false);
 
         }

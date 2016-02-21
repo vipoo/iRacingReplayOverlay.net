@@ -1,9 +1,10 @@
 ﻿using iRacingSDK;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Windows.Forms;
+using YamlDotNet.Serialization;
 
 namespace iRacingDirector.Plugin.Tester
 {
@@ -17,39 +18,16 @@ namespace iRacingDirector.Plugin.Tester
             this.onError = onError;
         }
 
-        public void SetPluginFileName(string value)
+        public void InitPlugin(string pluginPath, string sessionDataPath)
         {
-            PluginProxy = new PluginProxy(value);
+            PluginProxy = new PluginProxy(pluginPath);
 
-            PluginProxy.SetWeekendInfo(new SessionData._WeekendInfo
-            {
-                TrackDisplayName = "Sample Track Name",
-                TrackCity = "Track City",
-                TrackCountry = "Track Country"
-            });
+            var rawSessionData = File.ReadAllText(sessionDataPath);
+            var deserializer = new Deserializer(ignoreUnmatched: true);
+            var input = new StringReader(rawSessionData);
+            var result = (SessionData)deserializer.Deserialize(input, typeof(SessionData));
 
-            var x = new[]
-            {
-                new SessionData._SessionInfo._Sessions._ResultsPositions
-                {
-                     Position = 1,
-                     CarIdx = 1
-                }
-            };
-
-            PluginProxy.SetQualifyingResults(x);
-
-            PluginProxy.SetCompetingDrivers(new[] {
-                new SessionData._DriverInfo._Drivers
-                {
-                    CarIdx = 0
-                },
-                new SessionData._DriverInfo._Drivers
-                {
-                    CarIdx = 1,
-                    UserName = "John Smith"
-                },
-            });
+            PluginProxy.SetEventData(result);
         }
 
         public ImageViewer()
@@ -89,11 +67,6 @@ namespace iRacingDirector.Plugin.Tester
         {
             e.Cancel = true;
             Hide();
-        }
-
-        private void ImageViewer_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

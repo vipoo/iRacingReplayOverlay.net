@@ -46,5 +46,17 @@ namespace iRacingDirector.Plugin.Tester.Properties {
                 this["BackgroundTestImageFileName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SampleSessionDataFileName {
+            get {
+                return ((string)(this["SampleSessionDataFileName"]));
+            }
+            set {
+                this["SampleSessionDataFileName"] = value;
+            }
+        }
     }
 }

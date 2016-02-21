@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace iRacingDirector.Plugin.Tester
@@ -83,7 +84,15 @@ namespace iRacingDirector.Plugin.Tester
             pluginAssemblyFileName.Text = Properties.Settings.Default.PluginAssemblyFileName;
             backgroundTestImageFileName.Text = Properties.Settings.Default.BackgroundTestImageFileName;
 
+            if (Properties.Settings.Default.SampleSessionDataFileName == null || Properties.Settings.Default.SampleSessionDataFileName == "") {
+                var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                sampleSessionDataFileName.Text = Path.Combine(dir, "session-data.json");
+            }
+            else
+                sampleSessionDataFileName.Text = Properties.Settings.Default.SampleSessionDataFileName;
+
             domainForm = DomainForm.CreateRemote();
+            domainForm.SetSessionDataFileName(sampleSessionDataFileName.Text);
             domainForm.SetPluginFileName(pluginAssemblyFileName.Text);
             domainForm.SetOnError((s, m) => {
                 this.errorDetailsTextBox.Text = s + "\r\n" + m;
@@ -107,6 +116,29 @@ namespace iRacingDirector.Plugin.Tester
             Properties.Settings.Default.BackgroundTestImageFileName = backgroundTestImageFileName.Text;
             Properties.Settings.Default.Save();
         }
-        
+
+        private void browserSampleSessionDataButton_Click(object sender, EventArgs e)
+        {
+            var fbd = new OpenFileDialog();
+            fbd.Filter = "Assembly (*.json)|*.json";
+            if (sampleSessionDataFileName.Text != "")
+            {
+                fbd.FileName = Path.GetFileName(sampleSessionDataFileName.Text);
+                fbd.InitialDirectory = Path.GetDirectoryName(sampleSessionDataFileName.Text);
+            }
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                sampleSessionDataFileName.Text = fbd.FileName;
+                sampleSessionDataFileName_Leave(null, null);
+            }
+        }
+
+        private void sampleSessionDataFileName_Leave(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SampleSessionDataFileName = sampleSessionDataFileName.Text;
+            Properties.Settings.Default.Save();
+
+            domainForm.SetSessionDataFileName(sampleSessionDataFileName.Text);
+        }
     }
 }

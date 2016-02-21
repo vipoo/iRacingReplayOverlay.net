@@ -11,6 +11,5 @@ namespace iRacingDirector.Plugin
         {
             this.Description = description;
         }
-
     }
 }

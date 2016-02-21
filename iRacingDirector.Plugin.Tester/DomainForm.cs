@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -10,6 +9,9 @@ namespace iRacingDirector.Plugin.Tester
     {
         RemoteImageViewer frm;
         AppDomain domain;
+
+        string pluginPath;
+        string sessionDataPath;
 
         public static DomainForm CreateRemote()
         {
@@ -50,11 +52,12 @@ namespace iRacingDirector.Plugin.Tester
             frm.SetOnError(onError);
         }
 
-        public void SetPluginFileName(string fileName)
+        public void SetPluginFileName(string pluginPath)
         {
             Create(true);
 
-            frm.SetPluginFileName(fileName);
+            this.pluginPath = pluginPath;
+            frm.InitPlugin(pluginPath, sessionDataPath);
             frm.Refresh();
         }
 
@@ -86,6 +89,14 @@ namespace iRacingDirector.Plugin.Tester
         internal void Recreate()
         {
             Create(true);
+        }
+
+        internal void SetSessionDataFileName(string sessionDataPath)
+        {
+            Create();
+            this.sessionDataPath = sessionDataPath;
+            if( pluginPath != null)
+                frm.InitPlugin(pluginPath, sessionDataPath);
         }
     }
 }
