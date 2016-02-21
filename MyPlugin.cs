@@ -1,5 +1,4 @@
-﻿using iRacingSDK;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -9,10 +8,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
     public class MyPlugin
     {
         public Graphics Graphics;
-
-        public SessionData._WeekendInfo WeekendInfo;
-        public SessionData._SessionInfo._Sessions._ResultsPositions[] QualifyingResults;
-        public SessionData._DriverInfo._Drivers[] CompetingDrivers;
+        public EventData EventData;
 
         const int FlashCardWidth = 900;
         const int FlashCardLeft = (1920 / 2) - FlashCardWidth / 2;
@@ -27,7 +23,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
 
         GraphicRect DrawFlashCardHeading(string title)
         {
-            var displayName = WeekendInfo.TrackDisplayName.ToUpper();
+            var displayName = EventData.WeekendInfo.TrackDisplayName.ToUpper();
 
             Graphics.InRectangle(FlashCardLeft, 250, FlashCardWidth, 575)
                 .WithBrush(new SolidBrush(Color.FromArgb(180, Color.Gray)))
@@ -38,7 +34,6 @@ namespace iRacingDirector.Plugin.StandardOverlays
                 .WithLinearGradientBrush(Color.DarkGray, Color.White, LinearGradientMode.Vertical)
                 .WithPen(Styles.BlackPen)
                 .DrawRectangleWithBorder()
-                //.DrawRoundRectangle(5)
                 .MoveDown(7)
                 .MoveRight(20)
                 .WithBrush(Styles.BlackBrush)
@@ -48,7 +43,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
                 .MoveDown(32)
                 .WithFont(Settings.FontName, 17, FontStyle.Bold)
                 .WithStringFormat(StringAlignment.Near)
-                .DrawText(WeekendInfo.TrackCity.ToUpper() + ", " + WeekendInfo.TrackCountry.ToUpper());
+                .DrawText(EventData.WeekendInfo.TrackCity.ToUpper() + ", " + EventData.WeekendInfo.TrackCountry.ToUpper());
 
             var darkRed = Color.DarkRed;
             Func<byte, int> adjust = x => Math.Min((int)(x * 1.4), 255);
@@ -76,7 +71,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
             var totalWidth = FlashCardWidth;
             var left = FlashCardLeft;
 
-            var thisPageOfQualifyingResults = QualifyingResults.Skip(page * DriversPerPage).Take(DriversPerPage);
+            var thisPageOfQualifyingResults = EventData.QualifyingResults.Skip(page * DriversPerPage).Take(DriversPerPage);
 
             var offset = 5;
             var pen = new Pen(Styles.Black, 2);
@@ -86,7 +81,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
 
             foreach (var qualifier in thisPageOfQualifyingResults)
             {
-                var driver = CompetingDrivers[qualifier.CarIdx];
+                var driver = EventData.CompetingDrivers[qualifier.CarIdx];
                 r
                     .Center(cg => cg
                             .DrawText(qualifier.Position.ToString())
