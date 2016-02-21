@@ -45,6 +45,12 @@ namespace iRacingDirector.Plugin.Tester
             frm = (RemoteImageViewer)domain.CreateInstanceFromAndUnwrap(typeof(RemoteImageViewer).Assembly.Location, typeof(RemoteImageViewer).FullName);
         }
 
+        public void SetFramesPerSecond(int framesPerSecond)
+        {
+            Create();
+            frm.SetFramesPerSecond(framesPerSecond);
+        }
+
         public void SetOnError(Action<string, string> onError)
         {
             Create();
@@ -97,6 +103,18 @@ namespace iRacingDirector.Plugin.Tester
             this.sessionDataPath = sessionDataPath;
             if( pluginPath != null)
                 frm.InitPlugin(pluginPath, sessionDataPath);
+        }
+
+        internal void SetPlaybackSpeed(int value)
+        {
+            Create();
+
+            frm.SetPlaybackSpeed(value);
+        }
+
+        internal void SetOnAnimationTick(Action<double> p)
+        {
+            frm.SetOnAnimationTick(p);
         }
     }
 }

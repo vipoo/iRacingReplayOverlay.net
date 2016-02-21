@@ -97,12 +97,16 @@ namespace iRacingDirector.Plugin.Tester
             domainForm.SetOnError((s, m) => {
                 this.errorDetailsTextBox.Text = s + "\r\n" + m;
             });
+            domainForm.SetOnAnimationTick(f => {
+                playbackTimeLabel.Text = String.Format("Simulated playback time: {0}", f);
+            });
             if (File.Exists(backgroundTestImageFileName.Text))
             {
                 domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
                 domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
                 domainForm.SetPosition(this.Left, this.Top + this.Height);
             }
+            domainForm.SetFramesPerSecond((int)framesPerSecond.Value);
         }
 
         private void pluginAssemblyFileName_Leave(object sender, EventArgs e)
@@ -139,6 +143,16 @@ namespace iRacingDirector.Plugin.Tester
             Properties.Settings.Default.Save();
 
             domainForm.SetSessionDataFileName(sampleSessionDataFileName.Text);
+        }
+
+        private void framesPerSecond_ValueChanged(object sender, EventArgs e)
+        {
+            domainForm.SetFramesPerSecond((int)framesPerSecond.Value);
+        }
+
+        private void playbackSpeed_ValueChanged(object sender, EventArgs e)
+        {
+            domainForm.SetPlaybackSpeed((int)playbackSpeed.Value);
         }
     }
 }

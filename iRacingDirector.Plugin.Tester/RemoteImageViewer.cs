@@ -59,5 +59,20 @@ namespace iRacingDirector.Plugin.Tester
             frm.Left = left;
             frm.Top = top;
         }
+
+        internal void SetFramesPerSecond(int framesPerSecond)
+        {
+            frm.SetFramesPerSecond(framesPerSecond);
+        }
+
+        internal void SetPlaybackSpeed(int value)
+        {
+            frm.SetPlaybackSpeed(value);
+        }
+
+        internal void SetOnAnimationTick(Action<double> p)
+        {
+            frm.SetOnAnimationTick(p);
+        }
     }
 }

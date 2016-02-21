@@ -42,9 +42,9 @@ namespace iRacingDirector
             eventDataField.SetValue(plugin, instance);
         }
 
-        public void DrawIntroFlashCard( long timestamp, int page)
+        public void DrawIntroFlashCard(long duration, long timestamp)
         {
-            plugin.DrawIntroFlashCard( timestamp, page);
+            plugin.IntroFlashCard(duration, timestamp);
         }
         
         public void SetGraphics(Graphics graphics)

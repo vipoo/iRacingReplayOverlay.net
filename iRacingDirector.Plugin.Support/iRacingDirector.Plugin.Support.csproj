@@ -50,6 +50,7 @@
     <Compile Include="DescriptionAttribute.cs" />
     <Compile Include="EventData.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FlashCardPagingCalculator.cs" />
     <Compile Include="GraphicRect.cs" />
     <Compile Include="GraphicsExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

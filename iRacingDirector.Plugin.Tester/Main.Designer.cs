@@ -44,13 +44,22 @@
             this.sampleSessionDataFileName = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.browserSampleSessionDataButton = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.framesPerSecond = new System.Windows.Forms.NumericUpDown();
+            this.playbackSpeed = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.playbackTimeLabel = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // browseBackgroundImageButton
             // 
             this.browseBackgroundImageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.browseBackgroundImageButton.Location = new System.Drawing.Point(749, 47);
-            this.browseBackgroundImageButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.browseBackgroundImageButton.Margin = new System.Windows.Forms.Padding(4);
             this.browseBackgroundImageButton.Name = "browseBackgroundImageButton";
             this.browseBackgroundImageButton.Size = new System.Drawing.Size(80, 24);
             this.browseBackgroundImageButton.TabIndex = 0;
@@ -60,8 +69,8 @@
             // 
             // fullSizeButton
             // 
-            this.fullSizeButton.Location = new System.Drawing.Point(23, 185);
-            this.fullSizeButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fullSizeButton.Location = new System.Drawing.Point(17, 198);
+            this.fullSizeButton.Margin = new System.Windows.Forms.Padding(4);
             this.fullSizeButton.Name = "fullSizeButton";
             this.fullSizeButton.Size = new System.Drawing.Size(155, 28);
             this.fullSizeButton.TabIndex = 1;
@@ -71,8 +80,8 @@
             // 
             // halfSizeButton
             // 
-            this.halfSizeButton.Location = new System.Drawing.Point(23, 221);
-            this.halfSizeButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.halfSizeButton.Location = new System.Drawing.Point(17, 234);
+            this.halfSizeButton.Margin = new System.Windows.Forms.Padding(4);
             this.halfSizeButton.Name = "halfSizeButton";
             this.halfSizeButton.Size = new System.Drawing.Size(155, 28);
             this.halfSizeButton.TabIndex = 2;
@@ -82,8 +91,8 @@
             // 
             // thirdSizeButton
             // 
-            this.thirdSizeButton.Location = new System.Drawing.Point(23, 258);
-            this.thirdSizeButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.thirdSizeButton.Location = new System.Drawing.Point(17, 271);
+            this.thirdSizeButton.Margin = new System.Windows.Forms.Padding(4);
             this.thirdSizeButton.Name = "thirdSizeButton";
             this.thirdSizeButton.Size = new System.Drawing.Size(155, 28);
             this.thirdSizeButton.TabIndex = 3;
@@ -93,10 +102,10 @@
             // 
             // introFlashCardButton
             // 
-            this.introFlashCardButton.Location = new System.Drawing.Point(218, 185);
-            this.introFlashCardButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.introFlashCardButton.Location = new System.Drawing.Point(189, 198);
+            this.introFlashCardButton.Margin = new System.Windows.Forms.Padding(4);
             this.introFlashCardButton.Name = "introFlashCardButton";
-            this.introFlashCardButton.Size = new System.Drawing.Size(186, 43);
+            this.introFlashCardButton.Size = new System.Drawing.Size(135, 28);
             this.introFlashCardButton.TabIndex = 4;
             this.introFlashCardButton.Text = "Intro Flash Card";
             this.introFlashCardButton.UseVisualStyleBackColor = true;
@@ -142,7 +151,7 @@
             // 
             this.browsePluginButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.browsePluginButton.Location = new System.Drawing.Point(749, 18);
-            this.browsePluginButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.browsePluginButton.Margin = new System.Windows.Forms.Padding(4);
             this.browsePluginButton.Name = "browsePluginButton";
             this.browsePluginButton.Size = new System.Drawing.Size(80, 24);
             this.browsePluginButton.TabIndex = 7;
@@ -153,7 +162,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 152);
+            this.label3.Location = new System.Drawing.Point(13, 165);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(127, 18);
@@ -164,19 +173,19 @@
             // 
             this.errorDetailsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.errorDetailsTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.errorDetailsTextBox.Location = new System.Drawing.Point(485, 152);
+            this.errorDetailsTextBox.Location = new System.Drawing.Point(513, 142);
             this.errorDetailsTextBox.Multiline = true;
             this.errorDetailsTextBox.Name = "errorDetailsTextBox";
             this.errorDetailsTextBox.ReadOnly = true;
             this.errorDetailsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.errorDetailsTextBox.Size = new System.Drawing.Size(349, 157);
+            this.errorDetailsTextBox.Size = new System.Drawing.Size(316, 157);
             this.errorDetailsTextBox.TabIndex = 11;
             this.errorDetailsTextBox.WordWrap = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(481, 132);
+            this.label4.Location = new System.Drawing.Point(510, 120);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(95, 18);
             this.label4.TabIndex = 12;
@@ -212,11 +221,110 @@
             this.browserSampleSessionDataButton.UseVisualStyleBackColor = true;
             this.browserSampleSessionDataButton.Click += new System.EventHandler(this.browserSampleSessionDataButton_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 121);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(178, 18);
+            this.label6.TabIndex = 16;
+            this.label6.Text = "Render Frames / Second:";
+            // 
+            // framesPerSecond
+            // 
+            this.framesPerSecond.Location = new System.Drawing.Point(189, 118);
+            this.framesPerSecond.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.framesPerSecond.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.framesPerSecond.Name = "framesPerSecond";
+            this.framesPerSecond.Size = new System.Drawing.Size(78, 24);
+            this.framesPerSecond.TabIndex = 17;
+            this.framesPerSecond.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.framesPerSecond.ValueChanged += new System.EventHandler(this.framesPerSecond_ValueChanged);
+            // 
+            // playbackSpeed
+            // 
+            this.playbackSpeed.Location = new System.Drawing.Point(410, 118);
+            this.playbackSpeed.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.playbackSpeed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.playbackSpeed.Name = "playbackSpeed";
+            this.playbackSpeed.Size = new System.Drawing.Size(78, 24);
+            this.playbackSpeed.TabIndex = 19;
+            this.playbackSpeed.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.playbackSpeed.ValueChanged += new System.EventHandler(this.playbackSpeed_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(285, 121);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(118, 18);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "Playback Speed:";
+            // 
+            // playbackTimeLabel
+            // 
+            this.playbackTimeLabel.AutoSize = true;
+            this.playbackTimeLabel.Location = new System.Drawing.Point(14, 348);
+            this.playbackTimeLabel.Name = "playbackTimeLabel";
+            this.playbackTimeLabel.Size = new System.Drawing.Size(104, 18);
+            this.playbackTimeLabel.TabIndex = 20;
+            this.playbackTimeLabel.Text = "Playback time:";
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel1.Location = new System.Drawing.Point(13, 326);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(814, 10);
+            this.panel1.TabIndex = 21;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(233, 348);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(121, 18);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "Intro Duration: 60";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(849, 337);
+            this.ClientSize = new System.Drawing.Size(847, 377);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.playbackTimeLabel);
+            this.Controls.Add(this.playbackSpeed);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.framesPerSecond);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.sampleSessionDataFileName);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.browserSampleSessionDataButton);
@@ -235,13 +343,15 @@
             this.Controls.Add(this.browseBackgroundImageButton);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Main_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -265,6 +375,13 @@
         private System.Windows.Forms.TextBox sampleSessionDataFileName;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button browserSampleSessionDataButton;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown framesPerSecond;
+        private System.Windows.Forms.NumericUpDown playbackSpeed;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label playbackTimeLabel;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label8;
     }
 }
 
