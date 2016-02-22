@@ -22,6 +22,8 @@ namespace iRacingReplayOverlay
 {
     public class PluginProxy
     {
+        private dynamic plugin;
+
         public PluginProxy(string pluginPath)
         {
             var an = AssemblyName.GetAssemblyName(pluginPath);
@@ -35,26 +37,20 @@ namespace iRacingReplayOverlay
             plugin = Activator.CreateInstance(type);
         }
 
-        private dynamic plugin;
-
-        public void SetWeekendInfo(SessionData._WeekendInfo weekendInfo)
+        public void SetEventData(SessionData result)
         {
-            plugin.WeekendInfo = weekendInfo;
+            var pluginType = (Type)plugin.GetType();
+
+            var eventDataField = pluginType.GetField("EventData");
+            var eventDataType = eventDataField.FieldType;
+            var instance = Activator.CreateInstance(eventDataType, result);
+
+            eventDataField.SetValue(plugin, instance);
         }
 
-        public void DrawIntroFlashCard(long timestamp, int page)
+        public void DrawIntroFlashCard(long duration, long timestamp)
         {
-            plugin.DrawIntroFlashCard(timestamp, page);
-        }
-
-        public void SetQualifyingResults(SessionData._SessionInfo._Sessions._ResultsPositions[] qualifyingResults)
-        {
-            plugin.QualifyingResults = qualifyingResults;
-        }
-
-        public void SetCompetingDrivers(SessionData._DriverInfo._Drivers[] competingDrivers)
-        {
-            plugin.CompetingDrivers = competingDrivers;
+            plugin.IntroFlashCard(duration, timestamp);
         }
 
         public void SetGraphics(Graphics graphics)
@@ -63,7 +59,7 @@ namespace iRacingReplayOverlay
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            ((dynamic)plugin).Graphics = graphics;
+            plugin.Graphics = graphics;
         }
     }
 }

@@ -143,18 +143,14 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-        public void Intro(Graphics graphics, long timestamp, int page =0)
+        public void Intro(Graphics graphics, long duration, long timestamp)
         {
             var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
             var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
 
-            plugin.SetWeekendInfo(OverlayData.SessionData.WeekendInfo);
-            plugin.SetQualifyingResults(results);
-            plugin.SetCompetingDrivers(OverlayData.SessionData.DriverInfo.CompetingDrivers);
+            plugin.SetEventData(OverlayData.SessionData);
             plugin.SetGraphics(graphics);
-            plugin.DrawIntroFlashCard( timestamp, page);
-
-            //DrawFlashCard("Qualifying Results", graphics, timestamp, r => DrawIntroBody(graphics, r, page));
+            plugin.DrawIntroFlashCard( duration, timestamp );
         }
 
         public void Overlay(Graphics graphics, long timestamp)

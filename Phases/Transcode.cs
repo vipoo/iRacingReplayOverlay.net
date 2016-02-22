@@ -236,11 +236,7 @@ namespace iRacingReplayOverlay.Phases
 
         void applyIntroOverlay(SourceReaderSampleWithBitmap sample)
         {
-            var pagePeriod = (float)sample.Timestamp / sample.Duration;
-
-            int page = FlashCardPaging.GetPageNumber(leaderBoard.OverlayData.SessionData.DriverInfo, pagePeriod);
-
-            leaderBoard.Intro(sample.Graphic, sample.Timestamp, page);
+            leaderBoard.Intro(sample.Graphic, sample.Duration, sample.Timestamp);
         }
         
         ProcessSample ApplyEdits(ProcessSample next)
