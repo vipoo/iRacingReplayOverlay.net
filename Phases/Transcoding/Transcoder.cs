@@ -17,6 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using MediaFoundation;
 using MediaFoundation.Net;
 using MediaFoundation.Transform;
@@ -47,6 +48,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
         public SourceReaderExtra CreateSourceReader(ReadWriteClassFactory readWriteFactory, Attributes attributes)
         {
+            TraceDebug.WriteLine("Attempting to open file {0}".F(this.FileName));
             var reader = readWriteFactory.CreateSourceReaderFromURL(this.FileName, attributes);
             return new SourceReaderExtra(this.FileName,  this.State,  reader);
         }
