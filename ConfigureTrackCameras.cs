@@ -50,6 +50,10 @@ namespace iRacingReplayOverlay
                 ratioLabel.Text = "{0} has a".F(cameraList.SelectedItems[0].Text);
                 var context = SynchronizationContext.Current;
                 new Task(() => { Thread.Sleep(200); context.Post(i => ratioTextBox.Focus(), null); }).Start();
+
+                var trackCamera = GetCamerasForSelectedTrack().FirstOrDefault(tc => tc.CameraName == cameraList.SelectedItems[0].Text);
+
+                cameraAngleSelection.SelectedIndex = (int)trackCamera.CameraAngle;
             }
             else
             {
@@ -82,6 +86,17 @@ namespace iRacingReplayOverlay
             cameraList.SelectedItems[0].SubItems[1].Text = number.ToString();
 
             UpdateTotal();
+        }
+
+        void cameraAngleSelection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cameraList.SelectedItems.Count == 0)
+                return;
+
+            var allCameras = trackCameras.Where(tc => tc.CameraName == cameraList.SelectedItems[0].Text);
+
+            foreach(var tc in allCameras)
+                tc.CameraAngle = (CameraAngle)cameraAngleSelection.SelectedIndex;
         }
 
         IEnumerable<TrackCamera> GetCamerasForSelectedTrack()
@@ -120,6 +135,11 @@ namespace iRacingReplayOverlay
         {
             lastSample = new iRacingConnection().GetDataFeed().First();
 
+            cameraAngleSelection.Items.Add("Front Facing"); // CameraAngle.LookingInfrontOfCar);
+            cameraAngleSelection.Items.Add("Rear Facing"); // CameraAngle.LookingBehindCar);
+            cameraAngleSelection.Items.Add("Looking at Car"); // CameraAngle.LookingAtCar);
+            cameraAngleSelection.Items.Add("Static Track Camera"); // CameraAngle.LookingAtTrack);
+
             DiscoverAnyNewTrackCameras();
 
             InitialiseDropDownListOfTracks();
@@ -157,6 +177,10 @@ namespace iRacingReplayOverlay
 
                     trackCamera.TrackName = lastSample.SessionData.WeekendInfo.TrackDisplayName;
                     trackCamera.CameraName = camera.GroupName;
+
+                    var similiarCamera = trackCameras.FirstOrDefault(tc => tc.CameraName == trackCamera.CameraName);
+                    if (similiarCamera != null)
+                        trackCamera.CameraAngle = similiarCamera.CameraAngle;
                 }
                 
                 trackCameras.Add(trackCamera);
@@ -188,7 +212,7 @@ namespace iRacingReplayOverlay
             SetCameraDropDown(cameras, trackCameras.LastLap, "TV2", lastLapCamera);
         }
 
-        void SetCameraDropDown(System.Collections.Generic.IEnumerable<TrackCamera> cameras, TrackCameras._CameraSelection specialCamera, string defaultName, ComboBox dropDown)
+        void SetCameraDropDown(IEnumerable<TrackCamera> cameras, TrackCameras._CameraSelection specialCamera, string defaultName, ComboBox dropDown)
         {
             if (specialCamera[TrackName] == null && cameras.Any(tc => tc.CameraName == defaultName))
                 dropDown.SelectedItem = defaultName;

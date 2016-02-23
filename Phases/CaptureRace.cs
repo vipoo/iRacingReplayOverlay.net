@@ -67,6 +67,9 @@ namespace iRacingReplayOverlay.Phases
             var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
                  new CaptureCamDriver(overlayData).Process);
 
+            TraceDebug.WriteLine("Cameras:");
+            TraceDebug.WriteLine(TrackCameras.ToString());
+
             ApplyFirstLapCameraDirection(samples, replayControl);
 
             samples = samples

@@ -89,6 +89,11 @@ namespace iRacingReplayOverlay
                 return new _CameraSelection(this, tc => tc.IsLastLap, (tc, v) => tc.IsLastLap = v);
             }
         }
+
+        public override string ToString()
+        {
+            return String.Join("\n", this.Select(c => c.ToString()));
+        }
     }
 
     public class TrackCamera
@@ -111,7 +116,9 @@ namespace iRacingReplayOverlay
             { "Far Chase", CameraAngle.LookingAtCar },
             { "TV1", CameraAngle.LookingAtCar },
             { "TV2", CameraAngle.LookingAtCar },
-            { "TV3", CameraAngle.LookingAtCar }
+            { "TV3", CameraAngle.LookingAtCar },
+            { "Pit Lane", CameraAngle.LookingAtTrack },
+            { "Pit Lane 2", CameraAngle.LookingAtTrack }
         };
 
         public string TrackName;
@@ -121,17 +128,31 @@ namespace iRacingReplayOverlay
         public bool IsRaceStart;
         public bool IsIncident;
         public bool IsLastLap;
+        public CameraAngle? cameraAngle;
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}. Ratio: {2}, Number: {3}, IsRaceStart: {4}, IsIncident: {5}, IsLastLap: {6}, Angle: {7}",
+                TrackName, CameraName, Ratio, CameraNumber, IsRaceStart, IsIncident, IsLastLap, CameraAngle);
+        }
 
         public CameraAngle CameraAngle
         {
             get
             {
-                CameraAngle cameraAngle;
+                if (cameraAngle.HasValue)
+                    return cameraAngle.Value;
 
-                if(cameraAngles.TryGetValue(CameraName, out cameraAngle))
-                    return cameraAngle;
+                CameraAngle _cameraAngle;
+
+                if(cameraAngles.TryGetValue(CameraName, out _cameraAngle))
+                    return _cameraAngle;
                 else 
                     return CameraAngle.LookingAtCar;
+            }
+            set
+            {
+                cameraAngle = value;
             }
         }
     }

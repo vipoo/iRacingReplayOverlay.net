@@ -54,6 +54,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.lastLapCamera = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.cameraAngleSelection = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // trackList
@@ -270,6 +272,26 @@
             this.label7.TabIndex = 16;
             this.label7.Text = "Camera for Last Lap:";
             // 
+            // cameraAngleSelection
+            // 
+            this.cameraAngleSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cameraAngleSelection.FormattingEnabled = true;
+            this.cameraAngleSelection.Location = new System.Drawing.Point(483, 98);
+            this.cameraAngleSelection.Name = "cameraAngleSelection";
+            this.cameraAngleSelection.Size = new System.Drawing.Size(159, 24);
+            this.cameraAngleSelection.TabIndex = 19;
+            this.cameraAngleSelection.SelectedIndexChanged += new System.EventHandler(this.cameraAngleSelection_SelectedIndexChanged);
+            // 
+            // label8
+            // 
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(325, 101);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(161, 21);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "Camera Angle:";
+            // 
             // ConfigureTrackCameras
             // 
             this.AcceptButton = this.okButton;
@@ -277,6 +299,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.okButton;
             this.ClientSize = new System.Drawing.Size(679, 480);
+            this.Controls.Add(this.cameraAngleSelection);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.lastLapCamera);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.incidentCamera);
@@ -329,6 +353,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox lastLapCamera;
         private System.Windows.Forms.Label label7;
-
+        private System.Windows.Forms.ComboBox cameraAngleSelection;
+        private System.Windows.Forms.Label label8;
     }
 }
