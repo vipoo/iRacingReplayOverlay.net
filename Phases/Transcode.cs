@@ -196,10 +196,11 @@ namespace iRacingReplayOverlay.Phases
                     }
                     else
                     {
-                        var sourceReader = readers.Last().SourceReader; //TODO
-                        totalDuration += sourceReader.Duration;
+                        var mainReaders = AVOperations.Combine(readers.Select(r => r.SourceReader).ToArray());
 
-                        sourceReader.Samples(mainBodyOverlays);
+                        totalDuration += mainReaders.Duration;
+
+                        AVOperations.Concat(mainReaders, mainBodyOverlays)(0, 0);
                     }
                 });
 
@@ -209,9 +210,9 @@ namespace iRacingReplayOverlay.Phases
             }
             catch (Exception e)
             {
-                Trace.WriteLine(e.Message, "DEBUG");
-                Trace.WriteLine(e.StackTrace, "DEBUG");
-                throw;
+                TraceDebug.WriteLine(e.Message);
+                TraceDebug.WriteLine(e.StackTrace);
+                throw e;
             }
         }
 
