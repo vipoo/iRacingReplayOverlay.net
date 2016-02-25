@@ -81,6 +81,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyPlugin.FlashCardIntro.cs" />
+    <Compile Include="MyPlugin.FlashCardHeading.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Styles.cs" />
     <Compile Include="MyPlugin.cs" />
