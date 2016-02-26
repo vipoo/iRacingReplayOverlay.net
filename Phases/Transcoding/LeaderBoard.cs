@@ -148,9 +148,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
             var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
 
-            plugin.SetEventData(OverlayData.SessionData);
+            plugin.SetReplayConfig(OverlayData);
+            plugin.SetEventData();
             plugin.SetGraphics(graphics);
-            plugin.DrawIntroFlashCard( duration, timestamp );
+            plugin.SetTimestamp(timestamp);
+            plugin.DrawIntroFlashCard( duration );
         }
 
         public void Overlay(Graphics graphics, long timestamp)
