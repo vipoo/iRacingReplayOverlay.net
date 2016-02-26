@@ -1,4 +1,4 @@
-set IRACING_REPLAY_OVERLAY=1.0.3.17
+set IRACING_REPLAY_OVERLAY=1.0.3.21
 
 cd packages
 rm -rf iRacingReplayOverlay.net.%IRACING_REPLAY_OVERLAY%
