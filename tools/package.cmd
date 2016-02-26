@@ -26,6 +26,3 @@ cd ..\..
 appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
 
 cd ..\..\..
-
-cd .\plugins\iRacingDirector.Plugin.Support
-tools\package
