@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using iRacingSDK.Support;
+using System.Drawing;
 
 namespace iRacingDirector.Plugin.StandardOverlays
 {
@@ -6,6 +7,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
     {
         public Graphics Graphics;
         public EventData EventData;
+        public LeaderBoard LeaderBoard;
 
         const int FlashCardWidth = 900;
         const int FlashCardLeft = (1920 / 2) - FlashCardWidth / 2;
@@ -16,6 +18,13 @@ namespace iRacingDirector.Plugin.StandardOverlays
             var page = FlashCardPagingCalculator.GetPageNumber(EventData, DriversPerPage, duration, timestamp);
 
            DrawIntroFlashCard(page);
+        }
+
+        public void RaceOverlay(long timestamp)
+        {
+            var timeInSeconds = timestamp.FromNanoToSeconds();
+
+            DrawLeaderboard(timeInSeconds.Seconds());
         }
     }
 }
