@@ -55,6 +55,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="iRacingReplayOverlay">
+      <HintPath>..\packages\iRacingReplayOverlay.net.1.0.3.17\iRacingReplayOverlay.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
