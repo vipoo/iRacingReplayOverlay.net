@@ -54,10 +54,18 @@
       <Name>iRacingSDK</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="Exists('..\..\..\iRacingReplayOverlay.net.csproj')">
+    <ProjectReference Include="..\..\..\iRacingReplayOverlay.net.csproj">
+      <Project>{0e523573-2972-4dc0-aecb-c4cf746854bb}</Project>
+      <Name>iRacingReplayOverlay</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup  Condition="!Exists('..\..\..\iRacingReplayOverlay.net.csproj')">
     <Reference Include="iRacingReplayOverlay">
-      <HintPath>..\packages\iRacingReplayOverlay.net.1.0.3.17\iRacingReplayOverlay.exe</HintPath>
+      <HintPath>$(PackagesFolder)iRacingReplayOverlay.net.1.0.3.17\iRacingReplayOverlay.exe</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -123,6 +131,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
