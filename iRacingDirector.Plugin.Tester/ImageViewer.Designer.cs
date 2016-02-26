@@ -39,6 +39,7 @@
             this.ClientSize = new System.Drawing.Size(712, 439);
             this.DoubleBuffered = true;
             this.Name = "ImageViewer";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ImageViewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ImageViewer_FormClosing);
             this.ResumeLayout(false);

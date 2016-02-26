@@ -12,35 +12,36 @@ namespace iRacingDirector.Plugin.Tester
     public partial class ImageViewer : Form
     {
         const long OneNanoSecond = 10000000;
+        long Duration = OneNanoSecond * 60;
 
+        Timer animationTimer;
         PluginProxy PluginProxy;
         Action<string, string> onError;
         long timestamp = 0;
-        public Timer animationTimer { get; private set; }
+        int framesPerSecond;
+        DateTime offset;
+        int playbackSpeed = 1;
+        Action<double, double> onAnimationTick = (d, t) => { };
+        long lastTimerTick = 0;
+        Action<Graphics> drawAction = g => { };
 
         public void SetOnError(Action<string, string> onError)
         {
             this.onError = onError;
         }
 
-        public void SetOnAnimationTick(Action<double> onAnimationTick)
+        public void SetOnAnimationTick(Action<double, double> onAnimationTick)
         {
             this.onAnimationTick = onAnimationTick;
         }
 
-        public void InitPlugin(string pluginPath, string sessionDataPath)
+        public void InitPlugin(string pluginPath, string replayConfigPath)
         {
             PluginProxy = new PluginProxy(pluginPath);
-
-            var rawSessionData = File.ReadAllText(sessionDataPath);
-            var deserializer = new Deserializer(ignoreUnmatched: true);
-            var input = new StringReader(rawSessionData);
-            var result = (SessionData)deserializer.Deserialize(input, typeof(SessionData));
-
-            PluginProxy.SetEventData(result);
+            PluginProxy.SetReplayConfig(replayConfigPath);
+            PluginProxy.SetEventData();
         }
 
-        int framesPerSecond;
         public void SetFramesPerSecond(int framesPerSecond)
         {
             this.framesPerSecond = framesPerSecond;
@@ -59,17 +60,29 @@ namespace iRacingDirector.Plugin.Tester
             this.playbackSpeed = value;
         }
 
-        const long Duration = OneNanoSecond * 60;
-        private DateTime offset;
-        private int playbackSpeed = 1;
-        private Action<double> onAnimationTick = x => { };
+        internal void SetDrawAction(DrawAction drawAction)
+        {
+            switch(drawAction)
+            {
+                case DrawAction.Intro:
+                    this.drawAction = this.DrawActionIntro;
+                    this.Duration = 60 * OneNanoSecond;
+                    break;
+                case DrawAction.Main:
+                    this.drawAction = this.DrawActionMain;
+                    Duration = PluginProxy.Duration;
+                    break;
+                case DrawAction.Outro:
+                    this.drawAction = this.DrawActionOutro;
+                    this.Duration = 60 * OneNanoSecond;
+                    break;
+            }
+        }
 
         public ImageViewer()
         {
             InitializeComponent();
         }
-
-        long lastTimerTick = 0;
 
         private void OnAnimate()
         {
@@ -80,13 +93,13 @@ namespace iRacingDirector.Plugin.Tester
             if (timestamp > Duration)
             {
                 timestamp = timestamp % Duration;
-                onAnimationTick(Math.Round((float)timestamp / OneNanoSecond, 4));
+                onAnimationTick(Duration / OneNanoSecond, Math.Round((float)timestamp / OneNanoSecond, 4));
                 lastTimerTick = timestamp;
             }
 
             if( timestamp - lastTimerTick > (OneNanoSecond / 4))
             {
-                onAnimationTick(Math.Round((float)timestamp / OneNanoSecond, 1));
+                onAnimationTick(Duration / OneNanoSecond, Math.Round((float)timestamp / OneNanoSecond, 1));
                 lastTimerTick = timestamp;
             }
 
@@ -102,7 +115,7 @@ namespace iRacingDirector.Plugin.Tester
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
                 e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                DrawAction(e.Graphics);
+                drawAction(e.Graphics);
             }
             catch (Exception ex)
             {
@@ -112,12 +125,30 @@ namespace iRacingDirector.Plugin.Tester
 
         }
 
-        void DrawAction(Graphics g)
+        void DrawActionIntro(Graphics g)
         {
             if (PluginProxy == null)
                 return;
             PluginProxy.SetGraphics(g);
-            PluginProxy.DrawIntroFlashCard(Duration, timestamp);
+            PluginProxy.SetTimestamp(timestamp);
+            PluginProxy.SetLeaderboard();
+            PluginProxy.DrawIntroFlashCard(Duration);
+        }
+
+        private void DrawActionOutro(Graphics g)
+        {
+
+        }
+
+        private void DrawActionMain(Graphics g)
+        {
+
+            if (PluginProxy == null)
+                return;
+            PluginProxy.SetGraphics(g);
+            PluginProxy.SetTimestamp(timestamp);
+            PluginProxy.SetLeaderboard();
+            PluginProxy.RaceOverlay(timestamp);
         }
 
         private void ImageViewer_FormClosing(object sender, FormClosingEventArgs e)

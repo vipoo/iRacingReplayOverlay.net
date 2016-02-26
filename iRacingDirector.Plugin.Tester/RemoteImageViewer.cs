@@ -70,9 +70,14 @@ namespace iRacingDirector.Plugin.Tester
             frm.SetPlaybackSpeed(value);
         }
 
-        internal void SetOnAnimationTick(Action<double> p)
+        internal void SetOnAnimationTick(Action<double, double> p)
         {
             frm.SetOnAnimationTick(p);
+        }
+
+        internal void SetDrawAction(DrawAction drawAction)
+        {
+            frm.SetDrawAction(drawAction);
         }
     }
 }

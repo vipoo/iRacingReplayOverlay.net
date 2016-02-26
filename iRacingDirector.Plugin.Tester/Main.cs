@@ -51,15 +51,6 @@ namespace iRacingDirector.Plugin.Tester
             domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
         }
 
-        private void introFlashCardButton_Click(object sender, EventArgs e)
-        {
-            domainForm.Recreate();
-            domainForm.SetPluginFileName(this.pluginAssemblyFileName.Text);
-            domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
-            domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
-            domainForm.SetPosition(this.Left, this.Top + this.Height);
-        }
-
         private void browsePluginButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
@@ -97,16 +88,21 @@ namespace iRacingDirector.Plugin.Tester
             domainForm.SetOnError((s, m) => {
                 this.errorDetailsTextBox.Text = s + "\r\n" + m;
             });
-            domainForm.SetOnAnimationTick(f => {
+            domainForm.SetOnAnimationTick((d, f) => {
+                durationLabel.Text = String.Format("Duration: {0}", d);
                 playbackTimeLabel.Text = String.Format("Simulated playback time: {0}", f);
             });
             if (File.Exists(backgroundTestImageFileName.Text))
             {
+
                 domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
                 domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
                 domainForm.SetPosition(this.Left, this.Top + this.Height);
+
             }
             domainForm.SetFramesPerSecond((int)framesPerSecond.Value);
+
+            domainForm.Activate();
         }
 
         private void pluginAssemblyFileName_Leave(object sender, EventArgs e)
@@ -124,7 +120,7 @@ namespace iRacingDirector.Plugin.Tester
         private void browserSampleSessionDataButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
-            fbd.Filter = "Assembly (*.json)|*.json";
+            fbd.Filter = "Assembly (*.replayscript)|*.replayscript";
             if (sampleSessionDataFileName.Text != "")
             {
                 fbd.FileName = Path.GetFileName(sampleSessionDataFileName.Text);
@@ -153,6 +149,17 @@ namespace iRacingDirector.Plugin.Tester
         private void playbackSpeed_ValueChanged(object sender, EventArgs e)
         {
             domainForm.SetPlaybackSpeed((int)playbackSpeed.Value);
+        }
+        
+
+        void introFlashCardButton_Click(object sender, EventArgs e)
+        {
+            domainForm.SetAction(DrawAction.Intro);
+        }
+
+        void mainRaceButton_Click(object sender, EventArgs e)
+        {
+            domainForm.SetAction(DrawAction.Main);
         }
     }
 }

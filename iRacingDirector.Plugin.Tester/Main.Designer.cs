@@ -50,7 +50,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.playbackTimeLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
+            this.durationLabel = new System.Windows.Forms.Label();
+            this.mainRaceButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).BeginInit();
             this.SuspendLayout();
@@ -304,21 +305,33 @@
             this.panel1.Size = new System.Drawing.Size(814, 10);
             this.panel1.TabIndex = 21;
             // 
-            // label8
+            // durationLabel
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(233, 348);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(121, 18);
-            this.label8.TabIndex = 22;
-            this.label8.Text = "Intro Duration: 60";
+            this.durationLabel.AutoSize = true;
+            this.durationLabel.Location = new System.Drawing.Point(233, 348);
+            this.durationLabel.Name = "durationLabel";
+            this.durationLabel.Size = new System.Drawing.Size(121, 18);
+            this.durationLabel.TabIndex = 22;
+            this.durationLabel.Text = "Intro Duration: 60";
+            // 
+            // mainRaceButton
+            // 
+            this.mainRaceButton.Location = new System.Drawing.Point(189, 234);
+            this.mainRaceButton.Margin = new System.Windows.Forms.Padding(4);
+            this.mainRaceButton.Name = "mainRaceButton";
+            this.mainRaceButton.Size = new System.Drawing.Size(135, 28);
+            this.mainRaceButton.TabIndex = 23;
+            this.mainRaceButton.Text = "Main Race";
+            this.mainRaceButton.UseVisualStyleBackColor = true;
+            this.mainRaceButton.Click += new System.EventHandler(this.mainRaceButton_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 377);
-            this.Controls.Add(this.label8);
+            this.Controls.Add(this.mainRaceButton);
+            this.Controls.Add(this.durationLabel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.playbackTimeLabel);
             this.Controls.Add(this.playbackSpeed);
@@ -381,7 +394,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label playbackTimeLabel;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label durationLabel;
+        private System.Windows.Forms.Button mainRaceButton;
     }
 }
 

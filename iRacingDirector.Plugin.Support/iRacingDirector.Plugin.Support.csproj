@@ -70,6 +70,7 @@
     <Compile Include="FlashCardPagingCalculator.cs" />
     <Compile Include="GraphicRect.cs" />
     <Compile Include="GraphicsExtension.cs" />
+    <Compile Include="LeaderBoard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimingExtension.cs" />
   </ItemGroup>
