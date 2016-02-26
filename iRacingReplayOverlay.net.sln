@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Stan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Support", "plugins\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj", "{CEC2BB31-324D-41E3-83C8-A5C35C63129B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Tester", "plugins\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj", "{96FA1C80-396C-4792-9E8B-C7CBFC25833D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,14 @@ Global
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.ActiveCfg = Release|Any CPU
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.Build.0 = Release|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|x64.Build.0 = Debug|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|x64.ActiveCfg = Release|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
