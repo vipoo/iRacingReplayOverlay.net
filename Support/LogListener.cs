@@ -93,7 +93,7 @@ namespace iRacingReplayOverlay.Support
             this.Write(message + "\r\n");
         }
 
-        internal static void ToFile(string filename)
+        public static void ToFile(string filename)
         {
             var oldLogFile = logFile;
             logFile = new LogListener(filename);
