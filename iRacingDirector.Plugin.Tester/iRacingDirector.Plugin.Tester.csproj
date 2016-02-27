@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup Condition="!Exists('..\..\..\iRacingReplayOverlay.net.csproj')">
     <Reference Include="iRacingReplayOverlay">
-      <HintPath>$(PackagesFolder)iRacingReplayOverlay.net.1.0.3.23\iRacingReplayOverlay.exe</HintPath>
+      <HintPath>$(PackagesFolder)iRacingReplayOverlay.net.1.0.3.25\iRacingReplayOverlay.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

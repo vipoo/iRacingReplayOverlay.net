@@ -10,7 +10,7 @@ namespace iRacingDirector.Plugin.Tester
     {
         DomainForm domainForm;
         bool isPaused = false;
-        private bool moving;
+        private bool moving; 
 
         public Main()
         {

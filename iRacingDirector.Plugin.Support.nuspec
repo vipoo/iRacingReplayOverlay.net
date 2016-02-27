@@ -22,7 +22,7 @@
     <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.exe" target="tools" />
     <file src="iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.pdb" target="tools" />
     
-    <file src="packages\iRacingReplayOverlay.net.1.0.3.23\**\*" target="tools" />
+    <file src="packages\iRacingReplayOverlay.net.1.0.3.25\**\*" target="tools" />
 
     <file src="iRacingDirector.Plugin.Support\bin\Release\iRacingDirector.Plugin.Support.dll" target="lib\net40-client" />
     <file src="iRacingDirector.Plugin.Support\bin\Release\iRacingDirector.Plugin.Support.pdb" target="lib\net40-client" />

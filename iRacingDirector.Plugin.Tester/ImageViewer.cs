@@ -40,7 +40,7 @@ namespace iRacingDirector.Plugin.Tester
         {
             PluginProxy = new PluginProxy(pluginPath);
             PluginProxy.SetReplayConfig(replayConfigPath);
-            PluginProxy.SetEventData();
+            PluginProxy.InjectFields(0);
         }
 
         public void SetFramesPerSecond(int framesPerSecond)
@@ -145,9 +145,9 @@ namespace iRacingDirector.Plugin.Tester
         {
             if (PluginProxy == null)
                 return;
+
             PluginProxy.SetGraphics(g);
-            PluginProxy.SetTimestamp(timestamp);
-            PluginProxy.SetLeaderboard();
+            PluginProxy.InjectFields(timestamp);
             PluginProxy.DrawIntroFlashCard(Duration);
         }
 
@@ -158,13 +158,12 @@ namespace iRacingDirector.Plugin.Tester
 
         private void DrawActionMain(Graphics g)
         {
-
             if (PluginProxy == null)
                 return;
+
             PluginProxy.SetGraphics(g);
-            PluginProxy.SetTimestamp(timestamp);
-            PluginProxy.SetLeaderboard();
-            PluginProxy.RaceOverlay(timestamp);
+            PluginProxy.InjectFields(timestamp);
+            PluginProxy.RaceOverlay();
         }
 
         private void ImageViewer_FormClosing(object sender, FormClosingEventArgs e)
