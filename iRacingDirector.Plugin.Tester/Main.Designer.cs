@@ -52,6 +52,10 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.durationLabel = new System.Windows.Forms.Label();
             this.mainRaceButton = new System.Windows.Forms.Button();
+            this.replayProgress = new System.Windows.Forms.SplitContainer();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.playPauseButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).BeginInit();
             this.SuspendLayout();
@@ -325,6 +329,58 @@
             this.mainRaceButton.UseVisualStyleBackColor = true;
             this.mainRaceButton.Click += new System.EventHandler(this.mainRaceButton_Click);
             // 
+            // replayProgress
+            // 
+            this.replayProgress.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.replayProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.replayProgress.Location = new System.Drawing.Point(17, 353);
+            this.replayProgress.Name = "replayProgress";
+            // 
+            // replayProgress.Panel1
+            // 
+            this.replayProgress.Panel1.Controls.Add(this.panel2);
+            this.replayProgress.Panel1MinSize = 1;
+            // 
+            // replayProgress.Panel2
+            // 
+            this.replayProgress.Panel2.Controls.Add(this.panel3);
+            this.replayProgress.Panel2MinSize = 1;
+            this.replayProgress.Size = new System.Drawing.Size(813, 10);
+            this.replayProgress.SplitterDistance = 271;
+            this.replayProgress.SplitterWidth = 10;
+            this.replayProgress.TabIndex = 24;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(259, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(10, 8);
+            this.panel2.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(10, 8);
+            this.panel3.TabIndex = 1;
+            // 
+            // playPauseButton
+            // 
+            this.playPauseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.playPauseButton.Location = new System.Drawing.Point(456, 322);
+            this.playPauseButton.Margin = new System.Windows.Forms.Padding(4);
+            this.playPauseButton.Name = "playPauseButton";
+            this.playPauseButton.Size = new System.Drawing.Size(80, 24);
+            this.playPauseButton.TabIndex = 25;
+            this.playPauseButton.Tag = "false";
+            this.playPauseButton.Text = "pause";
+            this.playPauseButton.UseVisualStyleBackColor = true;
+            this.playPauseButton.Click += new System.EventHandler(this.playPauseButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -396,6 +452,10 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label durationLabel;
         private System.Windows.Forms.Button mainRaceButton;
+        private System.Windows.Forms.SplitContainer replayProgress;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button playPauseButton;
     }
 }
 

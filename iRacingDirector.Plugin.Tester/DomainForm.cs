@@ -23,6 +23,7 @@ namespace iRacingDirector.Plugin.Tester
         private int playbackSpeed = 1;
         private Size clientSize;
         private DrawAction drawAction;
+        private bool isPaused;
 
         public static DomainForm CreateRemote()
         {
@@ -68,6 +69,7 @@ namespace iRacingDirector.Plugin.Tester
             frm.SetPlaybackSpeed(playbackSpeed);
             frm.SetOnAnimationTick(onAnimationTick);
             frm.SetDrawAction(drawAction);
+            frm.SetPaused(isPaused);
 
             frm.Refresh();
         }
@@ -148,6 +150,12 @@ namespace iRacingDirector.Plugin.Tester
         internal void SetAction(DrawAction drawAction)
         {
             this.drawAction = drawAction;
+            Create();
+        }
+
+        internal void SetPause(bool isPaused)
+        {
+            this.isPaused = isPaused;
             Create();
         }
     }

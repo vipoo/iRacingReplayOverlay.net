@@ -24,6 +24,7 @@ namespace iRacingDirector.Plugin.Tester
         Action<double, double> onAnimationTick = (d, t) => { };
         long lastTimerTick = 0;
         Action<Graphics> drawAction = g => { };
+        private bool isPaused;
 
         public void SetOnError(Action<string, string> onError)
         {
@@ -79,6 +80,11 @@ namespace iRacingDirector.Plugin.Tester
             }
         }
 
+        internal void SetPaused(bool isPaused)
+        {
+            this.isPaused = isPaused;
+        }
+
         public ImageViewer()
         {
             InitializeComponent();
@@ -86,6 +92,9 @@ namespace iRacingDirector.Plugin.Tester
 
         private void OnAnimate()
         {
+            if (isPaused)
+                return;
+
             var period = (DateTime.Now - offset).TotalSeconds;
             offset = DateTime.Now;
 

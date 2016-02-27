@@ -9,6 +9,7 @@ namespace iRacingDirector.Plugin.Tester
     public partial class Main : Form
     {
         DomainForm domainForm;
+        bool isPaused = false;
 
         public Main()
         {
@@ -160,6 +161,14 @@ namespace iRacingDirector.Plugin.Tester
         void mainRaceButton_Click(object sender, EventArgs e)
         {
             domainForm.SetAction(DrawAction.Main);
+        }
+
+        private void playPauseButton_Click(object sender, EventArgs e)
+        {
+            isPaused = !isPaused;
+            playPauseButton.Text = isPaused ? "play" : "pause";
+            domainForm.SetPause(isPaused);
+
         }
     }
 }

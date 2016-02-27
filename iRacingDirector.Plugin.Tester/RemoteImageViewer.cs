@@ -79,5 +79,10 @@ namespace iRacingDirector.Plugin.Tester
         {
             frm.SetDrawAction(drawAction);
         }
+
+        internal void SetPaused(bool isPaused)
+        {
+            frm.SetPaused(isPaused);
+        }
     }
 }
