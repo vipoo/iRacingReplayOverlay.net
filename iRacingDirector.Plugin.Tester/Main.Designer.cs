@@ -50,7 +50,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.playbackTimeLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.durationLabel = new System.Windows.Forms.Label();
             this.mainRaceButton = new System.Windows.Forms.Button();
             this.replayProgress = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -58,6 +57,10 @@
             this.playPauseButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.replayProgress)).BeginInit();
+            this.replayProgress.Panel1.SuspendLayout();
+            this.replayProgress.Panel2.SuspendLayout();
+            this.replayProgress.SuspendLayout();
             this.SuspendLayout();
             // 
             // browseBackgroundImageButton
@@ -229,7 +232,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(13, 121);
+            this.label6.Location = new System.Drawing.Point(14, 324);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(178, 18);
@@ -238,7 +241,7 @@
             // 
             // framesPerSecond
             // 
-            this.framesPerSecond.Location = new System.Drawing.Point(189, 118);
+            this.framesPerSecond.Location = new System.Drawing.Point(199, 322);
             this.framesPerSecond.Maximum = new decimal(new int[] {
             60,
             0,
@@ -250,7 +253,7 @@
             0,
             0});
             this.framesPerSecond.Name = "framesPerSecond";
-            this.framesPerSecond.Size = new System.Drawing.Size(78, 24);
+            this.framesPerSecond.Size = new System.Drawing.Size(53, 24);
             this.framesPerSecond.TabIndex = 17;
             this.framesPerSecond.Value = new decimal(new int[] {
             5,
@@ -261,7 +264,7 @@
             // 
             // playbackSpeed
             // 
-            this.playbackSpeed.Location = new System.Drawing.Point(410, 118);
+            this.playbackSpeed.Location = new System.Drawing.Point(384, 322);
             this.playbackSpeed.Maximum = new decimal(new int[] {
             10,
             0,
@@ -273,7 +276,7 @@
             0,
             0});
             this.playbackSpeed.Name = "playbackSpeed";
-            this.playbackSpeed.Size = new System.Drawing.Size(78, 24);
+            this.playbackSpeed.Size = new System.Drawing.Size(51, 24);
             this.playbackSpeed.TabIndex = 19;
             this.playbackSpeed.Value = new decimal(new int[] {
             1,
@@ -285,7 +288,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(285, 121);
+            this.label7.Location = new System.Drawing.Point(259, 324);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(118, 18);
@@ -294,29 +297,20 @@
             // 
             // playbackTimeLabel
             // 
-            this.playbackTimeLabel.AutoSize = true;
-            this.playbackTimeLabel.Location = new System.Drawing.Point(14, 348);
+            this.playbackTimeLabel.Location = new System.Drawing.Point(557, 324);
             this.playbackTimeLabel.Name = "playbackTimeLabel";
-            this.playbackTimeLabel.Size = new System.Drawing.Size(104, 18);
+            this.playbackTimeLabel.Size = new System.Drawing.Size(270, 18);
             this.playbackTimeLabel.TabIndex = 20;
             this.playbackTimeLabel.Text = "Playback time:";
+            this.playbackTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.panel1.Location = new System.Drawing.Point(13, 326);
+            this.panel1.Location = new System.Drawing.Point(13, 307);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(814, 10);
             this.panel1.TabIndex = 21;
-            // 
-            // durationLabel
-            // 
-            this.durationLabel.AutoSize = true;
-            this.durationLabel.Location = new System.Drawing.Point(233, 348);
-            this.durationLabel.Name = "durationLabel";
-            this.durationLabel.Size = new System.Drawing.Size(121, 18);
-            this.durationLabel.TabIndex = 22;
-            this.durationLabel.Text = "Intro Duration: 60";
             // 
             // mainRaceButton
             // 
@@ -385,9 +379,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(847, 377);
+            this.ClientSize = new System.Drawing.Size(847, 380);
+            this.Controls.Add(this.playPauseButton);
+            this.Controls.Add(this.replayProgress);
             this.Controls.Add(this.mainRaceButton);
-            this.Controls.Add(this.durationLabel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.playbackTimeLabel);
             this.Controls.Add(this.playbackSpeed);
@@ -421,6 +416,10 @@
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).EndInit();
+            this.replayProgress.Panel1.ResumeLayout(false);
+            this.replayProgress.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.replayProgress)).EndInit();
+            this.replayProgress.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -450,7 +449,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label playbackTimeLabel;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label durationLabel;
         private System.Windows.Forms.Button mainRaceButton;
         private System.Windows.Forms.SplitContainer replayProgress;
         private System.Windows.Forms.Panel panel2;

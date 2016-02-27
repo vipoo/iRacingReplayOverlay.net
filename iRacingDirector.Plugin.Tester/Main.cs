@@ -90,8 +90,11 @@ namespace iRacingDirector.Plugin.Tester
                 this.errorDetailsTextBox.Text = s + "\r\n" + m;
             });
             domainForm.SetOnAnimationTick((d, f) => {
-                durationLabel.Text = String.Format("Duration: {0}", d);
-                playbackTimeLabel.Text = String.Format("Simulated playback time: {0}", f);
+                playbackTimeLabel.Text = String.Format("Time: {0} over {1}", f, d);
+
+                double percentage = (double)f / d;
+                replayProgress.SplitterDistance = (int)(percentage * replayProgress.Width);
+
             });
             if (File.Exists(backgroundTestImageFileName.Text))
             {
