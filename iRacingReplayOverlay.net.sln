@@ -38,11 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Stan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Support", "plugins\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj", "{CEC2BB31-324D-41E3-83C8-A5C35C63129B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Tester", "plugins\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj", "{96FA1C80-396C-4792-9E8B-C7CBFC25833D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5916B84C-0264-4102-9CCC-28006D84E4FA} = {5916B84C-0264-4102-9CCC-28006D84E4FA}
-		{0E523573-2972-4DC0-AECB-C4CF746854BB} = {0E523573-2972-4DC0-AECB-C4CF746854BB}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Tester", "plugins\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj", "{96FA1C80-396C-4792-9E8B-C7CBFC25833D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
