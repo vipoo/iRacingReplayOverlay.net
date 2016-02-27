@@ -2,7 +2,6 @@
 {
     public class LeaderBoard
     {
-        public readonly double StartTime;
         public readonly Driver[] Drivers;
         public readonly string RacePosition;
         public readonly string LapCounter;
@@ -15,5 +14,17 @@
         public readonly string UserName;
         public readonly int PitStopCount;
         public readonly string ShortName;
+    }
+
+    public class MessageSet
+    {
+        public string[] Messages;
+        public double Time;
+    }
+
+    public class FastLap
+    {
+        public Driver Driver;
+        public double Time;
     }
 }
