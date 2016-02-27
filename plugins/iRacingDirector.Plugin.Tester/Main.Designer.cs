@@ -78,7 +78,7 @@
             // 
             // fullSizeButton
             // 
-            this.fullSizeButton.Location = new System.Drawing.Point(17, 198);
+            this.fullSizeButton.Location = new System.Drawing.Point(17, 160);
             this.fullSizeButton.Margin = new System.Windows.Forms.Padding(4);
             this.fullSizeButton.Name = "fullSizeButton";
             this.fullSizeButton.Size = new System.Drawing.Size(155, 28);
@@ -89,7 +89,7 @@
             // 
             // halfSizeButton
             // 
-            this.halfSizeButton.Location = new System.Drawing.Point(17, 234);
+            this.halfSizeButton.Location = new System.Drawing.Point(17, 196);
             this.halfSizeButton.Margin = new System.Windows.Forms.Padding(4);
             this.halfSizeButton.Name = "halfSizeButton";
             this.halfSizeButton.Size = new System.Drawing.Size(155, 28);
@@ -100,7 +100,7 @@
             // 
             // thirdSizeButton
             // 
-            this.thirdSizeButton.Location = new System.Drawing.Point(17, 271);
+            this.thirdSizeButton.Location = new System.Drawing.Point(17, 233);
             this.thirdSizeButton.Margin = new System.Windows.Forms.Padding(4);
             this.thirdSizeButton.Name = "thirdSizeButton";
             this.thirdSizeButton.Size = new System.Drawing.Size(155, 28);
@@ -111,7 +111,7 @@
             // 
             // introFlashCardButton
             // 
-            this.introFlashCardButton.Location = new System.Drawing.Point(189, 198);
+            this.introFlashCardButton.Location = new System.Drawing.Point(189, 160);
             this.introFlashCardButton.Margin = new System.Windows.Forms.Padding(4);
             this.introFlashCardButton.Name = "introFlashCardButton";
             this.introFlashCardButton.Size = new System.Drawing.Size(135, 28);
@@ -171,7 +171,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 165);
+            this.label3.Location = new System.Drawing.Point(13, 127);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(127, 18);
@@ -182,19 +182,19 @@
             // 
             this.errorDetailsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.errorDetailsTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.errorDetailsTextBox.Location = new System.Drawing.Point(513, 142);
+            this.errorDetailsTextBox.Location = new System.Drawing.Point(358, 142);
             this.errorDetailsTextBox.Multiline = true;
             this.errorDetailsTextBox.Name = "errorDetailsTextBox";
             this.errorDetailsTextBox.ReadOnly = true;
             this.errorDetailsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.errorDetailsTextBox.Size = new System.Drawing.Size(316, 157);
+            this.errorDetailsTextBox.Size = new System.Drawing.Size(471, 157);
             this.errorDetailsTextBox.TabIndex = 11;
             this.errorDetailsTextBox.WordWrap = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(510, 120);
+            this.label4.Location = new System.Drawing.Point(355, 121);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(95, 18);
             this.label4.TabIndex = 12;
@@ -211,7 +211,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 79);
+            this.label5.Location = new System.Drawing.Point(13, 82);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(155, 18);
@@ -315,7 +315,7 @@
             // 
             // mainRaceButton
             // 
-            this.mainRaceButton.Location = new System.Drawing.Point(189, 234);
+            this.mainRaceButton.Location = new System.Drawing.Point(189, 196);
             this.mainRaceButton.Margin = new System.Windows.Forms.Padding(4);
             this.mainRaceButton.Name = "mainRaceButton";
             this.mainRaceButton.Size = new System.Drawing.Size(135, 28);
@@ -381,7 +381,7 @@
             // 
             // outroFlashCard
             // 
-            this.outroFlashCard.Location = new System.Drawing.Point(189, 272);
+            this.outroFlashCard.Location = new System.Drawing.Point(189, 234);
             this.outroFlashCard.Margin = new System.Windows.Forms.Padding(4);
             this.outroFlashCard.Name = "outroFlashCard";
             this.outroFlashCard.Size = new System.Drawing.Size(135, 28);
@@ -428,7 +428,7 @@
             this.MinimizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Form1";
+            this.Text = "iRacingDirector Plugin Tester";
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).EndInit();

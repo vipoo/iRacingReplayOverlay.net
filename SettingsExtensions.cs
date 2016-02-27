@@ -16,21 +16,18 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay
 {
-    internal sealed partial class Settings
+    public partial class Settings
     {
         public List<string> PreferredDrivers
         {
             get
             {
-                return this.PreferredDriverNames.Split(new char[] { ',', ';' }).Select(name => name.Trim().ToLower()).ToList();
+                return PreferredDriverNames.Split(new [] { ',', ';' }).Select(name => name.Trim().ToLower()).ToList();
             }
         }
     }

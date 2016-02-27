@@ -180,6 +180,10 @@
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
     <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
     <Compile Include="Phases\Direction\VideoCapture.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="SettingsAdditional.cs" />
     <Compile Include="SettingsExtensions.cs" />
     <Compile Include="Support\LogListener.cs" />
@@ -212,11 +216,6 @@
     <Compile Include="Phases\Capturing\CaptureLeaderBoard.cs" />
     <Compile Include="Phases\IRacingReplay.cs" />
     <Compile Include="Phases\WhenIRacingStarts.cs" />
-    <Compile Include="Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -256,10 +255,6 @@
     <None Include="publish.sh" />
     <None Include="publish-beta.sh" />
     <None Include="README.md" />
-    <None Include="Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <None Include="tools\decrypt.cmd" />
     <None Include="tools\package.cmd" />
     <None Include="tools\test.cmd" />
