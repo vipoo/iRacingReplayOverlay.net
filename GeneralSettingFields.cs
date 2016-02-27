@@ -23,60 +23,87 @@ using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
-    public partial class ConfigureGeneralSettings
+    public class GeneralSettingFields
     {
+        readonly Panel panel;
+        readonly Settings settings;
+        readonly Label helpText;
+        readonly Func<Control> activeControl;
+
+        public GeneralSettingFields(Panel panel, Label helpText, Func<Control> activeControl, Settings settings)
+        {
+            this.panel = panel;
+            this.helpText = helpText;
+            this.activeControl = activeControl;
+            this.settings = settings;
+        }
+        
         int nextTabIndex = 1;
         int nextRowPosition = 14;
-        List<Action> OnSave = new List<Action>();
+        List<Action> onSave = new List<Action>();
 
-        void AddBlankRow()
+        public Action OnSave
+        {
+            get
+            {
+                return () =>
+                {
+                    foreach (var s in onSave)
+                        s();
+
+                    settings.Save();
+                };
+            }
+        }
+
+        internal void AddBlankRow()
         {
             nextRowPosition += 20;
         }
 
-        void AddPasswordField(string caption, string description, Func<Settings, string> getter, Action<Settings, string> setter)
+        internal void AddPasswordField(string caption, string description, Func<Settings, string> getter, Action<Settings, string> setter)
         {
             var textBox = AddStringField(caption, description, getter, setter);
             textBox.PasswordChar = '*';
         }
 
-        TextBox AddStringField(string caption, string description, Func<Settings, string> getter, Action<Settings, string> setter)
+        internal TextBox AddStringField(string caption, string description, Func<Settings, string> getter, Action<Settings, string> setter)
         {
             return AddField(caption, description, getter(Settings.Default), tb => setter(Settings.Default, tb.Text));
         }
 
-        void AddStringField(string caption, string description, string setting)
+        internal void AddStringField(string caption, string description, string setting)
         {
             AddField(caption, description, Settings.Default[setting].ToString(), tb => Settings.Default[setting] = tb.Text);
         }
 
-        void AddKeyPressField(string caption, string description)
+        internal void AddKeyPressField(string caption, string description)
         {
             var textBox = AddField(caption, description, "ALT+F9", tb => { });
             textBox.ReadOnly = true;
         }
 
-        void AddNumberField(string caption, string description, string setting)
+        internal void AddNumberField(string caption, string description, string setting)
         {
             AddField(caption, description, Settings.Default[setting].ToString(), tb =>
             {
                 var number = 0.0d;
                 if (double.TryParse(tb.Text, out number))
-                    Settings.Default[setting] = number;
+                    settings[setting] = number;
             });
         }
 
-        void AddIntField(string caption, string description, string setting)
+        internal void AddIntField(string caption, string description, string setting)
         {
-            AddField(caption, description, Settings.Default[setting].ToString(), tb =>
+            AddField(caption, description, settings[setting].ToString(), tb =>
             {
                 var number = 0;
                 if (int.TryParse(tb.Text, out number))
-                    Settings.Default[setting] = number;
+                    settings[setting] = number;
             });
         }
 
-        void AddTimeField(string caption, string description, string setting)
+        internal void AddTimeField(string caption, string description, string setting)
         {
             panel.Controls.Add(new Label
             {
@@ -86,15 +113,15 @@ namespace iRacingReplayOverlay
                 Text = "seconds"
             });
 
-            AddField(caption, description, ((TimeSpan)Settings.Default[setting]).TotalSeconds.ToString(), tb =>
+            AddField(caption, description, ((TimeSpan)settings[setting]).TotalSeconds.ToString(), tb =>
             {
                 var newSeconds = 0.0;
                 if (double.TryParse(tb.Text, out newSeconds))
-                    Settings.Default[setting] = newSeconds.Seconds();
+                    settings[setting] = newSeconds.Seconds();
             });
         }
 
-        void AddMinuteField(string caption, string description, string setting)
+        internal void AddMinuteField(string caption, string description, string setting)
         {
             panel.Controls.Add(new Label
             {
@@ -110,11 +137,11 @@ namespace iRacingReplayOverlay
             {
                 var newMinutes = 0;
                 if (int.TryParse(tb.Text, out newMinutes))
-                    Settings.Default[setting] = newMinutes.Minutes();
+                    settings[setting] = newMinutes.Minutes();
             });
         }
 
-        void AddCheckboxField(string caption, string description, string setting)
+        internal void AddCheckboxField(string caption, string description, string setting)
         {
             panel.Controls.Add(new Label
             {
@@ -127,7 +154,7 @@ namespace iRacingReplayOverlay
             var checkBox = new CheckBox
             {
                 AutoSize = true,
-                Checked = (bool)Settings.Default[setting],
+                Checked = (bool)settings[setting],
                 Location = new System.Drawing.Point(301, nextRowPosition + 3),
                 Size = new System.Drawing.Size(186, 22),
                 TabIndex = nextTabIndex++,
@@ -135,15 +162,15 @@ namespace iRacingReplayOverlay
                 Tag = description
             };
 
-            checkBox.Enter += new System.EventHandler(this.OnFocus);
+            checkBox.Enter += new EventHandler(this.OnFocus);
 
-            OnSave.Add(() => Settings.Default[setting] = checkBox.Checked);
+            onSave.Add(() => settings[setting] = checkBox.Checked);
 
             panel.Controls.Add(checkBox);
             nextRowPosition += 28;
         }
 
-        TextBox AddField(string caption, string description, string value, Action<TextBox> onSave)
+        internal TextBox AddField(string caption, string description, string value, Action<TextBox> onSave)
         {
             panel.Controls.Add(new Label
             {
@@ -161,13 +188,20 @@ namespace iRacingReplayOverlay
                 Tag = description,
                 Text = value
             };
-            textBox.Enter += new System.EventHandler(this.OnFocus);
+            textBox.Enter += new EventHandler(this.OnFocus);
             panel.Controls.Add(textBox);
 
-            OnSave.Add(() => onSave(textBox));
+            this.onSave.Add(() => onSave(textBox));
             nextRowPosition += 28;
 
             return textBox;
+        }
+
+        internal void OnFocus(object sender, EventArgs e)
+        {
+            helpText.Text = "";
+            if (activeControl().Tag != null)
+                helpText.Text = activeControl().Tag.ToString();
         }
     }
 }

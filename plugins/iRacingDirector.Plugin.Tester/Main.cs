@@ -185,5 +185,12 @@ namespace iRacingDirector.Plugin.Tester
         {
             domainForm.SetAction(DrawAction.Outro);
         }
+
+        private void generalSettingsButton_Click(object sender, EventArgs e)
+        {
+            var frm = new iRacingReplayOverlay.PluginSettings(iRacingReplayOverlay.Settings.Default);
+            frm.ShowDialog();
+
+        }
     }
 }

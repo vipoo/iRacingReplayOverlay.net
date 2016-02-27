@@ -56,6 +56,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.playPauseButton = new System.Windows.Forms.Button();
             this.outroFlashCard = new System.Windows.Forms.Button();
+            this.generalSettingsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.replayProgress)).BeginInit();
@@ -390,11 +391,24 @@
             this.outroFlashCard.UseVisualStyleBackColor = true;
             this.outroFlashCard.Click += new System.EventHandler(this.outroFlashCard_Click);
             // 
+            // generalSettingsButton
+            // 
+            this.generalSettingsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.generalSettingsButton.Location = new System.Drawing.Point(189, 115);
+            this.generalSettingsButton.Margin = new System.Windows.Forms.Padding(4);
+            this.generalSettingsButton.Name = "generalSettingsButton";
+            this.generalSettingsButton.Size = new System.Drawing.Size(135, 24);
+            this.generalSettingsButton.TabIndex = 27;
+            this.generalSettingsButton.Text = "General Settings";
+            this.generalSettingsButton.UseVisualStyleBackColor = true;
+            this.generalSettingsButton.Click += new System.EventHandler(this.generalSettingsButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 380);
+            this.Controls.Add(this.generalSettingsButton);
             this.Controls.Add(this.outroFlashCard);
             this.Controls.Add(this.playPauseButton);
             this.Controls.Add(this.replayProgress);
@@ -471,6 +485,7 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button playPauseButton;
         private System.Windows.Forms.Button outroFlashCard;
+        private System.Windows.Forms.Button generalSettingsButton;
     }
 }
 

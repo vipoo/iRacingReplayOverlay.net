@@ -122,16 +122,20 @@
     </Compile>
     <Compile Include="Aws\AwsKey.cs" />
     <Compile Include="Aws\AwsLogListener.cs" />
+    <Compile Include="PluginSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PluginSettings.Designer.cs">
+      <DependentUpon>PluginSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GeneralSettingFields.cs">
+    </Compile>
     <Compile Include="Properties\IAVMSettingsProvider.cs" />
     <Compile Include="ConfigureGeneralSettings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConfigureGeneralSettings.Designer.cs">
       <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConfigureGeneralSettings.Support.cs">
-      <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConfigurePlugins.cs">
       <SubType>Form</SubType>
@@ -252,8 +256,6 @@
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <None Include="publish.sh" />
-    <None Include="publish-beta.sh" />
     <None Include="README.md" />
     <None Include="tools\decrypt.cmd" />
     <None Include="tools\package.cmd" />
@@ -280,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginSettings.resx">
+      <DependentUpon>PluginSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

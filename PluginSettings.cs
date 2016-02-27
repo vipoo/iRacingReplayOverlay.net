@@ -21,12 +21,12 @@ using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
 {
-    public partial class ConfigureGeneralSettings : Form
+    public partial class PluginSettings : Form
     {
         private Action onSave;
         private Settings settings;
 
-        public ConfigureGeneralSettings(Settings settings)
+        public PluginSettings(Settings settings)
         {
             this.settings = settings;
             InitializeComponent();
@@ -102,7 +102,7 @@ The data is sent encypted to me - the developer - dean.netherton@gmail.com", "Se
         }
 
         void okButton_Click(object sender, EventArgs e)
-        {            
+        {
             this.onSave();
         }
 
