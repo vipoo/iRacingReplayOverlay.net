@@ -343,6 +343,9 @@
             this.replayProgress.SplitterDistance = 271;
             this.replayProgress.SplitterWidth = 10;
             this.replayProgress.TabIndex = 24;
+            this.replayProgress.SplitterMoving += new System.Windows.Forms.SplitterCancelEventHandler(this.replayProgress_SplitterMoving);
+            this.replayProgress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.replayProgress_MouseDown);
+            this.replayProgress.MouseUp += new System.Windows.Forms.MouseEventHandler(this.replayProgress_MouseUp);
             // 
             // panel2
             // 

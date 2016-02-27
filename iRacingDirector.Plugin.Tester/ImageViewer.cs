@@ -80,6 +80,13 @@ namespace iRacingDirector.Plugin.Tester
             }
         }
 
+        internal void SetPositionPercentage(float positionPercentage)
+        {
+            this.lastTimerTick = this.timestamp = (long)(Duration * positionPercentage);
+            onAnimationTick(Duration / OneNanoSecond, Math.Round((float)timestamp / OneNanoSecond, 4));
+
+        }
+
         internal void SetPaused(bool isPaused)
         {
             this.isPaused = isPaused;
@@ -106,7 +113,7 @@ namespace iRacingDirector.Plugin.Tester
                 lastTimerTick = timestamp;
             }
 
-            if( timestamp - lastTimerTick > (OneNanoSecond / 4))
+            if( timestamp - lastTimerTick > (OneNanoSecond / 8))
             {
                 onAnimationTick(Duration / OneNanoSecond, Math.Round((float)timestamp / OneNanoSecond, 1));
                 lastTimerTick = timestamp;

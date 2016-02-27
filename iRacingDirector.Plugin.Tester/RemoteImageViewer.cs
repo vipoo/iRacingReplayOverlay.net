@@ -84,5 +84,10 @@ namespace iRacingDirector.Plugin.Tester
         {
             frm.SetPaused(isPaused);
         }
+
+        internal void SetPositionPercentage(float positionPercentage)
+        {
+            frm.SetPositionPercentage(positionPercentage);
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace iRacingDirector.Plugin.Tester
     {
         DomainForm domainForm;
         bool isPaused = false;
+        private bool moving;
 
         public Main()
         {
@@ -37,22 +38,22 @@ namespace iRacingDirector.Plugin.Tester
             domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
         }
 
-        private void fullSizeButton_Click(object sender, EventArgs e)
+        void fullSizeButton_Click(object sender, EventArgs e)
         {
             domainForm.SetClientSize(new Size(1920, 1080));
         }
 
-        private void halfSizeButton_Click(object sender, EventArgs e)
+        void halfSizeButton_Click(object sender, EventArgs e)
         {
             domainForm.SetClientSize(new Size(1920 / 2 , 1080 / 2));
         }
 
-        private void thirdSizeButton_Click(object sender, EventArgs e)
+        void thirdSizeButton_Click(object sender, EventArgs e)
         {
             domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
         }
 
-        private void browsePluginButton_Click(object sender, EventArgs e)
+        void browsePluginButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
             fbd.Filter = "Assembly (*.dll)|*.dll";
@@ -68,10 +69,10 @@ namespace iRacingDirector.Plugin.Tester
             }
         }
 
-        private void Main_Load(object sender, EventArgs e)
+        void Main_Load(object sender, EventArgs e)
         {
-            this.Left = Screen.PrimaryScreen.WorkingArea.Width / 24;
-            this.Top = Screen.PrimaryScreen.WorkingArea.Height / 16;
+            Left = Screen.PrimaryScreen.WorkingArea.Width / 24;
+            Top = Screen.PrimaryScreen.WorkingArea.Height / 16;
 
             pluginAssemblyFileName.Text = Properties.Settings.Default.PluginAssemblyFileName;
             backgroundTestImageFileName.Text = Properties.Settings.Default.BackgroundTestImageFileName;
@@ -86,14 +87,13 @@ namespace iRacingDirector.Plugin.Tester
             domainForm = DomainForm.CreateRemote();
             domainForm.SetSessionDataFileName(sampleSessionDataFileName.Text);
             domainForm.SetPluginFileName(pluginAssemblyFileName.Text);
-            domainForm.SetOnError((s, m) => {
-                this.errorDetailsTextBox.Text = s + "\r\n" + m;
-            });
+            domainForm.SetOnError((s, m) => errorDetailsTextBox.Text = s + "\r\n" + m);
             domainForm.SetOnAnimationTick((d, f) => {
                 playbackTimeLabel.Text = String.Format("Time: {0} over {1}", f, d);
 
-                double percentage = (double)f / d;
-                replayProgress.SplitterDistance = (int)(percentage * replayProgress.Width);
+                double percentage = f / d;
+                if (!moving)
+                    replayProgress.SplitterDistance = (int)(percentage * replayProgress.Width);
 
             });
             if (File.Exists(backgroundTestImageFileName.Text))
@@ -102,26 +102,24 @@ namespace iRacingDirector.Plugin.Tester
                 domainForm.SetBackgroundImage(backgroundTestImageFileName.Text);
                 domainForm.SetClientSize(new Size(1920 / 3, 1080 / 3));
                 domainForm.SetPosition(this.Left, this.Top + this.Height);
-
             }
             domainForm.SetFramesPerSecond((int)framesPerSecond.Value);
-
             domainForm.Activate();
         }
 
-        private void pluginAssemblyFileName_Leave(object sender, EventArgs e)
+        void pluginAssemblyFileName_Leave(object sender, EventArgs e)
         {
             Properties.Settings.Default.PluginAssemblyFileName = pluginAssemblyFileName.Text;
             Properties.Settings.Default.Save();
         }
 
-        private void backgroundTestImageFileName_Leave(object sender, EventArgs e)
+        void backgroundTestImageFileName_Leave(object sender, EventArgs e)
         {
             Properties.Settings.Default.BackgroundTestImageFileName = backgroundTestImageFileName.Text;
             Properties.Settings.Default.Save();
         }
 
-        private void browserSampleSessionDataButton_Click(object sender, EventArgs e)
+        void browserSampleSessionDataButton_Click(object sender, EventArgs e)
         {
             var fbd = new OpenFileDialog();
             fbd.Filter = "Assembly (*.replayscript)|*.replayscript";
@@ -137,24 +135,22 @@ namespace iRacingDirector.Plugin.Tester
             }
         }
 
-        private void sampleSessionDataFileName_Leave(object sender, EventArgs e)
+        void sampleSessionDataFileName_Leave(object sender, EventArgs e)
         {
             Properties.Settings.Default.SampleSessionDataFileName = sampleSessionDataFileName.Text;
             Properties.Settings.Default.Save();
-
             domainForm.SetSessionDataFileName(sampleSessionDataFileName.Text);
         }
 
-        private void framesPerSecond_ValueChanged(object sender, EventArgs e)
+        void framesPerSecond_ValueChanged(object sender, EventArgs e)
         {
             domainForm.SetFramesPerSecond((int)framesPerSecond.Value);
         }
 
-        private void playbackSpeed_ValueChanged(object sender, EventArgs e)
+        void playbackSpeed_ValueChanged(object sender, EventArgs e)
         {
             domainForm.SetPlaybackSpeed((int)playbackSpeed.Value);
         }
-        
 
         void introFlashCardButton_Click(object sender, EventArgs e)
         {
@@ -166,12 +162,28 @@ namespace iRacingDirector.Plugin.Tester
             domainForm.SetAction(DrawAction.Main);
         }
 
-        private void playPauseButton_Click(object sender, EventArgs e)
+        void playPauseButton_Click(object sender, EventArgs e)
         {
             isPaused = !isPaused;
             playPauseButton.Text = isPaused ? "play" : "pause";
             domainForm.SetPause(isPaused);
+        }
 
+        void replayProgress_SplitterMoving(object sender, SplitterCancelEventArgs e)
+        {
+            moving = true;
+            domainForm.SetPositionPercentage((float)e.SplitX / replayProgress.Width);
+            moving = false;
+        }
+
+        void replayProgress_MouseDown(object sender, MouseEventArgs e)
+        {
+            domainForm.SetPause(true);
+        }
+
+        void replayProgress_MouseUp(object sender, MouseEventArgs e)
+        {
+            domainForm.SetPause(isPaused);
         }
     }
 }
