@@ -76,7 +76,18 @@ namespace iRacingReplayOverlay
             this.data = data;
         }
 
-        public void SetEventData()
+        public void InjectFields(long timestamp)
+        {
+            this.timestamp = timestamp;
+
+            SetEventData();
+            SetLeaderboard();
+            SetCamDriver();
+            SetMessageSet();
+            SetFastLap();
+        }
+
+        void SetEventData()
         {
             var eventDataField = pluginType.GetField("EventData");
             var eventDataType = eventDataField.FieldType;
@@ -85,12 +96,12 @@ namespace iRacingReplayOverlay
             eventDataField.SetValue(plugin, instance);
         }
 
-        public void SetLeaderboard()
+        void SetLeaderboard()
         {
             var leaderboardDataField = pluginType.GetField("LeaderBoard");
             var leaderboardDataType = leaderboardDataField.FieldType;
 
-            var lb = data.LeaderBoards.FirstOrDefault(t => t.StartTime >= timestamp.FromNanoToSeconds());
+            var lb = data.LeaderBoards.LastOrDefault(t => t.StartTime <= timestamp.FromNanoToSeconds());
 
             if (lb == null)
             {
@@ -100,8 +111,7 @@ namespace iRacingReplayOverlay
 
             leaderboardInstance = Activator.CreateInstance(leaderboardDataType);
             leaderboardDataField.SetValue(plugin, leaderboardInstance);
-
-            SetLeaderboardField("StartTime", lb.StartTime);
+            
             SetLeaderboardField("RacePosition", lb.RacePosition);
             SetLeaderboardField("LapCounter", lb.LapCounter);
 
@@ -113,17 +123,88 @@ namespace iRacingReplayOverlay
             var x = driversInstance.GetType().GetMethod("Set");
             SetLeaderboardField("Drivers", driversInstance);
 
-            for (var i = 0; i < lb.Drivers.Length; i++) {
-                var driverInstance = Activator.CreateInstance(driversDataType);
+            for (var i = 0; i < lb.Drivers.Length; i++)
+            {
+                var driverInstance = CreateDriverInstance(driversDataType, lb.Drivers[i]);
 
                 x.Invoke(driversInstance, new object[] { i, driverInstance });
 
-                SetField(driverInstance, "CarNumber", lb.Drivers[i].CarNumber);
-                SetField(driverInstance, "UserName", lb.Drivers[i].UserName);
-                SetField(driverInstance, "PitStopCount", lb.Drivers[i].PitStopCount);
-                SetField(driverInstance, "ShortName", lb.Drivers[i].ShortName);
-                SetField(driverInstance, "Position", lb.Drivers[i].Position);
             }
+        }
+
+        object CreateDriverInstance(Type driversDataType, OverlayData.Driver driver)
+        {
+            var driverInstance = Activator.CreateInstance(driversDataType);
+
+            SetField(driverInstance, "CarNumber", driver.CarNumber);
+            SetField(driverInstance, "UserName", driver.UserName);
+            SetField(driverInstance, "PitStopCount", driver.PitStopCount);
+            SetField(driverInstance, "ShortName", driver.ShortName);
+            SetField(driverInstance, "Position", driver.Position);
+
+            return driverInstance;
+        }
+
+        public void SetCamDriver()
+        {
+            var field = pluginType.GetField("CamDriver");
+            if (field == null)
+                return;
+            
+            var cd = data.CamDrivers.LastOrDefault(t => t.StartTime <= timestamp.FromNanoToSeconds());
+
+            if (cd != null)
+            {
+                var instance = CreateDriverInstance(field.FieldType, cd.CurrentDriver);
+                field.SetValue(plugin, instance);
+            }
+            else
+                field.SetValue(plugin, null);
+        }
+
+        void SetMessageSet()
+        {
+            var field = pluginType.GetField("MessageSet");
+            if (field == null)
+                return;
+
+            var cd = data.MessageStates.LastOrDefault(t => t.Time <= timestamp.FromNanoToSeconds());
+
+            if (cd == null)
+            {
+                field.SetValue(plugin, null);
+                return;
+            }
+
+            var instance = Activator.CreateInstance(field.FieldType);
+            field.SetValue(plugin, instance);
+
+            SetField(instance, "Time", cd.Time);
+            SetField(instance, "Messages", cd.Messages);
+        }
+
+        void SetFastLap()
+        {
+            var field = pluginType.GetField("FastLap");
+            if (field == null)
+                return;
+
+            var timeInSeconds = timestamp.FromNanoToSeconds();
+            var cd = data.FastestLaps.LastOrDefault(t => t.StartTime <= timeInSeconds && t.StartTime + 15 > timeInSeconds);
+
+            if (cd == null)
+            {
+                field.SetValue(plugin, null);
+                return;
+            }
+
+            var instance = Activator.CreateInstance(field.FieldType);
+            field.SetValue(plugin, instance);
+
+            SetField(instance, "Time", cd.Time);
+
+            var driverType = instance.GetType().GetField("Driver").FieldType;
+            SetField(instance, "Driver", CreateDriverInstance(driverType, cd.Driver));
         }
 
         void SetField(object instance, string name, object value)
@@ -139,12 +220,7 @@ namespace iRacingReplayOverlay
             SetField(leaderboardInstance, name, value);
         }
 
-        public void SetTimestamp(long timestamp)
-        {
-            this.timestamp = timestamp;
-        }
-
-        public void RaceOverlay(long timestamp)
+        public void RaceOverlay()
         {
             plugin.RaceOverlay(timestamp);
         }

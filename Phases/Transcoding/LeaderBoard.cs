@@ -102,81 +102,22 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             drawBody(r);
         }
-
-        private void DrawIntroBody(Graphics graphics, GraphicRect r, int page)
-        {
-            var totalWidth = FlashCardWidth;
-            var left = FlashCardLeft;
-
-            var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
-            var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
-
-            var offset = 5;
-            var pen = new Pen(Styles.Black, 2);
-            graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
-                .WithPen(pen)
-                .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
-
-            foreach (var qualifier in results.Skip(page * DriversPerPage).Take(DriversPerPage))
-            {
-                var driver = OverlayData.SessionData.DriverInfo.CompetingDrivers[qualifier.CarIdx];
-                r
-                    .Center(cg => cg
-                            .DrawText(qualifier.Position.ToString())
-                            .AfterText(qualifier.Position.ToString())
-                            .MoveRight(1)
-                            .WithFont(fontName, 16, FontStyle.Bold)
-                            .DrawText(qualifier.Position.Ordinal())
-                    )
-                    .ToRight(width: 120, left: 30)
-                    .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
-                    .ToRight(width: 60)
-                    .DrawText(driver.CarNumber)
-                    .ToRight(width: 300)
-                    .DrawText(driver.UserName);
-
-                r = r.ToBelow();
-
-                graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
-                    .WithPen(pen)
-                    .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
-            }
-        }
+        
 
         public void Intro(Graphics graphics, long duration, long timestamp)
         {
-            var qsession = OverlayData.SessionData.SessionInfo.Sessions.Qualifying();
-            var results = qsession.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0];
-
             plugin.SetReplayConfig(OverlayData);
-            plugin.SetEventData();
             plugin.SetGraphics(graphics);
-            plugin.SetTimestamp(timestamp);
+            plugin.InjectFields(timestamp);
             plugin.DrawIntroFlashCard( duration );
         }
 
         public void Overlay(Graphics graphics, long timestamp)
         {
-            var timeInSeconds = timestamp.FromNanoToSeconds();
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-            var sample = OverlayData.LeaderBoards.LastOrDefault(s => s.StartTime <= timeInSeconds);
-            if (sample != null)
-                DrawLeaderboard(graphics, sample, timeInSeconds.Seconds());
-
-            var camDriver = OverlayData.CamDrivers.LastOrDefault(s => s.StartTime <= timeInSeconds);
-            if (camDriver != null)
-                DrawCurrentDriverRow(graphics, camDriver.CurrentDriver);
-
-            var messageState = OverlayData.MessageStates.LastOrDefault(s => s.Time <= timeInSeconds);
-            if (messageState != null)
-                DrawRaceMessages(graphics, timeInSeconds, messageState);
-
-            var fastestLap = OverlayData.FastestLaps.LastOrDefault(s => s.StartTime <= timeInSeconds && s.StartTime + 15 > timeInSeconds);
-            if (fastestLap != null)
-                DrawFastestLap(graphics, fastestLap);
+            plugin.SetReplayConfig(OverlayData);
+            plugin.SetGraphics(graphics);
+            plugin.InjectFields(timestamp);
+            plugin.RaceOverlay();
         }
 
         public void Outro(Graphics graphics, long timestamp, int page = 0)
@@ -231,59 +172,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-        private void DrawRaceMessages(Graphics g, double timeInSeconds, OverlayData.MessageState messageState)
-        {
-            Func<GraphicRect, GraphicRect> blueBox = rr =>
-               rr.WithBrush(Styles.TransparentLightBlueBrush)
-               .WithPen(Styles.BlackPen)
-               .DrawRectangleWithBorder()
-               .WithBrush(Styles.BlackBrush)
-               .WithFont(fontName, 20, FontStyle.Bold)
-               .WithStringFormat(StringAlignment.Near);
+        
 
-            var shiftFactor = (double)Math.Min(timeInSeconds - messageState.Time, 1d);
-            var offset = (int)(34 * shiftFactor);
-
-            offset = offset + (messageState.Messages.Length - 1) * 34;
-
-            var row4Top = 900 + 34 * 3;
-            offset = row4Top - offset;
-
-            var r = g.InRectangle(80, offset, 450, 34);
-
-            g.SetClip(new Rectangle(80, 900, 450, 34 + 34 + 34));
-
-            foreach (var msg in messageState.Messages)
-                r = r.With(blueBox)
-                    .DrawText(" " + msg)
-                    .ToBelow();
-
-            g.ResetClip();
-        }
-
-        private void DrawFastestLap(Graphics g, Capturing.OverlayData.FastLap fastestLap)
-        {
-            Func<GraphicRect, GraphicRect> blueBox = rr =>
-               rr.WithBrush(Styles.TransparentLightBlueBrush)
-               .WithPen(Styles.BlackPen)
-               .DrawRectangleWithBorder()
-               .WithBrush(Styles.BlackBrush)
-               .WithFont(fontName, 20, FontStyle.Bold)
-               .WithStringFormat(StringAlignment.Center);
-
-            g.InRectangle(1920 - 80 - 450, 900, 450, 34)
-                .With(blueBox)
-                .DrawText("New Fast Lap")
-                .ToBelow(width: 50)
-                .With(blueBox)
-                .DrawText(fastestLap.Driver.CarNumber)
-                .ToRight(width: 250)
-                .With(blueBox)
-                .DrawText(fastestLap.Driver.UserName)
-                .ToRight(width: 150)
-                .With(blueBox)
-                .DrawText(TimeSpan.FromSeconds(fastestLap.Time).ToString(@"mm\:ss\.fff"));
-        }
 
 
         public Func<GraphicRect, GraphicRect> SimpleWhiteBox(int fontSize = 20)
@@ -370,42 +260,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-        private void DrawCurrentDriverRow(Graphics g, OverlayData.Driver p)
-        {
-            var position = p.Position != null ? p.Position.Value.ToString() : "";
-            var indicator = p.Position != null ? p.Position.Value.Ordinal() : "";
-
-            var offset = 2;
-
-            g.InRectangle(1920 / 2 - 440 / 2, 980, 70, 40)
-                .WithBrush(Styles.YellowBrush)
-                .WithPen(Styles.BlackPen)
-                .DrawRectangleWithBorder()
-                .WithFont(fontName, 24, FontStyle.Bold)
-                .WithBrush(Styles.BlackBrush)
-                .WithStringFormat(StringAlignment.Near)
-                .Center(cg => cg
-                            .DrawText(position, topOffset: offset)
-                            .AfterText(position)
-                            .MoveRight(3)
-                            .WithFont(fontName, 18, FontStyle.Bold)
-                            .DrawText(indicator, topOffset: offset)
-                )
-
-                .ToRight(width: 70)
-                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
-                .DrawRectangleWithBorder()
-                .WithStringFormat(StringAlignment.Center)
-                .WithBrush(Styles.BlackBrush)
-                .DrawText(p.CarNumber, topOffset: offset)
-
-                .ToRight(width: 300)
-                .WithLinearGradientBrush(Styles.White, Styles.WhiteSmoke, LinearGradientMode.BackwardDiagonal)
-                .DrawRectangleWithBorder()
-                .WithStringFormat(StringAlignment.Center)
-                .WithBrush(Styles.BlackBrush)
-                .DrawText(p.UserName, topOffset: offset);
-        }
+       
 
 
         public class _Styles
