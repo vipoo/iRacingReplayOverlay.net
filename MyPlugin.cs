@@ -7,7 +7,6 @@ namespace iRacingDirector.Plugin.StandardOverlays
     {
         public Graphics Graphics;
         public EventData EventData;
-        public LeaderBoard LeaderBoard;
 
         const int FlashCardWidth = 900;
         const int FlashCardLeft = (1920 / 2) - FlashCardWidth / 2;
@@ -25,6 +24,9 @@ namespace iRacingDirector.Plugin.StandardOverlays
             var timeInSeconds = timestamp.FromNanoToSeconds();
 
             DrawLeaderboard(timeInSeconds.Seconds());
+            DrawCurrentDriverRow();
+            DrawRaceMessages(timeInSeconds);
+            DrawFastestLap();
         }
     }
 }

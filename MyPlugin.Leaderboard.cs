@@ -7,6 +7,8 @@ namespace iRacingDirector.Plugin.StandardOverlays
 {
     public partial class MyPlugin
     {
+        public LeaderBoard LeaderBoard;
+
         Func<GraphicRect, GraphicRect> SimpleWhiteBox(int fontSize = 20)
         {
             return rr => rr.WithLinearGradientBrush(Styles.WhiteSmoke, Styles.White, LinearGradientMode.BackwardDiagonal)
