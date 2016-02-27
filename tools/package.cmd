@@ -30,6 +30,6 @@ cd ..\..
 
 7z a -r release.zip *.*
 
-REM appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
+appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
 
 cd ..\..\..
