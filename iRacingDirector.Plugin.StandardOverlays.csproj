@@ -68,8 +68,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(SupportProject)' == ''">
-    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.23, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.23\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.35, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.35\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
