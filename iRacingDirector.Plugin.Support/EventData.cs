@@ -1,4 +1,5 @@
 ﻿using iRacingSDK;
+using System.Linq;
 
 namespace iRacingDirector.Plugin
 {
@@ -20,6 +21,11 @@ namespace iRacingDirector.Plugin
         public SessionData._DriverInfo._Drivers[] CompetingDrivers
         { get { return sessionData.DriverInfo.Drivers; } }
 
+        public SessionData._SessionInfo._Sessions Race
+        { get { return sessionData.SessionInfo.Sessions.First(s => s.SessionType.ToLower().Contains("race")); } }
+
+        public SessionData._SessionInfo._Sessions._ResultsPositions[] Results
+        { get { return Race.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0]; } }
         public SessionData Raw { get { return sessionData; } }
     }
 }
