@@ -77,12 +77,7 @@ namespace iRacingDirector.Plugin.Tester
             pluginAssemblyFileName.Text = Properties.Settings.Default.PluginAssemblyFileName;
             backgroundTestImageFileName.Text = Properties.Settings.Default.BackgroundTestImageFileName;
 
-            if (Properties.Settings.Default.SampleSessionDataFileName == null || Properties.Settings.Default.SampleSessionDataFileName == "") {
-                var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                sampleSessionDataFileName.Text = Path.Combine(dir, "session-data.json");
-            }
-            else
-                sampleSessionDataFileName.Text = Properties.Settings.Default.SampleSessionDataFileName;
+            sampleSessionDataFileName.Text = Properties.Settings.Default.SampleSessionDataFileName;
 
             domainForm = DomainForm.CreateRemote();
             domainForm.SetSessionDataFileName(sampleSessionDataFileName.Text);
@@ -184,6 +179,11 @@ namespace iRacingDirector.Plugin.Tester
         void replayProgress_MouseUp(object sender, MouseEventArgs e)
         {
             domainForm.SetPause(isPaused);
+        }
+
+        private void outroFlashCard_Click(object sender, EventArgs e)
+        {
+            domainForm.SetAction(DrawAction.Outro);
         }
     }
 }

@@ -24,7 +24,6 @@ namespace iRacingDirector.Plugin.Tester
         private Size clientSize;
         private DrawAction drawAction;
         private bool isPaused;
-        private float positionPercentage;
 
         public static DomainForm CreateRemote()
         {

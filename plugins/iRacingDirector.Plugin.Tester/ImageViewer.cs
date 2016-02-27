@@ -1,11 +1,8 @@
 ﻿using iRacingReplayOverlay;
-using iRacingSDK;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 using System.Windows.Forms;
-using YamlDotNet.Serialization;
 
 namespace iRacingDirector.Plugin.Tester
 {
@@ -40,7 +37,7 @@ namespace iRacingDirector.Plugin.Tester
         {
             PluginProxy = new PluginProxy(pluginPath);
             PluginProxy.SetReplayConfig(replayConfigPath);
-            PluginProxy.InjectFields(0);
+            PluginProxy.InjectFields(0, new string [0]);
         }
 
         public void SetFramesPerSecond(int framesPerSecond)
@@ -138,7 +135,6 @@ namespace iRacingDirector.Plugin.Tester
                 if (onError != null)
                     onError(ex.Message, ex.StackTrace);
             }
-
         }
 
         void DrawActionIntro(Graphics g)
@@ -147,13 +143,18 @@ namespace iRacingDirector.Plugin.Tester
                 return;
 
             PluginProxy.SetGraphics(g);
-            PluginProxy.InjectFields(timestamp);
+            PluginProxy.InjectFields(timestamp, new string[0]);
             PluginProxy.DrawIntroFlashCard(Duration);
         }
 
         private void DrawActionOutro(Graphics g)
         {
+            if (PluginProxy == null)
+                return;
 
+            PluginProxy.SetGraphics(g);
+            PluginProxy.InjectFields(timestamp, "".Split(','));
+            PluginProxy.DrawOutroFlashCard(Duration, timestamp);
         }
 
         private void DrawActionMain(Graphics g)
@@ -162,7 +163,7 @@ namespace iRacingDirector.Plugin.Tester
                 return;
 
             PluginProxy.SetGraphics(g);
-            PluginProxy.InjectFields(timestamp);
+            PluginProxy.InjectFields(timestamp, new string [0]);
             PluginProxy.RaceOverlay();
         }
 

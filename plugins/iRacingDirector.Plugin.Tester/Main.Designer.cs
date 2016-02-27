@@ -55,6 +55,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.playPauseButton = new System.Windows.Forms.Button();
+            this.outroFlashCard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.framesPerSecond)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playbackSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.replayProgress)).BeginInit();
@@ -378,11 +379,23 @@
             this.playPauseButton.UseVisualStyleBackColor = true;
             this.playPauseButton.Click += new System.EventHandler(this.playPauseButton_Click);
             // 
+            // outroFlashCard
+            // 
+            this.outroFlashCard.Location = new System.Drawing.Point(189, 272);
+            this.outroFlashCard.Margin = new System.Windows.Forms.Padding(4);
+            this.outroFlashCard.Name = "outroFlashCard";
+            this.outroFlashCard.Size = new System.Drawing.Size(135, 28);
+            this.outroFlashCard.TabIndex = 26;
+            this.outroFlashCard.Text = "Outro Flash Card";
+            this.outroFlashCard.UseVisualStyleBackColor = true;
+            this.outroFlashCard.Click += new System.EventHandler(this.outroFlashCard_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 380);
+            this.Controls.Add(this.outroFlashCard);
             this.Controls.Add(this.playPauseButton);
             this.Controls.Add(this.replayProgress);
             this.Controls.Add(this.mainRaceButton);
@@ -457,6 +470,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button playPauseButton;
+        private System.Windows.Forms.Button outroFlashCard;
     }
 }
 

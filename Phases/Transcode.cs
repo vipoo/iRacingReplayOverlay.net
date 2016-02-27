@@ -226,9 +226,8 @@ namespace iRacingReplayOverlay.Phases
                 var duration = sample.Duration - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
                 duration = Math.Min(duration, 30.FromSecondsToNano());
                 var period = sample.Timestamp - leaderBoard.OverlayData.TimeForOutroOverlay.Value.FromSecondsToNano();
-                var page = FlashCardPaging.GetPageNumber(leaderBoard.OverlayData.SessionData.DriverInfo, (float)period / duration);
 
-                leaderBoard.Outro(sample.Graphic, sample.Timestamp, page);
+                leaderBoard.Outro(sample.Graphic, duration, sample.Timestamp, period);
                 return;
             }
 
