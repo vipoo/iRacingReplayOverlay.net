@@ -28,5 +28,12 @@ namespace iRacingDirector.Plugin.StandardOverlays
             DrawRaceMessages(timeInSeconds);
             DrawFastestLap();
         }
+
+        public void OutroFlashCard(long duration, long timestamp)
+        {
+            var page = FlashCardPagingCalculator.GetPageNumber(EventData, DriversPerPage, duration, timestamp);
+
+            DrawOutroFlashCard(page);
+        }
     }
 }
