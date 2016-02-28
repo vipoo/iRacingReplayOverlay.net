@@ -82,7 +82,7 @@
             this.panel.Size = new System.Drawing.Size(538, 457);
             this.panel.TabIndex = 41;
             // 
-            // ConfigureGeneralSettings
+            // PluginSettings
             // 
             this.AcceptButton = this.okButton;
             this.CancelButton = this.okButton;
@@ -95,8 +95,9 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "ConfigureGeneralSettings";
-            this.Text = "Configure Video Capture";
+            this.Name = "PluginSettings";
+            this.Text = "Configure Plugin Settings";
+            this.Load += new System.EventHandler(this.PluginSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

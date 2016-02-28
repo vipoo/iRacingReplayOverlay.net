@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace iRacingDirector.Plugin.Tester
@@ -75,6 +76,11 @@ namespace iRacingDirector.Plugin.Tester
                     this.Duration = 60 * OneNanoSecond;
                     break;
             }
+        }
+
+        internal PluginProxySettings[] GetSettingsList()
+        {
+            return PluginProxy.GetSettingsList();
         }
 
         internal void SetPositionPercentage(float positionPercentage)

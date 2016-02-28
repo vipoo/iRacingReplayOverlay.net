@@ -69,12 +69,12 @@ namespace iRacingReplayOverlay
 
         internal TextBox AddStringField(string caption, string description, Func<Settings, string> getter, Action<Settings, string> setter)
         {
-            return AddField(caption, description, getter(Settings.Default), tb => setter(Settings.Default, tb.Text));
+            return AddField(caption, description, getter(settings), tb => setter(settings, tb.Text));
         }
 
         internal void AddStringField(string caption, string description, string setting)
         {
-            AddField(caption, description, Settings.Default[setting].ToString(), tb => Settings.Default[setting] = tb.Text);
+            AddField(caption, description, settings[setting].ToString(), tb => settings[setting] = tb.Text);
         }
 
         internal void AddKeyPressField(string caption, string description)
@@ -85,7 +85,7 @@ namespace iRacingReplayOverlay
 
         internal void AddNumberField(string caption, string description, string setting)
         {
-            AddField(caption, description, Settings.Default[setting].ToString(), tb =>
+            AddField(caption, description, settings[setting].ToString(), tb =>
             {
                 var number = 0.0d;
                 if (double.TryParse(tb.Text, out number))
@@ -131,7 +131,7 @@ namespace iRacingReplayOverlay
                 Text = "Minutes"
             });
 
-            var startValue = (int)((TimeSpan)Settings.Default[setting]).TotalMinutes;
+            var startValue = (int)((TimeSpan)settings[setting]).TotalMinutes;
 
             AddField(caption, description, startValue.ToString(), tb =>
             {
@@ -141,7 +141,7 @@ namespace iRacingReplayOverlay
             });
         }
 
-        internal void AddCheckboxField(string caption, string description, string setting)
+        internal void AddCheckboxField(string caption, string description, Func<Settings, bool> getter, Action<Settings, bool> setter)
         {
             panel.Controls.Add(new Label
             {
@@ -154,7 +154,7 @@ namespace iRacingReplayOverlay
             var checkBox = new CheckBox
             {
                 AutoSize = true,
-                Checked = (bool)settings[setting],
+                Checked = getter(settings),
                 Location = new System.Drawing.Point(301, nextRowPosition + 3),
                 Size = new System.Drawing.Size(186, 22),
                 TabIndex = nextTabIndex++,
@@ -164,10 +164,15 @@ namespace iRacingReplayOverlay
 
             checkBox.Enter += new EventHandler(this.OnFocus);
 
-            onSave.Add(() => settings[setting] = checkBox.Checked);
+            onSave.Add(() => setter(settings, checkBox.Checked));
 
             panel.Controls.Add(checkBox);
             nextRowPosition += 28;
+        }
+
+        internal void AddCheckboxField(string caption, string description, string setting)
+        {
+            AddCheckboxField(caption, description, (i) => (bool)settings[setting], (i, b) => settings[setting] = b);
         }
 
         internal TextBox AddField(string caption, string description, string value, Action<TextBox> onSave)

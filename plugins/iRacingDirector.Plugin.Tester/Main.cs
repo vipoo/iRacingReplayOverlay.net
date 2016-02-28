@@ -188,7 +188,7 @@ namespace iRacingDirector.Plugin.Tester
 
         private void generalSettingsButton_Click(object sender, EventArgs e)
         {
-            var frm = new iRacingReplayOverlay.PluginSettings(iRacingReplayOverlay.Settings.Default);
+            var frm = new iRacingReplayOverlay.PluginSettings(iRacingReplayOverlay.Settings.Default, domainForm.GetSettingsList());
             frm.ShowDialog();
 
         }

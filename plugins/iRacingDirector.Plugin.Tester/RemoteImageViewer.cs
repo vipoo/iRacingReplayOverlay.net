@@ -1,5 +1,7 @@
-﻿using System;
+﻿using iRacingReplayOverlay;
+using System;
 using System.Drawing;
+using System.Reflection;
 
 namespace iRacingDirector.Plugin.Tester
 {
@@ -88,6 +90,11 @@ namespace iRacingDirector.Plugin.Tester
         internal void SetPositionPercentage(float positionPercentage)
         {
             frm.SetPositionPercentage(positionPercentage);
+        }
+
+        internal PluginProxySettings[] GetSettingsList()
+        {
+            return frm.GetSettingsList();
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using iRacingReplayOverlay.Phases.Capturing;
-using iRacingSDK;
+using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -24,10 +25,12 @@ namespace iRacingReplayOverlay
 {
     public class PluginProxy
     {
-        private dynamic plugin;
-        private Type pluginType;
-        private OverlayData data;
-        private long timestamp;
+        dynamic plugin;
+        Type pluginType;
+        OverlayData data;
+        long timestamp;
+        readonly Func<Type, object> CreateInstance = t => Activator.CreateInstance(t);
+        readonly Type pluginSettingsType;
 
         public long Duration
         {
@@ -42,13 +45,18 @@ namespace iRacingReplayOverlay
             var an = AssemblyName.GetAssemblyName(pluginPath);
             var assembly = Assembly.Load(an);
 
-            var type = assembly.GetTypes()
+            pluginType = assembly.GetTypes()
                 .Where(t => !t.IsInterface)
                 .Where(t => !t.IsAbstract)
                 .FirstOrDefault(t => t.FullName.EndsWith(".MyPlugin"));
 
-            plugin = Activator.CreateInstance(type);
-            pluginType = (Type)plugin.GetType();
+            plugin = Activator.CreateInstance(pluginType);
+
+            var x = assembly.GetTypes();
+
+            pluginSettingsType = assembly.GetTypes()
+                .Where(t => !t.IsInterface)
+                .FirstOrDefault(t => t.FullName.EndsWith(".Settings"));
         }
 
         public void DrawIntroFlashCard(long duration)
@@ -73,6 +81,25 @@ namespace iRacingReplayOverlay
         public void SetReplayConfig(string filePath)
         {
             this.data = OverlayData.FromFile(filePath);
+        }
+
+        public PluginProxySettings[] GetSettingsList()
+        {
+            if (pluginSettingsType == null)
+                return null;
+
+            var fields = pluginSettingsType.GetFields(BindingFlags.GetField | BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty);
+            return fields.Select(f =>
+            {
+                var descAttr = (dynamic)f.GetCustomAttributes().FirstOrDefault(d => d.GetType().Name.EndsWith("DescriptionAttribute"));
+                return new PluginProxySettings
+                {
+                    Name = "StandardOverlay.{0}".F(f.Name),
+                    Value = f.GetValue(null),
+                    Type = f.FieldType,
+                    Description = descAttr == null ? "" : descAttr.Description
+                };
+            }).ToArray();
         }
 
         public void SetReplayConfig(OverlayData data)
@@ -126,9 +153,7 @@ namespace iRacingReplayOverlay
 
             eventDataField.SetValue(plugin, instance);
         }
-
-        readonly Func<Type, object> CreateInstance = t => Activator.CreateInstance(t);
-
+        
         object CreateAndAssignInstance(string fieldName, bool setToNull = false, Func<Type, object> createInstance = null)
         {
             var field = pluginType.GetField(fieldName);

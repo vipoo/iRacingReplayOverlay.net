@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 
@@ -416,6 +417,21 @@ namespace iRacingReplayOverlay
             set
             {
                 this["GitHubCachedReleases"] = value;
+            }
+        }
+
+        [UserScopedSetting]
+        [SettingsProvider(typeof(IracingReplayDirectorProvider))]
+        [DebuggerNonUserCode]
+        public PluginProxySettings[] PluginStoredSettings
+        {
+            get
+            {
+                return (PluginProxySettings[])this["PluginStoredSettings"];
+            }
+            set
+            {
+                this["PluginStoredSettings"] = value;
             }
         }
     }

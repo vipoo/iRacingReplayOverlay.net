@@ -17,6 +17,8 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace iRacingReplayOverlay
@@ -24,11 +26,13 @@ namespace iRacingReplayOverlay
     public partial class PluginSettings : Form
     {
         private Action onSave;
-        private Settings settings;
+        readonly PluginProxySettings[] pluginSettings;
+        readonly Settings settings;
 
-        public PluginSettings(Settings settings)
+        public PluginSettings(Settings settings, PluginProxySettings[] pluginSettings)
         {
             this.settings = settings;
+            this.pluginSettings = pluginSettings;
             InitializeComponent();
             AddPanelComponents();
         }
@@ -37,66 +41,21 @@ namespace iRacingReplayOverlay
         {
             var f = new GeneralSettingFields(panel, helpText, () => this.ActiveControl, Settings.Default);
 
-            f.AddTimeField("Time between camera switches:", "The time period that must elapsed before a new random camera is selected.", "CameraStickyPeriod");
-            f.AddTimeField("Time between battle switches:", "The time period that must elapsed before a new battle is randomly selected.", "BattleStickyPeriod");
-            f.AddTimeField("Time gap between cars for battle:", "The approximate amount of time between cars to determine if they are battling.  Default 1 second.", "BattleGap");
-            f.AddTimeField("Time to track leader at race start", "The amount of time, to stay focused on the leader, at race start.  After this period, the normal camera and driver tracking rules will apply.", "FollowLeaderAtRaceStartPeriod");
-            f.AddTimeField("Time to track leader on last lap", "The amount of time, to stay focused on the leader, prior to the race finish.", "FollowLeaderBeforeRaceEndPeriod");
-            f.AddNumberField("Factor for battle selection.", "A factor to bias the random selection of battles.  Larger numbers will tend to focus on battles at front.  Smaller numbers will increase the chance of battles futher down the order to be selected.  Recommend values between 1.3 and 2.0.\n\nShould always be more than 1.0\n\n1.0 means all battles have same chance of selection.", "BattleFactor2");
-
-            f.AddBlankRow();
-            f.AddMinuteField("Duration of Highlight video", "The duration to target for the length of the edited highlight videos.", "HighlightVideoTargetDuration");
-
-            f.AddBlankRow();
-            f.AddKeyPressField("Hot Key for Video Capture", "The hotkey used by your video capture program.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9 or F9");
-
-            f.AddBlankRow();
-            f.AddCheckboxField("Disable Incidents Capture",
-                @"If this option is selected, then the director will not capture or focus on incidents or crashes",
-                "DisableIncidentsSearch");
-
-            f.AddIntField("Incident Scan wait",
-                @"Advanced: The number of 'samples' the application will wait for the replay to have been reposition, upon requesting to move to the next incident.
-
-Smaller values will risk false positives for incident detections.
-
-Larger values will cause the incident scanning phase to take longer.",
-                "IncidentScanWait");
-
-            f.AddIntField("Ignore Incident Below", @"Ignore any incidents below the specified position.", "IgnoreIncidentsBelowPosition");
-
-            f.AddBlankRow();
-            f.AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");
-            f.AddCheckboxField("Only select battles for my perferred drivers",
-               @"This option determines what drivers will be selected for battles.  
-
-If selected, then the camera will only focus on battles of your preferred drivers.  All other battles will be ignored and cut from the highlighted video.
-
-If not selected, then all battles can be selected, but your perferred drivers will be prioritised",
-               "FocusOnPreferedDriver");
-
-            f.AddBlankRow();
-            f.AddIntField("Show Results after nth position", "Show the results flash cards, after the driver in the selected position finishes.", "ResultsFlashCardPosition");
-
-            f.AddBlankRow();
-            f.AddTimeField("Time to wait for IRacing to re-open", "The time after clicking 'Begin Capture', the application will wait, for iRacing to reload on the screen.  For larger replays or bigger tracks, you may need to increase this value. Default 6 seconds", "PeriodWaitForIRacingSwitch");
+            var storedSettings = Settings.Default.PluginStoredSettings == null ? new List<PluginProxySettings>() : Settings.Default.PluginStoredSettings.ToList();
             
-            if (AwsKeys.HaveKeys)
+            foreach(var s in this.pluginSettings)
             {
-                f.AddBlankRow();
-                f.AddCheckboxField("Allow usage data to be sent to developer",
-                @"Send anonymous usage data to the developer, to assist in fixing bugs and improving the application.
+                var storedValue = storedSettings.FirstOrDefault(ss => ss.Name == s.Name);
+                if(storedValue == null)
+                    storedSettings.Add(storedValue = new PluginProxySettings { Name = s.Name });
 
-What data is sent? 
-The data sent is the same data that is written to your local log files.
-
-Why should I say yes?
-It will really help me to understand how people use this application, and diagnose common problems people have.
-
-Where does the data go ?
-The data is sent encypted to me - the developer - dean.netherton@gmail.com", "SendUsageData");
-
+                if( s.Type == typeof(bool))
+                    f.AddCheckboxField(s.Name, s.Description, i => (bool)(storedValue.Value ?? s.Value), (i, v) => storedValue.Value = v);
+                else
+                    f.AddStringField(s.Name, s.Description, i => (string)(storedValue.Value ?? s.Value), (i, v) => storedValue.Value = v);
             }
+
+            Settings.Default.PluginStoredSettings = storedSettings.ToArray();
 
             this.onSave = f.OnSave;
         }
@@ -111,6 +70,11 @@ The data is sent encypted to me - the developer - dean.netherton@gmail.com", "Se
             helpText.Text = "";
             if (this.ActiveControl.Tag != null)
                 helpText.Text = this.ActiveControl.Tag.ToString();
+        }
+
+        private void PluginSettings_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

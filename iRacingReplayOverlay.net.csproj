@@ -193,6 +193,7 @@
     <Compile Include="Support\LogListener.cs" />
     <Compile Include="Support\Messages.cs" />
     <Compile Include="Support\PluginProxy.cs" />
+    <Compile Include="Support\PluginProxySettings.cs" />
     <Compile Include="Support\SimpleProfiler.cs" />
     <Compile Include="TestVideoConversion.cs">
       <SubType>Form</SubType>

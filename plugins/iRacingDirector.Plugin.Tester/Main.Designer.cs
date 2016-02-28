@@ -401,6 +401,7 @@
             this.generalSettingsButton.TabIndex = 27;
             this.generalSettingsButton.Text = "General Settings";
             this.generalSettingsButton.UseVisualStyleBackColor = true;
+            this.generalSettingsButton.Visible = false;
             this.generalSettingsButton.Click += new System.EventHandler(this.generalSettingsButton_Click);
             // 
             // Main
