@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
+using iRacingReplayOverlay.Phases;
 
 namespace iRacingDirector.Plugin.Tester
 {
@@ -10,7 +11,9 @@ namespace iRacingDirector.Plugin.Tester
     {
         DomainForm domainForm;
         bool isPaused = false;
-        private bool moving; 
+        private bool moving;
+        private FileSystemWatcher watcher;
+        private System.Windows.Forms.Timer changedTimer;
 
         public Main()
         {
@@ -79,9 +82,9 @@ namespace iRacingDirector.Plugin.Tester
 
             sampleSessionDataFileName.Text = Properties.Settings.Default.SampleSessionDataFileName;
 
-            domainForm = DomainForm.CreateRemote();
+            domainForm = DomainForm.CreateRemote(pluginAssemblyFileName.Text);
             domainForm.SetSessionDataFileName(sampleSessionDataFileName.Text);
-            domainForm.SetPluginFileName(pluginAssemblyFileName.Text);
+   
             domainForm.SetOnError((s, m) => errorDetailsTextBox.Text = s + "\r\n" + m);
             domainForm.SetOnAnimationTick((d, f) => {
                 playbackTimeLabel.Text = String.Format("Time: {0} over {1}", f, d);
@@ -100,12 +103,54 @@ namespace iRacingDirector.Plugin.Tester
             }
             domainForm.SetFramesPerSecond((int)framesPerSecond.Value);
             domainForm.Activate();
+            RecreateWatcher();
         }
 
         void pluginAssemblyFileName_Leave(object sender, EventArgs e)
         {
+            OnNewPluginPath();
+        }
+
+        void OnNewPluginPath()
+        {
             Properties.Settings.Default.PluginAssemblyFileName = pluginAssemblyFileName.Text;
             Properties.Settings.Default.Save();
+
+            domainForm.SetPluginFileName(pluginAssemblyFileName.Text);
+            domainForm.Activate();
+
+            RecreateWatcher();
+        }
+
+        private void RecreateWatcher()
+        {
+            if (watcher != null)
+                this.watcher.Dispose();
+
+            var context = SynchronizationContext.Current;
+
+            this.watcher = new FileSystemWatcher(Path.GetDirectoryName(pluginAssemblyFileName.Text), Path.GetFileName(pluginAssemblyFileName.Text));
+            watcher.Changed += (s, e) => context.Post(Watcher_Changed);
+            this.watcher.EnableRaisingEvents = true;
+        }
+        
+        private void Watcher_Changed()
+        {
+            if(this.changedTimer != null)
+            {
+                this.changedTimer.Stop();
+                this.changedTimer.Dispose();
+            }
+            this.changedTimer = new System.Windows.Forms.Timer();
+            changedTimer.Tick += (s, e) =>
+            {
+                changedTimer.Stop();
+                changedTimer.Dispose();
+                domainForm.SetPluginFileName(pluginAssemblyFileName.Text);
+                domainForm.Activate();
+            };
+            changedTimer.Interval = 1000;
+            changedTimer.Start();
         }
 
         void backgroundTestImageFileName_Leave(object sender, EventArgs e)

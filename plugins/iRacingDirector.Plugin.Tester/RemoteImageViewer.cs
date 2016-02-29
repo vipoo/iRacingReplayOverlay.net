@@ -46,9 +46,9 @@ namespace iRacingDirector.Plugin.Tester
             frm.Refresh();
         }
 
-        public void InitPlugin(string pluginPath, string sessionDataPath)
+        public void InitPlugin(string pluginPath)
         {
-            frm.InitPlugin(pluginPath, sessionDataPath);
+            frm.InitPlugin(pluginPath);
         }
 
         public void SetOnError(Action<string, string> onError)
@@ -60,6 +60,11 @@ namespace iRacingDirector.Plugin.Tester
         {
             frm.Left = left;
             frm.Top = top;
+        }
+
+        internal void Hide()
+        {
+            frm.Hide();
         }
 
         internal void SetFramesPerSecond(int framesPerSecond)
@@ -95,6 +100,11 @@ namespace iRacingDirector.Plugin.Tester
         internal PluginProxySettings[] GetSettingsList()
         {
             return frm.GetSettingsList();
+        }
+
+        internal void SetSessionDataPath(string sessionDataPath)
+        {
+            frm.SetSessionDataPath(sessionDataPath);
         }
     }
 }

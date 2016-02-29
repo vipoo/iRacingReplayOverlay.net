@@ -34,11 +34,18 @@ namespace iRacingDirector.Plugin.Tester
             this.onAnimationTick = onAnimationTick;
         }
 
-        public void InitPlugin(string pluginPath, string replayConfigPath)
+        public void InitPlugin(string pluginPath)
         {
+            if (PluginProxy != null)
+                throw new Exception("Attempt to load plugin twice");
+
             PluginProxy = new PluginProxy(pluginPath);
+        }
+
+        public void SetSessionDataPath(string replayConfigPath)
+        {
             PluginProxy.SetReplayConfig(replayConfigPath);
-            PluginProxy.InjectFields(0, new string [0]);
+            PluginProxy.InjectFields(0, new string[0]);
         }
 
         public void SetFramesPerSecond(int framesPerSecond)

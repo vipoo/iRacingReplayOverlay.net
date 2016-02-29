@@ -185,6 +185,8 @@ namespace iRacingReplayOverlay
         void SetLeaderboard()
         {
             var lb = data.LeaderBoards.LastOrDefault(t => t.StartTime <= timestamp.FromNanoToSeconds());
+            if (lb == null)
+                lb = data.LeaderBoards.First();
 
             var leaderboardInstance = CreateAndAssignInstance("LeaderBoard", lb == null, CreateInstance);
 
@@ -232,6 +234,8 @@ namespace iRacingReplayOverlay
         public void SetCamDriver()
         {
             var cd = data.CamDrivers.LastOrDefault(t => t.StartTime <= timestamp.FromNanoToSeconds());
+            if (cd == null)
+                cd = data.CamDrivers.First();
 
             CreateAndAssignInstance("CamDriver", cd == null, instance => AssignDriverInstance(instance, cd.CurrentDriver));
         }

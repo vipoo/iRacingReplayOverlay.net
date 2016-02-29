@@ -26,23 +26,24 @@ namespace iRacingDirector.Plugin.Tester
         private DrawAction drawAction;
         private bool isPaused;
 
-        public static DomainForm CreateRemote()
+        public static DomainForm CreateRemote(string pluginPath)
         {
-            return new DomainForm();
+            return new DomainForm(pluginPath);
         }
 
-        private DomainForm()
+        private DomainForm(string pluginPath)
         {
+            this.pluginPath = pluginPath;
         }
 
         private void Create(bool recreate = false)
         {
             if (domain == null || recreate)
             {
-                frm = null;
-
                 if (domain != null)
                 {
+                    System.Diagnostics.Trace.WriteLine("Unloading domain!");
+                    frm.Hide();
                     AppDomain.Unload(domain);
                     domain = null;
                 }
@@ -53,15 +54,19 @@ namespace iRacingDirector.Plugin.Tester
                     ShadowCopyFiles = "true"
                 };
 
+                System.Diagnostics.Trace.WriteLine("Creating domain!");
+
                 domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
                 frm = (RemoteImageViewer)domain.CreateInstanceFromAndUnwrap(typeof(RemoteImageViewer).Assembly.Location, typeof(RemoteImageViewer).FullName);
+
+                frm.InitPlugin(pluginPath);
             }
 
             frm.SetFramesPerSecond(framesPerSecond);
             frm.SetOnError(onError);
-
-            if( pluginPath != null && sessionDataPath != null)
-                frm.InitPlugin(pluginPath, sessionDataPath);
+            
+            if(sessionDataPath != null)
+                frm.SetSessionDataPath(sessionDataPath);
 
             if( backgroundImage != null)
                 frm.SetBackgroundImage(backgroundImage);
