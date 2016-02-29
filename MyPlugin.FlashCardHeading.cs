@@ -11,7 +11,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
             var displayName = EventData.WeekendInfo.TrackDisplayName.ToUpper();
 
             Graphics.InRectangle(FlashCardLeft, 250, FlashCardWidth, 575)
-                .WithBrush(new SolidBrush(Color.FromArgb(180, Color.Gray)))
+                .WithBrush(Styles.TransparentLightGray)
                 .WithPen(Styles.BlackPen)
                 .DrawRectangleWithBorder();
 

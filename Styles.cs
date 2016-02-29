@@ -18,5 +18,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
         public static readonly Brush WhiteBrush = new SolidBrush(Color.White);
         public static readonly Brush YellowBrush = new SolidBrush(Color.Yellow);
         public static readonly Brush TransparentLightBlueBrush = new SolidBrush(Color.FromArgb(AlphaLevel, Color.LightBlue));
+        public static readonly Brush TransparentLightGray = new SolidBrush(Color.FromArgb(180, Color.Gray));
+        public static readonly Brush TransparentLighterGray = new SolidBrush(Color.FromArgb(40, Color.LightGray));
     }
 }
