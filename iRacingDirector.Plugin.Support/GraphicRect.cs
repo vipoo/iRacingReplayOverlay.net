@@ -101,10 +101,15 @@ namespace iRacingDirector.Plugin
             var newRect = new Rectangle(r.Left + (int)size.Width + i, r.Top, r.Width - (int)size.Width - i, r.Height);
             return New(g, newRect, b, p, f, sf);
         }
-
+            
         public GraphicRect MoveRight(int right)
         {
-            return New(g, new Rectangle(r.Left + right, r.Top, r.Width + right, r.Height), b, p, f, sf);
+            return New(g, new Rectangle(r.Left + right, r.Top, r.Width, r.Height), b, p, f, sf);
+        }
+
+        public GraphicRect MoveLeft(int left)
+        {
+            return New(g, new Rectangle(r.Left -left, r.Top, r.Width, r.Height), b, p, f, sf);
         }
 
         public GraphicRect MoveDown(int top)
@@ -120,6 +125,11 @@ namespace iRacingDirector.Plugin
         public GraphicRect WithFont(string prototype, float emSize, FontStyle style)
         {
 			return New(g, r, b, p, new Font(prototype, emSize, style), sf);
+        }
+
+        public GraphicRect WithFontSize( float emSize)
+        {
+            return New(g, r, b, p, new Font(this.f.Name, emSize, f.Style), sf);
         }
 
         public GraphicRect ToBelow(int? width = null, int? height = null)
