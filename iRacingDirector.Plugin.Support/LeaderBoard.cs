@@ -1,4 +1,6 @@
-﻿namespace iRacingDirector.Plugin
+﻿using iRacingSDK;
+
+namespace iRacingDirector.Plugin
 {
     public class LeaderBoard
     {
@@ -14,6 +16,7 @@
         public readonly string UserName;
         public readonly int PitStopCount;
         public readonly string ShortName;
+        public readonly SessionData._DriverInfo._Drivers DriverDetails;
     }
 
     public class MessageSet

@@ -67,6 +67,11 @@ namespace iRacingDirector.Plugin
             return modifiers(this);
         }
 
+        public GraphicRect Draw(Func<GraphicRect, GraphicRect> modifiers)
+        {
+            return modifiers(this);
+        }
+
         public GraphicRect WithPen(Pen pen)
         {
 			return New(g, r, b, pen, f, sf);
@@ -89,7 +94,7 @@ namespace iRacingDirector.Plugin
             return this;
         }
 
-		public virtual GraphicRect DrawText(int number, int leftOffset = 0, int topOffset = 0)
+        public virtual GraphicRect DrawText(int number, int leftOffset = 0, int topOffset = 0)
         {
             return DrawText(number.ToString(), leftOffset, topOffset);
         }
@@ -115,6 +120,16 @@ namespace iRacingDirector.Plugin
         public GraphicRect MoveDown(int top)
         {
             return New(g, new Rectangle(r.Left, r.Top + top, r.Width, r.Height + top), b, p, f, sf);
+        }
+
+        public GraphicRect MoveUp(int v)
+        {
+            return New(g, new Rectangle(r.Left, r.Top - v, r.Width, r.Height), b, p, f, sf);
+        }
+
+        public GraphicRect WithHeight(int v)
+        {
+            return New(g, new Rectangle(r.Left, r.Top, r.Width, v), b, p, f, sf);
         }
 
         public GraphicRect WithBrush(Brush brush)

@@ -26,6 +26,7 @@ namespace iRacingDirector.Plugin
 
         public SessionData._SessionInfo._Sessions._ResultsPositions[] Results
         { get { return Race.ResultsPositions ?? new SessionData._SessionInfo._Sessions._ResultsPositions[0]; } }
+
         public SessionData Raw { get { return sessionData; } }
     }
 }

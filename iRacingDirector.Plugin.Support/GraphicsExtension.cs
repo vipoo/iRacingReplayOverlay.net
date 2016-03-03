@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Drawing;
 
 namespace iRacingDirector.Plugin
@@ -26,6 +27,13 @@ namespace iRacingDirector.Plugin
         public static GraphicRect InRectangle(this Graphics g, int x, int y, int w, int h)
         {
             return new GraphicRect(g, new Rectangle(x, y, w, h));
+        }
+
+        public static Color BrightenBy(this Color self, double amount)
+        {
+            Func<byte, int> adjust = x => Math.Min((int)(x * amount), 255);
+
+            return Color.FromArgb(adjust(self.R), adjust(self.G), adjust(self.B));
         }
     }    
 }
