@@ -229,6 +229,7 @@ namespace iRacingReplayOverlay
             SetField(driverInstance, "PitStopCount", driver.PitStopCount);
             SetField(driverInstance, "ShortName", driver.ShortName);
             SetField(driverInstance, "Position", driver.Position);
+            SetField(driverInstance, "DriverDetails", data.SessionData.DriverInfo.CompetingDrivers.FirstOrDefault(d => d.CarIdx == driver.CarIdx));
         }
 
         public void SetCamDriver()

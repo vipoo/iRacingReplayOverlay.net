@@ -42,7 +42,6 @@ namespace iRacingDirector.Plugin.Tester
             {
                 if (domain != null)
                 {
-                    System.Diagnostics.Trace.WriteLine("Unloading domain!");
                     frm.Hide();
                     AppDomain.Unload(domain);
                     domain = null;
@@ -53,8 +52,6 @@ namespace iRacingDirector.Plugin.Tester
                 {
                     ShadowCopyFiles = "true"
                 };
-
-                System.Diagnostics.Trace.WriteLine("Creating domain!");
 
                 domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
                 frm = (RemoteImageViewer)domain.CreateInstanceFromAndUnwrap(typeof(RemoteImageViewer).Assembly.Location, typeof(RemoteImageViewer).FullName);
