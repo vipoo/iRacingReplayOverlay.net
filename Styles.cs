@@ -11,7 +11,11 @@ namespace iRacingDirector.Plugin.StandardOverlays
         public static readonly Color LightYellow = Color.FromArgb(AlphaLevel, Color.LightYellow);
         public static readonly Color Yellow = Color.FromArgb(AlphaLevel, 150, 150, 0);
 
+        public static readonly Color RedBannerDark = Color.DarkRed;
+        public static readonly Color RedBannerLight = Color.DarkRed.BrightenBy(1.4);
+
         public static readonly Pen BlackPen = new Pen(Black);
+        public static readonly Pen ThickBlackPen = new Pen(Black, 2);
 
         public static readonly Brush BlackBrush = new SolidBrush(Color.Black);
         public static readonly Brush RedBrush = new SolidBrush(Color.Red);

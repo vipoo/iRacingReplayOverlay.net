@@ -21,31 +21,28 @@ namespace iRacingDirector.Plugin.StandardOverlays
             var results = EventData.Results;
 
             var offset = 5;
-            var pen = new Pen(Styles.Black, 2);
             Graphics.InRectangle(FlashCardLeft, r.Rectangle.Top, FlashCardWidth, 10)
-                .WithPen(pen)
-                .DrawLine(FlashCardLeft, r.Rectangle.Top - offset, FlashCardLeft + FlashCardWidth, r.Rectangle.Top - offset);
+                .WithPen(Styles.ThickBlackPen)
+                .DrawLine(FlashCardLeft + 8, r.Rectangle.Top - offset, FlashCardLeft + FlashCardWidth - 16, r.Rectangle.Top - offset);
 
             var LeaderTime = TimeSpan.FromSeconds(results[0].Time);
 
-            foreach (var racer in results.Skip(DriversPerPage * page).Take(DriversPerPage))
+            foreach (var racerResult in results.Skip(DriversPerPage * page).Take(DriversPerPage))
             {
-                var driver = EventData.CompetingDrivers[racer.CarIdx];
+                var driver = EventData.CompetingDrivers[racerResult.CarIdx];
 
-                var Gap = TimeSpan.FromSeconds(racer.Time) - LeaderTime; // Gap calculation
+                var Gap = TimeSpan.FromSeconds(racerResult.Time) - LeaderTime; // Gap calculation
                 if (Gap == TimeSpan.Zero) //For the leader we want to display the race duration
                     Gap = LeaderTime;
 
                 r.WithBrush(PreferredDriverNames.Any(d => d.UserName == driver.UserName) ? Styles.RedBrush : Styles.BlackBrush);
 
-                r
-                    .Center(cg => cg
-                            .DrawText(racer.Position.ToString())
-                            .AfterText(racer.Position.ToString())
+                r.Center(cg => cg
+                            .DrawText(racerResult.Position.ToString())
+                            .AfterText(racerResult.Position.ToString())
                             .MoveRight(1)
                             .WithFont(Settings.FontName, 16, FontStyle.Bold)
-                            .DrawText(racer.Position.Ordinal())
-                    )
+                            .DrawText(racerResult.Position.Ordinal()))
                     .ToRight(width: 190, left: 30)
                     .DrawText(Gap.ToString("hh\\:mm\\:ss\\.fff"))
                     .ToRight(width: 80, left: 20)
@@ -56,8 +53,8 @@ namespace iRacingDirector.Plugin.StandardOverlays
                 r = r.ToBelow();
 
                 Graphics.InRectangle(FlashCardLeft, r.Rectangle.Top, FlashCardWidth, 10)
-                    .WithPen(pen)
-                    .DrawLine(FlashCardLeft, r.Rectangle.Top - offset, FlashCardLeft + FlashCardWidth, r.Rectangle.Top - offset);
+                    .WithPen(Styles.ThickBlackPen)
+                    .DrawLine(FlashCardLeft + 8, r.Rectangle.Top - offset, FlashCardLeft + FlashCardWidth - 16, r.Rectangle.Top - offset);
             }
         }
     }

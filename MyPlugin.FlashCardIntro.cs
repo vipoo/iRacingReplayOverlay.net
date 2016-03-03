@@ -21,22 +21,19 @@ namespace iRacingDirector.Plugin.StandardOverlays
             var thisPageOfQualifyingResults = EventData.QualifyingResults.Skip(page * DriversPerPage).Take(DriversPerPage);
 
             var offset = 5;
-            var pen = new Pen(Styles.Black, 2);
             Graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
-                .WithPen(pen)
-                .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
+                .WithPen(Styles.ThickBlackPen)
+                .DrawLine(left + 8, r.Rectangle.Top - offset, left + totalWidth - 16, r.Rectangle.Top - offset);
 
             foreach (var qualifier in thisPageOfQualifyingResults)
             {
                 var driver = EventData.CompetingDrivers[qualifier.CarIdx];
-                r
-                    .Center(cg => cg
+                r.Center(cg => cg
                             .DrawText(qualifier.Position.ToString())
                             .AfterText(qualifier.Position.ToString())
                             .MoveRight(1)
                             .WithFont(Settings.FontName, 16, FontStyle.Bold)
-                            .DrawText(qualifier.Position.Ordinal())
-                    )
+                            .DrawText(qualifier.Position.Ordinal()))
                     .ToRight(width: 120, left: 30)
                     .DrawText(TimeSpan.FromSeconds(qualifier.FastestTime).ToString("mm\\:ss\\.ff"))
                     .ToRight(width: 60)
@@ -47,8 +44,8 @@ namespace iRacingDirector.Plugin.StandardOverlays
                 r = r.ToBelow();
 
                 Graphics.InRectangle(left, r.Rectangle.Top, totalWidth, 10)
-                    .WithPen(pen)
-                    .DrawLine(left, r.Rectangle.Top - offset, left + totalWidth, r.Rectangle.Top - offset);
+                    .WithPen(Styles.ThickBlackPen)
+                    .DrawLine(left + 8, r.Rectangle.Top - offset, left + totalWidth - 16, r.Rectangle.Top - offset);
             }
         }
     }

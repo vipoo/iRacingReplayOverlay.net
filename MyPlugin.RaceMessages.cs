@@ -11,16 +11,8 @@ namespace iRacingDirector.Plugin.StandardOverlays
         {
             if (MessageSet == null)
                 return;
-
-            Func<GraphicRect, GraphicRect> blueBox = rr =>
-               rr.WithBrush(Styles.TransparentLighterGray)
-               .WithPen(Styles.BlackPen)
-               .DrawRectangleWithBorder()
-               .WithBrush(Styles.BlackBrush)
-               .WithFont(Settings.FontName, 19, FontStyle.Bold)
-               .WithStringFormat(StringAlignment.Near);
-
-            var shiftFactor = (double)Math.Min(timeInSeconds - MessageSet.Time, 1d);
+            
+            var shiftFactor = Math.Min(timeInSeconds - MessageSet.Time, 1d);
             var offset = (int)(34 * shiftFactor);
 
             offset = offset + (MessageSet.Messages.Length - 1) * 34;
@@ -33,9 +25,14 @@ namespace iRacingDirector.Plugin.StandardOverlays
             Graphics.SetClip(new Rectangle(80, 900, 450, 34 + 34 + 34));
 
             foreach (var msg in MessageSet.Messages)
-                r = r.With(blueBox)
-                    .DrawText(" " + msg, 0, 5)
-                    .ToBelow();
+                r = r.WithBrush(Styles.TransparentLighterGray)
+                        .WithPen(Styles.BlackPen)
+                        .DrawRectangleWithBorder()
+                        .WithBrush(Styles.BlackBrush)
+                        .WithFontSizeOf(19)
+                        .WithStringFormat(StringAlignment.Near)
+                        .DrawText(" " + msg, 0, 5)
+                        .ToBelow();
 
             Graphics.ResetClip();
         }

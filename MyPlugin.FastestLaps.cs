@@ -11,27 +11,27 @@ namespace iRacingDirector.Plugin.StandardOverlays
         {
             if (FastLap == null)
                 return;
-            
-            Func<GraphicRect, GraphicRect> blueBox = rr =>
-               rr.WithBrush(Styles.TransparentLightBlueBrush)
-               .WithPen(Styles.BlackPen)
-               .DrawRectangleWithBorder()
-               .WithBrush(Styles.BlackBrush)
-               .WithFont(Settings.FontName, 20, FontStyle.Bold)
-               .WithStringFormat(StringAlignment.Center);
 
-            Graphics.InRectangle(1920 - 80 - 450, 900, 450, 34)
-                .With(blueBox)
-                .DrawText("New Fast Lap")
-                .ToBelow(width: 50)
-                .With(blueBox)
-                .DrawText(FastLap.Driver.CarNumber)
-                .ToRight(width: 250)
-                .With(blueBox)
-                .DrawText(FastLap.Driver.UserName)
+            const int left = 1920 - 80 - 450;
+            const int top = 900;
+
+            Graphics.InRectangle(left, top + 34, 400, 34)
+                .DrawRedGradiantBox();
+
+            Graphics.InRectangle(left, top + 34, 250, 34)
+                .WithBrush(Styles.WhiteBrush)
+                .WithFontSizeOf(19)
+                .WithStringFormat(StringAlignment.Center)
+                .DrawText(FastLap.Driver.UserName, topOffset: 5)
                 .ToRight(width: 150)
-                .With(blueBox)
-                .DrawText(TimeSpan.FromSeconds(FastLap.Time).ToString(@"mm\:ss\.fff"));
+                .DrawText(TimeSpan.FromSeconds(FastLap.Time).ToString(@"mm\:ss\.fff"), topOffset: 5);
+
+            Graphics.InRectangle(left, top, 400, 34)
+               .DrawWhiteGradiantBox()
+                .WithBrush(Styles.BlackBrush)
+                .WithFontSizeOf(18)
+                .WithStringFormat(StringAlignment.Center)
+                .DrawText("New Fast Lap", topOffset: 5);
         }
     }
 }

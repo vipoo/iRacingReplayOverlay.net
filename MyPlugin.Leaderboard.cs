@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace iRacingDirector.Plugin.StandardOverlays
@@ -8,98 +7,67 @@ namespace iRacingDirector.Plugin.StandardOverlays
     public partial class MyPlugin
     {
         public LeaderBoard LeaderBoard;
-
-        Func<GraphicRect, GraphicRect> SimpleWhiteBox(int fontSize = 20)
-        {
-            return rr => rr.WithLinearGradientBrush(Styles.WhiteSmoke, Styles.White, LinearGradientMode.BackwardDiagonal)
-            .WithPen(Styles.BlackPen)
-            .DrawRectangleWithBorder()
-            .WithBrush(Styles.BlackBrush)
-            .WithFont(Settings.FontName, fontSize, FontStyle.Bold)
-            .WithStringFormat(StringAlignment.Center);
-        }
-
-        public Func<GraphicRect, GraphicRect> ColourBox(Color color, int fontSize = 20)
-        {
-            return rr =>
-                rr.WithBrush(new SolidBrush(color))
-                    .WithPen(Styles.BlackPen)
-                    .DrawRectangleWithBorder()
-                    .WithFont(Settings.FontName, fontSize, FontStyle.Bold)
-                    .WithBrush(Styles.BlackBrush)
-                    .WithStringFormat(StringAlignment.Center);
-        }
+        const int leaderBoardWidth = 189;
+        const int headerFontSize = 12;
+        const int fontSize = 16;
+        const int offset = 4;
 
         void DrawLeaderboard(TimeSpan timeInSeconds)
         {
             var maxRows = LeaderBoard.LapCounter == null ? 22 : 21;
             var showPitStopCount = timeInSeconds.Minutes % 3 == 0 && timeInSeconds.Seconds < 30 && LeaderBoard.Drivers.Take(maxRows).Any(d => d.PitStopCount > 0);
-
             var numberOfDrivers = LeaderBoard.Drivers.Take(maxRows).Count();
 
+            var width = showPitStopCount ? leaderBoardWidth + 30 : leaderBoardWidth;
             var height = 35 + numberOfDrivers * 32 + 23;
             if (LeaderBoard.LapCounter != null)
                 height += 35;
 
-            var width = showPitStopCount ? 219 : 189;
-
             Graphics.InRectangle(80, 80, width, height)
-                .WithBrush(Styles.TransparentLightGray)
-                .WithPen(Styles.BlackPen)
-                .DrawRectangleWithBorder();
+                .DrawGrayBackground();
 
             var r = Graphics.InRectangle(80, 80, width, 35)
                 .WithBrush(Styles.BlackBrush)
-                .WithFont(Settings.FontName, 20, FontStyle.Bold)
+                .WithFontSizeOf(20)
                 .WithStringFormat(StringAlignment.Center);
-            
-           var headR = Graphics.InRectangle(80, 60, 189, 35)
-               .WithLinearGradientBrush(Color.DarkGray, Color.White, LinearGradientMode.Vertical)
-               .WithPen(Styles.BlackPen)
-               .MoveLeft(20)
-               .DrawRectangleWithBorder()
-               .WithBrush(Styles.BlackBrush)
-               .WithFont(Settings.FontName, 23, FontStyle.Bold)
-               .WithStringFormat(StringAlignment.Center)
-               .DrawText(LeaderBoard.RacePosition);
+
+            var headR = Graphics.InRectangle(60, 60, leaderBoardWidth, 35);
 
             if (LeaderBoard.LapCounter != null)
             {
                 r = r.ToBelow();
 
-                var darkRed = Color.DarkRed;
-                Func<byte, int> adjust = x => Math.Min((int)(x * 1.4), 255);
-                var lightRed = Color.FromArgb(adjust(darkRed.R), adjust(darkRed.G), adjust(darkRed.B));
                 headR.ToBelow()
-                    .WithLinearGradientBrush(darkRed, lightRed, LinearGradientMode.Vertical)
-                    .WithPen(Styles.BlackPen)
-                    .DrawRoundRectangle(5)
-                    .WithBrush(Styles.WhiteBrush)
+                    .DrawRedGradiantBox()
                     .WithFont(Settings.FontName, 18, FontStyle.Bold)
                     .WithStringFormat(StringAlignment.Near)
-                    .DrawText(LeaderBoard.LapCounter, topOffset: 5, leftOffset: 20);
+                    .DrawText(LeaderBoard.LapCounter, topOffset: 8, leftOffset: 20);
             }
 
-            r = r.ToBelow(width: 36, height: 23).MoveRight(8);
+            headR
+               .DrawWhiteGradiantBox()
+               .WithFontSizeOf(23)
+               .WithStringFormat(StringAlignment.Center)
+               .DrawText(LeaderBoard.RacePosition);
 
-            var headerSize = 12;
-            var size = 16;
-            var offset = 4;
+            r = r
+                .ToBelow(width: 36, height: 23)
+                .MoveRight(8);
 
             var n1 = r
-                .WithFontSize(headerSize)
+                .WithFontSize(headerFontSize)
                 .DrawText("Pos", topOffset: offset)
                 .ToRight(width: 58)
-                .WithFontSize(headerSize)
+                .WithFontSize(headerFontSize)
                 .DrawText("Num", topOffset: offset);
 
             if (showPitStopCount)
                 n1 = n1.ToRight(width: 30)
-                    .WithFontSize(headerSize)
+                    .WithFontSize(headerFontSize)
                     .DrawText("Pit", topOffset: offset);
 
             n1.ToRight(width: 95)
-                .WithFontSize(headerSize)
+                .WithFontSize(headerFontSize)
                 .WithStringFormat(StringAlignment.Near)
                 .DrawText("Name", leftOffset: 10, topOffset: offset);
 
@@ -110,7 +78,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
                 var position = d.Position != null ? d.Position.Value.ToString() : "";
 
                 var n = r
-                    .WithFontSize(size)
+                    .WithFontSize(fontSize)
                     .DrawText(position, topOffset: offset)
                     .ToRight(width: 58)
                     .DrawText(d.CarNumber, topOffset: offset);
@@ -118,17 +86,16 @@ namespace iRacingDirector.Plugin.StandardOverlays
                 var pitStopCount = d.PitStopCount != 0 ? d.PitStopCount.ToString() : " ";
                 if (showPitStopCount)
                     n = n.ToRight(width: 30)
-                    .WithFontSize(size)
+                    .WithFontSize(fontSize)
                     .DrawText(pitStopCount, topOffset: offset);
 
                 n.ToRight(width: 95)
-                    .WithFontSize(size)
+                    .WithFontSize(fontSize)
                     .WithStringFormat(StringAlignment.Near)
-                    .DrawText(d.ShortName.Substring(0, 4).ToUpper(), leftOffset: 10, topOffset: offset);
+                    .DrawText(d.ShortName.Substring(0, 4).ToUpper(), leftOffset: 10, topOffset: offset)
 
-                Graphics.InRectangle(r.Rectangle.Left, r.Rectangle.Top, n.Rectangle.Left + width, 10)
-                    .WithPen(new Pen(Styles.Black, 2))
-                    .DrawLine(r.Rectangle.Left, r.Rectangle.Top, n.Rectangle.Left + width, n.Rectangle.Top);
+                    .WithPen(Styles.ThickBlackPen)
+                    .DrawLine(r.Rectangle.Left, r.Rectangle.Top, r.Rectangle.Left + width - 16, n.Rectangle.Top);
             }
         }
     }

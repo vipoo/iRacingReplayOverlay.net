@@ -12,13 +12,13 @@ namespace iRacingDirector.Plugin.StandardOverlays
             var position = CamDriver.Position != null ? CamDriver.Position.Value.ToString() : "";
             var indicator = CamDriver.Position != null ? CamDriver.Position.Value.Ordinal() : "";
 
-            var offset = 2;
+            var offset = 5;
 
             Graphics.InRectangle(1920 / 2 - 440 / 2, 980, 70, 40)
                 .WithBrush(Styles.YellowBrush)
                 .WithPen(Styles.BlackPen)
                 .DrawRectangleWithBorder()
-                .WithFont(Settings.FontName, 24, FontStyle.Bold)
+                .WithFontSizeOf(24)
                 .WithBrush(Styles.BlackBrush)
                 .WithStringFormat(StringAlignment.Near)
                 .Center(cg => cg

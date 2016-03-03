@@ -68,8 +68,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(SupportProject)' == ''">
-    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.42, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.42\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.43, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.43\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="MyPlugin.FastestLaps.cs" />
     <Compile Include="MyPlugin.FlashCardOutro.cs" />
+    <Compile Include="MyPlugin.Extensions.cs" />
     <Compile Include="MyPlugin.RaceMessages.cs" />
     <Compile Include="MyPlugin.DriverCamera.cs" />
     <Compile Include="MyPlugin.FlashCardIntro.cs" />
