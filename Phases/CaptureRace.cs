@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Win32;
 
@@ -90,6 +91,8 @@ namespace iRacingReplayOverlay.Phases
 
             videoCapture.Activate(workingFolder);
             var startTime = DateTime.Now;
+
+            overlayData.CapturedVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             foreach (var data in samples)
             {

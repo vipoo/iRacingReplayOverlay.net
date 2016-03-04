@@ -161,6 +161,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public List<RaceEvent> RaceEvents = new List<RaceEvent>();
         public double? TimeForOutroOverlay = null;
         public List<CapturedVideoFile> VideoFiles;
+        public string CapturedVersion = null;
 
         public void SaveTo(string fileName)
         {

@@ -36,7 +36,6 @@ namespace iRacingReplayOverlay
             {
                 var assName = Assembly.GetExecutingAssembly().GetName();
                 var version = assName.Version;
-                var name = assName.Name;
 
                 return version.ToString();
             }

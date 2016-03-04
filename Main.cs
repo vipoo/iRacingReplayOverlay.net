@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -368,6 +369,15 @@ namespace iRacingReplayOverlay
                     errorSourceVideoLabel.Visible = true;
                     VideoDetailLabel.Visible = false;
                     return;
+                }
+
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+                if (data.CapturedVersion != null && data.CapturedVersion != currentVersion)
+                {
+                    errorSourceVideoLabel.Text = "*Video was captured with version {0} of application.  It is recommended to transcode and capture using the same version.  Transcoding may not work.".F(data.CapturedVersion);
+                    errorSourceVideoLabel.Visible = true;
+                    VideoDetailLabel.Visible = false;
                 }
 
                 var details = VideoAttributes.For(fileName);
