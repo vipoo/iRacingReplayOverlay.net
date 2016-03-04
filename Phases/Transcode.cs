@@ -187,7 +187,7 @@ namespace iRacingReplayOverlay.Phases
                     if (sourceReaderExtra != null)
                     {
                         var introSourceReader = sourceReaderExtra.SourceReader;
-                        var mainReaders = AVOperations.Combine(readers.Skip(1).Select(r => r.SourceReader).ToArray());
+                        var mainReaders = AVOperations.Combine(readers.Skip(1).Select(r => r.SourceReader).ToArray(), Settings.Default.VideoSplitGap);
 
                         totalDuration += introSourceReader.Duration + mainReaders.Duration;
                         
@@ -196,7 +196,7 @@ namespace iRacingReplayOverlay.Phases
                     }
                     else
                     {
-                        var mainReaders = AVOperations.Combine(readers.Select(r => r.SourceReader).ToArray());
+                        var mainReaders = AVOperations.Combine(readers.Select(r => r.SourceReader).ToArray(), Settings.Default.VideoSplitGap);
 
                         totalDuration += mainReaders.Duration;
 

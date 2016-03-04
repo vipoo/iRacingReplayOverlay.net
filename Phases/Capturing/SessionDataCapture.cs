@@ -17,10 +17,6 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {

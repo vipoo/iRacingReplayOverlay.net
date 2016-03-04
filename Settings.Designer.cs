@@ -434,5 +434,20 @@ namespace iRacingReplayOverlay
                 this["PluginStoredSettings"] = value;
             }
         }
+
+        [UserScopedSetting]
+        [DebuggerNonUserCode]
+        [DefaultSettingValue("1.1")]
+        public double VideoSplitGap
+        {
+            get
+            {
+                return (double)this["VideoSplitGap"];
+            }
+            set
+            {
+                this["VideoSplitGap"] = value;
+            }
+        }
     }
 }

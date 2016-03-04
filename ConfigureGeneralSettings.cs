@@ -80,7 +80,10 @@ If not selected, then all battles can be selected, but your perferred drivers wi
 
             f.AddBlankRow();
             f.AddTimeField("Time to wait for IRacing to re-open", "The time after clicking 'Begin Capture', the application will wait, for iRacing to reload on the screen.  For larger replays or bigger tracks, you may need to increase this value. Default 6 seconds", "PeriodWaitForIRacingSwitch");
-            
+
+            f.AddBlankRow();
+            f.AddNumberField("Time lost between captured video file splits", "If your video capture software, split the captured file into multiple files, it may lose a slight amount of time between the files.  Assign this field to an estimate of the averge number of seconds lost between each captured video file", "VideoSplitGap");
+
             if (AwsKeys.HaveKeys)
             {
                 f.AddBlankRow();
