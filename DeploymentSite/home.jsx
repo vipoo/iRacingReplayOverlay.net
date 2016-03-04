@@ -16,23 +16,8 @@ export default React.createClass({
             <div className="jumbotron">
               <h1>iRacing Replay Director</h1>
               <p className="lead">Click here to download setup application</p>
-              <p><a className="btn btn-lg btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-replay-director/main/setup.exe" role="button">Install ...</a></p>
+              <p><a className="btn btn-lg btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-application-version-manager/release/setup.exe" role="button">Install ...</a></p>
               <p>Create short highlight videos of your favourite races!</p>
-            </div>
-
-            <div className="row marketing">
-              <div className="col-lg-12">
-               <table className="table">
-                  <thead><tr><th>Versioned Managed Stream *New Beta</th></tr></thead>
-                  <tbody>
-                  <tr><td style={{textAlign: "Center"}}><a className="btn btn-success" href="https://s3-ap-southeast-2.amazonaws.com/iracing-application-version-manager/release/setup.exe" role="button">Install ...</a></td></tr>
-                  <tr><td>
-                    <p>Installing with this system, allows you to switch between all available versions of iRacing Director, within the application.</p>
-                    <p>Try a new experimental version, then if you dont like, switch back to a previous stable version - within the application</p>
-                  </td></tr>
-                  </tbody>
-                </table>
-              </div>
             </div>
 
             <div className="row marketing">
