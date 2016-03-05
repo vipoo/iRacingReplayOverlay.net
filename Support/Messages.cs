@@ -67,10 +67,14 @@ namespace iRacingReplayOverlay.Support
 
         public override void Write(string message)
         {
+            if (message.StartsWith(INFO) || message.StartsWith(ERROR))
+                WriteInfo(message);
         }
 
         public override void WriteLine(string message)
         {
+            if (message.StartsWith(INFO) || message.StartsWith(ERROR))
+                WriteInfoLine(message);
         }
     }
 }

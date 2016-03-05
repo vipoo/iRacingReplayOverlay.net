@@ -25,6 +25,7 @@ using System.Linq;
 using iRacingSDK.Support;
 using System.Reflection;
 using System.Threading;
+using System.Diagnostics;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -43,7 +44,7 @@ namespace iRacingReplayOverlay.Phases
                     false,
                     BindingFlags.CreateInstance,
                     null,
-                    new object[] { gameDataFile, videoBitRate, audioBitRate, destFile, highlights, (Action<long, long>)hostArgs.ProgressReporter, (Func<bool>)hostArgs.IsAborted },
+                    new object[] { gameDataFile, videoBitRate, audioBitRate, destFile, highlights, (Action<long, long>)hostArgs.ProgressReporter, (Func<bool>)hostArgs.IsAborted, hostArgs.LogRepeater },
                     null,
                     null);
                 arg.Apply();
@@ -61,6 +62,38 @@ namespace iRacingReplayOverlay.Phases
         }
     }
 
+    public class SubDomainLogListener : TraceListener
+    {
+        LogRepeater logRepeater;
+        public SubDomainLogListener(LogRepeater logRepeater)
+        {
+            this.logRepeater = logRepeater;
+        }
+
+        public override void Write(string message)
+        {
+            logRepeater.Write(message);
+        }
+
+        public override void WriteLine(string message)
+        {
+            logRepeater.WriteLine(message);
+        }
+    }
+
+    public class LogRepeater : MarshalByRefObject
+    {
+        public void Write(string message)
+        {
+            Trace.Write(message);
+        }
+
+        public void WriteLine(string message)
+        {
+            Trace.WriteLine(message);
+        }
+    }
+
     public class TranscodeAndOverlayArguments : MarshalByRefObject
     {
         private int audioBitRate;
@@ -70,15 +103,19 @@ namespace iRacingReplayOverlay.Phases
         private Func<bool> _isAborted;
         private Action<long, long> _progressReporter;
         private int videoBitRate;
+        private LogRepeater logRepeater;
 
         public TranscodeAndOverlayArguments(Action<long, long> progressReporter, Func<bool> isAborted)
         {
+            //Constructed in main/host AppDomain
             this._progressReporter = progressReporter;
             this._isAborted = isAborted;
+            this.logRepeater = new LogRepeater();
         }
 
-        public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted)
+        public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted, LogRepeater logRepeater)
         {
+            //Constructed in subdomain
             this.gameDataFile = gameDataFile;
             this.videoBitRate = videoBitRate;
             this.audioBitRate = audioBitRate;
@@ -86,6 +123,9 @@ namespace iRacingReplayOverlay.Phases
             this.highlights = highlights;
             this._progressReporter = progressReporter;
             this._isAborted = isAborted;
+
+            var logger = new SubDomainLogListener(logRepeater);
+            Trace.Listeners.Add(logger);
         }
 
         public bool IsAborted()
@@ -98,6 +138,8 @@ namespace iRacingReplayOverlay.Phases
             if(_progressReporter != null)
                 _progressReporter(a, b);
         }
+
+        public LogRepeater LogRepeater { get { return logRepeater; } }
 
         public void Apply()
         {

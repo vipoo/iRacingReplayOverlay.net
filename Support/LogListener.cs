@@ -27,8 +27,6 @@ using System.Threading.Tasks;
 
 namespace iRacingReplayOverlay.Support
 {
-
-
     public class LogListener : TraceListener
     {
         static LogListener logFile;

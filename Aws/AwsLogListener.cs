@@ -14,15 +14,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Timers;
 
 namespace iRacingReplayOverlay
 {
     public class AwsLogListener : TraceListener
     {
+        static string phase = "General";
+        
         static Timer timer;
         static readonly BlockingCollection<InputLogEvent> items = new BlockingCollection<InputLogEvent>(100);
         static string trackingId = Settings.Default.TrackingID;
+        static string timeStamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm");
 
         protected override void Dispose(bool disposing)
         {
@@ -54,7 +58,9 @@ namespace iRacingReplayOverlay
         {
             get
             {
-                return trackingId.ToString();
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+                return "{0}-t-{1}-v-{2}-p-{3}".F(trackingId, timeStamp, currentVersion, phase);
             }
         }
 
@@ -135,6 +141,30 @@ namespace iRacingReplayOverlay
         public override void WriteLine(string message)
         {
             Write(message);
+        }
+
+        internal static void SetPhaseGeneral()
+        {
+            SetPhase("General");
+        }
+
+        internal static void SetPhaseTranscode()
+        {
+            SetPhase("Transcode");
+        }
+
+        internal static void SetPhaseCapture()
+        {
+            SetPhase("Capture");
+        }
+
+        static void SetPhase(string p)
+        {
+            if (phase != p)
+            {
+                phase = p;
+                timeStamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm");
+            }
         }
     }
 }

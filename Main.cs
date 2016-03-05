@@ -162,6 +162,7 @@ namespace iRacingReplayOverlay
             Trace.Listeners.Add(new MyListener(logMessagges.TraceMessage));
 
             LogListener.ToFile(GetDefaultLogFileName());
+            AwsLogListener.SetPhaseGeneral();
 
             new Task(LogSystemInformation).Start();
 
@@ -297,6 +298,7 @@ namespace iRacingReplayOverlay
             State = States.Transcoding;
 
             LogListener.ToFile(Path.ChangeExtension(sourceVideoTextBox.Text, "log"));
+            AwsLogListener.SetPhaseTranscode();
 
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED);
 
@@ -307,6 +309,7 @@ namespace iRacingReplayOverlay
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
                     LogListener.ToFile(GetDefaultLogFileName());
+                    AwsLogListener.SetPhaseGeneral();
                     NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS);
                 });
         }
@@ -439,6 +442,7 @@ namespace iRacingReplayOverlay
             State = States.CapturingGameData;
 
             LogListener.ToFile(workingFolderTextBox.Text + "\\capture.log");
+            AwsLogListener.SetPhaseCapture();
 
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_DISPLAY_REQUIRED);
 
@@ -465,6 +469,7 @@ namespace iRacingReplayOverlay
                     StateUpdated();
 
                     LogListener.ToFile(GetDefaultLogFileName());
+                    AwsLogListener.SetPhaseGeneral();
 
                     WindowState = FormWindowState.Minimized;
                     Show();
