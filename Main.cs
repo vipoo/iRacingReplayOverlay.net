@@ -371,11 +371,13 @@ namespace iRacingReplayOverlay
                     return;
                 }
 
+                errorSourceVideoLabel.Visible = false;
+
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
                 if (data.CapturedVersion != null && data.CapturedVersion != currentVersion)
                 {
-                    errorSourceVideoLabel.Text = "*Video was captured with version {0} of application.  It is recommended to transcode and capture using the same version.  Transcoding may not work.".F(data.CapturedVersion);
+                    errorSourceVideoLabel.Text = "*Video was captured with version {0}.\nIt is recommended to transcode and capture using the same version.\nTranscoding may not work.".F(data.CapturedVersion);
                     errorSourceVideoLabel.Visible = true;
                     VideoDetailLabel.Visible = false;
                 }
@@ -388,7 +390,6 @@ namespace iRacingReplayOverlay
                 audioBitRate.SelectedItem = Settings.Default.audioBitRate;
 
                 VideoDetailLabel.Text = "Frame Rate: {0}, Frame Size: {1}x{2}, Bit Rate: {3}Mb".F(details.FrameRate, details.FrameSize.Width, details.FrameSize.Height, details.BitRate == 0 ? "-- " : details.BitRate.ToString());
-                errorSourceVideoLabel.Visible = false;
                 VideoDetailLabel.Visible = true;
             }
             catch(Exception ex)
