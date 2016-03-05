@@ -40,8 +40,8 @@
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
   <ItemGroup Condition="!Exists('..\..\iRacingSDK.Net\iRacingSDK.csproj')">
-    <Reference Include="iRacingSDK, Version=1.0.0.34, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(PackagesFolder)iRacingSDK.1.0.0.34\lib\net40-client\iRacingSDK.dll</HintPath>
+    <Reference Include="iRacingSDK, Version=1.0.0.35, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)iRacingSDK.1.0.0.35\lib\net40-client\iRacingSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -68,8 +68,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(SupportProject)' == ''">
-    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.43, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.43\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.44, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.44\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
