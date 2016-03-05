@@ -178,7 +178,7 @@
     <Compile Include="Phases\Direction\RuleLastLapPeriod.cs" />
     <Compile Include="Phases\Direction\RuleVeto.cs" />
     <Compile Include="Phases\Direction\Support\Battle.cs" />
-    <Compile Include="Phases\IRacingReplay.OverlayRaceDataOntoVideo..cs" />
+    <Compile Include="Phases\IRacingReplay.OverlayRaceDataOntoVideo.cs" />
     <Compile Include="Phases\CaptureOpeningScenes.cs" />
     <Compile Include="Phases\Capturing\RemovalEdits.cs" />
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />

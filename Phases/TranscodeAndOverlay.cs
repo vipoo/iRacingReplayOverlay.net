@@ -50,7 +50,8 @@ namespace iRacingReplayOverlay.Phases
             }
             catch (Exception e)
             {
-                TraceDebug.WriteLine(e.Message);
+                TraceError.WriteLine(e.Message);
+                TraceError.WriteLine(e.StackTrace);
                 throw e;
             }
             finally
