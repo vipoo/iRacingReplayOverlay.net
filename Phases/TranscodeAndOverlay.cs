@@ -21,128 +21,92 @@ using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Transcoding;
 using MediaFoundation.Net;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Linq;
 using iRacingSDK.Support;
 using System.Reflection;
+using System.Threading;
 
 namespace iRacingReplayOverlay.Phases
 {
-    public partial class IRacingReplay
+    public class TranscodeAndOverlayMarshaled
     {
-        int videoBitRate;
-        int audioBitRate;
-        string destinationFile;
-        string destinationHighlightsFile;
-        string gameDataFile;
-
-        public void _WithEncodingOf(int videoBitRate, int audioBitRate)
+        public static void Apply(string name, string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, CancellationToken token)
         {
-            this.videoBitRate = videoBitRate;
-            this.audioBitRate = audioBitRate;
-        }
-
-        public void _WithOverlayFile(string overlayFileName)
-        {
-            destinationFile = Path.ChangeExtension(overlayFileName, "wmv");
-            destinationHighlightsFile = Path.ChangeExtension(overlayFileName, ".highlights.wmv");
-
-            gameDataFile = overlayFileName;
-        }
-
-        public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly, CancellationToken token)
-        {
-            var domain = AppDomain.CreateDomain("TranscodingDomain", null, new AppDomainSetup());
+            var domain = AppDomain.CreateDomain(name, null, new AppDomainSetup());
             try
             {
-                var a = new Arguments(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progress, completed, highlightOnly, token);
+                var hostArgs = new TranscodeAndOverlayArguments(progressReporter, () => token.IsCancellationRequested);
 
-                domain.DoCallBack(a.OverlayRaceDataOntoVideo);
+                var arg = (TranscodeAndOverlayArguments)domain.CreateInstanceFromAndUnwrap(
+                    typeof(TranscodeAndOverlayArguments).Assembly.Location,
+                    typeof(TranscodeAndOverlayArguments).FullName,
+                    false,
+                    BindingFlags.CreateInstance,
+                    null,
+                    new object[] { gameDataFile, videoBitRate, audioBitRate, destFile, highlights, (Action<long, long>)hostArgs.ProgressReporter, (Func<bool>)hostArgs.IsAborted },
+                    null,
+                    null);
+                arg.Apply();
+            }
+            catch (Exception e)
+            {
+                TraceDebug.WriteLine(e.Message);
+                throw e;
             }
             finally
             {
                 AppDomain.Unload(domain);
             }
         }
+    }
 
-        public class Arguments : MarshalByRefObject
+    public class TranscodeAndOverlayArguments : MarshalByRefObject
+    {
+        private int audioBitRate;
+        private string destFile;
+        private string gameDataFile;
+        private bool highlights;
+        private Func<bool> _isAborted;
+        private Action<long, long> _progressReporter;
+        private int videoBitRate;
+
+        public TranscodeAndOverlayArguments(Action<long, long> progressReporter, Func<bool> isAborted)
         {
-            string gameDataFile;
-            int videoBitRate;
-            int audioBitRate;
-            string destinationFile;
-            string destinationHighlightsFile;
-            Action<long, long> progressReporter;
-            Action completed;
-            bool highlightOnly;
-            readonly CancellationToken token;
-
-            public Arguments(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progressReporter, Action completed, bool highlightOnly, CancellationToken token)
-            {
-                this.gameDataFile = gameDataFile;
-                this.videoBitRate = videoBitRate;
-                this.audioBitRate = audioBitRate;
-                this.destinationHighlightsFile = destinationHighlightsFile;
-                this.destinationFile = destinationFile;
-                this.progressReporter = progressReporter;
-                this.completed = completed;
-                this.highlightOnly = highlightOnly;
-                this.token = token;
-            }
-
-            public void OverlayRaceDataOntoVideo()
-            {
-               __OverlayRaceDataOntoVideo(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progressReporter, completed, highlightOnly, token);
-            }
+            this._progressReporter = progressReporter;
+            this._isAborted = isAborted;
         }
 
-        public static void __OverlayRaceDataOntoVideo(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progress, Action completed, bool highlightOnly, CancellationToken token)
+        public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted)
         {
-            bool TranscodeFull = !highlightOnly;
+            this.gameDataFile = gameDataFile;
+            this.videoBitRate = videoBitRate;
+            this.audioBitRate = audioBitRate;
+            this.destFile = destFile;
+            this.highlights = highlights;
+            this._progressReporter = progressReporter;
+            this._isAborted = isAborted;
+        }
 
-            var transcodeHigh = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null, token));
-            var transcodeFull = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationFile, false, progress, token));
+        public bool IsAborted()
+        {
+            return _isAborted();
+        }
 
-            using (MFSystem.Start())
-            {
-                var waits = new List<Task>();
+        public void ProgressReporter(long a, long b)
+        {
+            if(_progressReporter != null)
+                _progressReporter(a, b);
+        }
 
-                transcodeHigh.Start();
-                waits.Add(transcodeHigh);
-
-                //Seem to have some kind of bug in MediaFoundation - where if two threads attempt to open source Readers to the same file, we get exception raised.
-                //To work around issue, delay the start of the second transcoder - so we dont have two threads opening at the same time.
-                if (TranscodeFull)
-                {
-                    Thread.Sleep(10000);
-                    transcodeFull.Start();
-                    waits.Add(transcodeFull);
-                }
-
-                Task.WaitAll(waits.ToArray());
-            }
-            completed();
+        public void Apply()
+        {
+            TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destFile, highlights, ProgressReporter, IsAborted);
         }
     }
 
-    public class TranscodeAndOverlay
+    public class TranscodeAndOverlay 
     {
-
-        readonly LeaderBoard leaderBoard;
-        long totalDuration;
-        readonly Action<long, long> progressReporter;
-
-        private TranscodeAndOverlay(LeaderBoard leaderBoard, Action<long, long> progressReporter )
-        {
-            this.leaderBoard = leaderBoard;
-            this.progressReporter = progressReporter;
-        }
-
-        public static void Apply(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, CancellationToken token)
+        public static void Apply(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted)
         {
             try
             {
@@ -156,7 +120,7 @@ namespace iRacingReplayOverlay.Phases
                     AudioBitRate = audioBitRate
                 };
 
-                new TranscodeAndOverlay(leaderBoard, progressReporter).Process(transcoder, highlights, progressReporter, token);
+                new TranscodeAndOverlay(leaderBoard, progressReporter).Process(transcoder, highlights, progressReporter, isAborted);
             }
             catch (Exception e)
             {
@@ -165,8 +129,18 @@ namespace iRacingReplayOverlay.Phases
                 throw e;
             }
         }
-        
-        void Process(Transcoder transcoder, bool highlights, Action<long, long> monitorProgress, CancellationToken token)
+
+        readonly LeaderBoard leaderBoard;
+        long totalDuration;
+        readonly Action<long, long> progressReporter;
+
+        private TranscodeAndOverlay(LeaderBoard leaderBoard, Action<long, long> progressReporter)
+        {
+            this.leaderBoard = leaderBoard;
+            this.progressReporter = progressReporter;
+        }
+
+        void Process(Transcoder transcoder, bool highlights, Action<long, long> monitorProgress, Func<bool> isAborted)
         {
             try
             {
@@ -191,7 +165,7 @@ namespace iRacingReplayOverlay.Phases
                         totalDuration += introSourceReader.Duration + mainReaders.Duration;
                         
                         AVOperations.StartConcat(introSourceReader, introOverlay,
-                            AVOperations.Concat(mainReaders, mainBodyOverlays, () => token.IsCancellationRequested), () => token.IsCancellationRequested);
+                            AVOperations.Concat(mainReaders, mainBodyOverlays, isAborted), isAborted);
                     }
                     else
                     {
@@ -199,7 +173,7 @@ namespace iRacingReplayOverlay.Phases
 
                         totalDuration += mainReaders.Duration;
 
-                        AVOperations.Concat(mainReaders, mainBodyOverlays, () => token.IsCancellationRequested)(0, 0);
+                        AVOperations.Concat(mainReaders, mainBodyOverlays, isAborted)(0, 0);
                     }
                 });
 

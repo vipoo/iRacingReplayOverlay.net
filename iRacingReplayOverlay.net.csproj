@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="Aws\AwsKey.cs" />
     <Compile Include="Aws\AwsLogListener.cs" />
+    <Compile Include="Phases\TranscodeAndOverlay.cs" />
     <Compile Include="PluginSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,7 +156,6 @@
     <Compile Include="Phases\Transcoding\FlashCardPaging.cs" />
     <Compile Include="Phases\Transcoding\VideoCut.cs" />
     <Compile Include="Phases\Transcoding\RaceHighlightEdits.cs" />
-    <Compile Include="Drawing\CenterGraphicRect.cs" />
     <Compile Include="LogMessages.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,7 +178,7 @@
     <Compile Include="Phases\Direction\RuleLastLapPeriod.cs" />
     <Compile Include="Phases\Direction\RuleVeto.cs" />
     <Compile Include="Phases\Direction\Support\Battle.cs" />
-    <Compile Include="Phases\Transcode.cs" />
+    <Compile Include="Phases\IRacingReplay.OverlayRaceDataOntoVideo..cs" />
     <Compile Include="Phases\CaptureOpeningScenes.cs" />
     <Compile Include="Phases\Capturing\RemovalEdits.cs" />
     <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
@@ -229,8 +229,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\Extensions.cs" />
-    <Compile Include="Drawing\GraphicRect.cs" />
-    <Compile Include="Drawing\GraphicsExtension.cs" />
     <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
     <Compile Include="Phases\Direction\ReplayControl.cs" />
     <Compile Include="Phases\Capturing\OverlayData.cs" />

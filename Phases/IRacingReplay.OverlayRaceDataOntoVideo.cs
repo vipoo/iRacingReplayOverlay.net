@@ -1,0 +1,79 @@
+﻿// This file is part of iRacingReplayOverlay.
+//
+// Copyright 2014 Dean Netherton
+// https://github.com/vipoo/iRacingReplayOverlay.net
+//
+// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+using MediaFoundation.Net;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace iRacingReplayOverlay.Phases
+{
+    public partial class IRacingReplay
+    {
+        int videoBitRate;
+        int audioBitRate;
+        string destinationFile;
+        string destinationHighlightsFile;
+        string gameDataFile;
+
+        public void _WithEncodingOf(int videoBitRate, int audioBitRate)
+        {
+            this.videoBitRate = videoBitRate;
+            this.audioBitRate = audioBitRate;
+        }
+
+        public void _WithOverlayFile(string overlayFileName)
+        {
+            destinationFile = Path.ChangeExtension(overlayFileName, "wmv");
+            destinationHighlightsFile = Path.ChangeExtension(overlayFileName, ".highlights.wmv");
+
+            gameDataFile = overlayFileName;
+        }
+
+        public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly, CancellationToken token)
+        {
+            bool TranscodeFull = !highlightOnly;
+
+            var transcodeHigh = new Task(() => TranscodeAndOverlayMarshaled.Apply("HighLights", gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null, token));
+            var transcodeFull = new Task(() => TranscodeAndOverlayMarshaled.Apply("Full", gameDataFile, videoBitRate, audioBitRate, destinationFile, false, progress, token));
+
+            using (MFSystem.Start())
+            {
+                var waits = new List<Task>();
+
+                transcodeHigh.Start();
+                waits.Add(transcodeHigh);
+
+                //Seem to have some kind of bug in MediaFoundation - where if two threads attempt to open source Readers to the same file, we get exception raised.
+                //To work around issue, delay the start of the second transcoder - so we dont have two threads opening at the same time.
+                if (TranscodeFull)
+                {
+                    Thread.Sleep(10000);
+                    transcodeFull.Start();
+                    waits.Add(transcodeFull);
+                }
+
+                Task.WaitAll(waits.ToArray());
+            }
+            completed();
+        }
+    }
+}
