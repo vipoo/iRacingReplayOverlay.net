@@ -287,6 +287,7 @@ namespace iRacingReplayOverlay
             // 
             // tabTranscoding
             // 
+            this.tabTranscoding.Controls.Add(this.transcodeProgressBar);
             this.tabTranscoding.Controls.Add(this.button2);
             this.tabTranscoding.Controls.Add(this.highlightVideoOnly);
             this.tabTranscoding.Controls.Add(this.VideoDetailLabel);
@@ -299,7 +300,6 @@ namespace iRacingReplayOverlay
             this.tabTranscoding.Controls.Add(this.label3);
             this.tabTranscoding.Controls.Add(this.sourceVideoTextBox);
             this.tabTranscoding.Controls.Add(this.transcodeCancelButton);
-            this.tabTranscoding.Controls.Add(this.transcodeProgressBar);
             this.tabTranscoding.Controls.Add(this.transcodeVideoButton);
             this.tabTranscoding.Location = new System.Drawing.Point(4, 30);
             this.tabTranscoding.Name = "tabTranscoding";
@@ -431,7 +431,7 @@ namespace iRacingReplayOverlay
             // 
             // transcodeProgressBar
             // 
-            this.transcodeProgressBar.Location = new System.Drawing.Point(23, 232);
+            this.transcodeProgressBar.Location = new System.Drawing.Point(23, 246);
             this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4);
             this.transcodeProgressBar.Maximum = 10000;
             this.transcodeProgressBar.Name = "transcodeProgressBar";

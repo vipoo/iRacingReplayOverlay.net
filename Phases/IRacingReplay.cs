@@ -17,14 +17,9 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using iRacingSDK;
 using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -125,12 +120,13 @@ namespace iRacingReplayOverlay.Phases
         public IRacingReplay OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightsOnly)
         {
             var context = SynchronizationContext.Current;
-
+            
             actions.Add(
                 () => _OverlayRaceDataOntoVideo(
                     (c, d) => context.Post(() => progress(c, d)),
                     () => context.Post(completed),
-                    highlightsOnly
+                    highlightsOnly,
+                    token
                 )
             );
             
@@ -145,17 +141,23 @@ namespace iRacingReplayOverlay.Phases
 
         bool requestAbort = false;
         Task backgrounTask = null;
+        private CancellationTokenSource cancellationTokenSource;
+        private CancellationToken token;
 
         public void RequestAbort()
         {
             requestAbort = true;
+            cancellationTokenSource.Cancel();
         }
 
         public IRacingReplay InTheBackground(Action<string> onComplete)
         {
             requestAbort = false;
             var context = SynchronizationContext.Current;
-            
+
+            cancellationTokenSource = new CancellationTokenSource();
+            token = cancellationTokenSource.Token;
+
             backgrounTask = new Task(() => {
 
                 try
@@ -163,7 +165,7 @@ namespace iRacingReplayOverlay.Phases
                     foreach (var action in actions)
                     {
                         action();
-                        if (requestAbort)
+                        if (token.IsCancellationRequested)
                             break;
                     }
 

@@ -54,15 +54,12 @@ namespace iRacingReplayOverlay.Phases
             gameDataFile = overlayFileName;
         }
 
-        public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly)
+        public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly, CancellationToken token)
         {
-            var myLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            var info = new AppDomainSetup();
-            var domain = AppDomain.CreateDomain("TranscodingDomain", null, info);
+            var domain = AppDomain.CreateDomain("TranscodingDomain", null, new AppDomainSetup());
             try
             {
-                var a = new Arguments(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progress, completed, highlightOnly);
+                var a = new Arguments(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progress, completed, highlightOnly, token);
 
                 domain.DoCallBack(a.OverlayRaceDataOntoVideo);
             }
@@ -82,8 +79,9 @@ namespace iRacingReplayOverlay.Phases
             Action<long, long> progressReporter;
             Action completed;
             bool highlightOnly;
+            readonly CancellationToken token;
 
-            public Arguments(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progressReporter, Action completed, bool highlightOnly)
+            public Arguments(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progressReporter, Action completed, bool highlightOnly, CancellationToken token)
             {
                 this.gameDataFile = gameDataFile;
                 this.videoBitRate = videoBitRate;
@@ -93,20 +91,21 @@ namespace iRacingReplayOverlay.Phases
                 this.progressReporter = progressReporter;
                 this.completed = completed;
                 this.highlightOnly = highlightOnly;
+                this.token = token;
             }
 
             public void OverlayRaceDataOntoVideo()
             {
-                __OverlayRaceDataOntoVideo(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progressReporter, completed, highlightOnly);
+               __OverlayRaceDataOntoVideo(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, destinationFile, progressReporter, completed, highlightOnly, token);
             }
         }
 
-        public static void __OverlayRaceDataOntoVideo(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progress, Action completed, bool highlightOnly)
+        public static void __OverlayRaceDataOntoVideo(string gameDataFile, int videoBitRate, int audioBitRate, string destinationHighlightsFile, string destinationFile, Action<long, long> progress, Action completed, bool highlightOnly, CancellationToken token)
         {
             bool TranscodeFull = !highlightOnly;
 
-            var transcodeHigh = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null));
-            var transcodeFull = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationFile, false, progress));
+            var transcodeHigh = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null, token));
+            var transcodeFull = new Task(() => TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destinationFile, false, progress, token));
 
             using (MFSystem.Start())
             {
@@ -143,7 +142,7 @@ namespace iRacingReplayOverlay.Phases
             this.progressReporter = progressReporter;
         }
 
-        public static void Apply(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter)
+        public static void Apply(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, CancellationToken token)
         {
             try
             {
@@ -157,7 +156,7 @@ namespace iRacingReplayOverlay.Phases
                     AudioBitRate = audioBitRate
                 };
 
-                new TranscodeAndOverlay(leaderBoard, progressReporter).Process(transcoder, highlights, progressReporter);
+                new TranscodeAndOverlay(leaderBoard, progressReporter).Process(transcoder, highlights, progressReporter, token);
             }
             catch (Exception e)
             {
@@ -167,7 +166,7 @@ namespace iRacingReplayOverlay.Phases
             }
         }
         
-        void Process(Transcoder transcoder, bool highlights, Action<long, long> monitorProgress)
+        void Process(Transcoder transcoder, bool highlights, Action<long, long> monitorProgress, CancellationToken token)
         {
             try
             {
@@ -192,7 +191,7 @@ namespace iRacingReplayOverlay.Phases
                         totalDuration += introSourceReader.Duration + mainReaders.Duration;
                         
                         AVOperations.StartConcat(introSourceReader, introOverlay,
-                            AVOperations.Concat(mainReaders, mainBodyOverlays));
+                            AVOperations.Concat(mainReaders, mainBodyOverlays, () => token.IsCancellationRequested), () => token.IsCancellationRequested);
                     }
                     else
                     {
@@ -200,7 +199,7 @@ namespace iRacingReplayOverlay.Phases
 
                         totalDuration += mainReaders.Duration;
 
-                        AVOperations.Concat(mainReaders, mainBodyOverlays)(0, 0);
+                        AVOperations.Concat(mainReaders, mainBodyOverlays, () => token.IsCancellationRequested)(0, 0);
                     }
                 });
 

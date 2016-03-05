@@ -27,7 +27,7 @@ using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
 {
-    public class SourceReaderExtra
+    public class SourceReaderExtra : IDisposable
     {
         public readonly string FileName;
         public readonly SourceReader SourceReader;
@@ -54,6 +54,11 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             return new SourceReaderExtra(this.FileName,  this.State,  reader);
         }
+
+        public void Dispose()
+        {
+            SourceReader.Dispose();
+        }
     }
     
     class Transcoder
@@ -77,12 +82,23 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             };
 
             var readers = VideoFiles.Select(f => f.CreateSourceReader(readWriteFactory, attributes)).ToArray();
-            var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes);
 
-            var writeToSink = ConnectStreams(readers, sinkWriter);
+            try
+            {
+                using (var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(DestinationFile, attributes))
+                {
+                    var writeToSink = ConnectStreams(readers, sinkWriter);
 
-            using (sinkWriter.BeginWriting())
-                process(readers, writeToSink);
+                    using (sinkWriter.BeginWriting())
+                        process(readers, writeToSink);
+                }
+            }
+            finally
+            {
+                if(readers != null)
+                    foreach (var r in readers)
+                        r.Dispose();
+            }
         }
 
         private ProcessSample ConnectStreams(IEnumerable<SourceReaderExtra> readers, SinkWriter sinkWriter)
