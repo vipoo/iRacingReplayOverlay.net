@@ -488,6 +488,7 @@ namespace iRacingReplayOverlay
             this.configurePluginsButton.TabIndex = 38;
             this.configurePluginsButton.Text = "Configure Plugins";
             this.configurePluginsButton.UseVisualStyleBackColor = true;
+            this.configurePluginsButton.Visible = false;
             this.configurePluginsButton.Click += new System.EventHandler(this.configurePluginsButton_Click);
             // 
             // Main
