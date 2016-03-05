@@ -30,8 +30,8 @@ namespace iRacingDirector.Plugin.Tester
             var ex = e.ExceptionObject as Exception;
             if (ex != null)
             {
-                TraceInfo.WriteLine(ex.Message);
-                Trace.WriteLine(ex.StackTrace, "DEBUG");
+                Trace.WriteLine(ex.Message, "ERROR");
+                Trace.WriteLine(ex.StackTrace, "ERROR");
             }
             else
             {
@@ -42,8 +42,8 @@ namespace iRacingDirector.Plugin.Tester
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             MessageBox.Show("An error occured.  Details have been logged.\n\n{0}".F(e.Exception.Message), "Error");
-            TraceInfo.WriteLine(e.Exception.Message);
-            Trace.WriteLine(e.Exception.StackTrace, "DEBUG");
+            Trace.WriteLine(e.Exception.Message, "ERROR");
+            Trace.WriteLine(e.Exception.StackTrace, "ERROR");
         }
     }
 }

@@ -108,8 +108,8 @@ namespace iRacingReplayOverlay
             }
             catch(Exception ee)
             {
-                TraceInfo.WriteLine(ee.Message);
-                TraceDebug.WriteLine(ee.StackTrace);
+                TraceError.WriteLine(ee.Message);
+                TraceError.WriteLine(ee.StackTrace);
             }
             finally
             {

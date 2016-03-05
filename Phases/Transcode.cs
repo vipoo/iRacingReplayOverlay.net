@@ -161,8 +161,8 @@ namespace iRacingReplayOverlay.Phases
             }
             catch (Exception e)
             {
-                TraceDebug.WriteLine(e.Message);
-                TraceDebug.WriteLine(e.StackTrace);
+                TraceError.WriteLine(e.Message);
+                TraceError.WriteLine(e.StackTrace);
                 throw e;
             }
         }
@@ -210,8 +210,8 @@ namespace iRacingReplayOverlay.Phases
             }
             catch (Exception e)
             {
-                TraceDebug.WriteLine(e.Message);
-                TraceDebug.WriteLine(e.StackTrace);
+                TraceError.WriteLine(e.Message);
+                TraceError.WriteLine(e.StackTrace);
                 throw e;
             }
         }

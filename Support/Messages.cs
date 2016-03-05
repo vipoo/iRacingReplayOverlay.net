@@ -26,6 +26,7 @@ namespace iRacingReplayOverlay.Support
     public class MyListener : TraceListener
     {
         public const string INFO = "INFO";
+        public const string ERROR = "ERROR";
 
         TextBox textBox;
         SynchronizationContext context;
@@ -38,14 +39,14 @@ namespace iRacingReplayOverlay.Support
 
         public override void Write(string message, string category)
         {
-            if (category == INFO)
+            if (category == INFO || category == ERROR)
                 WriteInfo(message);
         }
 
         public override void WriteLine(string message, string category)
         {
-            if (category == INFO)
-                WriteInfoLine(message);
+            if (category == INFO || category == ERROR)
+                    WriteInfoLine(message);
         }
 
         public void WriteInfo(string message)

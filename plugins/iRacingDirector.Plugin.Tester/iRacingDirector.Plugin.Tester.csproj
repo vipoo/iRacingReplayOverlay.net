@@ -46,8 +46,8 @@
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
   <ItemGroup Condition="!Exists('..\..\..\iRacingSDK.Net\iRacingSDK.csproj')">
-    <Reference Include="iRacingSDK, Version=1.0.0.34, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(PackagesFolder)iRacingSDK.1.0.0.34\lib\net40-client\iRacingSDK.dll</HintPath>
+    <Reference Include="iRacingSDK, Version=1.0.0.35, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)iRacingSDK.1.0.0.35\lib\net40-client\iRacingSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
