@@ -51,6 +51,8 @@ namespace iRacingReplayOverlay
 
             listener = new MyListener(this.TraceMessageTextBox);
             Trace.Listeners.Add(listener);
+
+            sourceFilenameTextBox_TextChanged(null, null);
         }
 
         void TestVideoCapture_FormClosed(object sender, FormClosedEventArgs e)
@@ -143,6 +145,12 @@ namespace iRacingReplayOverlay
                 TraceInfo.WriteLine("Video converted.  Review the video file {0} to confirm it looks OK.", transcoder.DestinationFile);
                 TraceInfo.WriteLine("Success!");
             }
+        }
+
+        private void sourceFilenameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var exists = File.Exists(sourceFilenameTextBox.Text);
+            this.testVideoCaptureButton.Enabled = exists;
         }
     }
 }

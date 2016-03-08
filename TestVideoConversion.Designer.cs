@@ -97,6 +97,7 @@
             this.sourceFilenameTextBox.Name = "sourceFilenameTextBox";
             this.sourceFilenameTextBox.Size = new System.Drawing.Size(327, 24);
             this.sourceFilenameTextBox.TabIndex = 51;
+            this.sourceFilenameTextBox.TextChanged += new System.EventHandler(this.sourceFilenameTextBox_TextChanged);
             // 
             // pictureBox3
             // 
