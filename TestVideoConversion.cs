@@ -47,7 +47,7 @@ namespace iRacingReplayOverlay
 
         void TestVideoCapture_Load(object sender, EventArgs e)
         {
-            sourceFilenameTextBox.Text = Settings.Default.WorkingFolder;
+            sourceFilenameTextBox.Text = "";
 
             listener = new MyListener(this.TraceMessageTextBox);
             Trace.Listeners.Add(listener);
