@@ -125,7 +125,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             try
             {
-                var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsAudio);
+                var sourceStream = sourceReader.Streams.FirstOrDefault(s => s.IsSelected && s.NativeMediaType.IsAudio);
+
+                if (sourceStream.IsNull)
+                    throw new Exception("Unable to find a compatible audio track within file.  Its is recommend you use PCM encoding for audio capture.");
 
                 sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM };
 
@@ -141,7 +144,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             try
             {
-                var sourceStream = sourceReader.Streams.First(s => s.IsSelected && s.NativeMediaType.IsVideo);
+                var sourceStream = sourceReader.Streams.FirstOrDefault(s => s.IsSelected && s.NativeMediaType.IsVideo);
+
+                if (sourceStream.IsNull)
+                    throw new Exception("Unable to find a compatible video track within file.");
 
                 sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
 

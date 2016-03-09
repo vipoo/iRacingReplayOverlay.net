@@ -55,8 +55,8 @@
       <HintPath>packages\iRacingSDK.1.0.0.35\lib\net40-client\iRacingSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MediaFoundation.Net, Version=2.0.0.29, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\MediaFoundation.Net.2.0.0.29\lib\net35-client\MediaFoundation.Net.dll</HintPath>
+    <Reference Include="MediaFoundation.Net, Version=2.0.0.30, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>packages\MediaFoundation.Net.2.0.0.30\lib\net35-client\MediaFoundation.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
