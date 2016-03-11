@@ -16,17 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
-using iRacingReplayOverlay.Phases.Transcoding;
 using iRacingReplayOverlay.Support;
 using iRacingReplayOverlay.Video;
 using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -183,22 +179,26 @@ namespace iRacingReplayOverlay
         {
             using (MFSystem.Start())
             {
-                var transcoder = new Transcoder
-                {
-                    VideoFiles = new [] { new SourceReaderExtra(filename, null)},
-                    DestinationFile = Path.ChangeExtension(filename, "wmv"),
-                    VideoBitRate = 5000000,
-                    AudioBitRate = 48000/8
-                };
+                var details = VideoAttributes.TestFor(filename);
+
+                TraceInfo.WriteLine("Frame Rate: {0}, Frame Size: {1}x{2}, Video: {3} @ {4}Mbs, Audio: {5}, {6}Khz @ {7}Kbs, ".F
+                        (details.FrameRate,
+                        details.FrameSize.Width,
+                        details.FrameSize.Height,
+                        details.VideoEncoding,
+                        details.BitRate == 0 ? "-- " : details.BitRate.ToString(),
+                        details.AudioEncoding,
+                        details.AudioSamplesPerSecond / 1000,
+                        details.AudioAverageBytesPerSecond / 1000));
 
                 TraceInfo.WriteLine("Begining video re-encoding.");
 
-                transcoder.ProcessVideo((readers, saveToSink) =>
+                details.Transcoder.ProcessVideo((readers, saveToSink) =>
                 {
                     readers.First().SourceReader.Samples(AVOperations.FadeIn(saveToSink));
                 });
 
-                TraceInfo.WriteLine("Video converted.  Review the video file {0} to confirm it looks OK.", transcoder.DestinationFile);
+                TraceInfo.WriteLine("Video converted.  Review the video file {0} to confirm it looks OK.", details.Transcoder.DestinationFile);
                 TraceInfo.WriteLine("Success!");
             }
         }

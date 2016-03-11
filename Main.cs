@@ -76,7 +76,6 @@ namespace iRacingReplayOverlay
 
         void StateUpdated()
         {
-
             var trackCamerasDefined =
                 Settings.Default.trackCameras != null &&
                 lastSession != null &&
@@ -129,6 +128,36 @@ namespace iRacingReplayOverlay
                     sourceVideoButton.Enabled = false;
                     break;
             }
+        }
+
+        string transcodeMessageFormatDetails;
+        string transcodeMessageErrorDetails;
+        string transcodeMessageWarningDetails;
+
+        bool isEmpty(string s)
+        {
+            return s == null || s == "";
+        }
+
+        void SetTanscodeMessage(string formatDetails = null, string warningDetails = null, string errorDetails = null)
+        {
+            if (formatDetails != null)
+                transcodeMessageFormatDetails = formatDetails;
+
+            if (warningDetails != null)
+                transcodeMessageWarningDetails = warningDetails;
+
+            if (errorDetails != null)
+                transcodeMessageErrorDetails = errorDetails;
+
+            var message = transcodeMessageFormatDetails;
+            if(!isEmpty(transcodeMessageWarningDetails))
+                message = isEmpty(message) ? transcodeMessageWarningDetails : "{0}\n{1}".F(message, transcodeMessageWarningDetails);
+
+            if (!isEmpty(transcodeMessageErrorDetails))
+                message = isEmpty(message) ? transcodeMessageErrorDetails : "{0}\n{1}".F(message, transcodeMessageErrorDetails);
+            
+            VideoDetailLabel.Text = message;
         }
 
         public Main()
@@ -345,19 +374,14 @@ namespace iRacingReplayOverlay
             OnGameDataFileChanged();
             audioBitRate.Items.Clear();
 
-            if (sourceVideoTextBox.Text.Trim() == "")
-            {
-                errorSourceVideoLabel.Visible = false;
-                VideoDetailLabel.Visible = false;
-                return;
+            SetTanscodeMessage("", "", "");
 
-            }
+            if (sourceVideoTextBox.Text.Trim() == "")
+                return;
 
             if (!File.Exists(sourceVideoTextBox.Text) ) 
             {
-                errorSourceVideoLabel.Text = "*File does not exist";
-                errorSourceVideoLabel.Visible = true;
-                VideoDetailLabel.Visible = false;
+                SetTanscodeMessage(errorDetails: "*File does not exist");
                 return;
             }
             
@@ -368,38 +392,38 @@ namespace iRacingReplayOverlay
 
                 if (!File.Exists(fileName))
                 {
-                    errorSourceVideoLabel.Text = "*Captured video does not exist: " + fileName;
-                    errorSourceVideoLabel.Visible = true;
-                    VideoDetailLabel.Visible = false;
+                    SetTanscodeMessage(errorDetails: "*Captured video does not exist: " + fileName);
                     return;
                 }
-
-                errorSourceVideoLabel.Visible = false;
-
+                
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
                 if (data.CapturedVersion != null && data.CapturedVersion != currentVersion)
                 {
-                    errorSourceVideoLabel.Text = "*Video was captured with version {0}.\nIt is recommended to transcode and capture using the same version.\nTranscoding may not work.".F(data.CapturedVersion);
-                    errorSourceVideoLabel.Visible = true;
-                    VideoDetailLabel.Visible = false;
+                    SetTanscodeMessage(warningDetails: "*Video was captured with version {0}.\nIt is recommended to transcode and capture using the same version.\nTranscoding may not work.".F(data.CapturedVersion));
                 }
 
-                var details = VideoAttributes.For(fileName);
+                var details = VideoAttributes.TestFor(data);
 
                 foreach (var d in details.SupportedAudioBitRates)
                     audioBitRate.Items.Add(d);
 
                 audioBitRate.SelectedItem = Settings.Default.audioBitRate;
 
-                VideoDetailLabel.Text = "Frame Rate: {0}, Frame Size: {1}x{2}, Bit Rate: {3}Mb".F(details.FrameRate, details.FrameSize.Width, details.FrameSize.Height, details.BitRate == 0 ? "-- " : details.BitRate.ToString());
-                VideoDetailLabel.Visible = true;
+                SetTanscodeMessage(formatDetails: "Frame Rate: {0}, Frame Size: {1}x{2}, Video: {3} @ {4}Mbs, Audio: {5}, {6}Khz @ {7}Kbs, ".F
+                        (details.FrameRate,
+                        details.FrameSize.Width,
+                        details.FrameSize.Height,
+                        details.VideoEncoding,
+                        details.BitRate == 0 ? "-- " : details.BitRate.ToString(),
+                        details.AudioEncoding,
+                        details.AudioSamplesPerSecond / 1000,
+                        details.AudioAverageBytesPerSecond / 1000), 
+                    errorDetails: details.ErrorMessage);
             }
             catch(Exception ex)
             {
-                errorSourceVideoLabel.Text = "*Error reading the video file. {0}".F(ex.Message);
-                errorSourceVideoLabel.Visible = true;
-                VideoDetailLabel.Visible = false;
+                SetTanscodeMessage(errorDetails: "*Error reading the video file. {0}".F(ex.Message));
 
                 lookForAudioBitRates = new System.Windows.Forms.Timer();
                 lookForAudioBitRates.Tick += sourceVideoTextBox_TextChanged;
@@ -410,6 +434,9 @@ namespace iRacingReplayOverlay
 
         bool IsReadyForTranscoding()
         {
+            if (transcodeMessageErrorDetails != null && transcodeMessageErrorDetails != "")
+                return false;
+
             if (sourceVideoTextBox.Text == null || sourceVideoTextBox.Text.Length == 0)
                 return false;
 

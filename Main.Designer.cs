@@ -65,6 +65,7 @@ namespace iRacingReplayOverlay
             this.label5 = new System.Windows.Forms.Label();
             this.workingFolderTextBox = new System.Windows.Forms.TextBox();
             this.tabTranscoding = new System.Windows.Forms.TabPage();
+            this.transcodeProgressBar = new System.Windows.Forms.ProgressBar();
             this.button2 = new System.Windows.Forms.Button();
             this.highlightVideoOnly = new System.Windows.Forms.CheckBox();
             this.VideoDetailLabel = new System.Windows.Forms.Label();
@@ -72,12 +73,10 @@ namespace iRacingReplayOverlay
             this.label4 = new System.Windows.Forms.Label();
             this.videoBitRate = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.errorSourceVideoLabel = new System.Windows.Forms.Label();
             this.sourceVideoButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.sourceVideoTextBox = new System.Windows.Forms.TextBox();
             this.transcodeCancelButton = new System.Windows.Forms.Button();
-            this.transcodeProgressBar = new System.Windows.Forms.ProgressBar();
             this.transcodeVideoButton = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -295,7 +294,6 @@ namespace iRacingReplayOverlay
             this.tabTranscoding.Controls.Add(this.label4);
             this.tabTranscoding.Controls.Add(this.videoBitRate);
             this.tabTranscoding.Controls.Add(this.label1);
-            this.tabTranscoding.Controls.Add(this.errorSourceVideoLabel);
             this.tabTranscoding.Controls.Add(this.sourceVideoButton);
             this.tabTranscoding.Controls.Add(this.label3);
             this.tabTranscoding.Controls.Add(this.sourceVideoTextBox);
@@ -308,6 +306,15 @@ namespace iRacingReplayOverlay
             this.tabTranscoding.TabIndex = 1;
             this.tabTranscoding.Text = "Video Encoding";
             this.tabTranscoding.UseVisualStyleBackColor = true;
+            // 
+            // transcodeProgressBar
+            // 
+            this.transcodeProgressBar.Location = new System.Drawing.Point(23, 246);
+            this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4);
+            this.transcodeProgressBar.Maximum = 10000;
+            this.transcodeProgressBar.Name = "transcodeProgressBar";
+            this.transcodeProgressBar.Size = new System.Drawing.Size(700, 32);
+            this.transcodeProgressBar.TabIndex = 31;
             // 
             // button2
             // 
@@ -337,9 +344,9 @@ namespace iRacingReplayOverlay
             // VideoDetailLabel
             // 
             this.VideoDetailLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.VideoDetailLabel.Location = new System.Drawing.Point(134, 157);
+            this.VideoDetailLabel.Location = new System.Drawing.Point(7, 157);
             this.VideoDetailLabel.Name = "VideoDetailLabel";
-            this.VideoDetailLabel.Size = new System.Drawing.Size(464, 21);
+            this.VideoDetailLabel.Size = new System.Drawing.Size(580, 121);
             this.VideoDetailLabel.TabIndex = 40;
             // 
             // audioBitRate
@@ -378,17 +385,6 @@ namespace iRacingReplayOverlay
             this.label1.TabIndex = 21;
             this.label1.Text = "Video Bitrate (Mbs):";
             // 
-            // errorSourceVideoLabel
-            // 
-            this.errorSourceVideoLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.errorSourceVideoLabel.Location = new System.Drawing.Point(131, 182);
-            this.errorSourceVideoLabel.Name = "errorSourceVideoLabel";
-            this.errorSourceVideoLabel.Size = new System.Drawing.Size(607, 82);
-            this.errorSourceVideoLabel.TabIndex = 30;
-            this.errorSourceVideoLabel.Text = "*Unable to transcode this video, as there is no associated captured game data (cs" +
-    "v file name based on the name of the source input video)";
-            this.errorSourceVideoLabel.Visible = false;
-            // 
             // sourceVideoButton
             // 
             this.sourceVideoButton.Location = new System.Drawing.Point(674, 127);
@@ -404,15 +400,15 @@ namespace iRacingReplayOverlay
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(4, 128);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(94, 18);
+            this.label3.Size = new System.Drawing.Size(106, 18);
             this.label3.TabIndex = 26;
-            this.label3.Text = "Source Video:";
+            this.label3.Text = "Replay Capture:";
             // 
             // sourceVideoTextBox
             // 
-            this.sourceVideoTextBox.Location = new System.Drawing.Point(134, 128);
+            this.sourceVideoTextBox.Location = new System.Drawing.Point(116, 128);
             this.sourceVideoTextBox.Name = "sourceVideoTextBox";
-            this.sourceVideoTextBox.Size = new System.Drawing.Size(534, 26);
+            this.sourceVideoTextBox.Size = new System.Drawing.Size(552, 26);
             this.sourceVideoTextBox.TabIndex = 27;
             this.sourceVideoTextBox.TextChanged += new System.EventHandler(this.sourceVideoTextBox_TextChanged);
             // 
@@ -428,15 +424,6 @@ namespace iRacingReplayOverlay
             this.transcodeCancelButton.UseVisualStyleBackColor = true;
             this.transcodeCancelButton.Visible = false;
             this.transcodeCancelButton.Click += new System.EventHandler(this.transcodeCancel_Click);
-            // 
-            // transcodeProgressBar
-            // 
-            this.transcodeProgressBar.Location = new System.Drawing.Point(23, 246);
-            this.transcodeProgressBar.Margin = new System.Windows.Forms.Padding(4);
-            this.transcodeProgressBar.Maximum = 10000;
-            this.transcodeProgressBar.Name = "transcodeProgressBar";
-            this.transcodeProgressBar.Size = new System.Drawing.Size(700, 32);
-            this.transcodeProgressBar.TabIndex = 31;
             // 
             // transcodeVideoButton
             // 
@@ -546,7 +533,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox videoBitRate;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label errorSourceVideoLabel;
         private System.Windows.Forms.Button sourceVideoButton;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox sourceVideoTextBox;

@@ -71,6 +71,39 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
         static Guid TARGET_VIDEO_FORMAT = MFMediaType.WMV3;
 
+        internal string TestVideoConversion()
+        {
+            var readWriteFactory = new ReadWriteClassFactory();
+
+            var attributes = new Attributes
+            {
+                ReadWriterEnableHardwareTransforms = true,
+                SourceReaderEnableVideoProcessing = true
+            };
+
+            var readers = VideoFiles.Select(f => f.CreateSourceReader(readWriteFactory, attributes)).ToArray();
+
+            try
+            {
+                using (var sinkWriter = readWriteFactory.CreateSinkWriterFromURL("tmp-test.wmv", attributes))
+                {
+                    var writeToSink = ConnectStreams(readers, sinkWriter);
+                }
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+            finally
+            {
+                if (readers != null)
+                    foreach (var r in readers)
+                        r.Dispose();
+            }
+
+            return null;
+        }
+
         internal void ProcessVideo(Action<IEnumerable<SourceReaderExtra>, ProcessSample> process)
         {
             var readWriteFactory = new ReadWriteClassFactory();
@@ -128,7 +161,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var sourceStream = sourceReader.Streams.FirstOrDefault(s => s.IsSelected && s.NativeMediaType.IsAudio);
 
                 if (sourceStream.IsNull)
-                    throw new Exception("Unable to find a compatible audio track within file.  Its is recommend you use PCM encoding for audio capture.");
+                    throw new Exception("Unable to find audio track within file.");
 
                 sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Audio, SubType = MFMediaType.PCM };
 
@@ -147,7 +180,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 var sourceStream = sourceReader.Streams.FirstOrDefault(s => s.IsSelected && s.NativeMediaType.IsVideo);
 
                 if (sourceStream.IsNull)
-                    throw new Exception("Unable to find a compatible video track within file.");
+                    throw new Exception("Unable to find video track within file.");
 
                 sourceStream.CurrentMediaType = new MediaType() { MajorType = MFMediaType.Video, SubType = MFMediaType.RGB32 };
 
@@ -174,7 +207,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var availableTypes = MFSystem.TranscodeGetAudioOutputAvailableTypes(TARGET_AUDIO_FORMAT, MFT_EnumFlag.All);
 
             var type = availableTypes
-                .FirstOrDefault(t => t.AudioNumberOfChannels == numberOfChannels &&
+                .FirstOrDefault(t => 
                     t.AudioSamplesPerSecond == sampleRate &&
                     t.AudioAverageBytesPerSecond == AudioBitRate);
 
