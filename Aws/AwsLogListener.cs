@@ -71,10 +71,10 @@ namespace iRacingReplayOverlay
 
         void Writer(object sender, ElapsedEventArgs e)
         {
+            var logEvents = new List<InputLogEvent>();
+
             try
             {
-                var logEvents = new List<InputLogEvent>();
-
                 var more = true;
                 while (more)
                 {
@@ -94,7 +94,11 @@ namespace iRacingReplayOverlay
                 {
                     var request = new PutLogEventsRequest(AwsKeys.GroupName, LogStreamName, logEvents);
 
-                    var describeLogStreamsRequest = new DescribeLogStreamsRequest(AwsKeys.GroupName);
+                    var describeLogStreamsRequest = new DescribeLogStreamsRequest(AwsKeys.GroupName)
+                    {
+                        LogStreamNamePrefix = trackingId,
+                        Descending = true
+                    };
                     var describeLogStreamsResponse = logs.DescribeLogStreams(describeLogStreamsRequest);
                     var logStreams = describeLogStreamsResponse.LogStreams;
                     var logStream = logStreams.FirstOrDefault(ls => ls.LogStreamName == LogStreamName);
@@ -114,13 +118,26 @@ namespace iRacingReplayOverlay
             }
             catch(Exception ee)
             {
-                TraceError.WriteLine(ee.Message);
-                TraceError.WriteLine(ee.StackTrace);
+                AttempToRestoreErrors(logEvents, ee);
             }
             finally
             {
                 if(timer != null)
                     timer.Start();
+            }
+        }
+
+        private void AttempToRestoreErrors(List<InputLogEvent> logEvents, Exception e)
+        {
+            try
+            {
+                var message = "Error Logging to Aws.\n{0}\n{1}".F(e.Message, e.StackTrace);
+                items.TryAdd(new InputLogEvent { Message = message, Timestamp = DateTime.Now });
+                foreach (var le in logEvents)
+                    items.TryAdd(le);
+            }
+            catch(Exception)
+            {
             }
         }
 
