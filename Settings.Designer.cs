@@ -46,21 +46,6 @@ namespace iRacingReplayOverlay
 
         [UserScopedSetting]
         [DebuggerNonUserCode]
-        [DefaultSettingValue("48000")]
-        public int audioBitRate
-        {
-            get
-            {
-                return (int)this["audioBitRate"];
-            }
-            set
-            {
-                this["audioBitRate"] = value;
-            }
-        }
-
-        [UserScopedSetting]
-        [DebuggerNonUserCode]
         public TrackCameras trackCameras
         {
             get

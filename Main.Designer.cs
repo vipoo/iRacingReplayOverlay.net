@@ -69,8 +69,6 @@ namespace iRacingReplayOverlay
             this.button2 = new System.Windows.Forms.Button();
             this.highlightVideoOnly = new System.Windows.Forms.CheckBox();
             this.VideoDetailLabel = new System.Windows.Forms.Label();
-            this.audioBitRate = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.videoBitRate = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.sourceVideoButton = new System.Windows.Forms.Button();
@@ -290,8 +288,6 @@ namespace iRacingReplayOverlay
             this.tabTranscoding.Controls.Add(this.button2);
             this.tabTranscoding.Controls.Add(this.highlightVideoOnly);
             this.tabTranscoding.Controls.Add(this.VideoDetailLabel);
-            this.tabTranscoding.Controls.Add(this.audioBitRate);
-            this.tabTranscoding.Controls.Add(this.label4);
             this.tabTranscoding.Controls.Add(this.videoBitRate);
             this.tabTranscoding.Controls.Add(this.label1);
             this.tabTranscoding.Controls.Add(this.sourceVideoButton);
@@ -334,7 +330,7 @@ namespace iRacingReplayOverlay
             this.highlightVideoOnly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.highlightVideoOnly.Checked = true;
             this.highlightVideoOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.highlightVideoOnly.Location = new System.Drawing.Point(425, 87);
+            this.highlightVideoOnly.Location = new System.Drawing.Point(429, 52);
             this.highlightVideoOnly.Name = "highlightVideoOnly";
             this.highlightVideoOnly.Size = new System.Drawing.Size(155, 22);
             this.highlightVideoOnly.TabIndex = 25;
@@ -348,24 +344,6 @@ namespace iRacingReplayOverlay
             this.VideoDetailLabel.Name = "VideoDetailLabel";
             this.VideoDetailLabel.Size = new System.Drawing.Size(580, 121);
             this.VideoDetailLabel.TabIndex = 40;
-            // 
-            // audioBitRate
-            // 
-            this.audioBitRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audioBitRate.FormattingEnabled = true;
-            this.audioBitRate.Location = new System.Drawing.Point(565, 52);
-            this.audioBitRate.Name = "audioBitRate";
-            this.audioBitRate.Size = new System.Drawing.Size(173, 26);
-            this.audioBitRate.TabIndex = 24;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(426, 52);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(123, 18);
-            this.label4.TabIndex = 23;
-            this.label4.Text = "Audio Bitrate Kbps";
             // 
             // videoBitRate
             // 
@@ -529,8 +507,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.TextBox workingFolderTextBox;
         private System.Windows.Forms.TabPage tabTranscoding;
         private System.Windows.Forms.Label VideoDetailLabel;
-        private System.Windows.Forms.ComboBox audioBitRate;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox videoBitRate;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button sourceVideoButton;

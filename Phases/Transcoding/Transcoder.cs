@@ -23,6 +23,7 @@ using MediaFoundation.Net;
 using MediaFoundation.Transform;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace iRacingReplayOverlay.Phases.Transcoding
@@ -65,7 +66,6 @@ namespace iRacingReplayOverlay.Phases.Transcoding
     {
         public IEnumerable<SourceReaderExtra> VideoFiles;
         public string DestinationFile;
-        public int AudioBitRate;
         public int VideoBitRate;
 
         static Guid TARGET_AUDIO_FORMAT = MFMediaType.WMAudioV9;
@@ -83,9 +83,10 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             var readers = VideoFiles.Select(f => f.CreateSourceReader(readWriteFactory, attributes)).ToArray();
 
+            var testOuputFile = readers.First().FileName + ".tmp.test.wmv";
             try
             {
-                using (var sinkWriter = readWriteFactory.CreateSinkWriterFromURL("tmp-test.wmv", attributes))
+                using (var sinkWriter = readWriteFactory.CreateSinkWriterFromURL(testOuputFile, attributes))
                 {
                     var writeToSink = ConnectStreams(readers, sinkWriter);
                 }
@@ -99,6 +100,8 @@ namespace iRacingReplayOverlay.Phases.Transcoding
                 if (readers != null)
                     foreach (var r in readers)
                         r.Dispose();
+
+                File.Delete(testOuputFile);
             }
 
             return null;
@@ -206,13 +209,36 @@ namespace iRacingReplayOverlay.Phases.Transcoding
 
             var availableTypes = MFSystem.TranscodeGetAudioOutputAvailableTypes(TARGET_AUDIO_FORMAT, MFT_EnumFlag.All);
 
+            TraceDebug.WriteLine("Searching for audio transcoding for sampleRate of {0}khz and {1} channels".F(sampleRate / 1000, numberOfChannels));
+
             var type = availableTypes
-                .FirstOrDefault(t => 
-                    t.AudioSamplesPerSecond == sampleRate &&
-                    t.AudioAverageBytesPerSecond == AudioBitRate);
+                            .OrderByDescending(t => t.AudioAverageBytesPerSecond)
+                            .ThenByDescending(t => t.AudioNumberOfChannels)
+                            .FirstOrDefault(t => t.AudioSamplesPerSecond == sampleRate && t.AudioNumberOfChannels == numberOfChannels);
+
+            if (type == null)
+            {
+                TraceDebug.WriteLine("No audio transcoder found.  Searching for transcoding with 2 or fewer channels at any sample rate");
+                type = availableTypes
+                                            .OrderByDescending(t => t.AudioAverageBytesPerSecond)
+                                            .ThenByDescending(t => t.AudioNumberOfChannels)
+                                            .FirstOrDefault(t => t.AudioNumberOfChannels <= 2);
+            }
+
+            if (type == null)
+            {
+                TraceDebug.WriteLine("No audio transcoder found.  Search for first compatible transcoder");
+                type = availableTypes
+                                            .OrderByDescending(t => t.AudioAverageBytesPerSecond)
+                                            .ThenByDescending(t => t.AudioNumberOfChannels)
+                                            .FirstOrDefault();
+            }
 
             if (type != null)
+            {
+                TraceDebug.WriteLine("Found audio track.  SampleRate: {0}, Channels: {1}, BitRate: {2}kbs".F(type.AudioSamplesPerSecond / 1000, type.AudioNumberOfChannels, type.AudioAverageBytesPerSecond * 8 / 1000));
                 return new MediaType(type);
+            }
 
             throw new Exception("Unable to find target audio format");
         }

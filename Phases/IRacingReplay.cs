@@ -105,9 +105,9 @@ namespace iRacingReplayOverlay.Phases
             return this;
         }
 
-        public IRacingReplay WithEncodingOf(int videoBitRate, int audioBitRate)
+        public IRacingReplay WithEncodingOf(int videoBitRate)
         {
-            _WithEncodingOf(videoBitRate, audioBitRate);
+            _WithEncodingOf(videoBitRate);
             return this;
         }
 

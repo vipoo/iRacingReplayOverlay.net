@@ -94,7 +94,6 @@ namespace iRacingReplayOverlay
                     transcodeProgressBar.Visible = false;
                     transcodeProgressBar.Value = 0;
                     videoBitRate.Enabled =
-                    audioBitRate.Enabled =
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
@@ -107,7 +106,6 @@ namespace iRacingReplayOverlay
                     transcodeCancelButton.Visible = false;
                     transcodeProgressBar.Visible = false;
                     videoBitRate.Enabled =
-                    audioBitRate.Enabled =
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
@@ -121,7 +119,6 @@ namespace iRacingReplayOverlay
                     transcodeCancelButton.Visible = true;
                     transcodeProgressBar.Visible = true;
                     videoBitRate.Enabled =
-                    audioBitRate.Enabled =
                     workingFolderTextBox.Enabled =
                     workingFolderButton.Enabled =
                     sourceVideoTextBox.Enabled =
@@ -321,9 +318,6 @@ namespace iRacingReplayOverlay
 
         void TranscodeVideo_Click(object sender, EventArgs e)
         {
-            Settings.Default.audioBitRate = (int)audioBitRate.SelectedItem;
-            Settings.Default.Save();
-
             State = States.Transcoding;
 
             LogListener.ToFile(Path.ChangeExtension(sourceVideoTextBox.Text, "log"));
@@ -332,7 +326,7 @@ namespace iRacingReplayOverlay
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED);
 
             iRacingProcess = new IRacingReplay()
-                .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000, audioBitRate: (int)audioBitRate.SelectedItem / 8)
+                .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000)
                 .WithOverlayFile(overlayFile: sourceVideoTextBox.Text)
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, highlightVideoOnly.Checked)
                 .InTheBackground(errorMessage => {
@@ -372,7 +366,6 @@ namespace iRacingReplayOverlay
             }
 
             OnGameDataFileChanged();
-            audioBitRate.Items.Clear();
 
             SetTanscodeMessage("", "", "");
 
@@ -404,12 +397,7 @@ namespace iRacingReplayOverlay
                 }
 
                 var details = VideoAttributes.TestFor(data);
-
-                foreach (var d in details.SupportedAudioBitRates)
-                    audioBitRate.Items.Add(d);
-
-                audioBitRate.SelectedItem = Settings.Default.audioBitRate;
-
+                
                 SetTanscodeMessage(formatDetails: "Frame Rate: {0}, Frame Size: {1}x{2}, Video: {3} @ {4}Mbs, Audio: {5}, {6}Khz @ {7}Kbs, ".F
                         (details.FrameRate,
                         details.FrameSize.Width,
@@ -439,12 +427,8 @@ namespace iRacingReplayOverlay
 
             if (sourceVideoTextBox.Text == null || sourceVideoTextBox.Text.Length == 0)
                 return false;
-
-            var audioBitRateValid = audioBitRate.SelectedItem != null;
-
-            var hasXmlFile = File.Exists(sourceVideoTextBox.Text);
-
-            return hasXmlFile && audioBitRateValid;
+            
+            return File.Exists(sourceVideoTextBox.Text);
         }
 
         void OnGameDataFileChanged()

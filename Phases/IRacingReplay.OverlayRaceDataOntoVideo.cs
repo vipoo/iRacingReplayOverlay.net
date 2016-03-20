@@ -29,15 +29,13 @@ namespace iRacingReplayOverlay.Phases
     public partial class IRacingReplay
     {
         int videoBitRate;
-        int audioBitRate;
         string destinationFile;
         string destinationHighlightsFile;
         string gameDataFile;
 
-        public void _WithEncodingOf(int videoBitRate, int audioBitRate)
+        public void _WithEncodingOf(int videoBitRate)
         {
             this.videoBitRate = videoBitRate;
-            this.audioBitRate = audioBitRate;
         }
 
         public void _WithOverlayFile(string overlayFileName)
@@ -52,8 +50,8 @@ namespace iRacingReplayOverlay.Phases
         {
             bool TranscodeFull = !highlightOnly;
 
-            var transcodeHigh = new Task(() => TranscodeAndOverlayMarshaled.Apply("HighLights", gameDataFile, videoBitRate, audioBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null, token));
-            var transcodeFull = new Task(() => TranscodeAndOverlayMarshaled.Apply("Full", gameDataFile, videoBitRate, audioBitRate, destinationFile, false, progress, token));
+            var transcodeHigh = new Task(() => TranscodeAndOverlayMarshaled.Apply("HighLights", gameDataFile, videoBitRate, destinationHighlightsFile, true, highlightOnly ? progress : null, token));
+            var transcodeFull = new Task(() => TranscodeAndOverlayMarshaled.Apply("Full", gameDataFile, videoBitRate, destinationFile, false, progress, token));
 
             using (MFSystem.Start())
             {

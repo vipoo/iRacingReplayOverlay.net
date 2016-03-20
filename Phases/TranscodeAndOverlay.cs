@@ -31,7 +31,7 @@ namespace iRacingReplayOverlay.Phases
 {
     public class TranscodeAndOverlayMarshaled
     {
-        public static void Apply(string name, string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, CancellationToken token)
+        public static void Apply(string name, string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, CancellationToken token)
         {
             var domain = AppDomain.CreateDomain(name, null, new AppDomainSetup());
             try
@@ -44,7 +44,7 @@ namespace iRacingReplayOverlay.Phases
                     false,
                     BindingFlags.CreateInstance,
                     null,
-                    new object[] { gameDataFile, videoBitRate, audioBitRate, destFile, highlights, (Action<long, long>)hostArgs.ProgressReporter, (Func<bool>)hostArgs.IsAborted, hostArgs.LogRepeater },
+                    new object[] { gameDataFile, videoBitRate, destFile, highlights, (Action<long, long>)hostArgs.ProgressReporter, (Func<bool>)hostArgs.IsAborted, hostArgs.LogRepeater },
                     null,
                     null);
                 arg.Apply();
@@ -92,11 +92,15 @@ namespace iRacingReplayOverlay.Phases
         {
             Trace.WriteLine(message);
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 
     public class TranscodeAndOverlayArguments : MarshalByRefObject
     {
-        private int audioBitRate;
         private string destFile;
         private string gameDataFile;
         private bool highlights;
@@ -113,12 +117,11 @@ namespace iRacingReplayOverlay.Phases
             this.logRepeater = new LogRepeater();
         }
 
-        public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted, LogRepeater logRepeater)
+        public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted, LogRepeater logRepeater)
         {
             //Constructed in subdomain
             this.gameDataFile = gameDataFile;
             this.videoBitRate = videoBitRate;
-            this.audioBitRate = audioBitRate;
             this.destFile = destFile;
             this.highlights = highlights;
             this._progressReporter = progressReporter;
@@ -143,13 +146,13 @@ namespace iRacingReplayOverlay.Phases
 
         public void Apply()
         {
-            TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, audioBitRate, destFile, highlights, ProgressReporter, IsAborted);
+            TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, destFile, highlights, ProgressReporter, IsAborted);
         }
     }
 
     public class TranscodeAndOverlay 
     {
-        public static void Apply(string gameDataFile, int videoBitRate, int audioBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted)
+        public static void Apply(string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted)
         {
             try
             {
@@ -159,8 +162,7 @@ namespace iRacingReplayOverlay.Phases
                 {
                     VideoFiles = leaderBoard.OverlayData.VideoFiles.ToSourceReaderExtra(),
                     DestinationFile = destFile,
-                    VideoBitRate = videoBitRate,
-                    AudioBitRate = audioBitRate
+                    VideoBitRate = videoBitRate
                 };
 
                 new TranscodeAndOverlay(leaderBoard, progressReporter).Process(transcoder, highlights, progressReporter, isAborted);
@@ -219,8 +221,7 @@ namespace iRacingReplayOverlay.Phases
                         AVOperations.Concat(mainReaders, mainBodyOverlays, isAborted)(0, 0);
                     }
                 });
-
-
+                
                 TraceInfo.WriteLineIf(highlights, "Done Transcoding highlights to {0}", transcoder.DestinationFile);
                 TraceInfo.WriteLineIf(!highlights, "Done Transcoding full replay to {0}", transcoder.DestinationFile);
             }

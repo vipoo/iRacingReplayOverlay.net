@@ -111,8 +111,7 @@ namespace iRacingReplayOverlay.Video
                 {
                     VideoFiles = new[] { new SourceReaderExtra(videoFileName, null) },
                     DestinationFile = Path.ChangeExtension(videoFileName, "wmv"),
-                    VideoBitRate = 5000000,
-                    AudioBitRate = supportedAudioBitRates.Last()
+                    VideoBitRate = 5000000
                 };
 
                 var errorMessage = transcoder.TestVideoConversion();
