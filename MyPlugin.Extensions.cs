@@ -1,10 +1,17 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace iRacingDirector.Plugin.StandardOverlays
 {
     public static class MyPluginExtensions
     {
+        public static string FormattedForLeaderboard(this string shortName)
+        {
+            var length = Math.Min(4, shortName.Length);
+            return shortName.Substring(0, length).ToUpper();
+        }
+
         public static GraphicRect DrawGrayBackground(this GraphicRect rr)
         {
             return rr

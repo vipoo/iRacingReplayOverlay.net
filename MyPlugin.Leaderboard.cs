@@ -92,7 +92,7 @@ namespace iRacingDirector.Plugin.StandardOverlays
                 n.ToRight(width: 95)
                     .WithFontSize(fontSize)
                     .WithStringFormat(StringAlignment.Near)
-                    .DrawText(d.ShortName.Substring(0, 4).ToUpper(), leftOffset: 10, topOffset: offset)
+                    .DrawText(d.ShortName.FormattedForLeaderboard(), leftOffset: 10, topOffset: offset)
 
                     .WithPen(Styles.ThickBlackPen)
                     .DrawLine(r.Rectangle.Left, r.Rectangle.Top, r.Rectangle.Left + width - 16, n.Rectangle.Top);
