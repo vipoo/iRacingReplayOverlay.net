@@ -260,10 +260,11 @@ namespace iRacingReplayOverlay.Phases
         {
             var cut = next;
 
-            var firstEdit = leaderBoard.OverlayData.RaceEvents.GetRaceEdits().First();
-            var lastEdit = leaderBoard.OverlayData.RaceEvents.GetRaceEdits().Last();
+            var raceEdits = leaderBoard.OverlayData.RaceEvents.GetRaceEdits();
+            var firstEdit = raceEdits.First();
+            var lastEdit = raceEdits.Last();
 
-            foreach (var editCut in leaderBoard.OverlayData.RaceEvents.GetRaceEdits())
+            foreach (var editCut in raceEdits)
             {
                 cut = AVOperations.Cut(editCut.StartTime.FromSecondsToNano(), editCut.EndTime.FromSecondsToNano(), AVOperations.FadeInOut(cut));
                 totalDuration -= editCut.EndTime.FromSecondsToNano() - editCut.StartTime.FromSecondsToNano();

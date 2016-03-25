@@ -51,7 +51,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         {
             TraceDebug.WriteLine("Attempting to open file {0}".F(this.FileName));
             var reader = readWriteFactory.CreateSourceReaderFromURL(this.FileName, attributes);
-            TraceDebug.WriteLine("Opened file {0}.  Duration: {1}".F(this.FileName, reader.Duration));
+            TraceDebug.WriteLine("Opened file {0}.  Duration: {1}".F(this.FileName, reader.Duration.FromNanoToSeconds()));
 
             return new SourceReaderExtra(this.FileName,  this.State,  reader);
         }
