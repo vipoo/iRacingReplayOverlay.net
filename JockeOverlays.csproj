@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5916B84C-0264-4102-9CCC-28006D84E4FA}</ProjectGuid>
+    <ProjectGuid>{F49DAE6F-321E-45A8-B9B4-23475A3F6080}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JockeOverlays</RootNamespace>
