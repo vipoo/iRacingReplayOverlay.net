@@ -1,8 +1,9 @@
-﻿using System;
+﻿using iRacingDirector.Plugin;
+using System;
 using System.Drawing;
 using System.Linq;
 
-namespace iRacingDirector.Plugin.StandardOverlays
+namespace JockeOverlays
 {
     public partial class MyPlugin
     {

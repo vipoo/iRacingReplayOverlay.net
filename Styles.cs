@@ -1,6 +1,7 @@
-﻿using System.Drawing;
+﻿using iRacingDirector.Plugin;
+using System.Drawing;
 
-namespace iRacingDirector.Plugin.StandardOverlays
+namespace JockeOverlays
 {
     public static class Styles
     {

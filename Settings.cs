@@ -1,5 +1,6 @@
-﻿
-namespace iRacingDirector.Plugin.StandardOverlays
+﻿using iRacingDirector.Plugin;
+
+namespace JockeOverlays
 {
     public static class Settings
     {

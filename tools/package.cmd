@@ -1,7 +1,7 @@
 @echo off
 echo 'Building package' %APPVEYOR_BUILD_VERSION%
 
-msbuild iRacingDirector.Plugin.StandardOverlays.csproj -p:SolutionDir=%cd%\                ^
+msbuild JockeOverlays.csproj -p:SolutionDir=%cd%\                                          ^
                                         -p:Configuration=Release                           ^
                                         -t:rebuild                                         ^
                                         -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION%     ^
@@ -9,7 +9,7 @@ msbuild iRacingDirector.Plugin.StandardOverlays.csproj -p:SolutionDir=%cd%\     
 
 cd bin\Release
 
-7z a release.zip iRacingDirector.Plugin.StandardOverlays.* iRacingDirector.Plugin.Support.*
+7z a release.zip JockeOverlays.* JockeOverlays.*
 
 appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
 
