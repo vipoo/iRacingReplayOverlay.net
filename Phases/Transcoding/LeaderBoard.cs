@@ -29,10 +29,17 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         public const int DriversPerPage = 10;
 
         PluginProxy plugin;
-        
+
+        internal string PluginName
+        {
+            set
+            {
+                this.plugin = new PluginProxy(value);
+            }
+        }
+
         public LeaderBoard()
         {
-            this.plugin = new PluginProxy(Settings.Default.PluginName);
         }
 
         public void Intro(Graphics graphics, long duration, long timestamp)

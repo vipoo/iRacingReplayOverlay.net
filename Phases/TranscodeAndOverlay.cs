@@ -44,7 +44,7 @@ namespace iRacingReplayOverlay.Phases
                     false,
                     BindingFlags.CreateInstance,
                     null,
-                    new object[] { gameDataFile, videoBitRate, destFile, highlights, (Action<long, long>)hostArgs.ProgressReporter, (Func<bool>)hostArgs.IsAborted, hostArgs.LogRepeater },
+                    new object[] { gameDataFile, videoBitRate, destFile, highlights, (Action<long, long>)hostArgs.ProgressReporter, (Func<bool>)hostArgs.IsAborted, hostArgs.LogRepeater, Settings.Default.PluginName },
                     null,
                     null);
                 arg.Apply();
@@ -108,6 +108,7 @@ namespace iRacingReplayOverlay.Phases
         private Action<long, long> _progressReporter;
         private int videoBitRate;
         private LogRepeater logRepeater;
+        private readonly string pluginName;
 
         public TranscodeAndOverlayArguments(Action<long, long> progressReporter, Func<bool> isAborted)
         {
@@ -117,7 +118,7 @@ namespace iRacingReplayOverlay.Phases
             this.logRepeater = new LogRepeater();
         }
 
-        public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted, LogRepeater logRepeater)
+        public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted, LogRepeater logRepeater, string pluginName)
         {
             //Constructed in subdomain
             this.gameDataFile = gameDataFile;
@@ -126,6 +127,7 @@ namespace iRacingReplayOverlay.Phases
             this.highlights = highlights;
             this._progressReporter = progressReporter;
             this._isAborted = isAborted;
+            this.pluginName = pluginName;
 
             var logger = new SubDomainLogListener(logRepeater);
             Trace.Listeners.Add(logger);
@@ -146,17 +148,17 @@ namespace iRacingReplayOverlay.Phases
 
         public void Apply()
         {
-            TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, destFile, highlights, ProgressReporter, IsAborted);
+            TranscodeAndOverlay.Apply(gameDataFile, videoBitRate, destFile, highlights, ProgressReporter, IsAborted, pluginName);
         }
     }
 
     public class TranscodeAndOverlay 
     {
-        public static void Apply(string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted)
+        public static void Apply(string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted, string pluginName)
         {
             try
             {
-                var leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile) };
+                var leaderBoard = new LeaderBoard { OverlayData = OverlayData.FromFile(gameDataFile), PluginName = pluginName };
 
                 var transcoder = new Transcoder
                 {
