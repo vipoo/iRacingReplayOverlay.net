@@ -13,3 +13,6 @@
 [submodule "plugins/iRacingDirector.Plugin.Support"]
 	path = plugins/iRacingDirector.Plugin.Support
 	url = git://github.com/vipoo/iRacingDirector.Plugin.Support.git
+[submodule "plugins/JockeOverlays"]
+	path = plugins/JockeOverlays
+	url = git://github.com/vipoo/JockeOverlays.git
