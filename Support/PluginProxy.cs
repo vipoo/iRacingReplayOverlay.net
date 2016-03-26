@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -25,12 +26,27 @@ namespace iRacingReplayOverlay
 {
     public class PluginProxy
     {
+        const string PluginPath = ".\\plugins\\";
+        const string StandardOverlayDirectory = "iRacingDirector.Plugin.StandardOverlays";
+        const string StandardOverlaysName = "StandardOverlays";
+
         dynamic plugin;
         Type pluginType;
         OverlayData data;
         long timestamp;
         readonly Func<Type, object> CreateInstance = t => Activator.CreateInstance(t);
         readonly Type pluginSettingsType;
+
+        public static string[] Names
+        {
+            get
+            {
+                return System.IO.Directory.EnumerateDirectories(PluginPath)
+                    .Select(t => t.Substring(PluginPath.Length))
+                    .Select(t => t == StandardOverlayDirectory ? StandardOverlaysName : t)
+                    .ToArray();
+            }
+        }
 
         public long Duration
         {
@@ -40,9 +56,14 @@ namespace iRacingReplayOverlay
             }
         }
 
-        public PluginProxy(string pluginPath)
+        public PluginProxy(string pluginName)
         {
-            var an = AssemblyName.GetAssemblyName(pluginPath);
+            if (pluginName == StandardOverlaysName)
+                pluginName = Path.Combine(PluginPath, StandardOverlayDirectory, StandardOverlayDirectory + ".dll");
+            else
+                pluginName = Path.Combine(PluginPath, pluginName, pluginName + ".dll");
+
+            var an = AssemblyName.GetAssemblyName(pluginName);
             var assembly = Assembly.Load(an);
 
             pluginType = assembly.GetTypes()

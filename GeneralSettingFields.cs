@@ -170,6 +170,42 @@ namespace iRacingReplayOverlay
             nextRowPosition += 28;
         }
 
+        internal void AddPluginSelectorField()
+        {
+            const string setting = "PluginName";
+
+            panel.Controls.Add(new Label
+            {
+                Location = new System.Drawing.Point(14, nextRowPosition),
+                Size = new System.Drawing.Size(269, 16),
+                TabIndex = nextTabIndex++,
+                Text = "Overlay"
+            });
+
+            var comboBox = new ComboBox()
+            {
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                FormattingEnabled = true,
+                Location = new System.Drawing.Point(301, nextRowPosition + 3),
+                Margin = new Padding(4, 5, 4, 5),
+                Size = new System.Drawing.Size(186, 22),
+                Tag = "Choose the style of overlay to be applied",
+                TabIndex = nextTabIndex++
+            };
+            comboBox.Enter += new EventHandler(this.OnFocus);
+
+            foreach (var name in PluginProxy.Names)
+            {
+                comboBox.Items.Add(name);
+            }
+
+            comboBox.SelectedItem = settings[setting];
+
+            onSave.Add(() => settings[setting] = comboBox.SelectedItem);
+            panel.Controls.Add(comboBox);
+            nextRowPosition += 28;
+        }
+
         internal void AddCheckboxField(string caption, string description, string setting)
         {
             AddCheckboxField(caption, description, (i) => (bool)settings[setting], (i, b) => settings[setting] = b);

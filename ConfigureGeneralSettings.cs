@@ -84,6 +84,9 @@ If not selected, then all battles can be selected, but your perferred drivers wi
             f.AddBlankRow();
             f.AddNumberField("Time lost between captured video file splits", "If your video capture software, split the captured file into multiple files, it may lose a slight amount of time between the files.  Assign this field to an estimate of the averge number of seconds lost between each captured video file", "VideoSplitGap");
 
+            f.AddBlankRow();
+            f.AddPluginSelectorField();
+
             if (AwsKeys.HaveKeys)
             {
                 f.AddBlankRow();
