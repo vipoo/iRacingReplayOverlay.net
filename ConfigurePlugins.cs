@@ -60,7 +60,7 @@ namespace iRacingReplayOverlay
 
             var a = new Arguments
             {
-                Path = Path.Combine(myLocation, @"plugins\overlay\iRacingDirector.Plugin.StandardOverlays.dll"),
+                Path = Path.Combine(myLocation, @"plugins\iRacingDirector.Plugin.StandardOverlays\iRacingDirector.Plugin.StandardOverlays.dll"),
                 RetrievedVersionCallback = t => this.currentInstalled.Text = t
             };
 

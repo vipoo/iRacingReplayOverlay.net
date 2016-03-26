@@ -33,7 +33,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
         public LeaderBoard()
         {
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            this.plugin = new PluginProxy(Path.Combine(path, @"plugins\overlay\iRacingDirector.Plugin.StandardOverlays.dll"));
+            this.plugin = new PluginProxy(Path.Combine(path, @"plugins\iRacingDirector.Plugin.StandardOverlays\iRacingDirector.Plugin.StandardOverlays.dll"));
         }
 
         public void Intro(Graphics graphics, long duration, long timestamp)

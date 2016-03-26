@@ -20,9 +20,9 @@ copy plugins\iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Te
 
 cd bin\x64\Release
 
-mkdir plugins\overlay
+mkdir plugins\iRacingDirector.Plugin.StandardOverlays
 
-cd plugins\overlay
+cd plugins\iRacingDirector.Plugin.StandardOverlays
 curl -L https://github.com/vipoo/iRacingDirector.Plugin.StandardOverlays/releases/download/%STANDARD_OVERLAY_PLUGIN%/release.zip --output release.zip
 7z e release.zip
 rm release.zip
