@@ -26,7 +26,7 @@ namespace iRacingReplayOverlay
 {
     public class PluginProxy
     {
-        const string PluginPath = ".\\plugins\\";
+        static readonly string PluginPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),  "plugins\\");
         const string StandardOverlayDirectory = "iRacingDirector.Plugin.StandardOverlays";
         const string StandardOverlaysName = "StandardOverlays";
 
