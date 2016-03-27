@@ -76,7 +76,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                     directionAction = () =>
                     {
                         SwitchToBattle(data, state.Driver);
-                        editMarker.Start();
+                        editMarker.Start(data.Telemetry.Positions[battleLeader.CarIdx]);
                     };
                     return true;
 

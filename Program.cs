@@ -53,7 +53,7 @@ namespace iRacingReplayOverlay
                 Application.Run(new Main());
         }
 
-        private static void MakePortable(Settings settings)
+        internal static void MakePortable(Settings settings)
         {
             var pp = settings.Providers.OfType<IracingReplayDirectorProvider>().First();
 

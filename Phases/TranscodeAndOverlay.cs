@@ -121,6 +121,8 @@ namespace iRacingReplayOverlay.Phases
         public TranscodeAndOverlayArguments(string gameDataFile, int videoBitRate, string destFile, bool highlights, Action<long, long> progressReporter, Func<bool> isAborted, LogRepeater logRepeater, string pluginName)
         {
             //Constructed in subdomain
+            Program.MakePortable(Settings.Default);
+
             this.gameDataFile = gameDataFile;
             this.videoBitRate = videoBitRate;
             this.destFile = destFile;

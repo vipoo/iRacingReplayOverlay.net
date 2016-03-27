@@ -34,13 +34,13 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.interest = interest;
         }
 
-        internal void Start()
+        internal void Start(int pos = int.MaxValue)
         {
             if (wasStarted)
                 removalEdits.InterestingThingStopped(interest);
 
             wasStarted = true;
-            removalEdits.InterestingThingStarted(interest);
+            removalEdits.InterestingThingStarted(interest, pos);
         }
 
         internal void Stop()

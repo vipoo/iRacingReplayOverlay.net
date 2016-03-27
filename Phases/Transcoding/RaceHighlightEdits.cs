@@ -50,8 +50,17 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var previousEvent = totalRaceEvents.First();
             foreach (var re in totalRaceEvents.Skip(1))
             {
-                if (re.StartTime - previousEvent.EndTime >= 10d)
+                if (re.StartTime - previousEvent.EndTime >= 10d / Settings.AppliedTimingFactor)
+                {
+                    TraceDebug.WriteLine("Applying edit between {0}:{1}:{2} and {3}:{4}:{5}",
+                        previousEvent.Interest, previousEvent.Position, previousEvent.EndTime,
+                        re.Interest, re.Position, re.StartTime);
                     yield return new VideoEdit { StartTime = previousEvent.EndTime - 1, EndTime = re.StartTime + 1 };
+                }
+                else
+                    TraceDebug.WriteLine("Not apply edit between {0}:{1}:{2} and {3}:{4}:{5}",
+                        previousEvent.Interest, previousEvent.Position, previousEvent.EndTime,
+                        re.Interest, re.Position, re.StartTime);
 
                 previousEvent = re;
             }
@@ -76,7 +85,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             var restartPercentage = restartsRatio / totalRatio;
             var battlePercentage = battlesRatio / totalRatio;
 
-            var incidentsEdited = ExtractEditedEvents(totalTime, incidentPercentage, incidentRaceEvents, InterestState.Incident);
+            var incidentsEdited = ExtractEditedEvents(totalTime, incidentPercentage, incidentRaceEvents, InterestState.Incident, byPosition: true);
             var restartsEdited = ExtractEditedEvents(totalTime, restartPercentage, restartRaceEvents, InterestState.Restart);
             var battlessEdited = ExtractEditedEvents(totalTime, battlePercentage, battleRaceEvents, InterestState.Battle);
 
@@ -144,42 +153,66 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             SliceEvent(result, raceEvents, middleEvent, right, level + 1);
         }
 
-        static List<OverlayData.RaceEvent> ExtractEditedEvents(double totalTime, double percentage, List<OverlayData.RaceEvent> raceEvents, InterestState interest)
+        static List<OverlayData.RaceEvent> ExtractEditedEvents(
+            double totalTime, 
+            double percentage, 
+            List<OverlayData.RaceEvent> raceEvents, 
+            InterestState interest,
+            bool byPosition = false)
         {
-            var duration = 0d;
+            TraceInfo.WriteLine("Extracting {0} from a total set of {1}", interest, raceEvents.Count);
 
-            var orderRaceEvents = new List<_RaceEvent>();
-
-            var targetDuration = totalTime * percentage;
-
-            raceEvents = raceEvents.ToArray().ToList();
-
-            if( raceEvents.Count <= 2 )
+            if (raceEvents.Count <= 2)
                 return raceEvents;
 
-            var firstEvent = raceEvents.OrderBy(r => r.StartTime).First();
-            var lastEvent = raceEvents.OrderBy(r => r.StartTime).Last();
+            var duration = 0d;
+            var targetDuration = totalTime * percentage;
 
-            orderRaceEvents.Add(new _RaceEvent { RaceEvent = firstEvent, Level = 0 });
-            orderRaceEvents.Add(new _RaceEvent { RaceEvent = lastEvent, Level = 0 });
+            var orderedRaceEvents = raceEvents.OrderBy(r => r.StartTime).ToList();
+            var firstEvent = orderedRaceEvents.First();
+            var lastEvent = orderedRaceEvents.Last();
+
+            var searchRaceEvents = new List<_RaceEvent>();
+            searchRaceEvents.Add(new _RaceEvent { RaceEvent = firstEvent, Level = 0 });
+            searchRaceEvents.Add(new _RaceEvent { RaceEvent = lastEvent, Level = 0 });
 
             var result = new List<OverlayData.RaceEvent>();
 
-            SliceEvent(orderRaceEvents, raceEvents.Where( rc => rc.WithOvertake).ToList(), firstEvent, lastEvent, 1);
+            if (byPosition)
+            {
+                foreach (var p in raceEvents.OrderBy(r => r.Position).Select(r => r.Position).Distinct())
+                {
+                    TraceInfo.WriteLine("Scanning for {0}s for position {1}", interest, p);
+                    duration = ExtractUptoTargetDuration(raceEvents.Where(r => r.Position == p).ToList(), duration, targetDuration, firstEvent, lastEvent, searchRaceEvents, result);
+                }
+            }
+            else
+            {
+                TraceInfo.WriteLine("Scanning for {0}s", interest);
+                duration = ExtractUptoTargetDuration(raceEvents, duration, targetDuration, firstEvent, lastEvent, searchRaceEvents, result);
+            }
+
+            foreach (var r in result.OrderBy(x => x.StartTime))
+                TraceInfo.WriteLine("Highlight edit {0} @ position {4}: {1} - {2}, duration: {3}", r.Interest, r.StartTime.Seconds(), r.EndTime.Seconds(), r.Duration.Seconds(), r.Position);
+
+            TraceInfo.WriteLine("Highlight Edits: {0}.  Target Duration: {1}, Percentage: {2:00}%, Resolved Duration: {3}",
+                interest.ToString(), targetDuration.Seconds(), (int)(percentage * 100), duration.Seconds());
+
+            return result;
+        }
+
+        private static double ExtractUptoTargetDuration(List<OverlayData.RaceEvent> raceEvents, double duration, double targetDuration, OverlayData.RaceEvent firstEvent, OverlayData.RaceEvent lastEvent, List<_RaceEvent> orderRaceEvents, List<OverlayData.RaceEvent> result)
+        {
+            SliceEvent(orderRaceEvents, raceEvents.Where(rc => rc.WithOvertake /* && rc.Position == p*/).ToList(), firstEvent, lastEvent, 1);
             duration = SelectOrderByLevel(orderRaceEvents, targetDuration, result, duration);
 
             orderRaceEvents.Clear();
 
-            SliceEvent(orderRaceEvents, raceEvents.Where(rc => !rc.WithOvertake).ToList(), firstEvent, lastEvent, 1);
+            SliceEvent(orderRaceEvents, raceEvents.Where(rc => !rc.WithOvertake /*&& rc.Position == p */).ToList(), firstEvent, lastEvent, 1);
             duration = SelectOrderByLevel(orderRaceEvents, targetDuration, result, duration);
 
-            foreach( var r in result.OrderBy( x => x.StartTime))
-                TraceDebug.WriteLine("Highlight edit {0}: {1} - {2}, duration: {3}", r.Interest, r.StartTime.Seconds(), r.EndTime.Seconds(), r.Duration.Seconds());
-
-            TraceInfo.WriteLine("Highlight Edits: {0}.  Target Duration: {1}, Percentage: {2:00}%, Resolved Duration: {3}",
-                interest.ToString(), targetDuration.Seconds(), (int)(percentage*100), duration.Seconds());
-
-            return result;
+            orderRaceEvents.Clear();
+            return duration;
         }
 
         private static double SelectOrderByLevel(List<_RaceEvent> orderRaceEvents, double targetDuration, List<OverlayData.RaceEvent> result, double duration)

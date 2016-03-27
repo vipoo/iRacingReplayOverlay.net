@@ -33,6 +33,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         TimeSpan lastRelativeTime;
         TimeSpan lastStartTime;
         bool withOvertake = false;
+        int position = int.MaxValue;
 
         readonly Stack<InterestState> events = new Stack<InterestState>();
 
@@ -41,9 +42,10 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.raceEvents = raceEvents;
         }
 
-        public void InterestingThingStarted(InterestState interest)
+        public void InterestingThingStarted(InterestState interest, int pos)
         {
             var oldAction = nextAction;
+            position = pos;
 
             nextAction = (d, t) =>
             {
@@ -86,7 +88,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 Interest = interest, 
                 StartTime = lastStartTime.TotalSeconds, 
                 EndTime = t.TotalSeconds,
-                WithOvertake = withOvertake
+                WithOvertake = withOvertake,
+                Position = position
             });
             lastStartTime = t;
 

@@ -62,6 +62,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             public double EndTime;
             public InterestState Interest;
             public bool WithOvertake;
+            public int Position = int.MaxValue;
 
             public override int GetHashCode()
             {
@@ -79,7 +80,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
             public override string ToString()
             {
-                return "StartTime: {0}, EndTime: {1}, Interest: {2}".F(StartTime, EndTime, Interest.ToString());
+                return "StartTime: {0}, EndTime: {1}, Interest: {2}, Position: {3}".F(StartTime, EndTime, Interest.ToString(), Position);
             }
 
             public double Duration { get { return EndTime - StartTime; } }

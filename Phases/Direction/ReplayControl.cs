@@ -42,7 +42,6 @@ namespace iRacingReplayOverlay.Phases.Direction
                 tc.CameraNumber = (short)sessionData.CameraInfo.Groups.First(g => g.GroupName.ToLower() == tc.CameraName.ToLower()).GroupNum;
 
             var camera = cameras.First(tc => tc.IsRaceStart);
-            
 
             var cameraControl = new CameraControl(cameras);
             cameraControl.CameraOnPositon(1, camera.CameraNumber);
