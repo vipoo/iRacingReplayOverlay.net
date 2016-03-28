@@ -29,6 +29,11 @@ namespace iRacingDirector.Plugin
             return new GraphicRect(g, new Rectangle(x, y, w, h));
         }
 
+        public static GraphicRect With(this Graphics g)
+        {
+            return new GraphicRect(g, new Rectangle(0, 0, 0, 0));
+        }
+
         public static Color BrightenBy(this Color self, double amount)
         {
             Func<byte, int> adjust = x => Math.Min((int)(x * amount), 255);

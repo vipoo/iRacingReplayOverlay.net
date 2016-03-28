@@ -29,33 +29,42 @@ namespace iRacingDirector.Plugin
 		readonly int left;
 		readonly int right;
 
-		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
-			: base( g, r, b, p, f, sf)
+		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int lo, int to)
+			: base( g, r, b, p, f, sf, lo, to)
 		{
 			this.left = int.MaxValue;
 			this.right = int.MinValue;
 		}
 
-		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int left, int right)
-			: base( g, r, b, p, f, sf)
+		public CenterGraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int lo, int to, int left, int right)
+			: base( g, r, b, p, f, sf, lo, to)
 		{
 			this.left = left;
 			this.right = right;
 		}
 
-		protected override GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
+		protected override GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int lo, int to)
 		{
-			return new CenterGraphicRect(g, r, b, p, f, sf, left, right);
+			return new CenterGraphicRect(g, r, b, p, f, sf, lo, to, left, right);
 		}
 
         internal int Width { get { return right-left; } }
 		
-		public override GraphicRect DrawText(string text, int leftOffset = 0, int topOffset = 0)
+		public override GraphicRect DrawText(string text, int? leftOffset = 0, int? topOffset = 0)
 		{
+            var lo = this.leftOffset;
+            var to = this.topOffset;
+
+            if (leftOffset.HasValue)
+                lo = leftOffset.Value;
+
+            if (topOffset.HasValue)
+                to = topOffset.Value;
+
             var size = TextRenderer.MeasureText(g, text, f, r.Size, TextFormatFlags.NoPadding);
 
-			var newleft = Math.Min(r.Left + leftOffset, left);
-			var newRight = Math.Max(right, r.Left + leftOffset + (int)size.Width);
+			var newleft = Math.Min(r.Left + lo, left);
+			var newRight = Math.Max(right, r.Left + lo + (int)size.Width);
 
 			return new CenterGraphicRect(g, r, b, p, f, sf, newleft, newRight);
 		}

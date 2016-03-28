@@ -33,6 +33,8 @@ namespace iRacingDirector.Plugin
 		protected readonly Pen p;
 		protected readonly Font f;
 		protected readonly StringFormat sf;
+        protected readonly int leftOffset = 0;
+        protected readonly int topOffset = 0;
 
         public GraphicRect(Graphics g, Rectangle r)
         {
@@ -40,7 +42,7 @@ namespace iRacingDirector.Plugin
             this.r = r;
         }
 
-		internal GraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
+		internal GraphicRect(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int lo, int to)
         {
             this.g = g;
             this.r = r;
@@ -48,18 +50,25 @@ namespace iRacingDirector.Plugin
             this.p = p;
             this.f = f;
             this.sf = sf;
+            this.leftOffset = lo;
+            this.topOffset = to;
         }
 
         public Rectangle Rectangle { get { return r; } }
 
-		protected virtual GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf)
+		protected virtual GraphicRect New(Graphics g, Rectangle r, Brush b, Pen p, Font f, StringFormat sf, int lo, int to)
 		{
-			return new GraphicRect(g, r, b, p, f, sf);
+			return new GraphicRect(g, r, b, p, f, sf, lo, to);
 		}
+
+        public GraphicRect InRectangle(int x, int y, int w, int h)
+        {
+            return new GraphicRect(g, new Rectangle(x, y, w, h), b, p, f, sf, leftOffset, topOffset);
+        }
 
         public GraphicRect WithLinearGradientBrush(Color color1, Color color2, LinearGradientMode linearGradientMode)
         {
-			return New(g, r, new LinearGradientBrush(r, color1, color2, linearGradientMode), p, f, sf);
+			return New(g, r, new LinearGradientBrush(r, color1, color2, linearGradientMode), p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect With(Func<GraphicRect, GraphicRect> modifiers)
@@ -74,7 +83,13 @@ namespace iRacingDirector.Plugin
 
         public GraphicRect WithPen(Pen pen)
         {
-			return New(g, r, b, pen, f, sf);
+			return New(g, r, b, pen, f, sf, leftOffset, topOffset);
+        }
+
+        public virtual GraphicRect DrawRectangleWithoutBorder()
+        {
+            g.FillRectangle(b, r);
+            return this;
         }
 
         public virtual GraphicRect DrawRectangleWithBorder()
@@ -86,12 +101,37 @@ namespace iRacingDirector.Plugin
 
         const int TEXT_LEFT_OFFSET_MAGIC = -4;
         const int TEXT_RIGHT_PADDING_MAGIC = 10;
-		public virtual GraphicRect DrawText(string text, int leftOffset = 0, int topOffset = 0)
+
+
+        public virtual GraphicRect DrawText(string text, int? leftOffset = null, int? topOffset = null)
         {
+            var lo = this.leftOffset;
+            var to = this.topOffset;
+
+            if (leftOffset.HasValue)
+                lo = leftOffset.Value;
+
+            if (topOffset.HasValue)
+                to = topOffset.Value;
+
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
-            var rect2 = new Rectangle(r.Left + leftOffset + TEXT_LEFT_OFFSET_MAGIC, r.Top + topOffset, r.Width + TEXT_RIGHT_PADDING_MAGIC, r.Height);
+            var rect2 = new Rectangle(r.Left + lo + TEXT_LEFT_OFFSET_MAGIC, r.Top + to, r.Width + TEXT_RIGHT_PADDING_MAGIC, r.Height);
             g.DrawString(text, f, b, rect2, sf);
             return this;
+        }
+
+        public virtual GraphicRect WithTextOffset(int? leftOffset = null, int? topOffset = null)
+        {
+            var lo = this.leftOffset;
+            var to = this.topOffset;
+
+            if (leftOffset.HasValue)
+                lo = leftOffset.Value;
+
+            if (topOffset.HasValue)
+                to = topOffset.Value;
+
+            return new GraphicRect(g, r, b, p, f, sf, lo, to);
         }
 
         public virtual GraphicRect DrawText(int number, int leftOffset = 0, int topOffset = 0)
@@ -104,47 +144,47 @@ namespace iRacingDirector.Plugin
             var size = TextRenderer.MeasureText(g, str, f, new Size(0,0), TextFormatFlags.NoPadding);
 
             var newRect = new Rectangle(r.Left + (int)size.Width + i, r.Top, r.Width - (int)size.Width - i, r.Height);
-            return New(g, newRect, b, p, f, sf);
+            return New(g, newRect, b, p, f, sf, leftOffset, topOffset);
         }
             
         public GraphicRect MoveRight(int right)
         {
-            return New(g, new Rectangle(r.Left + right, r.Top, r.Width, r.Height), b, p, f, sf);
+            return New(g, new Rectangle(r.Left + right, r.Top, r.Width, r.Height), b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect MoveLeft(int left)
         {
-            return New(g, new Rectangle(r.Left -left, r.Top, r.Width, r.Height), b, p, f, sf);
+            return New(g, new Rectangle(r.Left -left, r.Top, r.Width, r.Height), b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect MoveDown(int top)
         {
-            return New(g, new Rectangle(r.Left, r.Top + top, r.Width, r.Height + top), b, p, f, sf);
+            return New(g, new Rectangle(r.Left, r.Top + top, r.Width, r.Height + top), b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect MoveUp(int v)
         {
-            return New(g, new Rectangle(r.Left, r.Top - v, r.Width, r.Height), b, p, f, sf);
+            return New(g, new Rectangle(r.Left, r.Top - v, r.Width, r.Height), b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect WithHeight(int v)
         {
-            return New(g, new Rectangle(r.Left, r.Top, r.Width, v), b, p, f, sf);
+            return New(g, new Rectangle(r.Left, r.Top, r.Width, v), b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect WithBrush(Brush brush)
         {
-			return New(g, r, brush, p, f, sf);
+			return New(g, r, brush, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect WithFont(string prototype, float emSize, FontStyle style)
         {
-			return New(g, r, b, p, new Font(prototype, emSize, style), sf);
+			return New(g, r, b, p, new Font(prototype, emSize, style), sf, leftOffset, topOffset);
         }
 
         public GraphicRect WithFontSize( float emSize)
         {
-            return New(g, r, b, p, new Font(this.f.Name, emSize, f.Style), sf);
+            return New(g, r, b, p, new Font(this.f.Name, emSize, f.Style), sf, leftOffset, topOffset);
         }
 
         public GraphicRect ToBelow(int? width = null, int? height = null)
@@ -152,7 +192,7 @@ namespace iRacingDirector.Plugin
             var w = width == null ? r.Width : width.Value;
             var h = height == null ? r.Height : height.Value;
 
-			return New(g, new Rectangle(r.Left, r.Top + r.Height, w, h), b, p, f, sf);
+			return New(g, new Rectangle(r.Left, r.Top + r.Height, w, h), b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect ToRight(int? width = null, int? height = null, int left = 0)
@@ -160,13 +200,13 @@ namespace iRacingDirector.Plugin
             var w = width == null ? r.Width : width.Value;
             var h = height == null ? r.Height : height.Value;
 
-			return New(g, new Rectangle(r.Left + r.Width + left, r.Top, w, h), b, p, f, sf);
+			return New(g, new Rectangle(r.Left + r.Width + left, r.Top, w, h), b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect WithStringFormat(StringAlignment alignment, StringAlignment lineAlignment = StringAlignment.Near)
         {
             var sf = new StringFormat { Alignment = alignment, LineAlignment = lineAlignment };
-			return New(g, r, b, p, f, sf);
+			return New(g, r, b, p, f, sf, leftOffset, topOffset);
         }
 
         public GraphicRect DrawLine(float x1, float y1, float x2, float y2)
@@ -177,7 +217,7 @@ namespace iRacingDirector.Plugin
 
 		public GraphicRect Center(Func<GraphicRect, GraphicRect> operation)
 		{
-			var newG = new CenterGraphicRect(g, r, b, p, f, sf);
+			var newG = new CenterGraphicRect(g, r, b, p, f, sf, leftOffset, topOffset);
 
 			var calculateCenter = (CenterGraphicRect)operation(newG);
 
@@ -186,7 +226,7 @@ namespace iRacingDirector.Plugin
 
 			var newRect = new Rectangle(currentCenterPoint - width/2, r.Top, width, r.Height);
 
-			var centeredGr = new GraphicRect(g, newRect, b, p, f, sf );
+			var centeredGr = new GraphicRect(g, newRect, b, p, f, sf, leftOffset, topOffset );
 
             operation(centeredGr).ToBelow();
 
