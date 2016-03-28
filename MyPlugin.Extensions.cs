@@ -13,18 +13,35 @@ namespace JockeOverlays
             return shortName.Substring(0, length).ToUpper();
         }
 
+        public static GraphicRect DrawBlackBackground(this GraphicRect rr)
+        {
+            return rr
+                .WithBrush(Styles.TransparentLightBlack)
+                .WithPen(Styles.WhitePen)
+                .DrawRectangleWithoutBorder();
+        }
+
         public static GraphicRect DrawGrayBackground(this GraphicRect rr)
         {
             return rr
                 .WithBrush(Styles.TransparentLightGray)
-                .WithPen(Styles.BlackPen)
-                .DrawRectangleWithBorder();
+                .WithPen(Styles.WhitePen)
+                .DrawRectangleWithoutBorder();
+        }
+
+        public static GraphicRect DrawWhiteText(this GraphicRect rr, string text, StringAlignment alignment)
+        {
+            rr.WithBrush(Styles.WhiteBrush)
+                .WithStringFormat(alignment)
+                .DrawText(text);
+
+                return rr;
         }
 
         public static GraphicRect WithFontSizeOf(this GraphicRect rr, int fontSize)
         {
             return rr
-                .WithFont(Settings.FontName, fontSize, FontStyle.Bold);
+                .WithFont(Settings.FontName, fontSize, FontStyle.Regular);
         }
 
         public static GraphicRect DrawWhiteGradiantBox(this GraphicRect rr)
