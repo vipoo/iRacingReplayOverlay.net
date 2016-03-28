@@ -66,7 +66,7 @@ namespace iRacingDirector.Plugin
 			var newleft = Math.Min(r.Left + lo, left);
 			var newRight = Math.Max(right, r.Left + lo + (int)size.Width);
 
-			return new CenterGraphicRect(g, r, b, p, f, sf, newleft, newRight);
+			return new CenterGraphicRect(g, r, b, p, f, sf, lo, to, newleft, newRight);
 		}
 
         public override GraphicRect DrawRectangleWithBorder()
