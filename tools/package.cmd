@@ -9,7 +9,7 @@ msbuild JockeOverlays.csproj -p:SolutionDir=%cd%\                               
 
 cd bin\Release
 
-7z a release.zip JockeOverlays.* JockeOverlays.*
+7z a release.zip JockeOverlays.* iRacingDirector.Plugin.Support.*
 
 appveyor PushArtifact release.zip -FileName "release.zip" -DeploymentName deploy-release
 
