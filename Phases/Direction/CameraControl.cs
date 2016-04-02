@@ -17,6 +17,7 @@
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK;
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,19 +62,17 @@ namespace iRacingReplayOverlay.Phases.Direction
             defaultCamera = cameras.First(tc => tc.IsRaceStart);
         }
         
-        public TrackCamera FindACamera(params CameraAngle[] cameraAngles)
+        public TrackCamera FindACamera(IEnumerable<CameraAngle> cameraAngles, TrackCamera adjustedCamera = null, int adjustRatioBy = 1)
         {
-            return FindACamera(cameraAngles as IEnumerable<CameraAngle>);
-        }
+            if (adjustedCamera != null)
+                TraceInfo.WriteLine("Adjusting ratio for camera {0} by 1/{1}", adjustedCamera.CameraName, adjustRatioBy);
 
-        public TrackCamera FindACamera(IEnumerable<CameraAngle> cameraAngles)
-        {
             var rand = 0;
             var offset = 0;
             var camera = defaultCamera;
 
             var selectableCameras = cameras.Where(x => cameraAngles.Contains(x.CameraAngle));
-            int total = selectableCameras.Sum(x => x.Ratio);
+            int total = selectableCameras.Sum(x => x == adjustedCamera ? x.Ratio / adjustRatioBy: x.Ratio);
 
             // If no camera within specified cameraAngles has non zero ratio select among all
             if (total == 0)
@@ -82,18 +81,18 @@ namespace iRacingReplayOverlay.Phases.Direction
                 rand = random.Next(100);
             }
             else
-            {
                 rand = random.Next(total);
-            }
 
             foreach (var tc in selectableCameras)
             {
-                if (rand < tc.Ratio + offset)
+                var ratio = tc == adjustedCamera ? tc.Ratio / adjustRatioBy : tc.Ratio;
+
+                if (rand < ratio + offset)
                 {
                     camera = tc;
                     break;
                 }
-                offset += tc.Ratio;
+                offset += ratio;
             }
 
             return camera;

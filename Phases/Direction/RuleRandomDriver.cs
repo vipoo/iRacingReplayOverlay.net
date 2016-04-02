@@ -77,7 +77,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             finishWatchingRandomDriverAt = data.Telemetry.SessionTimeSpan + stickyTime;
 
-            camera = cameraControl.FindACamera(CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar, CameraAngle.LookingAtTrack);
+            camera = cameraControl.FindACamera(new[] { CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar, CameraAngle.LookingAtTrack });
             car = FindADriver(data);
 
             TraceInfo.WriteLine("{0} Changing camera to random driver: {1}; camera: {2}", data.Telemetry.SessionTimeSpan, car.UserName, camera.CameraName);
