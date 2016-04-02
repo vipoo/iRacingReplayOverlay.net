@@ -3,7 +3,7 @@ SET SolutionDir=%~dp0..\
 
 echo 'Building test package' %APPVEYOR_BUILD_VERSION%
 
-set STANDARD_OVERLAY_PLUGIN=1.0.0.28
+set STANDARD_OVERLAY_PLUGIN=1.0.0.31
 
 
 msbuild %SolutionDir%plugins\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj -p:SolutionDir=%SolutionDir% -t:rebuild -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:Configuration=Release
