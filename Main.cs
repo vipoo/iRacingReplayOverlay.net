@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
+using GitHubReleases;
 using iRacingReplayOverlay.Phases;
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Support;
@@ -172,7 +173,7 @@ namespace iRacingReplayOverlay
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "general.log");
         }
 
-        void Main_Load(object sender, EventArgs e)
+        async void Main_Load(object sender, EventArgs e)
         {
             changeVersionButton.Visible = File.Exists(Settings.Default.MainExecPath);
 
@@ -211,6 +212,32 @@ namespace iRacingReplayOverlay
                     WaitingForIRacingLabel.Visible = false;
                 })
                 .InTheBackground(errorMessage => { });
+
+            try
+            {
+                var items = await GitHubAccess.GetVersions("vipoo", "iRacingReplayOverlay.net");
+
+                var currentVersionItem = items.FirstOrDefault(r => r.VersionStamp == AboutBox1.AssemblyVersion);
+                var isNewVersionAvailable = false;
+
+                if (currentVersionItem.VersionStamp == null)
+                    isNewVersionAvailable = true;
+                else
+                {
+                    var isPreRelease = currentVersionItem.Prerelease;
+
+                    var latestVersion = items.OrderByDescending(r => new Version(r.VersionStamp)).Where(r => r.Prerelease == isPreRelease).First();
+                    isNewVersionAvailable = new Version(latestVersion.VersionStamp) > AboutBox1.AssemblyVersionStamp;
+                }
+
+                if (isNewVersionAvailable)
+                    newVersionMessage.Visible = true;
+            }
+            catch(Exception ee)
+            {
+                TraceError.WriteLine(ee.Message);
+                TraceError.WriteLine(ee.StackTrace);
+            }
         }
 
         void LogSystemInformation()

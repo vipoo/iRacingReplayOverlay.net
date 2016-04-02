@@ -80,6 +80,7 @@ namespace iRacingReplayOverlay
             this.button1 = new System.Windows.Forms.Button();
             this.changeVersionButton = new System.Windows.Forms.Button();
             this.configurePluginsButton = new System.Windows.Forms.Button();
+            this.newVersionMessage = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -121,7 +122,7 @@ namespace iRacingReplayOverlay
             this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabControl1.Controls.Add(this.tabCapture);
             this.tabControl1.Controls.Add(this.tabTranscoding);
-            this.tabControl1.Location = new System.Drawing.Point(13, 70);
+            this.tabControl1.Location = new System.Drawing.Point(13, 75);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(754, 321);
@@ -418,7 +419,7 @@ namespace iRacingReplayOverlay
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pictureBox3.Location = new System.Drawing.Point(17, 104);
+            this.pictureBox3.Location = new System.Drawing.Point(17, 109);
             this.pictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(745, 5);
@@ -456,11 +457,24 @@ namespace iRacingReplayOverlay
             this.configurePluginsButton.Visible = false;
             this.configurePluginsButton.Click += new System.EventHandler(this.configurePluginsButton_Click);
             // 
+            // newVersionMessage
+            // 
+            this.newVersionMessage.AutoSize = true;
+            this.newVersionMessage.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.newVersionMessage.ForeColor = System.Drawing.Color.DarkRed;
+            this.newVersionMessage.Location = new System.Drawing.Point(466, 48);
+            this.newVersionMessage.Name = "newVersionMessage";
+            this.newVersionMessage.Size = new System.Drawing.Size(161, 18);
+            this.newVersionMessage.TabIndex = 39;
+            this.newVersionMessage.Text = "New Version available ->";
+            this.newVersionMessage.Visible = false;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(779, 405);
+            this.ClientSize = new System.Drawing.Size(779, 402);
+            this.Controls.Add(this.newVersionMessage);
             this.Controls.Add(this.configurePluginsButton);
             this.Controls.Add(this.changeVersionButton);
             this.Controls.Add(this.button1);
@@ -485,6 +499,7 @@ namespace iRacingReplayOverlay
             this.tabTranscoding.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -524,5 +539,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.CheckBox EncodeVideoAfterCapture;
         private System.Windows.Forms.Button changeVersionButton;
         private System.Windows.Forms.Button configurePluginsButton;
+        private System.Windows.Forms.Label newVersionMessage;
     }
 }

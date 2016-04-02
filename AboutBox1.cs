@@ -4,6 +4,7 @@
 // https://github.com/vipoo/iRacingReplayOverlay.net
 
 using iRacingSDK.Support;
+using System;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -30,14 +31,20 @@ namespace iRacingReplayOverlay
             }
         }
 
-        public static string AssemblyVersion
+        public static Version AssemblyVersionStamp
         {
             get
             {
                 var assName = Assembly.GetExecutingAssembly().GetName();
-                var version = assName.Version;
+                return assName.Version;
+            }
+        }
 
-                return version.ToString();
+        public static string AssemblyVersion
+        {
+            get
+            {
+                return AssemblyVersionStamp.ToString();
             }
         }
 
