@@ -137,7 +137,7 @@ namespace iRacingReplayOverlay
             return s == null || s == "";
         }
 
-        void SetTanscodeMessage(string formatDetails = null, string warningDetails = null, string errorDetails = null)
+        void SetTanscodeMessage(string formatDetails = null, string warningDetails = null, string sourceVideoFileErrorMessage = null, string trancodingErrorMessage = null)
         {
             if (formatDetails != null)
                 transcodeMessageFormatDetails = formatDetails;
@@ -145,8 +145,8 @@ namespace iRacingReplayOverlay
             if (warningDetails != null)
                 transcodeMessageWarningDetails = warningDetails;
 
-            if (errorDetails != null)
-                transcodeMessageErrorDetails = errorDetails;
+            if (sourceVideoFileErrorMessage != null)
+                transcodeMessageErrorDetails = sourceVideoFileErrorMessage;
 
             var message = transcodeMessageFormatDetails;
             if(!isEmpty(transcodeMessageWarningDetails))
@@ -154,7 +154,10 @@ namespace iRacingReplayOverlay
 
             if (!isEmpty(transcodeMessageErrorDetails))
                 message = isEmpty(message) ? transcodeMessageErrorDetails : "{0}\n{1}".F(message, transcodeMessageErrorDetails);
-            
+
+            if (!isEmpty(trancodingErrorMessage))
+                message = isEmpty(message) ? trancodingErrorMessage : "{0}\n{1}".F(message, trancodingErrorMessage);
+
             VideoDetailLabel.Text = message;
         }
 
@@ -346,6 +349,7 @@ namespace iRacingReplayOverlay
         void TranscodeVideo_Click(object sender, EventArgs e)
         {
             State = States.Transcoding;
+            SetTanscodeMessage(trancodingErrorMessage: null);
 
             LogListener.ToFile(Path.ChangeExtension(sourceVideoTextBox.Text, "log"));
             AwsLogListener.SetPhaseTranscode();
@@ -358,6 +362,7 @@ namespace iRacingReplayOverlay
                 .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, highlightVideoOnly.Checked)
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
+                    SetTanscodeMessage(trancodingErrorMessage: errorMessage);
                     LogListener.ToFile(GetDefaultLogFileName());
                     AwsLogListener.SetPhaseGeneral();
                     NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS);
@@ -401,7 +406,7 @@ namespace iRacingReplayOverlay
 
             if (!File.Exists(sourceVideoTextBox.Text) ) 
             {
-                SetTanscodeMessage(errorDetails: "*File does not exist");
+                SetTanscodeMessage(sourceVideoFileErrorMessage: "*File does not exist");
                 return;
             }
             
@@ -412,7 +417,7 @@ namespace iRacingReplayOverlay
 
                 if (!File.Exists(fileName))
                 {
-                    SetTanscodeMessage(errorDetails: "*Captured video does not exist: " + fileName);
+                    SetTanscodeMessage(sourceVideoFileErrorMessage: "*Captured video does not exist: " + fileName);
                     return;
                 }
                 
@@ -434,11 +439,11 @@ namespace iRacingReplayOverlay
                         details.AudioEncoding,
                         details.AudioSamplesPerSecond / 1000,
                         details.AudioAverageBytesPerSecond / 1000), 
-                    errorDetails: details.ErrorMessage);
+                    sourceVideoFileErrorMessage: details.ErrorMessage);
             }
             catch(Exception ex)
             {
-                SetTanscodeMessage(errorDetails: "*Error reading the video file. {0}".F(ex.Message));
+                SetTanscodeMessage(sourceVideoFileErrorMessage: "*Error reading the video file. {0}".F(ex.Message));
 
                 lookForAudioBitRates = new System.Windows.Forms.Timer();
                 lookForAudioBitRates.Tick += sourceVideoTextBox_TextChanged;
