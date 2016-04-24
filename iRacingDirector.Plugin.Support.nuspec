@@ -15,7 +15,7 @@
     <copyright>Copyright 2016</copyright>
     <tags>iRacing, Replay Director, iRacingDirector.Plugin.Tester</tags>
     <dependencies>
-      <dependency id="iRacingSDK" version="1.0.0.35" />
+      <dependency id="iRacingSDK" version="1.0.0.36" />
     </dependencies>
   </metadata>
   <files>
