@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
-    public enum InterestState { None = 0, FirstLap = 1, LastLap = 2, Incident = 3, Restart = 4, Battle = 5 /*, Overtake = 5, Pitstp = 6 */};
+    public enum InterestState { Unknown = -1, None = 0, FirstLap = 1, LastLap = 2, Incident = 3, Restart = 4, Battle = 5 /*, Overtake = 5, Pitstp = 6 */};
 
     public class RemovalEdits
     {
@@ -68,7 +68,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         {
             nextAction = (d, t) =>
             {
-                var le = events.Pop();
+                InterestState le = events.Count > 0 ? events.Pop() : InterestState.Unknown;
                 if (le != interest)
                     throw new Exception("RaceEvent mismatched.  Attempted to close {0}, when expecting {1}".F(interest.ToString(), le.ToString()));
 
