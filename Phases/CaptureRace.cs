@@ -68,6 +68,10 @@ namespace iRacingReplayOverlay.Phases
             var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
                  new CaptureCamDriver(overlayData).Process);
 
+            var captureCamDriverEvery4Seconds = new SampleFilter(TimeSpan.FromSeconds(4),
+                new LogCamDriver().Process);
+
+
             TraceDebug.WriteLine("Cameras:");
             TraceDebug.WriteLine(TrackCameras.ToString());
 
@@ -105,6 +109,7 @@ namespace iRacingReplayOverlay.Phases
                 recordPitStop.Process(data, relativeTime);
                 fastestLaps.Process(data, relativeTime);
                 removalEdits.Process(data, relativeTime);
+                captureCamDriverEvery4Seconds.Process(data, relativeTime);
             }
 
             var files = videoCapture.Deactivate();

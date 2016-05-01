@@ -53,7 +53,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         camDriver.CurrentDriver.UserName,
                         camDriver.CurrentDriver.CarNumber,
                         position, indicator);
-
+                    
                     lastCamDriver = camDriver.CurrentDriver;
                 }
                 overlayData.CamDrivers.Add(camDriver);
@@ -80,7 +80,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 return null;
 
             var car = data.Telemetry.CamCar;
-
+            
             var position = GetPositionFor(data, car.Details);
 
             var driver = new OverlayData.Driver
@@ -90,6 +90,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
                 UserName = car.Details.UserName,
                 Position = position,
                 PitStopCount = car.PitStopCount
+
             };
 
             return driver;
