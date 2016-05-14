@@ -51,7 +51,7 @@ namespace iRacingReplayOverlay
             f.AddKeyPressField("Hot Key for Video Capture", "The hotkey used by your video capture program.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9 or F9");
 
             f.AddBlankRow();
-            f.AddCheckboxField("Disable Incidents Capture",
+            f.AddCheckboxField("Ignore Incidents Capture",
                 @"If this option is selected, then the director will not capture or focus on incidents or crashes",
                 "DisableIncidentsSearch");
 
@@ -64,6 +64,10 @@ Larger values will cause the incident scanning phase to take longer.",
                 "IncidentScanWait");
 
             f.AddIntField("Ignore Incident Below", @"Ignore any incidents below the specified position.", "IgnoreIncidentsBelowPosition");
+
+            f.AddCheckboxField("Ignore Incidents during race start", 
+                "If this option is select, then the camera will stay on the leader for during the race start, and will not following any incidents that happen in the field",
+                "IgnoreIncidentsDuringRaceStart");
 
             f.AddBlankRow();
             f.AddStringField("Preferred driver names (comma separated):", "A comma seperated list of driver names, to preference in camera selection.", "PreferredDriverNames");

@@ -57,9 +57,11 @@ namespace iRacingReplayOverlay.Phases.Direction
             var ruleBattle = new RuleBattle(cameraControl, battleMarker, Settings.Default.CameraStickyPeriod, Settings.Default.BattleStickyPeriod, Settings.Default.BattleGap, Settings.Default.BattleFactor2);
             ruleRandom = new RuleRandomDriver(cameraControl, sessionData, Settings.Default.CameraStickyPeriod);
 
+            var ruleForFirstSectors = Settings.Default.IgnoreIncidentsDuringRaceStart ? ruleFirstSectors : ruleFirstSectors.WithVeto(ruleUnlimitedIncident);
+
             directionRules = new IDirectionRule[] { 
                 ruleLastSectors,
-                ruleFirstSectors.WithVeto(ruleUnlimitedIncident),
+                ruleForFirstSectors,
                 rulePaceLaps.WithVeto(ruleUnlimitedIncident.WithVeto(ruleLastSectors)),
                 ruleBattle.WithVeto(ruleLimitedIncident.WithVeto(ruleLastSectors)),
                 ruleUnlimitedIncident.WithVeto(ruleLastSectors),

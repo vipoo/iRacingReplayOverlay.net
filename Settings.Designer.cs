@@ -448,5 +448,20 @@ namespace iRacingReplayOverlay
                 this["PluginName"] = value;
             }
         }
+
+        [UserScopedSetting]
+        [DebuggerNonUserCode]
+        [DefaultSettingValue("False")]
+        public bool IgnoreIncidentsDuringRaceStart
+        {
+            get
+            {
+                return (bool)this["IgnoreIncidentsDuringRaceStart"];
+            }
+            set
+            {
+                this["IgnoreIncidentsDuringRaceStart"] = value;
+            }
+        }
     }
 }
