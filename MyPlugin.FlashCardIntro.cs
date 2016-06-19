@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRacingSDK;
+using System;
 using System.Drawing;
 using System.Linq;
 
@@ -27,7 +28,8 @@ namespace iRacingDirector.Plugin.StandardOverlays
 
             foreach (var qualifier in thisPageOfQualifyingResults)
             {
-                var driver = EventData.CompetingDrivers[qualifier.CarIdx];
+                var driver = EventData.GetCompetingDriverByIndex(qualifier.CarIdx);
+
                 r.Center(cg => cg
                             .DrawText(qualifier.Position.ToString())
                             .AfterText(qualifier.Position.ToString())
