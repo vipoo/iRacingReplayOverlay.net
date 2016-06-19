@@ -28,7 +28,8 @@ namespace JockeOverlays
 
             foreach (var qualifier in thisPageOfQualifyingResults)
             {
-                var driver = EventData.CompetingDrivers[qualifier.CarIdx];
+                var driver = EventData.GetCompetingDriverByIndex(qualifier.CarIdx);
+
                 r.Center(cg => cg
                             .DrawText(qualifier.Position.ToString())
                             .AfterText(qualifier.Position.ToString())

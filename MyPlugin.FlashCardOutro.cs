@@ -30,7 +30,7 @@ namespace JockeOverlays
 
             foreach (var racerResult in results.Skip(DriversPerPage * page).Take(DriversPerPage))
             {
-                var driver = EventData.CompetingDrivers[racerResult.CarIdx];
+                var driver = EventData.GetCompetingDriverByIndex(racerResult.CarIdx);
 
                 var Gap = TimeSpan.FromSeconds(racerResult.Time) - LeaderTime; // Gap calculation
                 if (Gap == TimeSpan.Zero) //For the leader we want to display the race duration
