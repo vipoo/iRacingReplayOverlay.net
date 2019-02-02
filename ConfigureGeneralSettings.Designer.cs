@@ -97,7 +97,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ConfigureGeneralSettings";
             this.Text = "Configure Video Capture";
-            this.Load += new System.EventHandler(this.ConfigureGeneralSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

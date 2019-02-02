@@ -122,10 +122,5 @@ The data is sent encypted to me - the developer - dean.netherton@gmail.com", "Se
             if (this.ActiveControl.Tag != null)
                 helpText.Text = this.ActiveControl.Tag.ToString();
         }
-
-        private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

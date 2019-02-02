@@ -117,13 +117,7 @@ namespace iRacingReplayOverlay
             {
                 var newSeconds = 0.0;
                 if (double.TryParse(tb.Text, out newSeconds))
-                {
-                    if (string.Compare(setting, "BattleGap") == 0)
-                        settings[setting] = TimeSpan.FromMilliseconds(newSeconds*1000);
-                    else
-                        settings[setting] = newSeconds.Seconds(); 
-                }
-                  
+                    settings[setting] = newSeconds.Seconds();
             });
         }
 
