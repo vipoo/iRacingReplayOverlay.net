@@ -116,7 +116,7 @@ namespace iRacingReplayOverlay
             AddField(caption, description, ((TimeSpan)settings[setting]).TotalSeconds.ToString(), tb =>
             {
                 var newSeconds = 0.0;
-                if (double.TryParse(tb.Text, out newSeconds))
+                if (double.TryParse(tb.Text, out newSeconds)) 
                 {
                     if (string.Compare(setting, "BattleGap") == 0)
                         settings[setting] = TimeSpan.FromMilliseconds(newSeconds*1000);
