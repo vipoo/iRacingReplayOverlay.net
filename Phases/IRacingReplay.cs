@@ -117,7 +117,7 @@ namespace iRacingReplayOverlay.Phases
             return this;
         }
 
-        public IRacingReplay OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightsOnly)
+        public IRacingReplay OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightsOnly, bool shutdownAfterCompleted)
         {
             var context = SynchronizationContext.Current;
             
@@ -126,6 +126,7 @@ namespace iRacingReplayOverlay.Phases
                     (c, d) => context.Post(() => progress(c, d)),
                     () => context.Post(completed),
                     highlightsOnly,
+                    shutdownAfterCompleted,
                     token
                 )
             );

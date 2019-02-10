@@ -51,6 +51,7 @@ namespace iRacingReplayOverlay
             this.logMessagesButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCapture = new System.Windows.Forms.TabPage();
+            this.checkBoxShutdownAfterEncode = new System.Windows.Forms.CheckBox();
             this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.verifyVideoCaptureButton = new System.Windows.Forms.Button();
             this.configureTrackCamerasLabel = new System.Windows.Forms.Label();
@@ -131,6 +132,7 @@ namespace iRacingReplayOverlay
             // 
             // tabCapture
             // 
+            this.tabCapture.Controls.Add(this.checkBoxShutdownAfterEncode);
             this.tabCapture.Controls.Add(this.EncodeVideoAfterCapture);
             this.tabCapture.Controls.Add(this.verifyVideoCaptureButton);
             this.tabCapture.Controls.Add(this.configureTrackCamerasLabel);
@@ -151,6 +153,17 @@ namespace iRacingReplayOverlay
             this.tabCapture.TabIndex = 0;
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShutdownAfterEncode
+            // 
+            this.checkBoxShutdownAfterEncode.AutoSize = true;
+            this.checkBoxShutdownAfterEncode.Location = new System.Drawing.Point(514, 18);
+            this.checkBoxShutdownAfterEncode.Name = "checkBoxShutdownAfterEncode";
+            this.checkBoxShutdownAfterEncode.Size = new System.Drawing.Size(189, 23);
+            this.checkBoxShutdownAfterEncode.TabIndex = 8;
+            this.checkBoxShutdownAfterEncode.Text = "Shutdown after Encoding";
+            this.checkBoxShutdownAfterEncode.UseVisualStyleBackColor = true;
+            this.checkBoxShutdownAfterEncode.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // EncodeVideoAfterCapture
             // 
@@ -553,5 +566,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Button configurePluginsButton;
         private System.Windows.Forms.Label newVersionMessage;
         private System.Windows.Forms.Button buttonTestNewSettingsDlg;
+        private System.Windows.Forms.CheckBox checkBoxShutdownAfterEncode;
     }
 }
