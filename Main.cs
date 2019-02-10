@@ -34,6 +34,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+ 
 
 namespace iRacingReplayOverlay
 {
@@ -600,6 +601,12 @@ namespace iRacingReplayOverlay
         {
             var f = new ConfigurePlugins();
             f.ShowDialog();
+        }
+
+        private void configureVideoCaptureButton_Click_Test(object sender, EventArgs e)
+        {
+            var settingsDialog = new AdvanceGeneralSettingsDlg();
+            settingsDialog.ShowDialog();
         }
     }
 }
