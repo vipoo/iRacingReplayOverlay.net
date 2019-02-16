@@ -71,5 +71,30 @@ namespace iRacingReplayOverlay
         {
 
         }
+
+        private void checkBox_PerferedDriversOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender.GetType() == typeof(CheckBox))
+            {
+                //enable/disable groupBox Drivers depending on status of checkbox
+                Boolean bChecked = ((CheckBox)sender).Checked;
+                groupBox_Drivers.Enabled = bChecked;
+                foreach (Control ctrl in groupBox_Drivers.Controls)
+                    ctrl.Enabled = bChecked;
+            }
+
+            //if (((CheckBox)sender).Checked)
+            //{
+            //    //enable groupBox with driver names
+            //    groupBox_Drivers.Enabled = true;
+            //}
+            //else
+            //{
+            //    //disable groupBxo with driver names
+            //    groupBox_Drivers.Enabled = false;
+            //}
+
+
+        }
     }
 }

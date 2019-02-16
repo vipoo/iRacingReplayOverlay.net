@@ -44,28 +44,36 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxSettingDescription = new System.Windows.Forms.TextBox();
             this.tabPageIncidents = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.input_IgnoreIncidentBelow = new System.Windows.Forms.MaskedTextBox();
+            this.input_IncidentScanWait = new System.Windows.Forms.MaskedTextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxIgnoreCarsInPitsDuringStart = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox_IgnoreIncidentsCapture = new System.Windows.Forms.CheckBox();
             this.tabPageDrivers = new System.Windows.Forms.TabPage();
+            this.groupBox_Drivers = new System.Windows.Forms.GroupBox();
+            this.listBox_PreferedDriverNames = new System.Windows.Forms.ListBox();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBox_PerferedDriversOnly = new System.Windows.Forms.CheckBox();
             this.ok_button = new System.Windows.Forms.Button();
             this.cancel_button = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBox_IgnoreIncidentsCapture = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBoxIgnoreCarsInPitsDuringStart = new System.Windows.Forms.CheckBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.input_IncidentScanWait = new System.Windows.Forms.MaskedTextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.input_IgnoreIncidentBelow = new System.Windows.Forms.MaskedTextBox();
             this.incidents_settings_tab.SuspendLayout();
             this.tabPageTiming.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPageIncidents.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.tabPageDrivers.SuspendLayout();
+            this.groupBox_Drivers.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // incidents_settings_tab
@@ -259,8 +267,135 @@
             this.tabPageIncidents.Text = "Incidents";
             this.tabPageIncidents.UseVisualStyleBackColor = true;
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.input_IgnoreIncidentBelow);
+            this.groupBox5.Controls.Add(this.input_IncidentScanWait);
+            this.groupBox5.Controls.Add(this.label7);
+            this.groupBox5.Controls.Add(this.label6);
+            this.groupBox5.Location = new System.Drawing.Point(15, 156);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(480, 119);
+            this.groupBox5.TabIndex = 8;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Incident Parameters";
+            // 
+            // input_IgnoreIncidentBelow
+            // 
+            this.input_IgnoreIncidentBelow.Location = new System.Drawing.Point(339, 61);
+            this.input_IgnoreIncidentBelow.Margin = new System.Windows.Forms.Padding(4);
+            this.input_IgnoreIncidentBelow.Mask = "000";
+            this.input_IgnoreIncidentBelow.Name = "input_IgnoreIncidentBelow";
+            this.input_IgnoreIncidentBelow.Size = new System.Drawing.Size(132, 27);
+            this.input_IgnoreIncidentBelow.TabIndex = 5;
+            this.input_IgnoreIncidentBelow.Tag = "150";
+            this.input_IgnoreIncidentBelow.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.input_IgnoreIncidentBelow.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
+            // 
+            // input_IncidentScanWait
+            // 
+            this.input_IncidentScanWait.Location = new System.Drawing.Point(339, 27);
+            this.input_IncidentScanWait.Margin = new System.Windows.Forms.Padding(4);
+            this.input_IncidentScanWait.Mask = "000";
+            this.input_IncidentScanWait.Name = "input_IncidentScanWait";
+            this.input_IncidentScanWait.Size = new System.Drawing.Size(132, 27);
+            this.input_IncidentScanWait.TabIndex = 5;
+            this.input_IncidentScanWait.Tag = "150";
+            this.input_IncidentScanWait.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(15, 66);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(150, 19);
+            this.label7.TabIndex = 4;
+            this.label7.Text = "Ignore Incident Below";
+            this.label7.Click += new System.EventHandler(this.label6_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(15, 32);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(129, 19);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Incident Scan Wait";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.textBox1);
+            this.groupBox4.Location = new System.Drawing.Point(15, 301);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox4.Size = new System.Drawing.Size(480, 164);
+            this.groupBox4.TabIndex = 7;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Description of Setting";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(15, 29);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(456, 124);
+            this.textBox1.TabIndex = 0;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.checkBoxIgnoreCarsInPitsDuringStart);
+            this.groupBox3.Controls.Add(this.checkBox1);
+            this.groupBox3.Controls.Add(this.checkBox_IgnoreIncidentsCapture);
+            this.groupBox3.Location = new System.Drawing.Point(15, 21);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(480, 119);
+            this.groupBox3.TabIndex = 0;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "General Incidents Settings";
+            // 
+            // checkBoxIgnoreCarsInPitsDuringStart
+            // 
+            this.checkBoxIgnoreCarsInPitsDuringStart.AutoSize = true;
+            this.checkBoxIgnoreCarsInPitsDuringStart.Checked = true;
+            this.checkBoxIgnoreCarsInPitsDuringStart.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxIgnoreCarsInPitsDuringStart.Location = new System.Drawing.Point(15, 26);
+            this.checkBoxIgnoreCarsInPitsDuringStart.Name = "checkBoxIgnoreCarsInPitsDuringStart";
+            this.checkBoxIgnoreCarsInPitsDuringStart.Size = new System.Drawing.Size(225, 23);
+            this.checkBoxIgnoreCarsInPitsDuringStart.TabIndex = 0;
+            this.checkBoxIgnoreCarsInPitsDuringStart.Text = "Ingore Cars in Pits during Start";
+            this.checkBoxIgnoreCarsInPitsDuringStart.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(15, 55);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(249, 23);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Ingore Incidents During Race Start";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_IgnoreIncidentsCapture
+            // 
+            this.checkBox_IgnoreIncidentsCapture.AutoSize = true;
+            this.checkBox_IgnoreIncidentsCapture.Location = new System.Drawing.Point(15, 84);
+            this.checkBox_IgnoreIncidentsCapture.Name = "checkBox_IgnoreIncidentsCapture";
+            this.checkBox_IgnoreIncidentsCapture.Size = new System.Drawing.Size(187, 23);
+            this.checkBox_IgnoreIncidentsCapture.TabIndex = 0;
+            this.checkBox_IgnoreIncidentsCapture.Text = "Ingore Incidents Capture";
+            this.checkBox_IgnoreIncidentsCapture.UseVisualStyleBackColor = true;
+            // 
             // tabPageDrivers
             // 
+            this.tabPageDrivers.Controls.Add(this.groupBox_Drivers);
+            this.tabPageDrivers.Controls.Add(this.groupBox6);
             this.tabPageDrivers.Location = new System.Drawing.Point(4, 28);
             this.tabPageDrivers.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageDrivers.Name = "tabPageDrivers";
@@ -269,6 +404,56 @@
             this.tabPageDrivers.TabIndex = 2;
             this.tabPageDrivers.Text = "Drivers";
             this.tabPageDrivers.UseVisualStyleBackColor = true;
+            // 
+            // groupBox_Drivers
+            // 
+            this.groupBox_Drivers.Controls.Add(this.listBox_PreferedDriverNames);
+            this.groupBox_Drivers.Controls.Add(this.checkedListBox1);
+            this.groupBox_Drivers.Enabled = false;
+            this.groupBox_Drivers.Location = new System.Drawing.Point(7, 116);
+            this.groupBox_Drivers.Name = "groupBox_Drivers";
+            this.groupBox_Drivers.Size = new System.Drawing.Size(480, 390);
+            this.groupBox_Drivers.TabIndex = 1;
+            this.groupBox_Drivers.TabStop = false;
+            this.groupBox_Drivers.Text = "Drivers";
+            // 
+            // listBox_PreferedDriverNames
+            // 
+            this.listBox_PreferedDriverNames.FormattingEnabled = true;
+            this.listBox_PreferedDriverNames.ItemHeight = 19;
+            this.listBox_PreferedDriverNames.Location = new System.Drawing.Point(15, 154);
+            this.listBox_PreferedDriverNames.Name = "listBox_PreferedDriverNames";
+            this.listBox_PreferedDriverNames.Size = new System.Drawing.Size(422, 80);
+            this.listBox_PreferedDriverNames.TabIndex = 1;
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Location = new System.Drawing.Point(15, 44);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(422, 92);
+            this.checkedListBox1.TabIndex = 0;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.checkBox_PerferedDriversOnly);
+            this.groupBox6.Location = new System.Drawing.Point(7, 18);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(480, 79);
+            this.groupBox6.TabIndex = 1;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "General";
+            // 
+            // checkBox_PerferedDriversOnly
+            // 
+            this.checkBox_PerferedDriversOnly.AutoSize = true;
+            this.checkBox_PerferedDriversOnly.Location = new System.Drawing.Point(15, 26);
+            this.checkBox_PerferedDriversOnly.Name = "checkBox_PerferedDriversOnly";
+            this.checkBox_PerferedDriversOnly.Size = new System.Drawing.Size(229, 23);
+            this.checkBox_PerferedDriversOnly.TabIndex = 0;
+            this.checkBox_PerferedDriversOnly.Text = "Battles of prefered drivers only";
+            this.checkBox_PerferedDriversOnly.UseVisualStyleBackColor = true;
+            this.checkBox_PerferedDriversOnly.CheckedChanged += new System.EventHandler(this.checkBox_PerferedDriversOnly_CheckedChanged);
             // 
             // ok_button
             // 
@@ -291,131 +476,6 @@
             this.cancel_button.Text = "Cancel";
             this.cancel_button.UseVisualStyleBackColor = true;
             this.cancel_button.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.checkBoxIgnoreCarsInPitsDuringStart);
-            this.groupBox3.Controls.Add(this.checkBox1);
-            this.groupBox3.Controls.Add(this.checkBox_IgnoreIncidentsCapture);
-            this.groupBox3.Location = new System.Drawing.Point(15, 21);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(480, 119);
-            this.groupBox3.TabIndex = 0;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "General Incidents Settings";
-            // 
-            // checkBox_IgnoreIncidentsCapture
-            // 
-            this.checkBox_IgnoreIncidentsCapture.AutoSize = true;
-            this.checkBox_IgnoreIncidentsCapture.Location = new System.Drawing.Point(15, 84);
-            this.checkBox_IgnoreIncidentsCapture.Name = "checkBox_IgnoreIncidentsCapture";
-            this.checkBox_IgnoreIncidentsCapture.Size = new System.Drawing.Size(187, 23);
-            this.checkBox_IgnoreIncidentsCapture.TabIndex = 0;
-            this.checkBox_IgnoreIncidentsCapture.Text = "Ingore Incidents Capture";
-            this.checkBox_IgnoreIncidentsCapture.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(15, 29);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(456, 124);
-            this.textBox1.TabIndex = 0;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.textBox1);
-            this.groupBox4.Location = new System.Drawing.Point(15, 301);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox4.Size = new System.Drawing.Size(480, 164);
-            this.groupBox4.TabIndex = 7;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Description of Setting";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(15, 55);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(249, 23);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Ingore Incidents During Race Start";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxIgnoreCarsInPitsDuringStart
-            // 
-            this.checkBoxIgnoreCarsInPitsDuringStart.AutoSize = true;
-            this.checkBoxIgnoreCarsInPitsDuringStart.Checked = true;
-            this.checkBoxIgnoreCarsInPitsDuringStart.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxIgnoreCarsInPitsDuringStart.Location = new System.Drawing.Point(15, 26);
-            this.checkBoxIgnoreCarsInPitsDuringStart.Name = "checkBoxIgnoreCarsInPitsDuringStart";
-            this.checkBoxIgnoreCarsInPitsDuringStart.Size = new System.Drawing.Size(225, 23);
-            this.checkBoxIgnoreCarsInPitsDuringStart.TabIndex = 0;
-            this.checkBoxIgnoreCarsInPitsDuringStart.Text = "Ingore Cars in Pits during Start";
-            this.checkBoxIgnoreCarsInPitsDuringStart.UseVisualStyleBackColor = true;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.input_IgnoreIncidentBelow);
-            this.groupBox5.Controls.Add(this.input_IncidentScanWait);
-            this.groupBox5.Controls.Add(this.label7);
-            this.groupBox5.Controls.Add(this.label6);
-            this.groupBox5.Location = new System.Drawing.Point(15, 156);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(480, 119);
-            this.groupBox5.TabIndex = 8;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Incident Parameters";
-            // 
-            // input_IncidentScanWait
-            // 
-            this.input_IncidentScanWait.Location = new System.Drawing.Point(339, 27);
-            this.input_IncidentScanWait.Margin = new System.Windows.Forms.Padding(4);
-            this.input_IncidentScanWait.Mask = "000";
-            this.input_IncidentScanWait.Name = "input_IncidentScanWait";
-            this.input_IncidentScanWait.Size = new System.Drawing.Size(132, 27);
-            this.input_IncidentScanWait.TabIndex = 5;
-            this.input_IncidentScanWait.Tag = "150";
-            this.input_IncidentScanWait.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 32);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(129, 19);
-            this.label6.TabIndex = 4;
-            this.label6.Text = "Incident Scan Wait";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 66);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(150, 19);
-            this.label7.TabIndex = 4;
-            this.label7.Text = "Ignore Incident Below";
-            this.label7.Click += new System.EventHandler(this.label6_Click);
-            // 
-            // input_IgnoreIncidentBelow
-            // 
-            this.input_IgnoreIncidentBelow.Location = new System.Drawing.Point(339, 61);
-            this.input_IgnoreIncidentBelow.Margin = new System.Windows.Forms.Padding(4);
-            this.input_IgnoreIncidentBelow.Mask = "000";
-            this.input_IgnoreIncidentBelow.Name = "input_IgnoreIncidentBelow";
-            this.input_IgnoreIncidentBelow.Size = new System.Drawing.Size(132, 27);
-            this.input_IgnoreIncidentBelow.TabIndex = 5;
-            this.input_IgnoreIncidentBelow.Tag = "150";
-            this.input_IgnoreIncidentBelow.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.input_IgnoreIncidentBelow.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
             // 
             // AdvanceGeneralSettingsDlg
             // 
@@ -440,12 +500,16 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPageIncidents.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.tabPageDrivers.ResumeLayout(false);
+            this.groupBox_Drivers.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -482,5 +546,10 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.MaskedTextBox input_IgnoreIncidentBelow;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox groupBox_Drivers;
+        private System.Windows.Forms.ListBox listBox_PreferedDriverNames;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.CheckBox checkBox_PerferedDriversOnly;
     }
 }
