@@ -88,7 +88,24 @@ namespace iRacingReplayOverlay.Phases.Direction
         {
             if (reselectLeaderAt < DateTime.Now)
             {
-                var leader = data.Telemetry.Cars.First(c => c.Position == 1);
+                int posLeaderOnTrack = 1;
+                var leader = data.Telemetry.Cars.First(c => c.Position == posLeaderOnTrack);
+
+                //InterestState curState = editMarker.getInterestState();
+                if (editMarker.getInterestState() == InterestState.FirstLap)
+                {
+                    
+                    ////if in first lap make sure that first car on track is selected as leader
+                    while (leader.IsInPits)
+                    {
+                        posLeaderOnTrack += 1;
+                        leader = data.Telemetry.Cars[posLeaderOnTrack];
+                        //leader = data.Telemetry.Cars.First(c => c.Position == posLeaderOnTrack);
+                    }
+                    ;
+                }
+                
+
                 cameraControl.CameraOnDriver(leader.Details.CarNumberRaw, cameraControl.RaceStartCameraNumber);
 
                 reselectLeaderAt = DateTime.Now + 1.5.Seconds();

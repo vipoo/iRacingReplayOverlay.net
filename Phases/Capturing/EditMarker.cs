@@ -34,6 +34,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
             this.interest = interest;
         }
 
+        public InterestState getInterestState() { return interest; }
+
         internal void Start(int pos = int.MaxValue)
         {
             if (wasStarted)
