@@ -25,6 +25,7 @@ using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -117,6 +118,18 @@ namespace iRacingReplayOverlay.Phases
             removalEdits.Stop();
 
             var overlayFile = SaveOverlayData(overlayData, files);
+
+            //terminate iRacing after video capture completed
+            try
+            {
+                //ToBe added: Option to select/deselect termination of iRacing after capturing video in new settings Dialog
+                Process[] iRacingProc = Process.GetProcessesByName("iRacingSim64DX11");
+                iRacingProc1[0].Kill();
+            }
+            catch
+            {
+                throw new Exception("Could not terminate iRacing Simulator".F(workingFolder));
+            }
 
             iRacing.Replay.SetSpeed(0);
 
