@@ -124,7 +124,7 @@ namespace iRacingReplayOverlay.Phases
             {
                 //ToBe added: Option to select/deselect termination of iRacing after capturing video in new settings Dialog
                 Process[] iRacingProc = Process.GetProcessesByName("iRacingSim64DX11");
-                iRacingProc1[0].Kill();
+                iRacingProc[0].Kill();
             }
             catch
             {
