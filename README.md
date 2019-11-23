@@ -1,11 +1,8 @@
 iRacingReplayOverlay.net
 ========================
 
-[![Build status](https://ci.appveyor.com/api/projects/status/15batnoaijxhvfjd?svg=true)](https://ci.appveyor.com/project/vipoo/iracingreplayoverlay-net)
-
-This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
-
-It creates 2 videos from your replays; the full replay and a 10 minute highlight video.
+The program provided in this repository (branch) is derived from the original iRacingReplayDirector from vipoo. 
+Due to vipoo seemed to discontinue his support the installation process had to be changed - furthermore issues should be directly reported into this branch.
 
 The highlight video will contain the battles, incidents and remove any boring bits from the final video.
 
@@ -16,7 +13,8 @@ https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be
 
 https://www.youtube.com/watch?v=Zs4VyBPOCHw&list=UUjHTFbxIv3vi7KGreofr8Aw
 
-Please feel free to log feature requests, or bug issues in github issues tracker for the repo at: https://github.com/vipoo/iRacingReplayOverlay.net/issues
+Please feel free to log feature requests, or bug issues in github issues tracker for the repo at: 
+https://github.com/MerlinCooper/iRacingReplayOverlay.net/issues
 
 You configure the rules for cameras selection - then with iRacing replay loaded, you press the big button saying 'Begin'.
 
@@ -40,9 +38,8 @@ The program will send the required keystroke to the video capture software, once
 Installation
 ============
 
-The application can be installed at: https://iracingreplaydirector.s3-ap-southeast-2.amazonaws.com/index.html
-
-Or if you a feeling adventurous, you can try ealier releases at: https://iracingreplaydirector-beta.s3.amazonaws.com/index.html
+To install the application download the zip-file containing the binaries from github and unzip the files on your local harddrive. 
+https://github.com/MerlinCooper/iRacingReplayOverlay.net/releases
 
 How to use
 ===================
@@ -65,5 +62,5 @@ Known Issues/Requirements
 * Only tested with audio codec PCM
 * Video capture software must respond to ALT+F9 or F9 keypress to start/stop recording
 * Replays must captured details of all competitors (Under the graphics options, set the Max Cars to a number greater than number of competitors before recording a replay session)
-* Tested on Windows 7/Windows 8 only
+* Tested on Windows 10 only
 * Requires 64x version of windows
