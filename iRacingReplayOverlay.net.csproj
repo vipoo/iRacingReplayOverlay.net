@@ -156,6 +156,7 @@
     </Compile>
     <Compile Include="Aws\AwsKey.cs" />
     <Compile Include="Aws\AwsLogListener.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Phases\Capturing\LogCamDriver.cs" />
     <Compile Include="Phases\TranscodeAndOverlay.cs" />
     <Compile Include="PluginSettings.cs">
