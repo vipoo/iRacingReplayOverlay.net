@@ -372,7 +372,8 @@ namespace iRacingReplayOverlay
 
         void OnTranscoderProgress(long timestamp, long duration)
         {
-            transcodeProgressBar.Value = Math.Min(transcodeProgressBar.Maximum, (int)(timestamp * transcodeProgressBar.Maximum / duration));
+            ulong ulDuration = (ulong)duration;
+            transcodeProgressBar.Value = Math.Min(transcodeProgressBar.Maximum, (int)((ulong)(timestamp * transcodeProgressBar.Maximum) / ulDuration));
         }
 
         void OnTranscoderCompleted()
