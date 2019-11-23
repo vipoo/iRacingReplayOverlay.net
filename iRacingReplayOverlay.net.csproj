@@ -16,11 +16,25 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
     <ProductName>iRacing Replay Director</ProductName>
     <PublisherName>Dean Netherton</PublisherName>
     <SuiteName>iRacing Apps</SuiteName>
     <ApplicationRevision>34</ApplicationRevision>
-    <ApplicationVersion>1.0.0.34</ApplicationVersion>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Optimize>false</Optimize>
@@ -43,12 +57,27 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <DefineConstants>TRACE</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>5A161F85D2EF3CAAF0579FF864F6B3FBB11097FE</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>iRacingReplayOverlay.net_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <Reference Include="iRacingSDK, Version=1.0.0.36, Culture=neutral, processorArchitecture=MSIL">
@@ -258,6 +287,7 @@
     <None Include="DeploymentSite\.gitignore" />
     <None Include="DeploymentSite\main.jsx" />
     <None Include="DeploymentSite\package.json" />
+    <None Include="iRacingReplayOverlay.net_TemporaryKey.pfx" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
@@ -320,5 +350,11 @@
   <ItemGroup>
     <Analyzer Include="packages\AWSSDK.CloudWatchLogs.3.1.2.2\analyzers\dotnet\cs\AWSSDK.CloudWatchLogs.CodeAnalysis.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
 </Project>
