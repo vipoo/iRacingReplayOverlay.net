@@ -1,22 +1,22 @@
-﻿// This file is part of iRacingReplayDirector.
+﻿// This file is part of iRacingReplayOverlay.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayDirector.net
+// https://github.com/vipoo/iRacingReplayOverlay.net
 //
-// iRacingReplayDirector is free software: you can redistribute it and/or modify
+// iRacingReplayOverlay is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayDirector is distributed in the hope that it will be useful,
+// iRacingReplayOverlay is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace iRacingReplayDirector
+namespace iRacingReplayOverlay
 {
     partial class Main
     {
@@ -51,10 +51,7 @@ namespace iRacingReplayDirector
             this.logMessagesButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCapture = new System.Windows.Forms.TabPage();
-            this.cb_CloseiRacingAfterRecording = new System.Windows.Forms.CheckBox();
-            this.checkBoxShutdownAfterEncode = new System.Windows.Forms.CheckBox();
-            this.cb_FastVideoRecording = new System.Windows.Forms.CheckBox();
-            this.cb_EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
+            this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.verifyVideoCaptureButton = new System.Windows.Forms.Button();
             this.configureTrackCamerasLabel = new System.Windows.Forms.Label();
             this.TestOnlyCheckBox = new System.Windows.Forms.CheckBox();
@@ -84,6 +81,7 @@ namespace iRacingReplayDirector
             this.changeVersionButton = new System.Windows.Forms.Button();
             this.configurePluginsButton = new System.Windows.Forms.Button();
             this.newVersionMessage = new System.Windows.Forms.Label();
+            this.buttonTestNewSettingsDlg = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -133,10 +131,7 @@ namespace iRacingReplayDirector
             // 
             // tabCapture
             // 
-            this.tabCapture.Controls.Add(this.cb_CloseiRacingAfterRecording);
-            this.tabCapture.Controls.Add(this.checkBoxShutdownAfterEncode);
-            this.tabCapture.Controls.Add(this.cb_FastVideoRecording);
-            this.tabCapture.Controls.Add(this.cb_EncodeVideoAfterCapture);
+            this.tabCapture.Controls.Add(this.EncodeVideoAfterCapture);
             this.tabCapture.Controls.Add(this.verifyVideoCaptureButton);
             this.tabCapture.Controls.Add(this.configureTrackCamerasLabel);
             this.tabCapture.Controls.Add(this.TestOnlyCheckBox);
@@ -157,56 +152,20 @@ namespace iRacingReplayDirector
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
             // 
-            // cb_CloseiRacingAfterRecording
+            // EncodeVideoAfterCapture
             // 
-            this.cb_CloseiRacingAfterRecording.AutoSize = true;
-            this.cb_CloseiRacingAfterRecording.Location = new System.Drawing.Point(516, 29);
-            this.cb_CloseiRacingAfterRecording.Name = "cb_CloseiRacingAfterRecording";
-            this.cb_CloseiRacingAfterRecording.Size = new System.Drawing.Size(220, 23);
-            this.cb_CloseiRacingAfterRecording.TabIndex = 8;
-            this.cb_CloseiRacingAfterRecording.Text = "Close iRacing after Recording";
-            this.cb_CloseiRacingAfterRecording.UseVisualStyleBackColor = true;
-            this.cb_CloseiRacingAfterRecording.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // checkBoxShutdownAfterEncode
-            // 
-            this.checkBoxShutdownAfterEncode.AutoSize = true;
-            this.checkBoxShutdownAfterEncode.Location = new System.Drawing.Point(516, 58);
-            this.checkBoxShutdownAfterEncode.Name = "checkBoxShutdownAfterEncode";
-            this.checkBoxShutdownAfterEncode.Size = new System.Drawing.Size(210, 23);
-            this.checkBoxShutdownAfterEncode.TabIndex = 8;
-            this.checkBoxShutdownAfterEncode.Text = "Shutdown PC after Encoding";
-            this.checkBoxShutdownAfterEncode.UseVisualStyleBackColor = true;
-            this.checkBoxShutdownAfterEncode.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // cb_FastVideoRecording
-            // 
-            this.cb_FastVideoRecording.AutoSize = true;
-            this.cb_FastVideoRecording.Checked = true;
-            this.cb_FastVideoRecording.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_FastVideoRecording.Location = new System.Drawing.Point(300, 58);
-            this.cb_FastVideoRecording.Name = "cb_FastVideoRecording";
-            this.cb_FastVideoRecording.Size = new System.Drawing.Size(190, 23);
-            this.cb_FastVideoRecording.TabIndex = 8;
-            this.cb_FastVideoRecording.Text = "Use fast video recording ";
-            this.cb_FastVideoRecording.UseVisualStyleBackColor = true;
-            this.cb_FastVideoRecording.CheckedChanged += new System.EventHandler(this.cb_FastVideoRecording_CheckedChanged);
-            // 
-            // cb_EncodeVideoAfterCapture
-            // 
-            this.cb_EncodeVideoAfterCapture.AutoSize = true;
-            this.cb_EncodeVideoAfterCapture.Location = new System.Drawing.Point(300, 29);
-            this.cb_EncodeVideoAfterCapture.Name = "cb_EncodeVideoAfterCapture";
-            this.cb_EncodeVideoAfterCapture.Size = new System.Drawing.Size(207, 23);
-            this.cb_EncodeVideoAfterCapture.TabIndex = 8;
-            this.cb_EncodeVideoAfterCapture.Text = "Encode Video After Capture";
-            this.cb_EncodeVideoAfterCapture.UseVisualStyleBackColor = true;
-            this.cb_EncodeVideoAfterCapture.CheckedChanged += new System.EventHandler(this.EncodeVideoAfterCapture_CheckedChanged);
+            this.EncodeVideoAfterCapture.AutoSize = true;
+            this.EncodeVideoAfterCapture.Location = new System.Drawing.Point(300, 18);
+            this.EncodeVideoAfterCapture.Name = "EncodeVideoAfterCapture";
+            this.EncodeVideoAfterCapture.Size = new System.Drawing.Size(207, 23);
+            this.EncodeVideoAfterCapture.TabIndex = 8;
+            this.EncodeVideoAfterCapture.Text = "Encode Video After Capture";
+            this.EncodeVideoAfterCapture.UseVisualStyleBackColor = true;
             // 
             // verifyVideoCaptureButton
             // 
             this.verifyVideoCaptureButton.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.verifyVideoCaptureButton.Location = new System.Drawing.Point(586, 180);
+            this.verifyVideoCaptureButton.Location = new System.Drawing.Point(586, 132);
             this.verifyVideoCaptureButton.Margin = new System.Windows.Forms.Padding(4);
             this.verifyVideoCaptureButton.Name = "verifyVideoCaptureButton";
             this.verifyVideoCaptureButton.Size = new System.Drawing.Size(153, 30);
@@ -219,7 +178,7 @@ namespace iRacingReplayDirector
             // 
             this.configureTrackCamerasLabel.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.configureTrackCamerasLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.configureTrackCamerasLabel.Location = new System.Drawing.Point(7, 115);
+            this.configureTrackCamerasLabel.Location = new System.Drawing.Point(174, 48);
             this.configureTrackCamerasLabel.Name = "configureTrackCamerasLabel";
             this.configureTrackCamerasLabel.Size = new System.Drawing.Size(279, 30);
             this.configureTrackCamerasLabel.TabIndex = 9;
@@ -230,7 +189,7 @@ namespace iRacingReplayDirector
             // TestOnlyCheckBox
             // 
             this.TestOnlyCheckBox.AutoSize = true;
-            this.TestOnlyCheckBox.Location = new System.Drawing.Point(174, 29);
+            this.TestOnlyCheckBox.Location = new System.Drawing.Point(174, 18);
             this.TestOnlyCheckBox.Name = "TestOnlyCheckBox";
             this.TestOnlyCheckBox.Size = new System.Drawing.Size(126, 23);
             this.TestOnlyCheckBox.TabIndex = 7;
@@ -240,7 +199,7 @@ namespace iRacingReplayDirector
             // WaitingForIRacingLabel
             // 
             this.WaitingForIRacingLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.WaitingForIRacingLabel.Location = new System.Drawing.Point(6, 115);
+            this.WaitingForIRacingLabel.Location = new System.Drawing.Point(174, 44);
             this.WaitingForIRacingLabel.Name = "WaitingForIRacingLabel";
             this.WaitingForIRacingLabel.Size = new System.Drawing.Size(547, 41);
             this.WaitingForIRacingLabel.TabIndex = 11;
@@ -249,7 +208,7 @@ namespace iRacingReplayDirector
             // ProcessErrorMessageLabel
             // 
             this.ProcessErrorMessageLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.ProcessErrorMessageLabel.Location = new System.Drawing.Point(6, 115);
+            this.ProcessErrorMessageLabel.Location = new System.Drawing.Point(174, 44);
             this.ProcessErrorMessageLabel.Name = "ProcessErrorMessageLabel";
             this.ProcessErrorMessageLabel.Size = new System.Drawing.Size(547, 50);
             this.ProcessErrorMessageLabel.TabIndex = 10;
@@ -259,7 +218,7 @@ namespace iRacingReplayDirector
             // CapturingRaceLabel
             // 
             this.CapturingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.CapturingRaceLabel.Location = new System.Drawing.Point(6, 115);
+            this.CapturingRaceLabel.Location = new System.Drawing.Point(174, 48);
             this.CapturingRaceLabel.Name = "CapturingRaceLabel";
             this.CapturingRaceLabel.Size = new System.Drawing.Size(406, 50);
             this.CapturingRaceLabel.TabIndex = 12;
@@ -269,7 +228,7 @@ namespace iRacingReplayDirector
             // AnalysingRaceLabel
             // 
             this.AnalysingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.AnalysingRaceLabel.Location = new System.Drawing.Point(6, 115);
+            this.AnalysingRaceLabel.Location = new System.Drawing.Point(174, 44);
             this.AnalysingRaceLabel.Name = "AnalysingRaceLabel";
             this.AnalysingRaceLabel.Size = new System.Drawing.Size(406, 50);
             this.AnalysingRaceLabel.TabIndex = 13;
@@ -278,7 +237,7 @@ namespace iRacingReplayDirector
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(6, 226);
+            this.label2.Location = new System.Drawing.Point(6, 178);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(594, 55);
             this.label2.TabIndex = 18;
@@ -300,7 +259,7 @@ namespace iRacingReplayDirector
             // 
             // workingFolderButton
             // 
-            this.workingFolderButton.Location = new System.Drawing.Point(516, 180);
+            this.workingFolderButton.Location = new System.Drawing.Point(516, 132);
             this.workingFolderButton.Name = "workingFolderButton";
             this.workingFolderButton.Size = new System.Drawing.Size(64, 30);
             this.workingFolderButton.TabIndex = 16;
@@ -311,7 +270,7 @@ namespace iRacingReplayDirector
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 185);
+            this.label5.Location = new System.Drawing.Point(6, 137);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(149, 19);
             this.label5.TabIndex = 14;
@@ -319,7 +278,7 @@ namespace iRacingReplayDirector
             // 
             // workingFolderTextBox
             // 
-            this.workingFolderTextBox.Location = new System.Drawing.Point(156, 182);
+            this.workingFolderTextBox.Location = new System.Drawing.Point(156, 134);
             this.workingFolderTextBox.Name = "workingFolderTextBox";
             this.workingFolderTextBox.Size = new System.Drawing.Size(355, 27);
             this.workingFolderTextBox.TabIndex = 15;
@@ -511,6 +470,16 @@ namespace iRacingReplayDirector
             this.newVersionMessage.Text = "New Version available ->";
             this.newVersionMessage.Visible = false;
             // 
+            // buttonTestNewSettingsDlg
+            // 
+            this.buttonTestNewSettingsDlg.Location = new System.Drawing.Point(12, 42);
+            this.buttonTestNewSettingsDlg.Name = "buttonTestNewSettingsDlg";
+            this.buttonTestNewSettingsDlg.Size = new System.Drawing.Size(267, 27);
+            this.buttonTestNewSettingsDlg.TabIndex = 1;
+            this.buttonTestNewSettingsDlg.Text = "Configure General (not working)";
+            this.buttonTestNewSettingsDlg.UseVisualStyleBackColor = true;
+            this.buttonTestNewSettingsDlg.Click += new System.EventHandler(this.configureVideoCaptureButton_Click_Test);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -523,6 +492,7 @@ namespace iRacingReplayDirector
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.logMessagesButton);
+            this.Controls.Add(this.buttonTestNewSettingsDlg);
             this.Controls.Add(this.configureGeneralSettingsButton);
             this.Controls.Add(this.SettingsButton);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -578,12 +548,10 @@ namespace iRacingReplayDirector
         private System.Windows.Forms.Button verifyVideoCaptureButton;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox cb_EncodeVideoAfterCapture;
+        private System.Windows.Forms.CheckBox EncodeVideoAfterCapture;
         private System.Windows.Forms.Button changeVersionButton;
         private System.Windows.Forms.Button configurePluginsButton;
         private System.Windows.Forms.Label newVersionMessage;
-        private System.Windows.Forms.CheckBox checkBoxShutdownAfterEncode;
-        private System.Windows.Forms.CheckBox cb_FastVideoRecording;
-        private System.Windows.Forms.CheckBox cb_CloseiRacingAfterRecording;
+        private System.Windows.Forms.Button buttonTestNewSettingsDlg;
     }
 }
