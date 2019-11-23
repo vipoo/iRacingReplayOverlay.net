@@ -1,8 +1,10 @@
 iRacingReplayOverlay.net
 ========================
 
-The program provided in this repository (branch) is derived from the original iRacingReplayDirector from vipoo. 
-Due to vipoo seemed to discontinue his support the installation process had to be changed - furthermore issues should be directly reported into this branch.
+The program provided in this repository (fork) is derived from the original iRacingReplayDirector from vipoo.
+
+Due to vipoo discontinue his support the installation process was changed and no automatic updates possible anymore.  
+Furthermore I would appreciate if you do issue reports and feature requests directly in this fork. 
 
 The highlight video will contain the battles, incidents and remove any boring bits from the final video.
 
