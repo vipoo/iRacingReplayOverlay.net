@@ -82,6 +82,7 @@ namespace iRacingReplayOverlay
             this.changeVersionButton = new System.Windows.Forms.Button();
             this.configurePluginsButton = new System.Windows.Forms.Button();
             this.newVersionMessage = new System.Windows.Forms.Label();
+            this.buttonTestNewSettingsDlg = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -482,6 +483,16 @@ namespace iRacingReplayOverlay
             this.newVersionMessage.Text = "New Version available ->";
             this.newVersionMessage.Visible = false;
             // 
+            // buttonTestNewSettingsDlg
+            // 
+            this.buttonTestNewSettingsDlg.Location = new System.Drawing.Point(12, 42);
+            this.buttonTestNewSettingsDlg.Name = "buttonTestNewSettingsDlg";
+            this.buttonTestNewSettingsDlg.Size = new System.Drawing.Size(181, 27);
+            this.buttonTestNewSettingsDlg.TabIndex = 1;
+            this.buttonTestNewSettingsDlg.Text = "Configure General (Beta)";
+            this.buttonTestNewSettingsDlg.UseVisualStyleBackColor = true;
+            this.buttonTestNewSettingsDlg.Click += new System.EventHandler(this.configureVideoCaptureButton_Click_Test);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -494,6 +505,7 @@ namespace iRacingReplayOverlay
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.logMessagesButton);
+            this.Controls.Add(this.buttonTestNewSettingsDlg);
             this.Controls.Add(this.configureGeneralSettingsButton);
             this.Controls.Add(this.SettingsButton);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -553,6 +565,7 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Button changeVersionButton;
         private System.Windows.Forms.Button configurePluginsButton;
         private System.Windows.Forms.Label newVersionMessage;
+        private System.Windows.Forms.Button buttonTestNewSettingsDlg;
         private System.Windows.Forms.CheckBox checkBoxShutdownAfterEncode;
     }
 }

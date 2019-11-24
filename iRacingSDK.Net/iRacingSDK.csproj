@@ -46,8 +46,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="YamlDotNet, Version=0.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.8.0.0\lib\net35-client\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.5.3.0\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +58,6 @@
     <Compile Include="DataSampleExtensions\WithPitStopCounts.cs" />
     <Compile Include="DataSampleExtensions\VerifyReplayFrames.cs" />
     <Compile Include="DataSampleExtensions\WithEvents.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Skies.cs" />
     <Compile Include="Messaging\WeatherType.cs" />
     <Compile Include="Messaging\iRacingMessaging.cs" />
