@@ -82,6 +82,7 @@ namespace iRacingReplayOverlay
             this.changeVersionButton = new System.Windows.Forms.Button();
             this.configurePluginsButton = new System.Windows.Forms.Button();
             this.newVersionMessage = new System.Windows.Forms.Label();
+            this.cb_FastVideoRecording = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -132,6 +133,7 @@ namespace iRacingReplayOverlay
             // tabCapture
             // 
             this.tabCapture.Controls.Add(this.checkBoxShutdownAfterEncode);
+            this.tabCapture.Controls.Add(this.cb_FastVideoRecording);
             this.tabCapture.Controls.Add(this.EncodeVideoAfterCapture);
             this.tabCapture.Controls.Add(this.verifyVideoCaptureButton);
             this.tabCapture.Controls.Add(this.configureTrackCamerasLabel);
@@ -156,7 +158,9 @@ namespace iRacingReplayOverlay
             // checkBoxShutdownAfterEncode
             // 
             this.checkBoxShutdownAfterEncode.AutoSize = true;
-            this.checkBoxShutdownAfterEncode.Location = new System.Drawing.Point(514, 18);
+            this.checkBoxShutdownAfterEncode.Checked = true;
+            this.checkBoxShutdownAfterEncode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxShutdownAfterEncode.Location = new System.Drawing.Point(514, 29);
             this.checkBoxShutdownAfterEncode.Name = "checkBoxShutdownAfterEncode";
             this.checkBoxShutdownAfterEncode.Size = new System.Drawing.Size(189, 23);
             this.checkBoxShutdownAfterEncode.TabIndex = 8;
@@ -167,7 +171,7 @@ namespace iRacingReplayOverlay
             // EncodeVideoAfterCapture
             // 
             this.EncodeVideoAfterCapture.AutoSize = true;
-            this.EncodeVideoAfterCapture.Location = new System.Drawing.Point(300, 18);
+            this.EncodeVideoAfterCapture.Location = new System.Drawing.Point(300, 29);
             this.EncodeVideoAfterCapture.Name = "EncodeVideoAfterCapture";
             this.EncodeVideoAfterCapture.Size = new System.Drawing.Size(207, 23);
             this.EncodeVideoAfterCapture.TabIndex = 8;
@@ -201,7 +205,7 @@ namespace iRacingReplayOverlay
             // TestOnlyCheckBox
             // 
             this.TestOnlyCheckBox.AutoSize = true;
-            this.TestOnlyCheckBox.Location = new System.Drawing.Point(174, 18);
+            this.TestOnlyCheckBox.Location = new System.Drawing.Point(174, 29);
             this.TestOnlyCheckBox.Name = "TestOnlyCheckBox";
             this.TestOnlyCheckBox.Size = new System.Drawing.Size(126, 23);
             this.TestOnlyCheckBox.TabIndex = 7;
@@ -482,6 +486,18 @@ namespace iRacingReplayOverlay
             this.newVersionMessage.Text = "New Version available ->";
             this.newVersionMessage.Visible = false;
             // 
+            // cb_FastVideoRecording
+            // 
+            this.cb_FastVideoRecording.AutoSize = true;
+            this.cb_FastVideoRecording.Checked = true;
+            this.cb_FastVideoRecording.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_FastVideoRecording.Location = new System.Drawing.Point(300, 58);
+            this.cb_FastVideoRecording.Name = "cb_FastVideoRecording";
+            this.cb_FastVideoRecording.Size = new System.Drawing.Size(159, 23);
+            this.cb_FastVideoRecording.TabIndex = 8;
+            this.cb_FastVideoRecording.Text = "Fast video recording";
+            this.cb_FastVideoRecording.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -554,5 +570,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Button configurePluginsButton;
         private System.Windows.Forms.Label newVersionMessage;
         private System.Windows.Forms.CheckBox checkBoxShutdownAfterEncode;
+        private System.Windows.Forms.CheckBox cb_FastVideoRecording;
     }
 }
