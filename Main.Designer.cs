@@ -497,6 +497,7 @@ namespace iRacingReplayOverlay
             this.cb_FastVideoRecording.TabIndex = 8;
             this.cb_FastVideoRecording.Text = "Fast video recording";
             this.cb_FastVideoRecording.UseVisualStyleBackColor = true;
+            this.cb_FastVideoRecording.CheckedChanged += new System.EventHandler(this.cb_FastVideoRecording_CheckedChanged);
             // 
             // Main
             // 

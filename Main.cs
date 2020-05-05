@@ -613,5 +613,10 @@ namespace iRacingReplayOverlay
         {
 
         }
+
+        private void cb_FastVideoRecording_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
