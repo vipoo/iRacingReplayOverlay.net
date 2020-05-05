@@ -177,7 +177,7 @@ namespace iRacingReplayOverlay
             // verifyVideoCaptureButton
             // 
             this.verifyVideoCaptureButton.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.verifyVideoCaptureButton.Location = new System.Drawing.Point(586, 132);
+            this.verifyVideoCaptureButton.Location = new System.Drawing.Point(586, 180);
             this.verifyVideoCaptureButton.Margin = new System.Windows.Forms.Padding(4);
             this.verifyVideoCaptureButton.Name = "verifyVideoCaptureButton";
             this.verifyVideoCaptureButton.Size = new System.Drawing.Size(153, 30);
@@ -190,7 +190,7 @@ namespace iRacingReplayOverlay
             // 
             this.configureTrackCamerasLabel.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.configureTrackCamerasLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.configureTrackCamerasLabel.Location = new System.Drawing.Point(174, 48);
+            this.configureTrackCamerasLabel.Location = new System.Drawing.Point(7, 115);
             this.configureTrackCamerasLabel.Name = "configureTrackCamerasLabel";
             this.configureTrackCamerasLabel.Size = new System.Drawing.Size(279, 30);
             this.configureTrackCamerasLabel.TabIndex = 9;
@@ -211,7 +211,7 @@ namespace iRacingReplayOverlay
             // WaitingForIRacingLabel
             // 
             this.WaitingForIRacingLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.WaitingForIRacingLabel.Location = new System.Drawing.Point(174, 44);
+            this.WaitingForIRacingLabel.Location = new System.Drawing.Point(6, 115);
             this.WaitingForIRacingLabel.Name = "WaitingForIRacingLabel";
             this.WaitingForIRacingLabel.Size = new System.Drawing.Size(547, 41);
             this.WaitingForIRacingLabel.TabIndex = 11;
@@ -220,7 +220,7 @@ namespace iRacingReplayOverlay
             // ProcessErrorMessageLabel
             // 
             this.ProcessErrorMessageLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.ProcessErrorMessageLabel.Location = new System.Drawing.Point(174, 44);
+            this.ProcessErrorMessageLabel.Location = new System.Drawing.Point(6, 115);
             this.ProcessErrorMessageLabel.Name = "ProcessErrorMessageLabel";
             this.ProcessErrorMessageLabel.Size = new System.Drawing.Size(547, 50);
             this.ProcessErrorMessageLabel.TabIndex = 10;
@@ -230,7 +230,7 @@ namespace iRacingReplayOverlay
             // CapturingRaceLabel
             // 
             this.CapturingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.CapturingRaceLabel.Location = new System.Drawing.Point(174, 48);
+            this.CapturingRaceLabel.Location = new System.Drawing.Point(6, 115);
             this.CapturingRaceLabel.Name = "CapturingRaceLabel";
             this.CapturingRaceLabel.Size = new System.Drawing.Size(406, 50);
             this.CapturingRaceLabel.TabIndex = 12;
@@ -240,7 +240,7 @@ namespace iRacingReplayOverlay
             // AnalysingRaceLabel
             // 
             this.AnalysingRaceLabel.ForeColor = System.Drawing.Color.DarkRed;
-            this.AnalysingRaceLabel.Location = new System.Drawing.Point(174, 44);
+            this.AnalysingRaceLabel.Location = new System.Drawing.Point(6, 115);
             this.AnalysingRaceLabel.Name = "AnalysingRaceLabel";
             this.AnalysingRaceLabel.Size = new System.Drawing.Size(406, 50);
             this.AnalysingRaceLabel.TabIndex = 13;
@@ -249,7 +249,7 @@ namespace iRacingReplayOverlay
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(6, 178);
+            this.label2.Location = new System.Drawing.Point(6, 226);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(594, 55);
             this.label2.TabIndex = 18;
@@ -271,7 +271,7 @@ namespace iRacingReplayOverlay
             // 
             // workingFolderButton
             // 
-            this.workingFolderButton.Location = new System.Drawing.Point(516, 132);
+            this.workingFolderButton.Location = new System.Drawing.Point(516, 180);
             this.workingFolderButton.Name = "workingFolderButton";
             this.workingFolderButton.Size = new System.Drawing.Size(64, 30);
             this.workingFolderButton.TabIndex = 16;
@@ -282,7 +282,7 @@ namespace iRacingReplayOverlay
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 137);
+            this.label5.Location = new System.Drawing.Point(6, 185);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(149, 19);
             this.label5.TabIndex = 14;
@@ -290,7 +290,7 @@ namespace iRacingReplayOverlay
             // 
             // workingFolderTextBox
             // 
-            this.workingFolderTextBox.Location = new System.Drawing.Point(156, 134);
+            this.workingFolderTextBox.Location = new System.Drawing.Point(156, 182);
             this.workingFolderTextBox.Name = "workingFolderTextBox";
             this.workingFolderTextBox.Size = new System.Drawing.Size(355, 27);
             this.workingFolderTextBox.TabIndex = 15;
