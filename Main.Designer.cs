@@ -52,7 +52,7 @@ namespace iRacingReplayOverlay
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCapture = new System.Windows.Forms.TabPage();
             this.checkBoxShutdownAfterEncode = new System.Windows.Forms.CheckBox();
-            this.EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
+            this.cb_EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
             this.verifyVideoCaptureButton = new System.Windows.Forms.Button();
             this.configureTrackCamerasLabel = new System.Windows.Forms.Label();
             this.TestOnlyCheckBox = new System.Windows.Forms.CheckBox();
@@ -134,7 +134,7 @@ namespace iRacingReplayOverlay
             // 
             this.tabCapture.Controls.Add(this.checkBoxShutdownAfterEncode);
             this.tabCapture.Controls.Add(this.cb_FastVideoRecording);
-            this.tabCapture.Controls.Add(this.EncodeVideoAfterCapture);
+            this.tabCapture.Controls.Add(this.cb_EncodeVideoAfterCapture);
             this.tabCapture.Controls.Add(this.verifyVideoCaptureButton);
             this.tabCapture.Controls.Add(this.configureTrackCamerasLabel);
             this.tabCapture.Controls.Add(this.TestOnlyCheckBox);
@@ -168,15 +168,16 @@ namespace iRacingReplayOverlay
             this.checkBoxShutdownAfterEncode.UseVisualStyleBackColor = true;
             this.checkBoxShutdownAfterEncode.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // EncodeVideoAfterCapture
+            // cb_EncodeVideoAfterCapture
             // 
-            this.EncodeVideoAfterCapture.AutoSize = true;
-            this.EncodeVideoAfterCapture.Location = new System.Drawing.Point(300, 29);
-            this.EncodeVideoAfterCapture.Name = "EncodeVideoAfterCapture";
-            this.EncodeVideoAfterCapture.Size = new System.Drawing.Size(207, 23);
-            this.EncodeVideoAfterCapture.TabIndex = 8;
-            this.EncodeVideoAfterCapture.Text = "Encode Video After Capture";
-            this.EncodeVideoAfterCapture.UseVisualStyleBackColor = true;
+            this.cb_EncodeVideoAfterCapture.AutoSize = true;
+            this.cb_EncodeVideoAfterCapture.Location = new System.Drawing.Point(300, 29);
+            this.cb_EncodeVideoAfterCapture.Name = "cb_EncodeVideoAfterCapture";
+            this.cb_EncodeVideoAfterCapture.Size = new System.Drawing.Size(207, 23);
+            this.cb_EncodeVideoAfterCapture.TabIndex = 8;
+            this.cb_EncodeVideoAfterCapture.Text = "Encode Video After Capture";
+            this.cb_EncodeVideoAfterCapture.UseVisualStyleBackColor = true;
+            this.cb_EncodeVideoAfterCapture.CheckedChanged += new System.EventHandler(this.EncodeVideoAfterCapture_CheckedChanged);
             // 
             // verifyVideoCaptureButton
             // 
@@ -493,9 +494,9 @@ namespace iRacingReplayOverlay
             this.cb_FastVideoRecording.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_FastVideoRecording.Location = new System.Drawing.Point(300, 58);
             this.cb_FastVideoRecording.Name = "cb_FastVideoRecording";
-            this.cb_FastVideoRecording.Size = new System.Drawing.Size(159, 23);
+            this.cb_FastVideoRecording.Size = new System.Drawing.Size(326, 23);
             this.cb_FastVideoRecording.TabIndex = 8;
-            this.cb_FastVideoRecording.Text = "Fast video recording";
+            this.cb_FastVideoRecording.Text = "Fast video recording using OBS pause/resume";
             this.cb_FastVideoRecording.UseVisualStyleBackColor = true;
             this.cb_FastVideoRecording.CheckedChanged += new System.EventHandler(this.cb_FastVideoRecording_CheckedChanged);
             // 
@@ -566,7 +567,7 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Button verifyVideoCaptureButton;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox EncodeVideoAfterCapture;
+        private System.Windows.Forms.CheckBox cb_EncodeVideoAfterCapture;
         private System.Windows.Forms.Button changeVersionButton;
         private System.Windows.Forms.Button configurePluginsButton;
         private System.Windows.Forms.Label newVersionMessage;
