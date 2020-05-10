@@ -20,6 +20,7 @@ using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace iRacingReplayOverlay
 {
@@ -116,8 +117,22 @@ namespace iRacingReplayOverlay
             AddField(caption, description, ((TimeSpan)settings[setting]).TotalSeconds.ToString(), tb =>
             {
                 var newSeconds = 0.0;
-                if (double.TryParse(tb.Text, out newSeconds))
-                    settings[setting] = newSeconds.Seconds();
+                if (double.TryParse(tb.Text, out newSeconds)) 
+                {
+                    if (string.Compare(setting, "BattleGap") == 0)
+                    {
+                        // Create a NumberFormatInfo object and set some of its properties.
+                        NumberFormatInfo provider = new NumberFormatInfo();
+                        provider.NumberDecimalSeparator = ".";
+                        
+                        var newMilliSec = 1000 * Convert.ToDouble(tb.Text.ToString(), provider);
+                        settings[setting] = TimeSpan.FromMilliseconds(newMilliSec);
+                    }
+                        
+                    else
+                        settings[setting] = newSeconds.Seconds(); 
+                }
+                  
             });
         }
 
