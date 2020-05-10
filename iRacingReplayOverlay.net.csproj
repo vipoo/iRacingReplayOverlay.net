@@ -51,10 +51,6 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Reference Include="iRacingSDK, Version=1.0.0.36, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingSDK.1.0.0.36\lib\net40-client\iRacingSDK.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MediaFoundation.Net, Version=2.0.0.32, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\MediaFoundation.Net.2.0.0.32\lib\net35-client\MediaFoundation.Net.dll</HintPath>
       <Private>True</Private>
@@ -82,6 +78,9 @@
     <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="iRacingSDK, Version=1.0.0.40, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\iRacingSDK.1.0.0.40\lib\net40-client\iRacingSDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
