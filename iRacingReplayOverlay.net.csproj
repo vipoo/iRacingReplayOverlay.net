@@ -9,7 +9,7 @@
     <ProjectGuid>{0E523573-2972-4DC0-AECB-C4CF746854BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>iRacingReplayOverlay</RootNamespace>
+    <RootNamespace>iRacingReplayDirector</RootNamespace>
     <FileAlignment>512</FileAlignment>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -49,6 +49,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>iRacingReplayDirector</AssemblyName>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <Reference Include="MediaFoundation.Net, Version=2.0.0.32, Culture=neutral, processorArchitecture=AMD64">
