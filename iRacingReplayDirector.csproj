@@ -6,7 +6,7 @@
     <AssemblyName Condition=" '$(OverrideAssemblyName)' != '' ">$(OverrideAssemblyName)</AssemblyName>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{0E523573-2972-4DC0-AECB-C4CF746854BB}</ProjectGuid>
+    <ProjectGuid>{F82A3871-1554-4964-BF81-59854E9C4BB3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>iRacingReplayDirector</RootNamespace>
