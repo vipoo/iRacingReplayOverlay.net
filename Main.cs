@@ -34,6 +34,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+ 
 
 namespace iRacingReplayOverlay
 {
@@ -359,7 +360,7 @@ namespace iRacingReplayOverlay
             iRacingProcess = new IRacingReplay()
                 .WithEncodingOf(videoBitRate: videoBitRateNumber * 1000000)
                 .WithOverlayFile(overlayFile: sourceVideoTextBox.Text)
-                .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, highlightVideoOnly.Checked)
+                .OverlayRaceDataOntoVideo(OnTranscoderProgress, OnTranscoderCompleted, highlightVideoOnly.Checked, checkBoxShutdownAfterEncode.Checked)
                 .InTheBackground(errorMessage => {
                     OnTranscoderCompleted();
                     SetTanscodeMessage(trancodingErrorMessage: errorMessage);
@@ -600,6 +601,17 @@ namespace iRacingReplayOverlay
         {
             var f = new ConfigurePlugins();
             f.ShowDialog();
+        }
+
+        private void configureVideoCaptureButton_Click_Test(object sender, EventArgs e)
+        {
+            var settingsDialog = new AdvanceGeneralSettingsDlg();
+            settingsDialog.ShowDialog();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

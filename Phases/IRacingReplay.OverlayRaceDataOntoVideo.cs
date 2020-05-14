@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Management;
+using System.Diagnostics;
 
 namespace iRacingReplayOverlay.Phases
 {
@@ -46,7 +48,7 @@ namespace iRacingReplayOverlay.Phases
             gameDataFile = overlayFileName;
         }
 
-        public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly, CancellationToken token)
+        public void _OverlayRaceDataOntoVideo(Action<long, long> progress, Action completed, bool highlightOnly, bool bShutdownAfterCompleted, CancellationToken token)
         {
             bool TranscodeFull = !highlightOnly;
 
@@ -72,6 +74,15 @@ namespace iRacingReplayOverlay.Phases
                 Task.WaitAll(waits.ToArray());
             }
             completed();
+            
+            //Shutdown PC after Transcoding is completed (MCooper)
+            if (bShutdownAfterCompleted)
+            {
+                var psi = new ProcessStartInfo("shutdown", "/s /f /t 0");
+                psi.CreateNoWindow = true;
+                psi.UseShellExecute = false;
+                Process.Start(psi);
+            }
         }
     }
 }

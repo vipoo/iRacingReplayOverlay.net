@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net", "iRacingReplayOverlay.net.csproj", "{0E523573-2972-4DC0-AECB-C4CF746854BB}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -41,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Tester", "plugins\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj", "{96FA1C80-396C-4792-9E8B-C7CBFC25833D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JockeOverlays", "plugins\JockeOverlays\JockeOverlays.csproj", "{F49DAE6F-321E-45A8-B9B4-23475A3F6080}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayDirector", "iRacingReplayDirector.csproj", "{F82A3871-1554-4964-BF81-59854E9C4BB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,7 @@ Global
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.ActiveCfg = Release|Any CPU
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Release|x64.Build.0 = Release|Any CPU
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|Any CPU.Build.0 = Debug|x64
 		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x64.ActiveCfg = Debug|x64
@@ -123,6 +126,7 @@ Global
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|x64.ActiveCfg = Release|Any CPU
+		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|x64.Build.0 = Release|Any CPU
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -138,7 +142,6 @@ Global
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|x64.ActiveCfg = Release|Any CPU
-		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|x64.Build.0 = Release|Any CPU
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -147,9 +150,18 @@ Global
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Release|x64.ActiveCfg = Release|Any CPU
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Release|x64.Build.0 = Release|Any CPU
+		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Debug|x64.ActiveCfg = Debug|x64
+		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Debug|x64.Build.0 = Debug|x64
+		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|Any CPU.ActiveCfg = Release|x64
+		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|x64.ActiveCfg = Release|x64
+		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B1FF876-5F77-45FF-95CB-C191D2506994}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = iRacingReplayOverlay.net.Tests\iRacingReplayOverlay.net.Tests.csproj

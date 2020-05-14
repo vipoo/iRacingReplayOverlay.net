@@ -114,25 +114,25 @@ namespace iRacingReplayOverlay
                 Text = "seconds"
             });
 
-            AddField(caption, description, ((TimeSpan)settings[setting]).TotalSeconds.ToString(), tb =>
+            // Create a NumberFormatInfo object and set some of its properties.
+            NumberFormatInfo provider = new NumberFormatInfo();
+            provider.NumberDecimalSeparator = ".";
+
+            AddField(caption, description, ((TimeSpan)settings[setting]).TotalSeconds.ToString(provider), tb =>
             {
                 var newSeconds = 0.0;
-                if (double.TryParse(tb.Text, out newSeconds)) 
+
+                if (double.TryParse(tb.Text, out newSeconds))
                 {
                     if (string.Compare(setting, "BattleGap") == 0)
                     {
-                        // Create a NumberFormatInfo object and set some of its properties.
-                        NumberFormatInfo provider = new NumberFormatInfo();
-                        provider.NumberDecimalSeparator = ".";
-                        
                         var newMilliSec = 1000 * Convert.ToDouble(tb.Text.ToString(), provider);
                         settings[setting] = TimeSpan.FromMilliseconds(newMilliSec);
                     }
-                        
                     else
-                        settings[setting] = newSeconds.Seconds(); 
+                        settings[setting] = newSeconds.Seconds();
                 }
-                  
+
             });
         }
 

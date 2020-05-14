@@ -6,10 +6,10 @@
     <AssemblyName Condition=" '$(OverrideAssemblyName)' != '' ">$(OverrideAssemblyName)</AssemblyName>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{0E523573-2972-4DC0-AECB-C4CF746854BB}</ProjectGuid>
+    <ProjectGuid>{F82A3871-1554-4964-BF81-59854E9C4BB3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>iRacingReplayOverlay</RootNamespace>
+    <RootNamespace>iRacingReplayDirector</RootNamespace>
     <FileAlignment>512</FileAlignment>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -50,7 +50,14 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>iRacingReplayDirector</AssemblyName>
+  </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Reference Include="iRacingSDK, Version=1.0.0.36, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\iRacingSDK.1.0.0.36\lib\net40-client\iRacingSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MediaFoundation.Net, Version=2.0.0.32, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\MediaFoundation.Net.2.0.0.32\lib\net35-client\MediaFoundation.Net.dll</HintPath>
       <Private>True</Private>
@@ -105,7 +112,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
     <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\YamlDotNet.5.3.0\lib\net45\YamlDotNet.dll</HintPath>
+      <HintPath>packages\YamlDotNet.5.3.1\lib\net45\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -316,14 +323,5 @@
   <ItemGroup>
     <Analyzer Include="packages\AWSSDK.CloudWatchLogs.3.1.2.2\analyzers\dotnet\cs\AWSSDK.CloudWatchLogs.CodeAnalysis.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
-    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
 </Project>
