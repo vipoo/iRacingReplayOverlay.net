@@ -1,6 +1,14 @@
 iRacingReplayOverlay.net
 ========================
 
+Please note - as I no longer own an active license for iRacing, nor do i have any time to commit to this project - I have to
+abandon support for the project - its the challenge of open-source
+
+I strongly encourage anyone who wishes - to fork this repo - and take over management/deployment/hosting of this application
+
+
+
+
 [![Build status](https://ci.appveyor.com/api/projects/status/15batnoaijxhvfjd?svg=true)](https://ci.appveyor.com/project/vipoo/iracingreplayoverlay-net)
 
 This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
