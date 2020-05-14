@@ -82,9 +82,6 @@
       <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="iRacingSDK, Version=1.0.0.40, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingSDK.1.0.0.40\lib\net40-client\iRacingSDK.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -322,5 +319,10 @@
   <ItemGroup>
     <Analyzer Include="packages\AWSSDK.CloudWatchLogs.3.1.2.2\analyzers\dotnet\cs\AWSSDK.CloudWatchLogs.CodeAnalysis.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
+      <Name>iRacingSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
