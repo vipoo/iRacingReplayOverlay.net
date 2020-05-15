@@ -57,6 +57,9 @@ namespace iRacingReplayOverlay.Phases
             TraceDebug.WriteLine(data.Telemetry.ToString());
             
             AnalyseIncidents();
+            
+
+            //add here complete Analyse of race - not only incidents
 
             onComplete();
         }
