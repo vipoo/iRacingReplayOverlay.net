@@ -119,10 +119,14 @@ namespace iRacingReplayOverlay.Phases
 
             var overlayFile = SaveOverlayData(overlayData, files);
 
-            //terminate iRacing after video capture completed
+            iRacing.Replay.SetSpeed(0);
+
+            AltTabBackToApp();
+
+            //terminate iRacing after video capture completed to free up CPU resources
             try
             {
-                //ToBe added: Option to select/deselect termination of iRacing after capturing video in new settings Dialog
+                //To be added: Option to select/deselect termination of iRacing after capturing video in new settings Dialog
                 Process[] iRacingProc = Process.GetProcessesByName("iRacingSim64DX11");
                 iRacingProc[0].Kill();
             }
@@ -131,9 +135,7 @@ namespace iRacingReplayOverlay.Phases
                 throw new Exception("Could not terminate iRacing Simulator".F(workingFolder));
             }
 
-            iRacing.Replay.SetSpeed(0);
-
-            AltTabBackToApp();
+            
 
             if (files.Count == 0)
                 throw new Exception("Unable to find video files in '{0}' - possible wrong working folder".F(workingFolder));
