@@ -3,6 +3,9 @@
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingReplayOverlay.net
 //
+// Copyright 2020 Merlin Cooper 
+// https://github.com/MerlinCooper/iRacingReplayDirector
+//
 // iRacingReplayOverlay is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -57,9 +60,10 @@ namespace iRacingReplayOverlay.Phases
             TraceDebug.WriteLine(data.Telemetry.ToString());
             
             AnalyseIncidents();
-            
+
 
             //add here complete Analyse of race - not only incidents
+            AnalyseRaceSituations();
 
             onComplete();
         }
@@ -77,6 +81,14 @@ namespace iRacingReplayOverlay.Phases
                 foreach (var data in incidentSamples)
                     incidents.Process(data);
             }
+        }
+
+        //Analyse race situations at maximum replay speed w/o recording.  
+        void AnalyseRaceSituations()
+        {
+            //
+            
+
         }
     }
 }
