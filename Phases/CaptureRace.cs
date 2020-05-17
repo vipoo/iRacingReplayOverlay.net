@@ -192,9 +192,9 @@ namespace iRacingReplayOverlay.Phases
             return overlayFile;
         }
 
-        string SaveReplaySript (OverlayData overlayData)
+        string SaveReplayScript (OverlayData overlayData)
         {
-            string fullNameReplayScript = workingFolder + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".replayscript";
+            string fullNameReplayScript = workingFolder + "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "analysis.replayscript";
 
             Trace.WriteLine("Saving ReplayScript (analysis phase) to {0}" + fullNameReplayScript);
 
