@@ -150,7 +150,7 @@ namespace iRacingReplayOverlay.Phases
 
             //save OverlayData into target folder for video ("working folder")
 
-            var overlayFile = SaveReplaySript(overlayData);
+            var overlayFile = SaveReplayScript(overlayData);
 
             iRacing.Replay.SetSpeed(0);
         }
