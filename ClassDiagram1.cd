@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.LeaderBoard.CaptureLeaderBoardFirstLap" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAgAAAgAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Phases\Capturing\LeaderBoard\CaptureLeaderBoardFirstLap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.LeaderBoard.CaptureLeaderBoardLastLap" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAAAAAAAAAgAAAgAAAAAAAAAAAAIAAIAACAAAAAA=</HashCode>
+      <FileName>Phases\Capturing\LeaderBoard\CaptureLeaderBoardLastLap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.LeaderBoard.CaptureLeaderBoardMiddleLaps" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAIAAAAAAgAAAgAAAAEAAAAAAAAAAAAACAABAAA=</HashCode>
+      <FileName>Phases\Capturing\LeaderBoard\CaptureLeaderBoardMiddleLaps.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.CaptureCamDriver" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAhAABgAAAAABAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Phases\Capturing\CaptureCamDriver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.CaptureLeaderBoard" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAEgCEAwACAAAAAAAAAAAICAAAAAAAAAI=</HashCode>
+      <FileName>Phases\Capturing\CaptureLeaderBoard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.CommentaryMessages" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAQAAAAA=</HashCode>
+      <FileName>Phases\Capturing\CommentaryMessages.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.EditMarker" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAIEAAAAgAAAAIQAAAAAIAAA=</HashCode>
+      <FileName>Phases\Capturing\EditMarker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.LogCamDriver" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Phases\Capturing\LogCamDriver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.CapturedVideoFile" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Phases\Capturing\OverlayData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.CapturedVideoFileExtensions" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Phases\Capturing\OverlayData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.OverlayData" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAiAAAAAAoAkAAAAAAAAgAAAAAAEAAAAACgEAAA=</HashCode>
+      <FileName>Phases\Capturing\OverlayData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.RecordFastestLaps" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAARgAAAgAAIAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Phases\Capturing\RecordFastestLaps.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.RecordPitStop" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAABAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Phases\Capturing\RecordPitStops.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.RemovalEdits" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAgABAAgAAIAAAIAABIAIgIQAAACAAAAA=</HashCode>
+      <FileName>Phases\Capturing\RemovalEdits.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.SampleFilter">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAgAAAgAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Phases\Capturing\SampleFilter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="iRacingReplayOverlay.Phases.Capturing.SessionDataCapture">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Phases\Capturing\SessionDataCapture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="iRacingReplayOverlay.Phases.Capturing.InterestState" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAACAQAAAAAAACAAAIAAAAAAAAAAAAAEAABA=</HashCode>
+      <FileName>Phases\Capturing\RemovalEdits.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
