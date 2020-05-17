@@ -98,7 +98,6 @@ namespace iRacingReplayOverlay.Phases
             var overlayData = new OverlayData();
             var removalEdits = new RemovalEdits(overlayData.RaceEvents);
             var commentaryMessages = new CommentaryMessages(overlayData);
-            //var videoCapture = new VideoCapture();                                                                        //do not capture a video during analysis
             var recordPitStop = new RecordPitStop(commentaryMessages);
             var fastestLaps = new RecordFastestLaps(overlayData);
             var replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
@@ -126,14 +125,9 @@ namespace iRacingReplayOverlay.Phases
                 .WithPitStopCounts()
                 .TakeUntil(3.Seconds()).Of(d => d.Telemetry.LeaderHasFinished && d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface != TrackLocation.OnTrack))
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
+            samples = samples.AtSpeed(16);
+            Settings.AppliedTimingFactor = 1.0 / 16.0;
 
-            if (shortTestOnly)
-            {
-                samples = samples.AtSpeed(Settings.Default.TimingFactorForShortTest);
-                Settings.AppliedTimingFactor = 1.0 / Settings.Default.TimingFactorForShortTest;
-            }
-
-            //videoCapture.Activate(workingFolder);                                                                         //do not capture a video during analysis
             var startTime = DateTime.Now;
 
             overlayData.CapturedVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -152,11 +146,11 @@ namespace iRacingReplayOverlay.Phases
                 captureCamDriverEvery4Seconds.Process(data, relativeTime);
             }
 
-            //var files = videoCapture.Deactivate();                                                                        //do not capture a video during analysis
-
             removalEdits.Stop();
 
-            //var overlayFile = SaveOverlayData(overlayData, files);
+            //save OverlayData into target folder for video ("working folder")
+
+            var overlayFile = SaveReplaySript(overlayData);
 
             iRacing.Replay.SetSpeed(0);
         }
