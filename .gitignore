@@ -19,3 +19,8 @@ iRacingReplayOverlay.test.application
 .vs/*
 tools/encrypt.cmd
 Aws/AwsKeyActual.cs
+iRacingSDK.Net
+plugins/iRacingDirector.Plugin.StandardOverlays
+plugins/iRacingDirector.Plugin.Support
+plugins/JockeOverlays
+SuperMFLib
