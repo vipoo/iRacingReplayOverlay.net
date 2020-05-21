@@ -520,7 +520,7 @@ namespace iRacingReplayOverlay
                     WindowState = FormWindowState.Normal;
                     this.BringToFront();
 
-                    if (errorMessage == null && transcodeVideoButton.Enabled && EncodeVideoAfterCapture.Checked)
+                    if (errorMessage == null && transcodeVideoButton.Enabled && cb_EncodeVideoAfterCapture.Checked)
                     {
                         tabControl1.SelectedIndex = 1;
                         Thread.Sleep(1000);
@@ -612,6 +612,16 @@ namespace iRacingReplayOverlay
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void cb_FastVideoRecording_CheckedChanged(object sender, EventArgs e)
+        {
+            cb_EncodeVideoAfterCapture.Checked = !cb_FastVideoRecording.Checked;
+        }
+
+        private void EncodeVideoAfterCapture_CheckedChanged(object sender, EventArgs e)
+        {
+            cb_FastVideoRecording.Checked = !cb_EncodeVideoAfterCapture.Checked;
         }
     }
 }

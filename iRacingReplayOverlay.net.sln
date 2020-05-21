@@ -42,9 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JockeOverlays", "plugins\JockeOverlays\JockeOverlays.csproj", "{F49DAE6F-321E-45A8-B9B4-23475A3F6080}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayDirector", "iRacingReplayDirector.csproj", "{F82A3871-1554-4964-BF81-59854E9C4BB3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoOverlay", "plugins\NoOverlay\NoOverlay.csproj", "{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayDirector", "iRacingReplayDirector.csproj", "{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,20 +150,12 @@ Global
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Release|x64.ActiveCfg = Release|Any CPU
 		{F49DAE6F-321E-45A8-B9B4-23475A3F6080}.Release|x64.Build.0 = Release|Any CPU
-		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Debug|x64.ActiveCfg = Debug|x64
-		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Debug|x64.Build.0 = Debug|x64
-		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|Any CPU.ActiveCfg = Release|x64
-		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|x64.ActiveCfg = Release|x64
-		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|x64.Build.0 = Release|x64
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|x64.Build.0 = Debug|Any CPU
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|x64.ActiveCfg = Release|Any CPU
-		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|x64.Build.0 = Release|Any CPU
+		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Debug|x64.ActiveCfg = Debug|x64
+		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Debug|x64.Build.0 = Debug|x64
+		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Release|Any CPU.ActiveCfg = Release|x64
+		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Release|x64.ActiveCfg = Release|x64
+		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
