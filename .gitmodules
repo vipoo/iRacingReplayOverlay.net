@@ -13,3 +13,6 @@
 [submodule "plugins/JockeOverlays"]
 	path = plugins/JockeOverlays
 	url = git://github.com/vipoo/JockeOverlays.git
+[submodule "iRacingSDK.Net"]
+	path = iRacingSDK.Net
+	url = https://github.com/MerlinCooper/iRacingSDK.Net.git
