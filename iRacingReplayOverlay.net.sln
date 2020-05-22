@@ -14,6 +14,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "iRacingSDK.Net\Sample\Sample.csproj", "{8BDF1915-3140-478E-827F-25D495B8CDC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18} = {E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net.Tests", "iRacingReplayOverlay.net.Tests\iRacingReplayOverlay.net.Tests.csproj", "{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}"
 EndProject
@@ -43,6 +46,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JockeOverlays", "plugins\JockeOverlays\JockeOverlays.csproj", "{F49DAE6F-321E-45A8-B9B4-23475A3F6080}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayDirector", "iRacingReplayDirector.csproj", "{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5422AE20-F220-4BE1-9E61-5296981ABB5C} = {5422AE20-F220-4BE1-9E61-5296981ABB5C}
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B} = {CEC2BB31-324D-41E3-83C8-A5C35C63129B}
+		{5916B84C-0264-4102-9CCC-28006D84E4FA} = {5916B84C-0264-4102-9CCC-28006D84E4FA}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoOverlay", "plugins\NoOverlay\NoOverlay.csproj", "{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -156,6 +166,14 @@ Global
 		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Release|Any CPU.ActiveCfg = Release|x64
 		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Release|x64.ActiveCfg = Release|x64
 		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}.Release|x64.Build.0 = Release|x64
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|x64.Build.0 = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|x64.ActiveCfg = Release|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
