@@ -33,7 +33,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         DateTime started;
         Timer timer;
         List<CapturedVideoFile> captureFileNames = new List<CapturedVideoFile>();
-
+        
         public void Activate(string workingFolder)
         {
             this.workingFolder = workingFolder;
@@ -44,7 +44,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             timer.AutoReset = false;
             timer.Enabled = true;
 
-            SendKeyStroke();
+            SendKeyStroke_StartStopp();
         }
 
         private void CaptureNewFileNames(object sender, ElapsedEventArgs e)
@@ -86,7 +86,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 t.Dispose();
             }
 
-            SendKeyStroke();
+            SendKeyStroke_StartStopp();
 
             System.Threading.Thread.Sleep(2000);
 
@@ -97,9 +97,22 @@ namespace iRacingReplayOverlay.Phases.Direction
             return captureFileNames;
         }
 
-        private static void SendKeyStroke()
+        private static void SendKeyStroke_StartStopp()
         {
-            TraceInfo.WriteLine("Sending key event ALT+F9");
+            TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
+
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
+            System.Threading.Thread.Sleep(700);
+            Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
+            System.Threading.Thread.Sleep(700);
+            Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            System.Threading.Thread.Sleep(700);
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+        }
+
+        private static void SendKeyStroke_PauseResume()
+        {
+            TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
