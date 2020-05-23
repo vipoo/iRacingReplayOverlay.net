@@ -98,7 +98,7 @@ namespace iRacingReplayOverlay.Phases
                 Settings.AppliedTimingFactor = 1.0 / Settings.Default.TimingFactorForShortTest;
             }
 
-            videoCapture.Activate(workingFolder);
+            videoCapture.Activate(workingFolder);                           //Start video capturing FileName will be given by recording software. 
             var startTime = DateTime.Now;
 
             overlayData.CapturedVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -119,7 +119,8 @@ namespace iRacingReplayOverlay.Phases
                 captureCamDriverEvery4Seconds.Process(data, relativeTime);
             }
 
-            var files = videoCapture.Deactivate();
+            var files = videoCapture.Deactivate();                          //Stop video capturing - returns list with "guessed" filename. Filenmae being different from replay-script due to different time stamp.
+                                                                            //investigate whether renaming of video file is necessary. 
 
             removalEdits.Stop();
 
@@ -181,7 +182,8 @@ namespace iRacingReplayOverlay.Phases
             string firstFileName;
 
             if (files.Count == 0)
-                firstFileName = workingFolder + "/unknown_capture-{0}".F(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+                //firstFileName = workingFolder + "/unknown_capture-{0}".F(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+                firstFileName = workingFolder + "/unknown_capture-{0}".F(overlayData.overlayDateTime.ToString("yyyy-MM-dd-HH-mm-ss"));
             else
                 firstFileName = files.First().FileName;
 
@@ -200,7 +202,8 @@ namespace iRacingReplayOverlay.Phases
 
         string SaveReplayScript (OverlayData overlayData)
         {
-            string fullNameReplayScript = workingFolder + "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "analysis.replayscript";
+            //string fullNameReplayScript = workingFolder + "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "analysis.replayscript";
+            string fullNameReplayScript = workingFolder + "/" + overlayData.overlayDateTime.ToString("yyyy-MM-dd HH-mm-ss") + ".analysis.replayscript";
 
             Trace.WriteLine("Saving ReplayScript (analysis phase) to {0}" + fullNameReplayScript);
 
