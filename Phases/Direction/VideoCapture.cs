@@ -44,7 +44,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             timer.AutoReset = false;
             timer.Enabled = true;
 
-            SendKeyStroke_StartStopp();
+            SendKeyStroke_StartStopp();     //Send hot-key to start recording
         }
 
         private void CaptureNewFileNames(object sender, ElapsedEventArgs e)
