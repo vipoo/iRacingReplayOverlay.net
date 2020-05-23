@@ -56,7 +56,9 @@ namespace iRacingReplayOverlay.Phases
 
         internal void _CaptureRaceTest(Action<string> onComplete, IEnumerable<DataSample> samples)
         {
-            var overlayData = new OverlayData();
+            //use internal class members in iRacingReplay class instead of local variables. 
+            /*
+            var overlayData = new OverlayData();                          
             var removalEdits = new RemovalEdits(overlayData.RaceEvents);
             var commentaryMessages = new CommentaryMessages(overlayData);
             var videoCapture = new VideoCapture();
@@ -74,7 +76,9 @@ namespace iRacingReplayOverlay.Phases
 
 
             TraceDebug.WriteLine("Cameras:");
-            TraceDebug.WriteLine(TrackCameras.ToString());
+            TraceDebug.WriteLine(TrackCameras.ToString());*/
+
+            var videoCapture = new VideoCapture();
 
             ApplyFirstLapCameraDirection(samples, replayControl);
 
@@ -103,13 +107,15 @@ namespace iRacingReplayOverlay.Phases
             {
                 var relativeTime = DateTime.Now - startTime;
 
+                TraceDebug.WriteLine("Recording at time: {0}", relativeTime);
+
                 replayControl.Process(data);
-                sessionDataCapture.Process(data);
-                captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
-                captureCamDriverEveryQuaterSecond.Process(data, relativeTime);
-                recordPitStop.Process(data, relativeTime);
-                fastestLaps.Process(data, relativeTime);
-                removalEdits.Process(data, relativeTime);
+                //sessionDataCapture.Process(data);
+                //captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
+                //captureCamDriverEveryQuaterSecond.Process(data, relativeTime);
+                //recordPitStop.Process(data, relativeTime);
+                //fastestLaps.Process(data, relativeTime);
+                //removalEdits.Process(data, relativeTime);
                 captureCamDriverEvery4Seconds.Process(data, relativeTime);
             }
 

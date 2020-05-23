@@ -40,6 +40,19 @@ namespace iRacingReplayOverlay.Phases
         int raceStartFrameNumber = 0;
         internal Incidents incidents;
 
+        //create classes needed to analze race as global variables in the iRacingReplay instance 
+        internal OverlayData overlayData = new OverlayData();
+        internal RemovalEdits removalEdits;
+        internal CommentaryMessages commentaryMessages;
+        internal RecordPitStop recordPitStop;
+        internal RecordFastestLaps fastestLaps;
+        internal ReplayControl replayControl;
+        internal SessionDataCapture sessionDataCapture;
+        internal SampleFilter captureLeaderBoardEveryHalfSecond;
+        internal SampleFilter captureCamDriverEveryQuaterSecond;
+        internal SampleFilter captureCamDriverEvery4Seconds;
+
+
         public void _AnalyseRace(Action onComplete)
         {
             var hwnd = Win32.Messages.FindWindow(null, "iRacing.com Simulator");
@@ -95,24 +108,21 @@ namespace iRacingReplayOverlay.Phases
             iRacing.Replay.SetSpeed(16);
 
             //copied from iRacing.Capturing because race events in app V1.0.x.x are identified during capturing the whole video. 
-            var overlayData = new OverlayData();
-            var removalEdits = new RemovalEdits(overlayData.RaceEvents);
-            var commentaryMessages = new CommentaryMessages(overlayData);
-            var recordPitStop = new RecordPitStop(commentaryMessages);
-            var fastestLaps = new RecordFastestLaps(overlayData);
-            var replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
-            var sessionDataCapture = new SessionDataCapture(overlayData);
-            var captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5),
+            //var overlayData = new OverlayData();
+            removalEdits = new RemovalEdits(overlayData.RaceEvents);
+            commentaryMessages = new CommentaryMessages(overlayData);
+            recordPitStop = new RecordPitStop(commentaryMessages);
+            fastestLaps = new RecordFastestLaps(overlayData);
+            replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
+            sessionDataCapture = new SessionDataCapture(overlayData);
+            captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5),
                 new CaptureLeaderBoard(overlayData, commentaryMessages, removalEdits).Process);
-            var captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
+            captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
                     new CaptureCamDriver(overlayData).Process);
 
-            var captureCamDriverEvery4Seconds = new SampleFilter(TimeSpan.FromSeconds(4),
+            captureCamDriverEvery4Seconds = new SampleFilter(TimeSpan.FromSeconds(4),
                 new LogCamDriver().Process);
 
-
-            TraceDebug.WriteLine("Cameras:");
-            TraceDebug.WriteLine(TrackCameras.ToString());
 
             ApplyFirstLapCameraDirection(samples, replayControl);
 
@@ -148,9 +158,11 @@ namespace iRacingReplayOverlay.Phases
 
             removalEdits.Stop();
 
-            //save OverlayData into target folder for video ("working folder")
+            TraceDebug.WriteLine("Race analysis phase completed");
 
+            //save OverlayData into target folder for video ("working folder")
             SaveReplayScript(overlayData);
+            TraceDebug.WriteLine("Replay Script saved to disk");
 
             iRacing.Replay.SetSpeed(0);
         }
