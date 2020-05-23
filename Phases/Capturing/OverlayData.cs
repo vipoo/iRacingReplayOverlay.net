@@ -57,6 +57,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
     public class OverlayData
     {
+        public DateTime overlayDateTime = DateTime.Now;
+
         public class RaceEvent
         {
             public double StartTime;
