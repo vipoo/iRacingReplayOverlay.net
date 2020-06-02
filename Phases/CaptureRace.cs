@@ -78,6 +78,12 @@ namespace iRacingReplayOverlay.Phases
             TraceDebug.WriteLine("Cameras:");
             TraceDebug.WriteLine(TrackCameras.ToString());*/
 
+            //identify wheather highlights video only is selected and OBS pause/resume can be used (to be implemented)
+            if (bRecordUsingPauseResume)
+            {
+                //Get race Events 
+            }
+
             var videoCapture = new VideoCapture();
 
             ApplyFirstLapCameraDirection(samples, replayControl);
