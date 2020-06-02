@@ -4,13 +4,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- Fast_Video_Recording_With_OBS
+- master 
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: 'iRacingReplayOverlay.net.sln'
+  solution: '**/*Director*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
