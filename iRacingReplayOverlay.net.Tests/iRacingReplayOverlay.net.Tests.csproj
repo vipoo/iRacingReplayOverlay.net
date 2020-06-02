@@ -70,12 +70,10 @@
       <Project>{0E523573-2972-4DC0-AECB-C4CF746854BB}</Project>
       <Name>iRacingReplayOverlay.net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Reference Include="iRacingSDK, Version=1.0.0.36, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingSDK.1.0.0.36\lib\net40-client\iRacingSDK.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <ProjectReference Include="..\iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
+      <Name>iRacingSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <ProjectReference Include="..\iRacingSDK.Net\iRacingSDK.csproj">
