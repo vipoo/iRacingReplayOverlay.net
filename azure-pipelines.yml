@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/iRacingReplayOverlay.net.sln'
+  solution: 'iRacingReplayOverlay.net.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
