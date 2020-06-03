@@ -83,6 +83,7 @@ namespace iRacingReplayOverlay
             this.changeVersionButton = new System.Windows.Forms.Button();
             this.configurePluginsButton = new System.Windows.Forms.Button();
             this.newVersionMessage = new System.Windows.Forms.Label();
+            this.bcheckBoxCloseiRacingAfterRecording = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -132,6 +133,7 @@ namespace iRacingReplayOverlay
             // 
             // tabCapture
             // 
+            this.tabCapture.Controls.Add(this.bcheckBoxCloseiRacingAfterRecording);
             this.tabCapture.Controls.Add(this.checkBoxShutdownAfterEncode);
             this.tabCapture.Controls.Add(this.cb_FastVideoRecording);
             this.tabCapture.Controls.Add(this.cb_EncodeVideoAfterCapture);
@@ -158,11 +160,11 @@ namespace iRacingReplayOverlay
             // checkBoxShutdownAfterEncode
             // 
             this.checkBoxShutdownAfterEncode.AutoSize = true;
-            this.checkBoxShutdownAfterEncode.Location = new System.Drawing.Point(514, 29);
+            this.checkBoxShutdownAfterEncode.Location = new System.Drawing.Point(516, 58);
             this.checkBoxShutdownAfterEncode.Name = "checkBoxShutdownAfterEncode";
-            this.checkBoxShutdownAfterEncode.Size = new System.Drawing.Size(189, 23);
+            this.checkBoxShutdownAfterEncode.Size = new System.Drawing.Size(210, 23);
             this.checkBoxShutdownAfterEncode.TabIndex = 8;
-            this.checkBoxShutdownAfterEncode.Text = "Shutdown after Encoding";
+            this.checkBoxShutdownAfterEncode.Text = "Shutdown PC after Encoding";
             this.checkBoxShutdownAfterEncode.UseVisualStyleBackColor = true;
             this.checkBoxShutdownAfterEncode.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
@@ -173,9 +175,9 @@ namespace iRacingReplayOverlay
             this.cb_FastVideoRecording.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_FastVideoRecording.Location = new System.Drawing.Point(300, 58);
             this.cb_FastVideoRecording.Name = "cb_FastVideoRecording";
-            this.cb_FastVideoRecording.Size = new System.Drawing.Size(326, 23);
+            this.cb_FastVideoRecording.Size = new System.Drawing.Size(190, 23);
             this.cb_FastVideoRecording.TabIndex = 8;
-            this.cb_FastVideoRecording.Text = "Fast video recording using OBS pause/resume";
+            this.cb_FastVideoRecording.Text = "Use fast video recording ";
             this.cb_FastVideoRecording.UseVisualStyleBackColor = true;
             this.cb_FastVideoRecording.CheckedChanged += new System.EventHandler(this.cb_FastVideoRecording_CheckedChanged);
             // 
@@ -498,6 +500,17 @@ namespace iRacingReplayOverlay
             this.newVersionMessage.Text = "New Version available ->";
             this.newVersionMessage.Visible = false;
             // 
+            // bcheckBoxCloseiRacingAfterRecording
+            // 
+            this.bcheckBoxCloseiRacingAfterRecording.AutoSize = true;
+            this.bcheckBoxCloseiRacingAfterRecording.Location = new System.Drawing.Point(516, 29);
+            this.bcheckBoxCloseiRacingAfterRecording.Name = "bcheckBoxCloseiRacingAfterRecording";
+            this.bcheckBoxCloseiRacingAfterRecording.Size = new System.Drawing.Size(220, 23);
+            this.bcheckBoxCloseiRacingAfterRecording.TabIndex = 8;
+            this.bcheckBoxCloseiRacingAfterRecording.Text = "Close iRacing after Recording";
+            this.bcheckBoxCloseiRacingAfterRecording.UseVisualStyleBackColor = true;
+            this.bcheckBoxCloseiRacingAfterRecording.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -571,5 +584,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label newVersionMessage;
         private System.Windows.Forms.CheckBox checkBoxShutdownAfterEncode;
         private System.Windows.Forms.CheckBox cb_FastVideoRecording;
+        private System.Windows.Forms.CheckBox bcheckBoxCloseiRacingAfterRecording;
     }
 }

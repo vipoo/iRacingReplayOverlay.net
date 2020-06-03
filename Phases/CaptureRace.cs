@@ -137,16 +137,20 @@ namespace iRacingReplayOverlay.Phases
             AltTabBackToApp();
 
             //terminate iRacing after video capture completed to free up CPU resources
-            try
+            if (bCloseiRacingAfterRecording)
             {
-                //To be added: Option to select/deselect termination of iRacing after capturing video in new settings Dialog
-                Process[] iRacingProc = Process.GetProcessesByName("iRacingSim64DX11");
-                iRacingProc[0].Kill();
+                try
+                {
+                    //To be added: Option to select/deselect termination of iRacing after capturing video in new settings Dialog
+                    Process[] iRacingProc = Process.GetProcessesByName("iRacingSim64DX11");
+                    iRacingProc[0].Kill();
+                }
+                catch
+                {
+                    throw new Exception("Could not terminate iRacing Simulator".F(workingFolder));
+                }
             }
-            catch
-            {
-                throw new Exception("Could not terminate iRacing Simulator".F(workingFolder));
-            }
+            
 
             
 
