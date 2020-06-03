@@ -51,6 +51,7 @@ namespace iRacingReplayOverlay
             this.logMessagesButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCapture = new System.Windows.Forms.TabPage();
+            this.cb_BoxCloseiRacingAfterRecording = new System.Windows.Forms.CheckBox();
             this.checkBoxShutdownAfterEncode = new System.Windows.Forms.CheckBox();
             this.cb_FastVideoRecording = new System.Windows.Forms.CheckBox();
             this.cb_EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
@@ -83,7 +84,6 @@ namespace iRacingReplayOverlay
             this.changeVersionButton = new System.Windows.Forms.Button();
             this.configurePluginsButton = new System.Windows.Forms.Button();
             this.newVersionMessage = new System.Windows.Forms.Label();
-            this.bcheckBoxCloseiRacingAfterRecording = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.tabTranscoding.SuspendLayout();
@@ -133,7 +133,7 @@ namespace iRacingReplayOverlay
             // 
             // tabCapture
             // 
-            this.tabCapture.Controls.Add(this.bcheckBoxCloseiRacingAfterRecording);
+            this.tabCapture.Controls.Add(this.cb_BoxCloseiRacingAfterRecording);
             this.tabCapture.Controls.Add(this.checkBoxShutdownAfterEncode);
             this.tabCapture.Controls.Add(this.cb_FastVideoRecording);
             this.tabCapture.Controls.Add(this.cb_EncodeVideoAfterCapture);
@@ -156,6 +156,17 @@ namespace iRacingReplayOverlay
             this.tabCapture.TabIndex = 0;
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
+            // 
+            // cb_BoxCloseiRacingAfterRecording
+            // 
+            this.cb_BoxCloseiRacingAfterRecording.AutoSize = true;
+            this.cb_BoxCloseiRacingAfterRecording.Location = new System.Drawing.Point(516, 29);
+            this.cb_BoxCloseiRacingAfterRecording.Name = "cb_BoxCloseiRacingAfterRecording";
+            this.cb_BoxCloseiRacingAfterRecording.Size = new System.Drawing.Size(220, 23);
+            this.cb_BoxCloseiRacingAfterRecording.TabIndex = 8;
+            this.cb_BoxCloseiRacingAfterRecording.Text = "Close iRacing after Recording";
+            this.cb_BoxCloseiRacingAfterRecording.UseVisualStyleBackColor = true;
+            this.cb_BoxCloseiRacingAfterRecording.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // checkBoxShutdownAfterEncode
             // 
@@ -500,17 +511,6 @@ namespace iRacingReplayOverlay
             this.newVersionMessage.Text = "New Version available ->";
             this.newVersionMessage.Visible = false;
             // 
-            // bcheckBoxCloseiRacingAfterRecording
-            // 
-            this.bcheckBoxCloseiRacingAfterRecording.AutoSize = true;
-            this.bcheckBoxCloseiRacingAfterRecording.Location = new System.Drawing.Point(516, 29);
-            this.bcheckBoxCloseiRacingAfterRecording.Name = "bcheckBoxCloseiRacingAfterRecording";
-            this.bcheckBoxCloseiRacingAfterRecording.Size = new System.Drawing.Size(220, 23);
-            this.bcheckBoxCloseiRacingAfterRecording.TabIndex = 8;
-            this.bcheckBoxCloseiRacingAfterRecording.Text = "Close iRacing after Recording";
-            this.bcheckBoxCloseiRacingAfterRecording.UseVisualStyleBackColor = true;
-            this.bcheckBoxCloseiRacingAfterRecording.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -584,6 +584,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label newVersionMessage;
         private System.Windows.Forms.CheckBox checkBoxShutdownAfterEncode;
         private System.Windows.Forms.CheckBox cb_FastVideoRecording;
-        private System.Windows.Forms.CheckBox bcheckBoxCloseiRacingAfterRecording;
+        private System.Windows.Forms.CheckBox cb_BoxCloseiRacingAfterRecording;
     }
 }
