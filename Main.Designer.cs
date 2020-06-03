@@ -51,7 +51,7 @@ namespace iRacingReplayOverlay
             this.logMessagesButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCapture = new System.Windows.Forms.TabPage();
-            this.cb_BoxCloseiRacingAfterRecording = new System.Windows.Forms.CheckBox();
+            this.cb_CloseiRacingAfterRecording = new System.Windows.Forms.CheckBox();
             this.checkBoxShutdownAfterEncode = new System.Windows.Forms.CheckBox();
             this.cb_FastVideoRecording = new System.Windows.Forms.CheckBox();
             this.cb_EncodeVideoAfterCapture = new System.Windows.Forms.CheckBox();
@@ -133,7 +133,7 @@ namespace iRacingReplayOverlay
             // 
             // tabCapture
             // 
-            this.tabCapture.Controls.Add(this.cb_BoxCloseiRacingAfterRecording);
+            this.tabCapture.Controls.Add(this.cb_CloseiRacingAfterRecording);
             this.tabCapture.Controls.Add(this.checkBoxShutdownAfterEncode);
             this.tabCapture.Controls.Add(this.cb_FastVideoRecording);
             this.tabCapture.Controls.Add(this.cb_EncodeVideoAfterCapture);
@@ -157,16 +157,16 @@ namespace iRacingReplayOverlay
             this.tabCapture.Text = "Race Capture";
             this.tabCapture.UseVisualStyleBackColor = true;
             // 
-            // cb_BoxCloseiRacingAfterRecording
+            // cb_CloseiRacingAfterRecording
             // 
-            this.cb_BoxCloseiRacingAfterRecording.AutoSize = true;
-            this.cb_BoxCloseiRacingAfterRecording.Location = new System.Drawing.Point(516, 29);
-            this.cb_BoxCloseiRacingAfterRecording.Name = "cb_BoxCloseiRacingAfterRecording";
-            this.cb_BoxCloseiRacingAfterRecording.Size = new System.Drawing.Size(220, 23);
-            this.cb_BoxCloseiRacingAfterRecording.TabIndex = 8;
-            this.cb_BoxCloseiRacingAfterRecording.Text = "Close iRacing after Recording";
-            this.cb_BoxCloseiRacingAfterRecording.UseVisualStyleBackColor = true;
-            this.cb_BoxCloseiRacingAfterRecording.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.cb_CloseiRacingAfterRecording.AutoSize = true;
+            this.cb_CloseiRacingAfterRecording.Location = new System.Drawing.Point(516, 29);
+            this.cb_CloseiRacingAfterRecording.Name = "cb_CloseiRacingAfterRecording";
+            this.cb_CloseiRacingAfterRecording.Size = new System.Drawing.Size(220, 23);
+            this.cb_CloseiRacingAfterRecording.TabIndex = 8;
+            this.cb_CloseiRacingAfterRecording.Text = "Close iRacing after Recording";
+            this.cb_CloseiRacingAfterRecording.UseVisualStyleBackColor = true;
+            this.cb_CloseiRacingAfterRecording.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // checkBoxShutdownAfterEncode
             // 
@@ -584,6 +584,6 @@ namespace iRacingReplayOverlay
         private System.Windows.Forms.Label newVersionMessage;
         private System.Windows.Forms.CheckBox checkBoxShutdownAfterEncode;
         private System.Windows.Forms.CheckBox cb_FastVideoRecording;
-        private System.Windows.Forms.CheckBox cb_BoxCloseiRacingAfterRecording;
+        private System.Windows.Forms.CheckBox cb_CloseiRacingAfterRecording;
     }
 }

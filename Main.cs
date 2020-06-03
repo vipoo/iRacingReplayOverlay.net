@@ -490,7 +490,7 @@ namespace iRacingReplayOverlay
 
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_DISPLAY_REQUIRED);
 
-            iRacingProcess = new IRacingReplay(shortTestOnly: TestOnlyCheckBox.Checked, bRecordUsingPauseResume:cb_FastVideoRecording.Checked, bCloseiRacingAfterRecording: cb_BoxCloseiRacingAfterRecording.Checked)
+            iRacingProcess = new IRacingReplay(shortTestOnly: TestOnlyCheckBox.Checked, bRecordUsingPauseResume:cb_FastVideoRecording.Checked, bCloseiRacingAfterRecording: cb_CloseiRacingAfterRecording.Checked)
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()

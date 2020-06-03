@@ -84,7 +84,7 @@ namespace iRacingReplayOverlay.Phases
                 //Get race Events 
             }
 
-            var videoCapture = new VideoCapture();
+            var videoCapture = new VideoCapture(); 
 
             ApplyFirstLapCameraDirection(samples, replayControl);
 
