@@ -76,11 +76,8 @@ namespace iRacingReplayOverlay.Phases
 
             TraceDebug.WriteLine(data.Telemetry.ToString());
             
-            AnalyseIncidents();
-
-
-            //add here complete Analyse of race - not only incidents
-            AnalyseRaceSituations(new iRacingConnection().GetBufferedDataFeed());
+            AnalyseIncidents();                                                         //Analyse incidents
+            AnalyseRaceSituations(new iRacingConnection().GetBufferedDataFeed());       //Analyse race situation (all) by playing out replay at 16x speed. 
 
             onComplete();
         }
