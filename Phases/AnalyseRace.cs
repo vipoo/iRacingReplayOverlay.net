@@ -157,7 +157,7 @@ namespace iRacingReplayOverlay.Phases
             samples = samples.AtSpeed(Settings.Default.TimingFactorForShortTest);
             Settings.AppliedTimingFactor = 1.0 / Settings.Default.TimingFactorForShortTest;
 
-            iRacing.Replay.SetSpeed((int)curReplaySpeed);
+            //iRacing.Replay.SetSpeed((int)curReplaySpeed);
 
             var startTime = DateTime.Now;
 
@@ -165,8 +165,12 @@ namespace iRacingReplayOverlay.Phases
 
             foreach (var data in samples)
             {
-                var relativeTime = (DateTime.Now - startTime).Multiply(3.0);
-                
+                var relativeTime = (DateTime.Now - startTime).Multiply(Settings.Default.TimingFactorForShortTest);
+                var prevRelativeTime = DateTime.Now - startTime;
+
+                TraceDebug.WriteLine("Processing Data Sample at relative time: {0} |  {1}".F(relativeTime, prevRelativeTime));
+
+
                 replayControl.Process(data);
                 sessionDataCapture.Process(data);
                 captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
