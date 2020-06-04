@@ -23,6 +23,7 @@
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
@@ -164,8 +165,8 @@ namespace iRacingReplayOverlay.Phases
 
             foreach (var data in samples)
             {
-                var relativeTime = DateTime.Now - startTime;
-
+                var relativeTime = (DateTime.Now - startTime).Multiply(3.0);
+                
                 replayControl.Process(data);
                 sessionDataCapture.Process(data);
                 captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
