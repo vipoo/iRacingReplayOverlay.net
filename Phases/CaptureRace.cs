@@ -86,11 +86,6 @@ namespace iRacingReplayOverlay.Phases
                     
                     Thread.Sleep((int)(1000*raceEvent.Duration));                       //pause thread until scene is fully recorded.
                 }
-                //IOrderedEnumerable<OverlayData.RaceEvent> eRaceEventsOfInterest = _GetRaceEdits(this.overlayData.RaceEvents);
-                //foreach ( var raceEvent in removalEdits)
-                //{
-
-                //}
             } else {        //Code to be removed after being able to implment working solution where analysis phase and replay-capture phase are distinct processes. 
                 //use local variables for original code instead of global variables introduced to support full analysis in analysis-phase
                 
