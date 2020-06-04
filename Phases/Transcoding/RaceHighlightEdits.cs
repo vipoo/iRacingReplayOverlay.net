@@ -66,7 +66,7 @@ namespace iRacingReplayOverlay.Phases.Transcoding
             }
         }
 
-        private static IOrderedEnumerable<OverlayData.RaceEvent> GetInterestingRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents)
+        public static IOrderedEnumerable<OverlayData.RaceEvent> GetInterestingRaceEvents(IEnumerable<OverlayData.RaceEvent> raceEvents)
         {
             TraceInfo.WriteLine("Highlight Edits: Total Duration Target: {0}", HighlightVideoDuration);
 
