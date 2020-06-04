@@ -27,12 +27,15 @@ using iRacingReplayOverlay.Phases.Capturing;
 
 namespace iRacingReplayOverlay.Phases.Direction
 {
-    public class VideoCapture
+    enum videoStatus { stopped, running, paused };
+
+        public class VideoCapture
     {
         string workingFolder;
         DateTime started;
         Timer timer;
         List<CapturedVideoFile> captureFileNames = new List<CapturedVideoFile>();
+        videoStatus curVideoStatus = videoStatus.stopped;
         
         public void Activate(string workingFolder)
         {
@@ -43,6 +46,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             timer.Elapsed += CaptureNewFileNames; ;
             timer.AutoReset = false;
             timer.Enabled = true;
+            curVideoStatus = videoStatus.running;
 
             SendKeyStroke_StartStopp();     //Send hot-key to start recording
         }
@@ -84,6 +88,7 @@ namespace iRacingReplayOverlay.Phases.Direction
                 timer = null;
                 t.Stop();
                 t.Dispose();
+                curVideoStatus = videoStatus.stopped;
             }
 
             SendKeyStroke_StartStopp();
@@ -95,6 +100,26 @@ namespace iRacingReplayOverlay.Phases.Direction
             TraceInfo.WriteLineIf(captureFileNames.Count == 0, "Unable to find video files in folder '{0}' - check your Video Working folder", workingFolder);
 
             return captureFileNames;
+        }
+
+        //methode sending key-stroke command to pause recording software
+        public void Pause()
+        {
+            if(curVideoStatus == videoStatus.running && curVideoStatus != videoStatus.paused)
+            {
+                SendKeyStroke_PauseResume();
+                curVideoStatus = videoStatus.paused;
+            }
+        }
+
+        //methode sending key-stroke command to resume recording software
+        public void Resume()
+        {
+            if (curVideoStatus == videoStatus.running && curVideoStatus == videoStatus.paused)
+            {
+                SendKeyStroke_PauseResume();
+                curVideoStatus = videoStatus.running;
+            }
         }
 
         private static void SendKeyStroke_StartStopp()
@@ -116,9 +141,9 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
+            Keyboard.keybd_event(Keyboard.VK_F10, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            Keyboard.keybd_event(Keyboard.VK_F10, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
