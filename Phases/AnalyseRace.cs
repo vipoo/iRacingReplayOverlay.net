@@ -112,7 +112,15 @@ namespace iRacingReplayOverlay.Phases
             
             //Start iRacing Replay from the beginning with maximum speed (16x)
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
-            iRacing.Replay.SetSpeed((int)curReplaySpeed);
+            
+
+
+            //if (shortTestOnly)
+            //{
+            //    samples = samples.AtSpeed(Settings.Default.TimingFactorForShortTest);
+            //    Settings.AppliedTimingFactor = 1.0 / Settings.Default.TimingFactorForShortTest;
+            //}
+
 
             //copied from iRacing.Capturing because race events in app V1.0.x.x are identified during capturing the whole video. 
             //var overlayData = new OverlayData();
@@ -142,8 +150,13 @@ namespace iRacingReplayOverlay.Phases
                 .WithPitStopCounts()
                 .TakeUntil(3.Seconds()).Of(d => d.Telemetry.LeaderHasFinished && d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface != TrackLocation.OnTrack))
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
-            samples = samples.AtSpeed((int)curReplaySpeed);
-            Settings.AppliedTimingFactor = 1.0 / (int)curReplaySpeed;
+
+
+            //set speed for analysis phase (target speed is FF16x)
+            samples = samples.AtSpeed(Settings.Default.TimingFactorForShortTest);
+            Settings.AppliedTimingFactor = 1.0 / Settings.Default.TimingFactorForShortTest;
+
+            iRacing.Replay.SetSpeed((int)curReplaySpeed);
 
             var startTime = DateTime.Now;
 
