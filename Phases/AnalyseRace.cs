@@ -40,6 +40,14 @@ namespace iRacingReplayOverlay.Phases
         int raceStartFrameNumber = 0;
         internal Incidents incidents;
 
+        enum replaySpeeds : int
+        {
+            pause = 0,
+            normal = 1,
+            FF2x = 2,
+            FF16x = 16
+        };
+
         //create classes needed to analze race as global variables in the iRacingReplay instance 
         internal OverlayData overlayData = new OverlayData();
         internal RemovalEdits removalEdits;
@@ -100,9 +108,11 @@ namespace iRacingReplayOverlay.Phases
         //Analyse race situations at maximum replay speed w/o recording.  
         void AnalyseRaceSituations(IEnumerable<DataSample> samples)
         {
+            replaySpeeds curReplaySpeed = replaySpeeds.normal;
+            
             //Start iRacing Replay from the beginning with maximum speed (16x)
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
-            iRacing.Replay.SetSpeed(16);
+            iRacing.Replay.SetSpeed((int)curReplaySpeed);
 
             //copied from iRacing.Capturing because race events in app V1.0.x.x are identified during capturing the whole video. 
             //var overlayData = new OverlayData();
@@ -132,8 +142,8 @@ namespace iRacingReplayOverlay.Phases
                 .WithPitStopCounts()
                 .TakeUntil(3.Seconds()).Of(d => d.Telemetry.LeaderHasFinished && d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface != TrackLocation.OnTrack))
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
-            samples = samples.AtSpeed(16);
-            Settings.AppliedTimingFactor = 1.0 / 16.0;
+            samples = samples.AtSpeed((int)curReplaySpeed);
+            Settings.AppliedTimingFactor = 1.0 / (int)curReplaySpeed;
 
             var startTime = DateTime.Now;
 
