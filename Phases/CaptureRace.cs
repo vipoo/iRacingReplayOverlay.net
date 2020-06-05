@@ -81,6 +81,7 @@ namespace iRacingReplayOverlay.Phases
                     //jump to selected RaceEvent in iRacing Replay
                     int framePositionInRace = raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0);
                     iRacing.Replay.MoveToFrame(raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0));
+                    iRacing.Replay.SetSpeed((int)replaySpeeds.normal);
 
                     highligtVideoCapture.Resume();                                      //resume recording
                     
