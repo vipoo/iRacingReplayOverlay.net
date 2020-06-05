@@ -11,7 +11,7 @@ pool:
 
 variables:
   #solution: '**/*.sln'
-  #solution: '**/*iRacingReplayOverlay.net*.sln'
+  solution: '**/*iRacingReplayOverlay.net*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
