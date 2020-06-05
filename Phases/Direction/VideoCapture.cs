@@ -37,7 +37,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         List<CapturedVideoFile> captureFileNames = new List<CapturedVideoFile>();
         videoStatus curVideoStatus = videoStatus.stopped;
         
-        public void Activate(string workingFolder)
+        public void Activate(string workingFolder, bool bStartRecording = true)
         {
             this.workingFolder = workingFolder;
             this.started = DateTime.Now;
@@ -47,7 +47,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             timer.AutoReset = false;
             timer.Enabled = true;
             
-            if (curVideoStatus != videoStatus.running)
+            if (bStartRecording & (curVideoStatus != videoStatus.running))
             {
                 SendKeyStroke_StartStopp();     //Send hot-key to start recording
                 curVideoStatus = videoStatus.running;
