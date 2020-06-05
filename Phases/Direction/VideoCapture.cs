@@ -29,7 +29,7 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     enum videoStatus { stopped, running, paused };
 
-        public class VideoCapture
+    public class VideoCapture
     {
         string workingFolder;
         DateTime started;
@@ -46,9 +46,12 @@ namespace iRacingReplayOverlay.Phases.Direction
             timer.Elapsed += CaptureNewFileNames; ;
             timer.AutoReset = false;
             timer.Enabled = true;
-            curVideoStatus = videoStatus.running;
-
-            SendKeyStroke_StartStopp();     //Send hot-key to start recording
+            
+            if (curVideoStatus != videoStatus.running)
+            {
+                SendKeyStroke_StartStopp();     //Send hot-key to start recording
+                curVideoStatus = videoStatus.running;
+            }
         }
 
         private void CaptureNewFileNames(object sender, ElapsedEventArgs e)
@@ -88,10 +91,15 @@ namespace iRacingReplayOverlay.Phases.Direction
                 timer = null;
                 t.Stop();
                 t.Dispose();
-                curVideoStatus = videoStatus.stopped;
+                
             }
 
-            SendKeyStroke_StartStopp();
+            if( curVideoStatus != videoStatus.stopped)
+            {
+                SendKeyStroke_StartStopp();
+                curVideoStatus = videoStatus.stopped;
+            }
+            
 
             System.Threading.Thread.Sleep(2000);
 
