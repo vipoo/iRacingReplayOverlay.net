@@ -10,8 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  #solution: '**/*.sln'
-  solution: '**/*iRacingReplayOverlay.net*.sln'
+  solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -26,7 +25,6 @@ steps:
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
-    vsVersion: '15.0'
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
