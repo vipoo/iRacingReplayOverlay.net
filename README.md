@@ -1,18 +1,18 @@
 [![Board Status](https://merlincooper.visualstudio.com/e6f13734-ec60-4c67-b13c-08641fd28b90/aba5fdb2-a95f-4c59-a57a-c7bc2140e80e/_apis/work/boardbadge/7e4ac0d3-9a8d-4dd6-a01a-49909ee3bae6)](https://merlincooper.visualstudio.com/e6f13734-ec60-4c67-b13c-08641fd28b90/_boards/board/t/aba5fdb2-a95f-4c59-a57a-c7bc2140e80e/Microsoft.RequirementCategory)
 
 
-iRacingReplayOverlay.net
+iRacingReplayDirector
 ========================
 
-Please note - as I no longer own an active license for iRacing, nor do i have any time to commit to this project - I have to
-abandon support for the project - its the challenge of open-source
+Project is the sucessor of the discontinued iRacingReplayOverlay.NET application started by Vipoo. 
 
-I strongly encourage anyone who wishes - to fork this repo - and take over management/deployment/hosting of this application
+As Vipoo no longer owns an active license for iRacing - nor has the time to commit to this project - I will take over managing the original repository (vipoo/iRacingReplayOverlay.net) and continue to coordinate future enhancements as well.  
 
+For the ease of processing most of the development activites will be done in the my fork (MerlinCooper/iRacingReplayDirector). Due to not being owner of the orignal repository CI/CD processes will be based on my fork as well. 
 
+Former Readme File (to be updated) 
+==================================
 
-
-[![Build status](https://ci.appveyor.com/api/projects/status/15batnoaijxhvfjd?svg=true)](https://ci.appveyor.com/project/vipoo/iracingreplayoverlay-net)
 
 This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
 
