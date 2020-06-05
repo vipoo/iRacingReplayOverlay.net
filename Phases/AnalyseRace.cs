@@ -23,6 +23,7 @@
 using iRacingReplayOverlay.Phases.Analysis;
 using iRacingReplayOverlay.Phases.Capturing;
 using iRacingReplayOverlay.Phases.Direction;
+using iRacingReplayOverlay.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
@@ -45,6 +46,9 @@ namespace iRacingReplayOverlay.Phases
             pause = 0,
             normal = 1,
             FF2x = 2,
+            FF4x = 4, 
+            FF8x = 8,
+            FF12x = 12,
             FF16x = 16
         };
 
@@ -108,16 +112,18 @@ namespace iRacingReplayOverlay.Phases
         //Analyse race situations at maximum replay speed w/o recording.  
         void AnalyseRaceSituations(IEnumerable<DataSample> samples)
         {
-            replaySpeeds curReplaySpeed = replaySpeeds.normal;
-            
+            int iReplaySpeedForAnalysis = (int)replaySpeeds.FF16x;                                              //set speed for analysis phase to FF16x
+
             //Start iRacing Replay from the beginning with maximum speed (16x)
             iRacing.Replay.MoveToFrame(raceStartFrameNumber);
-            iRacing.Replay.SetSpeed((int)curReplaySpeed);
 
-            //copied from iRacing.Capturing because race events in app V1.0.x.x are identified during capturing the whole video. 
+            //----------------------------
+            // copied from iRacing.Capturing because race events in app V1.0.x.x are identified during capturing the whole video. 
+            // necessity of classes in analysis phase to be reviewed
+            //----------------------------
             //var overlayData = new OverlayData();
             removalEdits = new RemovalEdits(overlayData.RaceEvents);
-            commentaryMessages = new CommentaryMessages(overlayData);
+            commentaryMessages = new CommentaryMessages(overlayData);   
             recordPitStop = new RecordPitStop(commentaryMessages);
             fastestLaps = new RecordFastestLaps(overlayData);
             replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
@@ -130,6 +136,9 @@ namespace iRacingReplayOverlay.Phases
             captureCamDriverEvery4Seconds = new SampleFilter(TimeSpan.FromSeconds(4),
                 new LogCamDriver().Process);
 
+            //----------------------------
+            //end copy / end review 
+            //----------------------------
 
             ApplyFirstLapCameraDirection(samples, replayControl);
 
@@ -142,17 +151,19 @@ namespace iRacingReplayOverlay.Phases
                 .WithPitStopCounts()
                 .TakeUntil(3.Seconds()).Of(d => d.Telemetry.LeaderHasFinished && d.Telemetry.RaceCars.All(c => c.HasSeenCheckeredFlag || c.HasRetired || c.TrackSurface != TrackLocation.OnTrack))
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
-            samples = samples.AtSpeed((int)curReplaySpeed);
-            Settings.AppliedTimingFactor = 1.0 / (int)curReplaySpeed;
-
-            var startTime = DateTime.Now;
+            
+            samples = samples.AtSpeed(iReplaySpeedForAnalysis);
+            Settings.AppliedTimingFactor = 1.0 / iReplaySpeedForAnalysis;
 
             overlayData.CapturedVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
+            ulong numberOfDataProcessed = 0;
+            var startTime = DateTime.Now;
+
             foreach (var data in samples)
             {
-                var relativeTime = DateTime.Now - startTime;
-
+                var relativeTime = (DateTime.Now - startTime).Multiply(iReplaySpeedForAnalysis);        //calculate relative time in Replay taking into account replay speed (FF)
+                
                 replayControl.Process(data);
                 sessionDataCapture.Process(data);
                 captureLeaderBoardEveryHalfSecond.Process(data, relativeTime);
@@ -161,11 +172,13 @@ namespace iRacingReplayOverlay.Phases
                 fastestLaps.Process(data, relativeTime);
                 removalEdits.Process(data, relativeTime);
                 captureCamDriverEvery4Seconds.Process(data, relativeTime);
+
+                numberOfDataProcessed += 1;
             }
 
             removalEdits.Stop();
 
-            TraceDebug.WriteLine("Race analysis phase completed");
+            TraceDebug.WriteLine("Race analysis phase completed. {0} data samples processed with replay speed {1}".F(numberOfDataProcessed, iReplaySpeedForAnalysis));
 
             //save OverlayData into target folder for video ("working folder")
             SaveReplayScript(overlayData);

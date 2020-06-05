@@ -64,8 +64,8 @@ namespace iRacingReplayOverlay.Phases
                 var totalRaceEvents = RaceEventExtension.GetInterestingRaceEvents(overlayData.RaceEvents.ToList());
 
                 //set iRacing Replay to Race start and ensure that iRacing is playing out replay at normal speed
-                iRacing.Replay.MoveToStartOfRace();                                     //move in iRacing replay to start of Race
-                iRacing.Replay.SetSpeed(1);                                             //set replay speed to normal
+                iRacing.Replay.MoveToFrame(raceStartFrameNumber);                       //move in iRacing replay to start of Race
+                iRacing.Replay.SetSpeed((int)replaySpeeds.normal);                      //set replay speed to normal
 
                 //Record the selected race events into a highlight video
                 var highligtVideoCapture = new VideoCapture();                          //create instance to control by sending hot-keys to recording software (tested with OBS)
@@ -81,6 +81,7 @@ namespace iRacingReplayOverlay.Phases
                     //jump to selected RaceEvent in iRacing Replay
                     int framePositionInRace = raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0);
                     iRacing.Replay.MoveToFrame(raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0));
+                    
 
                     highligtVideoCapture.Resume();                                      //resume recording
                     

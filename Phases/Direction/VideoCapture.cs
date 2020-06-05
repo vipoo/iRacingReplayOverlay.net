@@ -115,7 +115,7 @@ namespace iRacingReplayOverlay.Phases.Direction
         //methode sending key-stroke command to resume recording software
         public void Resume()
         {
-            if (curVideoStatus == videoStatus.running && curVideoStatus == videoStatus.paused)
+            if (curVideoStatus == videoStatus.paused)
             {
                 SendKeyStroke_PauseResume();
                 curVideoStatus = videoStatus.running;
