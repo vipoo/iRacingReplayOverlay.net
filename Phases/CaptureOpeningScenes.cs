@@ -28,8 +28,14 @@ namespace iRacingReplayOverlay.Phases
 {
     public partial class IRacingReplay
     {
+        static private VideoCapture raceVideo = new VideoCapture();
+
         void _CaptureOpeningScenes(Action onComplete)
         {
+            if (bRecordUsingPauseResume)
+            {
+
+            }
             var data = iRacing.GetDataFeed().First();
             var session = data.SessionData.SessionInfo.Sessions.Qualifying();
             if (session == null || session.ResultsPositions == null)
@@ -57,13 +63,13 @@ namespace iRacingReplayOverlay.Phases
             var aCar = data.SessionData.DriverInfo.CompetingDrivers[1].CarNumberRaw;
             iRacing.Replay.CameraOnDriver((short)aCar, (short)scenicCameras);
 
-            var videoCapture = new VideoCapture();
+            //var videoCapture = new VideoCapture();
 
-            videoCapture.Activate(workingFolder);
+            raceVideo.Activate(workingFolder);
 
             Thread.Sleep(shortTestOnly ? 5000 : 20000);
 
-            var fileNames = videoCapture.Deactivate();
+            var fileNames = raceVideo.Deactivate(bRecordUsingPauseResume);
             if( fileNames.Count == 0)
                 return;
 
