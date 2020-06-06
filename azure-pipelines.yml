@@ -10,15 +10,12 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+
+  solution: '**/*iRacingReplayOverlay*.sln'
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'All'
+  buildConfiguration: 'Debug'
 
 steps:
-- task: VSBuild@1
-  inputs:
-    solution: '**\*.sln'
-    vsVersion: '15.0'
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
