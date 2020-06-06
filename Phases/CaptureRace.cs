@@ -83,15 +83,17 @@ namespace iRacingReplayOverlay.Phases
                     int framePositionInRace = raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0);
                     iRacing.Replay.MoveToFrame(raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0));
 
-                    iRacing.Replay.SetSpeed((int)replaySpeeds.normal);                     //start iRacing Replay at selected position                     
+                    //TODO: SET CAMERA TO DRIVER 
+                    
+
+                    iRacing.Replay.SetSpeed((int)replaySpeeds.normal);           //start iRacing Replay at selected position                     
 
                     raceVideo.Resume();                                         //resume recording
-
                     TraceDebug.WriteLine("Recording Race-Event. Frame-Position: {0}  | Duration: {1} ms".F(framePositionInRace, 1000 * raceEvent.Duration));
-
+                    //TODO: START THREAD TO SWITCH / CONTROL CAMERA WHILE RECORDING SCENE
                     Thread.Sleep((int)(1000 * raceEvent.Duration));                       //pause thread until scene is fully recorded.
-
-                   raceVideo.Pause();                                         //pause recording software before jumping to new position in iRacing Replay   
+                    //TODO: TERMINATE THREAD CAMERA CONTROL
+                    raceVideo.Pause();                                         //pause recording software before jumping to new position in iRacing Replay   
                 }
 
                 TraceDebug.WriteLine("Video Capture of Race-Events completed");
