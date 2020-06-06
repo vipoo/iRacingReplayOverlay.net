@@ -53,10 +53,12 @@ namespace iRacingReplayOverlay.Phases.Direction
             timer.AutoReset = false;
             timer.Enabled = true;
             
-            if (bStartRecording && (curVideoStatus != videoStatus.running))
+            if (bStartRecording && (curVideoStatus == videoStatus.stopped))
             {
                 SendKeyStroke_StartStopp();     //Send hot-key to start recording
                 curVideoStatus = videoStatus.running;
+            }else if( curVideoStatus == videoStatus.paused){
+                Resume();
             }
         }
 
@@ -89,7 +91,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
         }
 
-        public List<CapturedVideoFile> Deactivate()
+        public List<CapturedVideoFile> Deactivate(bool bRecordUsingPauseResume=false)
         {
             if (timer != null)
             {
@@ -100,12 +102,15 @@ namespace iRacingReplayOverlay.Phases.Direction
                 
             }
 
-            if( curVideoStatus != videoStatus.stopped)
+            if (bRecordUsingPauseResume && curVideoStatus != videoStatus.paused)
+            {
+                Pause();
+                curVideoStatus = videoStatus.paused;
+            } else
             {
                 SendKeyStroke_StartStopp();
                 curVideoStatus = videoStatus.stopped;
             }
-            
 
             System.Threading.Thread.Sleep(2000);
 
