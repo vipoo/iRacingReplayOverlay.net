@@ -153,7 +153,6 @@ namespace iRacingReplayOverlay.Phases
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
             
             samples = samples.AtSpeed(iReplaySpeedForAnalysis);
-            //Settings.AppliedTimingFactor = 1.0 / iReplaySpeedForAnalysis;
 
             overlayData.CapturedVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
