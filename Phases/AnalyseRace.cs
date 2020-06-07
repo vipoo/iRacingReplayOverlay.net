@@ -128,6 +128,8 @@ namespace iRacingReplayOverlay.Phases
             fastestLaps = new RecordFastestLaps(overlayData);
             replayControl = new ReplayControl(samples.First().SessionData, incidents, removalEdits, TrackCameras);
             sessionDataCapture = new SessionDataCapture(overlayData);
+
+            //CAPTURING LEADERBOARD, CAMERAS will be done at FF16x. TO BE DETERMINED WHETHER STANDARD INTERVALS HAVE TO BE REDUCED BY FACTOR OF 16?!
             captureLeaderBoardEveryHalfSecond = new SampleFilter(TimeSpan.FromSeconds(0.5),
                 new CaptureLeaderBoard(overlayData, commentaryMessages, removalEdits).Process);
             captureCamDriverEveryQuaterSecond = new SampleFilter(TimeSpan.FromSeconds(0.25),
@@ -153,7 +155,6 @@ namespace iRacingReplayOverlay.Phases
                 .TakeUntil(3.Seconds()).AfterReplayPaused();
             
             samples = samples.AtSpeed(iReplaySpeedForAnalysis);
-            Settings.AppliedTimingFactor = 1.0 / iReplaySpeedForAnalysis;
 
             overlayData.CapturedVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
