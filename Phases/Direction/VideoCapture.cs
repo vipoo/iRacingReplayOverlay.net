@@ -29,37 +29,26 @@ namespace iRacingReplayOverlay.Phases.Direction
 {
     enum videoStatus { stopped, running, paused };
 
-    public class VideoCapture
+        public class VideoCapture
     {
         string workingFolder;
         DateTime started;
         Timer timer;
         List<CapturedVideoFile> captureFileNames = new List<CapturedVideoFile>();
         videoStatus curVideoStatus = videoStatus.stopped;
-
-        ~VideoCapture()
-        {
-            if(curVideoStatus != videoStatus.stopped)
-                SendKeyStroke_StartStopp();
-        }
         
-        public void Activate(string workingFolder, bool bStartRecording = true)
+        public void Activate(string workingFolder)
         {
             this.workingFolder = workingFolder;
             this.started = DateTime.Now;
 
             timer = new Timer(500);
-            timer.Elapsed += CaptureNewFileNames; 
+            timer.Elapsed += CaptureNewFileNames; ;
             timer.AutoReset = false;
             timer.Enabled = true;
-            
-            if (bStartRecording && (curVideoStatus == videoStatus.stopped))
-            {
-                SendKeyStroke_StartStopp();     //Send hot-key to start recording
-                curVideoStatus = videoStatus.running;
-            }else if( curVideoStatus == videoStatus.paused){
-                Resume();
-            }
+            curVideoStatus = videoStatus.running;
+
+            SendKeyStroke_StartStopp();     //Send hot-key to start recording
         }
 
         private void CaptureNewFileNames(object sender, ElapsedEventArgs e)
@@ -91,7 +80,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
         }
 
-        public List<CapturedVideoFile> Deactivate(bool bRecordUsingPauseResume=false)
+        public List<CapturedVideoFile> Deactivate()
         {
             if (timer != null)
             {
@@ -99,18 +88,10 @@ namespace iRacingReplayOverlay.Phases.Direction
                 timer = null;
                 t.Stop();
                 t.Dispose();
-                
-            }
-
-            if (bRecordUsingPauseResume && curVideoStatus != videoStatus.paused)
-            {
-                Pause();
-                curVideoStatus = videoStatus.paused;
-            } else
-            {
-                SendKeyStroke_StartStopp();
                 curVideoStatus = videoStatus.stopped;
             }
+
+            SendKeyStroke_StartStopp();
 
             System.Threading.Thread.Sleep(2000);
 
@@ -140,16 +121,6 @@ namespace iRacingReplayOverlay.Phases.Direction
                 curVideoStatus = videoStatus.running;
             }
         }
-
-        public void Stop()
-        {
-            if(curVideoStatus == videoStatus.running || curVideoStatus == videoStatus.paused)
-            {
-                SendKeyStroke_StartStopp();
-                curVideoStatus = videoStatus.stopped;
-            }
-        }
-
 
         private static void SendKeyStroke_StartStopp()
         {
