@@ -1,5 +1,3 @@
-[![Board Status](https://merlincooper.visualstudio.com/e6f13734-ec60-4c67-b13c-08641fd28b90/aba5fdb2-a95f-4c59-a57a-c7bc2140e80e/_apis/work/boardbadge/7e4ac0d3-9a8d-4dd6-a01a-49909ee3bae6)](https://merlincooper.visualstudio.com/e6f13734-ec60-4c67-b13c-08641fd28b90/_boards/board/t/aba5fdb2-a95f-4c59-a57a-c7bc2140e80e/Microsoft.RequirementCategory)
-
 [![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/MerlinCooper.iRacingReplayDirector?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=2&branchName=master)
 
 iRacingReplayDirector
