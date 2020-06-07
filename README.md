@@ -1,5 +1,5 @@
 [![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/MerlinCooper.iRacingReplayDirector?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=2&branchName=master)
-
+ 
 iRacingReplayDirector
 ========================
 
