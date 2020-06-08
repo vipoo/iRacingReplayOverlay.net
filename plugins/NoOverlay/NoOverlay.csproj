@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="tools\package.cmd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
