@@ -98,6 +98,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public class CamDriver
         {
             public double StartTime;
+            public int camGroupNumber;
             public Driver CurrentDriver;
         }
 

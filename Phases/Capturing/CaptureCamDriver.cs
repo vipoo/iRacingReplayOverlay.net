@@ -55,8 +55,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         position, indicator);
                     
                     lastCamDriver = camDriver.CurrentDriver;
+                    //add camDriver to list only if either drivername or position has changed
+                    overlayData.CamDrivers.Add(camDriver);
                 }
-                overlayData.CamDrivers.Add(camDriver);
             }
         }
 
@@ -71,6 +72,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             {
                 StartTime = relativeTime.TotalSeconds,
                 CurrentDriver = driver,
+                camGroupNumber = data.Telemetry.CamGroupNumber     //get current, active camera group from telemetry data
             };
         }
 
