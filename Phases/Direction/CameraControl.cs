@@ -101,11 +101,13 @@ namespace iRacingReplayOverlay.Phases.Direction
         public void CameraOnDriver(short carNumber, short group, short camera = 0)
         {
             iRacing.Replay.CameraOnDriver(carNumber, group, camera);
+            TraceDebug.WriteLine("CameraOnDriver called for carNumber: {0} cameraGroup: {1} camera: {2}".F(carNumber, group, camera));
         }
 
         public void CameraOnPositon(short carPosition, short group, short camera = 0)
         {
             iRacing.Replay.CameraOnPositon(carPosition, group, camera);
+            TraceDebug.WriteLine("CameraOnPositon called for carNumber: {0} cameraGroup: {1} camera: {2}".F(carPosition, group, camera));
         }
     }
 }
