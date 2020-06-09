@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\ILMerge.3.0.40\build\ILMerge.props" Condition="Exists('packages\ILMerge.3.0.40\build\ILMerge.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <AssemblyName Condition=" '$(OverrideAssemblyName)' == '' ">iRacingReplayOverlay</AssemblyName>
@@ -15,12 +16,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <ProductName>iRacing Replay Director</ProductName>
     <PublisherName>Dean Netherton</PublisherName>
     <SuiteName>iRacing Apps</SuiteName>
     <ApplicationRevision>34</ApplicationRevision>
     <ApplicationVersion>1.0.0.34</ApplicationVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Optimize>false</Optimize>
@@ -324,4 +327,10 @@
       <Name>iRacingSDK</Name>
     </ProjectReference>
   </ItemGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\ILMerge.3.0.40\build\ILMerge.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\ILMerge.3.0.40\build\ILMerge.props'))" />
+  </Target>
 </Project>
