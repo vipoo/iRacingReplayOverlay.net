@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}</ProjectGuid>
+    <ProjectGuid>{F49DAE6F-321E-45A8-B9B4-23475A3F6080}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NoOverlay</RootNamespace>
-    <AssemblyName>NoOverlay</AssemblyName>
+    <RootNamespace>JockeOverlays</RootNamespace>
+    <AssemblyName>JockeOverlays</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +39,24 @@
   <PropertyGroup Condition="Exists('.\..\..\packages')">
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
+  <ItemGroup Condition="!Exists('..\..\iRacingSDK.Net\iRacingSDK.csproj')">
+    <Reference Include="iRacingSDK, Version=1.0.0.36, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)iRacingSDK.1.0.0.36\lib\net40-client\iRacingSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="YamlDotNet, Version=2.0.1.20271, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="Exists('..\..\iRacingSDK.Net\iRacingSDK.csproj')">
+    <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
+      <Name>iRacingSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
     <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
@@ -57,15 +74,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="iRacingSDK, Version=1.0.0.40, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\YamlDotNet.5.3.1\lib\net35\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyPlugin.FastestLaps.cs" />
@@ -84,22 +97,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PostBuildEvent>
-      mkdir $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
-      copy $(TargetDir)\NoOverlay.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
-      copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
+      mkdir $(SolutionDir)\bin\x64\Debug\plugins\JockeOverlays
+      copy $(TargetDir)\JockeOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\JockeOverlays
+      copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\JockeOverlays
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay</PreBuildEvent>
+    <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\JockeOverlays</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

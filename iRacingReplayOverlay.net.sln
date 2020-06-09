@@ -23,11 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK.Net.Tests", "iRa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDataModels", "iRacingSDK.Net\GenerateDataModels\GenerateDataModels.csproj", "{90126FE7-C20E-43EC-93AF-77AA5268E860}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BCCAE92-016E-41D6-9CB5-4FC83AC190BE}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet.config = NuGet.config
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation", "SuperMFLib\mfnet\mflib\src\MediaFoundation.csproj", "{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.StandardOverlays", "plugins\iRacingDirector.Plugin.StandardOverlays\iRacingDirector.Plugin.StandardOverlays.csproj", "{5916B84C-0264-4102-9CCC-28006D84E4FA}"
@@ -36,13 +31,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Stan
 		{0E523573-2972-4DC0-AECB-C4CF746854BB} = {0E523573-2972-4DC0-AECB-C4CF746854BB}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Support", "plugins\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj", "{CEC2BB31-324D-41E3-83C8-A5C35C63129B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Tester", "plugins\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj", "{96FA1C80-396C-4792-9E8B-C7CBFC25833D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JockeOverlays", "plugins\JockeOverlays\JockeOverlays.csproj", "{F49DAE6F-321E-45A8-B9B4-23475A3F6080}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayDirector", "iRacingReplayDirector.csproj", "{F82A3871-1554-4964-BF81-59854E9C4BB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoOverlay", "plugins\NoOverlay\NoOverlay.csproj", "{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Support", "plugins\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj", "{CEC2BB31-324D-41E3-83C8-A5C35C63129B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,14 +124,6 @@ Global
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|x64.ActiveCfg = Release|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Release|x64.Build.0 = Release|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|x64.Build.0 = Debug|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.ActiveCfg = Release|Any CPU
-		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.Build.0 = Release|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -156,6 +145,22 @@ Global
 		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|Any CPU.ActiveCfg = Release|x64
 		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|x64.ActiveCfg = Release|x64
 		{F82A3871-1554-4964-BF81-59854E9C4BB3}.Release|x64.Build.0 = Release|x64
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Debug|x64.Build.0 = Debug|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|x64.ActiveCfg = Release|Any CPU
+		{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}.Release|x64.Build.0 = Release|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Debug|x64.Build.0 = Debug|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.ActiveCfg = Release|Any CPU
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
