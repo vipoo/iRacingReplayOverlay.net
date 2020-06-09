@@ -1,18 +1,9 @@
 [submodule "SuperMFLib"]
 	path = SuperMFLib
 	url = git://github.com/vipoo/SuperMFLib.git
-[submodule "plugins/iRacingDirector.Plugin.StandardOverlays"]
-	path = plugins/iRacingDirector.Plugin.StandardOverlays
-	url = git://github.com/vipoo/iRacingDirector.Plugin.StandardOverlays.git
 [submodule "GitHubReleases"]
 	path = GitHubReleases
 	url = git://github.com/vipoo/GitHubReleases.git
-[submodule "plugins/iRacingDirector.Plugin.Support"]
-	path = plugins/iRacingDirector.Plugin.Support
-	url = git://github.com/vipoo/iRacingDirector.Plugin.Support.git
-[submodule "plugins/JockeOverlays"]
-	path = plugins/JockeOverlays
-	url = git://github.com/vipoo/JockeOverlays.git
-[submodule "iRacingSDK.NET"]
-	path = iRacingSDK.NET
+[submodule "iRacingSDK.Net"]
+	path = iRacingSDK.Net
 	url = https://github.com/MerlinCooper/iRacingSDK.Net.git
