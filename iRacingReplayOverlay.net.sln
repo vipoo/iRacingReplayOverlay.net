@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csp
 		{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18} = {E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net.Tests", "iRacingReplayOverlay.net.Tests\iRacingReplayOverlay.net.Tests.csproj", "{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK", "iRacingSDK.Net\iRacingSDK.csproj", "{5422AE20-F220-4BE1-9E61-5296981ABB5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK.Net.Tests", "iRacingSDK.Net\iRacingSDK.Net.Tests\iRacingSDK.Net.Tests.csproj", "{947BD2B6-FFF4-4762-8C0E-718112CDA72E}"
@@ -90,6 +92,12 @@ Global
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Any CPU.ActiveCfg = Release|x64
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Any CPU.Build.0 = Release|x64
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|x64.ActiveCfg = Release|x64
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|Any CPU.Build.0 = Debug|x64
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|x64.ActiveCfg = Debug|x64
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Debug|x64.Build.0 = Debug|x64
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|Any CPU.ActiveCfg = Release|x64
+		{E4D21BA6-6275-4D46-A1D6-E7D16BF0E5EC}.Release|x64.ActiveCfg = Release|x64
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C}.Debug|x64.ActiveCfg = Debug|Any CPU
