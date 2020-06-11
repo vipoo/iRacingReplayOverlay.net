@@ -26,6 +26,7 @@ using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -66,13 +67,16 @@ namespace iRacingReplayOverlay.Phases
 
                 ApplyFirstLapCameraDirection(samples, replayControl);
 
-                /*//set iRacing Replay to Race start and ensure that iRacing is playing out replay at normal speed
-                iRacing.Replay.MoveToFrame(raceStartFrameNumber);                       //move in iRacing replay to start of Race
-                iRacing.Replay.SetSpeed((int)replaySpeeds.normal);                      //set replay speed to normal*/
-
+                
                 //Record the selected race events into a highlight video
-                //var highligtVideoCapture = new VideoCapture();                          //create instance to control by sending hot-keys to recording software (tested with OBS)
-                raceVideo.Activate(workingFolder);                           //Active video-capturing and send start command to recording software. 
+                raceVideo.Activate(workingFolder);                                      //Active video-capturing and send start command to recording software. 
+
+                OverlayData.CamDriver curCamDriver = overlayData.CamDrivers.First();
+
+                //start thread to control / switch cameras while recording
+                ReplayControl.cameraControl.ReplayCameraControlTask(overlayData);
+
+                //ReplayControl.cameraControl.CameraOnDriver(short.Parse(curCamDriver.CurrentDriver.CarNumber), (short)curCamDriver.camGroupNumber);
 
                 //cycle through all raceEvents selected for the highlight video and record them  (REMARK: Camera switching not implemented yet)
                 foreach (var raceEvent in totalRaceEvents)
@@ -83,22 +87,19 @@ namespace iRacingReplayOverlay.Phases
                     int framePositionInRace = raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0);
                     iRacing.Replay.MoveToFrame(raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0));
 
-                    //TODO: SET CAMERA TO DRIVER 
-                    
-
                     iRacing.Replay.SetSpeed((int)replaySpeeds.normal);           //start iRacing Replay at selected position                     
 
                     raceVideo.Resume();                                         //resume recording
+
                     TraceDebug.WriteLine("Recording Race-Event. Frame-Position: {0}  | Duration: {1} ms".F(framePositionInRace, 1000 * raceEvent.Duration));
-                    //TODO: START THREAD TO SWITCH / CONTROL CAMERA WHILE RECORDING SCENE
+
                     Thread.Sleep((int)(1000 * raceEvent.Duration));                       //pause thread until scene is fully recorded.
-                    //TODO: TERMINATE THREAD CAMERA CONTROL
                     raceVideo.Pause();                                         //pause recording software before jumping to new position in iRacing Replay   
                 }
 
+
                 TraceDebug.WriteLine("Video Capture of Race-Events completed");
                 raceVideo.Stop();
-
             } else {        //Code to be removed after being able to implment working solution where analysis phase and replay-capture phase are distinct processes. 
                 //use local variables for original code instead of global variables introduced to support full analysis in analysis-phase
                 
