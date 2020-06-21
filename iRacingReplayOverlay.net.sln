@@ -44,6 +44,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.Tester", "plugins\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj", "{96FA1C80-396C-4792-9E8B-C7CBFC25833D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JockeOverlays", "plugins\JockeOverlays\JockeOverlays.csproj", "{F49DAE6F-321E-45A8-B9B4-23475A3F6080}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B} = {CEC2BB31-324D-41E3-83C8-A5C35C63129B}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayDirector", "iRacingReplayDirector.csproj", "{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}"
 	ProjectSection(ProjectDependencies) = postProject

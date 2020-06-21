@@ -50,10 +50,7 @@
       <Project>{0e523573-2972-4dc0-aecb-c4cf746854bb}</Project>
       <Name>iRacingReplayOverlay</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
+    
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
