@@ -1,0 +1,3 @@
+[submodule "mfnet"]
+	path = mfnet
+	url = git://github.com/vipoo/mfnet.git
