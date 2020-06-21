@@ -6,10 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayOverlay.net", "iRacingReplayOverlay.net.csproj", "{0E523573-2972-4DC0-AECB-C4CF746854BB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5422AE20-F220-4BE1-9E61-5296981ABB5C} = {5422AE20-F220-4BE1-9E61-5296981ABB5C}
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09} = {59D2B4B5-2852-4396-A0D9-9CA546AC3C09}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMFLib", "SuperMFLib\SuperMFLib\SuperMFLib.csproj", "{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "iRacingSDK.Net\Sample\Sample.csproj", "{8BDF1915-3140-478E-827F-25D495B8CDC5}"
 EndProject
@@ -30,8 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		NuGet.config = NuGet.config
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation", "SuperMFLib\mfnet\mflib\src\MediaFoundation.csproj", "{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.StandardOverlays", "plugins\iRacingDirector.Plugin.StandardOverlays\iRacingDirector.Plugin.StandardOverlays.csproj", "{5916B84C-0264-4102-9CCC-28006D84E4FA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -73,14 +68,6 @@ Global
 		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|Any CPU.Build.0 = Release|x64
 		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.ActiveCfg = Release|x64
 		{0E523573-2972-4DC0-AECB-C4CF746854BB}.Release|x64.Build.0 = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|Any CPU.ActiveCfg = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|Any CPU.Build.0 = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.ActiveCfg = Debug|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Debug|x64.Build.0 = Debug|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|Any CPU.ActiveCfg = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|Any CPU.Build.0 = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.ActiveCfg = Release|x64
-		{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}.Release|x64.Build.0 = Release|x64
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -123,14 +110,6 @@ Global
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90126FE7-C20E-43EC-93AF-77AA5268E860}.Release|x64.ActiveCfg = Release|Any CPU
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|Any CPU.ActiveCfg = Release|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|Any CPU.Build.0 = Release|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.ActiveCfg = Debug|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Debug|x64.Build.0 = Debug|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|Any CPU.ActiveCfg = Release|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|Any CPU.Build.0 = Release|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.ActiveCfg = Release|x64
-		{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}.Release|x64.Build.0 = Release|x64
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5916B84C-0264-4102-9CCC-28006D84E4FA}.Debug|x64.ActiveCfg = Debug|Any CPU
