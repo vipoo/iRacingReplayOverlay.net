@@ -343,4 +343,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudWatchLogs">
+      <Version>3.1.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="AWSSDK.Core">
+      <Version>3.1.4</Version>
+    </PackageReference>
+  </ItemGroup>
 </Project>
