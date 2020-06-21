@@ -1,5 +1,5 @@
 ﻿using GitHubReleases;
-using iRacingReplayOverlay;
+using iRacingReplayDirector;
 
 internal static class GitHubAccessSettings
 {

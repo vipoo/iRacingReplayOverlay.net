@@ -42,14 +42,12 @@
   <PropertyGroup Condition="Exists('.\..\..\packages')">
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
- 
   <ItemGroup>
     <Reference Include="YamlDotNet, Version=2.0.1.20271, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
       <HintPath>$(PackagesFolder)YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
- 
   <PropertyGroup>
     <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
     <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
@@ -101,6 +99,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+      mkdir $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+      copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+      copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+     copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\JockeOverlays\iRacingDirector.Plugin.StandardOverlays
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

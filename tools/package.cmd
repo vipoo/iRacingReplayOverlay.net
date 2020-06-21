@@ -8,13 +8,13 @@ set STANDARD_OVERLAY_PLUGIN=1.0.0.33
 
 msbuild %SolutionDir%plugins\iRacingDirector.Plugin.Tester\iRacingDirector.Plugin.Tester.csproj -p:SolutionDir=%SolutionDir% -t:rebuild -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION% -v:minimal -p:Configuration=Release
 
-msbuild iRacingReplayOverlay.net.csproj -p:SolutionDir=%cd%\                               ^
+msbuild iRacingReplayDirector.net.csproj -p:SolutionDir=%cd%\                               ^
                                         -p:Configuration=Release                           ^
                                         -t:rebuild                                         ^
                                         -p:ApplicationVersion=%APPVEYOR_BUILD_VERSION%     ^
                                         -v:minimal                                         ^
                                         -p:ProductName="iRacing Replay Director"           ^
-                                        -p:OverrideAssemblyName=iRacingReplayOverlay
+                                        -p:OverrideAssemblyName=iRacingReplayDirector
 
 copy plugins\iRacingDirector.Plugin.Tester\bin\Release\iRacingDirector.Plugin.Tester.* bin\x64\Release\
 

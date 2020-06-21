@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     public partial class ConfigurePlugins : Form
     {

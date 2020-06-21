@@ -1,9 +1,9 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     partial class UsageDataRequest
     {

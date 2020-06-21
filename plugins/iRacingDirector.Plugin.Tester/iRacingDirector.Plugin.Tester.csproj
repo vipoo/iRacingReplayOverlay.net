@@ -46,22 +46,12 @@
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\iRacingReplayOverlay.net.csproj">
-      <Project>{0e523573-2972-4dc0-aecb-c4cf746854bb}</Project>
-      <Name>iRacingReplayOverlay</Name>
-    </ProjectReference>
-    
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\YamlDotNet.5.3.1\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DomainForm.cs" />
@@ -108,6 +98,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="iRacingSDK">
+      <Version>1.0.0.43</Version>
+    </PackageReference>
+    <PackageReference Include="YamlDotNet">
+      <Version>5.3.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

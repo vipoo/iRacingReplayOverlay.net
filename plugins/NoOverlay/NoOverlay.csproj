@@ -90,7 +90,7 @@
   <ItemGroup>
     <None Include="tools\package.cmd" />
   </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PostBuildEvent>
       mkdir $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
@@ -100,6 +100,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
+      copy $(TargetDir)\JockeOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
+      copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
