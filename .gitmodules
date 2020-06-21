@@ -1,6 +1,3 @@
-[submodule "SuperMFLib"]
-	path = SuperMFLib
-	url = git://github.com/vipoo/SuperMFLib.git
 [submodule "GitHubReleases"]
 	path = GitHubReleases
 	url = git://github.com/vipoo/GitHubReleases.git
