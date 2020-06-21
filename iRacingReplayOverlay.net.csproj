@@ -264,10 +264,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="DeploymentSite\.gitignore" />
     <None Include="DeploymentSite\main.jsx" />
     <None Include="DeploymentSite\package.json" />
     <None Include="LICENSE.txt" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="README.md" />
     <None Include="tools\decrypt.cmd" />

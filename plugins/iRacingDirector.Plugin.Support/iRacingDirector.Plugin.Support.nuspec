@@ -18,8 +18,5 @@
       <dependency id="iRacingSDK" version="1.0.0.36" />
     </dependencies>
   </metadata>
-  <files>
-    <file src="iRacingDirector.Plugin.Support\bin\Release\iRacingDirector.Plugin.Support.dll" target="lib\net40-client" />
-    <file src="iRacingDirector.Plugin.Support\bin\Release\iRacingDirector.Plugin.Support.pdb" target="lib\net40-client" />
-  </files>
+  
 </package>

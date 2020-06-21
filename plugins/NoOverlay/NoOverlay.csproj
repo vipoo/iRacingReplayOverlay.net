@@ -9,10 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NoOverlay</RootNamespace>
     <AssemblyName>NoOverlay</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +22,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +30,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="Exists('.\packages')">
     <PackagesFolder>.\packages\</PackagesFolder>
@@ -53,12 +50,22 @@
       <Name>iRacingDirector.Plugin.Support</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup Condition="'$(SupportProject)' == ''">
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.48, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.48\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
+    <Reference Include="iRacingSDK, Version=1.0.0.40, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\YamlDotNet.5.3.1\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyPlugin.FastestLaps.cs" />
@@ -75,6 +82,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="tools\package.cmd" />
   </ItemGroup>
   <ItemGroup>
@@ -82,17 +90,6 @@
       <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
       <Name>iRacingSDK</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="iRacingDirector.Plugin.Support">
-      <Version>1.0.0.48</Version>
-    </PackageReference>
-    <PackageReference Include="iRacingSDK">
-      <Version>1.0.0.43</Version>
-    </PackageReference>
-    <PackageReference Include="YamlDotNet">
-      <Version>5.3.1</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

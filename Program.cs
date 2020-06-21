@@ -41,16 +41,20 @@ namespace iRacingReplayOverlay
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += Application_ThreadException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            if( AwsKeys.HaveKeys)
-                using (var awsLogListener = new AwsLogListener())
-                {
-                    Trace.Listeners.Add(awsLogListener);
-                    TraceInfo.WriteLine("Application Start");
-                    Application.Run(new Main());
-                    TraceInfo.WriteLine("Application End");
-                }
-            else
-                Application.Run(new Main());
+
+
+            //if( AwsKeys.HaveKeys)
+            //    using (var awsLogListener = new AwsLogListener())
+            //    {
+            //        Trace.Listeners.Add(awsLogListener);
+            //        TraceInfo.WriteLine("Application Start");
+            //        Application.Run(new Main());
+            //        TraceInfo.WriteLine("Application End");
+            //    }
+            //else
+            //    Application.Run(new Main());
+
+            Application.Run(new Main());
         }
 
         internal static void MakePortable(Settings settings)

@@ -42,6 +42,18 @@
   <PropertyGroup Condition="Exists('.\..\..\packages')">
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
+  <ItemGroup Condition="!Exists('..\..\iRacingSDK.Net\iRacingSDK.csproj')">
+    <Reference Include="iRacingSDK, Version=1.0.0.36, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)iRacingSDK.1.0.0.36\lib\net40-client\iRacingSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="YamlDotNet, Version=2.0.1.20271, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
   <ItemGroup Condition="Exists('..\..\iRacingSDK.Net\iRacingSDK.csproj')">
     <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
       <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
@@ -53,10 +65,16 @@
     <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
   </PropertyGroup>
   <ItemGroup Condition="'$(SupportProject)' != ''">
-    <ProjectReference Include="..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj">
+    <ProjectReference Include="$(SupportProject)">
       <Project>{cec2bb31-324d-41e3-83c8-a5c35c63129b}</Project>
       <Name>iRacingDirector.Plugin.Support</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(SupportProject)' == ''">
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.48, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.48\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -80,9 +98,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="iRacingDirector.Plugin.Support">
-      <Version>1.0.0.48</Version>
-    </PackageReference>
+    <None Include="packages.config" />
+    <None Include="tools\package.cmd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
