@@ -83,6 +83,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+<<<<<<< HEAD
+=======
+    <None Include="tools\package.cmd" />
+>>>>>>> Fast_Video_Recording_With_OBS
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">

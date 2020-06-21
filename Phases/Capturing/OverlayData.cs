@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace iRacingReplayOverlay.Phases.Capturing
 {
@@ -56,6 +57,8 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
     public class OverlayData
     {
+        public DateTime overlayDateTime = DateTime.Now;
+
         public class RaceEvent
         {
             public double StartTime;
@@ -95,6 +98,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
         public class CamDriver
         {
             public double StartTime;
+            public int camGroupNumber;
             public Driver CurrentDriver;
         }
 
@@ -166,10 +170,19 @@ namespace iRacingReplayOverlay.Phases.Capturing
 
         public void SaveTo(string fileName)
         {
+            //write OverlayData to XML file
             var writer = new XmlSerializer(typeof(OverlayData));
 
             using (var file = new StreamWriter(fileName))
                 writer.Serialize(file, this);
+            
+            //write OverlayData to JSON file 
+            string fileNameJSON = fileName + ".json";
+            using (StreamWriter fileJSON = File.CreateText(fileNameJSON))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(fileJSON, this);
+            }
         }
 
         public static OverlayData FromFile(string fileName)

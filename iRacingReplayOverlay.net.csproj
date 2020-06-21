@@ -9,18 +9,31 @@
     <ProjectGuid>{0E523573-2972-4DC0-AECB-C4CF746854BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>iRacingReplayOverlay</RootNamespace>
+    <RootNamespace>iRacingReplayDirector</RootNamespace>
     <FileAlignment>512</FileAlignment>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
     <ProductName>iRacing Replay Director</ProductName>
     <PublisherName>Dean Netherton</PublisherName>
     <SuiteName>iRacing Apps</SuiteName>
     <ApplicationRevision>34</ApplicationRevision>
     <ApplicationVersion>1.0.0.34</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Optimize>false</Optimize>
@@ -50,6 +63,9 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>iRacingReplayDirector</AssemblyName>
+  </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <Reference Include="MediaFoundation.Net, Version=2.0.0.32, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\MediaFoundation.Net.2.0.0.32\lib\net35-client\MediaFoundation.Net.dll</HintPath>
@@ -57,10 +73,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
     <ProjectReference Include="SuperMFLib\mfnet\mflib\src\MediaFoundation.csproj">
       <Project>{b78c0f3b-071a-4fd2-829d-7a67e0f7bd1c}</Project>
       <Name>MediaFoundation</Name>
@@ -79,6 +91,7 @@
       <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="iRacingSDK, Version=1.0.0.40, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -251,6 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="DeploymentSite\.gitignore" />
     <None Include="DeploymentSite\main.jsx" />
     <None Include="DeploymentSite\package.json" />
@@ -321,9 +335,12 @@
       <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
       <Name>iRacingSDK</Name>
     </ProjectReference>
-    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
 </Project>

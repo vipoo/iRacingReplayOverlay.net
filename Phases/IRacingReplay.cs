@@ -37,10 +37,14 @@ namespace iRacingReplayOverlay.Phases
     {
         List<Action> actions = new List<Action>();
         bool shortTestOnly;
+        bool bRecordUsingPauseResume;
+        bool bCloseiRacingAfterRecording;
 
-        public IRacingReplay(bool shortTestOnly = false)
+        public IRacingReplay(bool shortTestOnly = false, bool bRecordUsingPauseResume=false, bool bCloseiRacingAfterRecording=false)
         {
             this.shortTestOnly = shortTestOnly;
+            this.bRecordUsingPauseResume = bRecordUsingPauseResume;
+            this.bCloseiRacingAfterRecording = bCloseiRacingAfterRecording;
         }
 
         private void Add(Action<Action> action, Action onComplete)
