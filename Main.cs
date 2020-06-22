@@ -1,26 +1,26 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 //
-// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// iRacingReplayDirector is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 
 using GitHubReleases;
-using iRacingReplayOverlay.Phases;
-using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Support;
-using iRacingReplayOverlay.Video;
+using iRacingReplayDirector.Phases;
+using iRacingReplayDirector.Phases.Capturing;
+using iRacingReplayDirector.Support;
+using iRacingReplayDirector.Video;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
@@ -36,7 +36,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
  
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     public partial class Main : Form
     {
@@ -219,7 +219,7 @@ namespace iRacingReplayOverlay
 
             try
             {
-                var items = await GitHubAccess.GetVersions("vipoo", "iRacingReplayOverlay.net");
+                var items = await GitHubAccess.GetVersions("vipoo", "iRacingReplayDirector.net");
 
                 var currentVersionItem = items.FirstOrDefault(r => r.VersionStamp == AboutBox1.AssemblyVersion);
                 var isNewVersionAvailable = false;
@@ -490,7 +490,7 @@ namespace iRacingReplayOverlay
 
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_DISPLAY_REQUIRED);
 
-            iRacingProcess = new IRacingReplay(shortTestOnly: TestOnlyCheckBox.Checked)
+            iRacingProcess = new IRacingReplay(shortTestOnly: TestOnlyCheckBox.Checked, bRecordUsingPauseResume:cb_FastVideoRecording.Checked, bCloseiRacingAfterRecording: cb_CloseiRacingAfterRecording.Checked)
                 .WithWorkingFolder(workingFolderTextBox.Text)
                 .AnalyseRace(() => { AnalysingRaceLabel.Visible = false; CapturingRaceLabel.Visible = true; })
                 .CaptureOpeningScenes()
@@ -520,7 +520,7 @@ namespace iRacingReplayOverlay
                     WindowState = FormWindowState.Normal;
                     this.BringToFront();
 
-                    if (errorMessage == null && transcodeVideoButton.Enabled && EncodeVideoAfterCapture.Checked)
+                    if (errorMessage == null && transcodeVideoButton.Enabled && cb_EncodeVideoAfterCapture.Checked)
                     {
                         tabControl1.SelectedIndex = 1;
                         Thread.Sleep(1000);
@@ -612,6 +612,16 @@ namespace iRacingReplayOverlay
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void cb_FastVideoRecording_CheckedChanged(object sender, EventArgs e)
+        {
+            cb_EncodeVideoAfterCapture.Checked = !cb_FastVideoRecording.Checked;
+        }
+
+        private void EncodeVideoAfterCapture_CheckedChanged(object sender, EventArgs e)
+        {
+            cb_FastVideoRecording.Checked = !cb_EncodeVideoAfterCapture.Checked;
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2016 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 
 using iRacingSDK.Support;
 using System;
 using System.Windows.Forms;
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     partial class UsageDataRequest : Form
     {

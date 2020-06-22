@@ -1,8 +1,9 @@
-﻿using iRacingReplayOverlay;
+﻿using iRacingDirector;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using iRacingReplayDirector;
 
 namespace iRacingDirector.Plugin.Tester
 {

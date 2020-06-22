@@ -1,0 +1,3 @@
+﻿* Auto reload assembly and redraw, on updating of assembly
+* Clean up Form's appearance
+* Clean up support code to be more DSL

@@ -3,7 +3,8 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using iRacingReplayOverlay.Phases;
+using iRacingDirector;
+using iRacingReplayDirector.Phases;
 
 namespace iRacingDirector.Plugin.Tester
 {
@@ -233,7 +234,7 @@ namespace iRacingDirector.Plugin.Tester
 
         private void generalSettingsButton_Click(object sender, EventArgs e)
         {
-            var frm = new iRacingReplayOverlay.PluginSettings(iRacingReplayOverlay.Settings.Default, domainForm.GetSettingsList());
+            var frm = new iRacingReplayDirector.PluginSettings(iRacingReplayDirector.Settings.Default, domainForm.GetSettingsList());
             frm.ShowDialog();
 
         }

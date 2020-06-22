@@ -1,29 +1,29 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 //
-// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// iRacingReplayDirector is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License333
-// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using iRacingReplayOverlay.Support;
+using iRacingReplayDirector.Support;
 
-namespace iRacingReplayOverlay.Phases.Capturing
+namespace iRacingReplayDirector.Phases.Capturing
 {
     public class CaptureCamDriver
     {
@@ -55,8 +55,9 @@ namespace iRacingReplayOverlay.Phases.Capturing
                         position, indicator);
                     
                     lastCamDriver = camDriver.CurrentDriver;
+                    //add camDriver to list only if either drivername or position has changed
+                    overlayData.CamDrivers.Add(camDriver);
                 }
-                overlayData.CamDrivers.Add(camDriver);
             }
         }
 
@@ -71,6 +72,7 @@ namespace iRacingReplayOverlay.Phases.Capturing
             {
                 StartTime = relativeTime.TotalSeconds,
                 CurrentDriver = driver,
+                camGroupNumber = data.Telemetry.CamGroupNumber     //get current, active camera group from telemetry data
             };
         }
 

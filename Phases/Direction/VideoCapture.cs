@@ -1,20 +1,20 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 //
-// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// iRacingReplayDirector is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK.Support;
 using System;
@@ -23,28 +23,43 @@ using System.Linq;
 using Win32;
 using System.Timers;
 using System.Collections.Generic;
-using iRacingReplayOverlay.Phases.Capturing;
+using iRacingReplayDirector.Phases.Capturing;
 
-namespace iRacingReplayOverlay.Phases.Direction
+namespace iRacingReplayDirector.Phases.Direction
 {
+    enum videoStatus { stopped, running, paused };
+
     public class VideoCapture
     {
         string workingFolder;
         DateTime started;
         Timer timer;
         List<CapturedVideoFile> captureFileNames = new List<CapturedVideoFile>();
+        videoStatus curVideoStatus = videoStatus.stopped;
 
-        public void Activate(string workingFolder)
+        ~VideoCapture()
+        {
+            if(curVideoStatus != videoStatus.stopped)
+                SendKeyStroke_StartStopp();
+        }
+        
+        public void Activate(string workingFolder, bool bStartRecording = true)
         {
             this.workingFolder = workingFolder;
             this.started = DateTime.Now;
 
             timer = new Timer(500);
-            timer.Elapsed += CaptureNewFileNames; ;
+            timer.Elapsed += CaptureNewFileNames; 
             timer.AutoReset = false;
             timer.Enabled = true;
-
-            SendKeyStroke();
+            
+            if (bStartRecording && (curVideoStatus == videoStatus.stopped))
+            {
+                SendKeyStroke_StartStopp();     //Send hot-key to start recording
+                curVideoStatus = videoStatus.running;
+            }else if( curVideoStatus == videoStatus.paused){
+                Resume();
+            }
         }
 
         private void CaptureNewFileNames(object sender, ElapsedEventArgs e)
@@ -76,7 +91,7 @@ namespace iRacingReplayOverlay.Phases.Direction
             }
         }
 
-        public List<CapturedVideoFile> Deactivate()
+        public List<CapturedVideoFile> Deactivate(bool bRecordUsingPauseResume=false)
         {
             if (timer != null)
             {
@@ -84,9 +99,18 @@ namespace iRacingReplayOverlay.Phases.Direction
                 timer = null;
                 t.Stop();
                 t.Dispose();
+                
             }
 
-            SendKeyStroke();
+            if (bRecordUsingPauseResume && curVideoStatus != videoStatus.paused)
+            {
+                Pause();
+                curVideoStatus = videoStatus.paused;
+            } else
+            {
+                SendKeyStroke_StartStopp();
+                curVideoStatus = videoStatus.stopped;
+            }
 
             System.Threading.Thread.Sleep(2000);
 
@@ -97,15 +121,58 @@ namespace iRacingReplayOverlay.Phases.Direction
             return captureFileNames;
         }
 
-        private static void SendKeyStroke()
+        //methode sending key-stroke command to pause recording software
+        public void Pause()
         {
-            TraceInfo.WriteLine("Sending key event ALT+F9");
+            if(curVideoStatus == videoStatus.running && curVideoStatus != videoStatus.paused)
+            {
+                SendKeyStroke_PauseResume();
+                curVideoStatus = videoStatus.paused;
+            }
+        }
+
+        //methode sending key-stroke command to resume recording software
+        public void Resume()
+        {
+            if (curVideoStatus == videoStatus.paused)
+            {
+                SendKeyStroke_PauseResume();
+                curVideoStatus = videoStatus.running;
+            }
+        }
+
+        public void Stop()
+        {
+            if(curVideoStatus == videoStatus.running || curVideoStatus == videoStatus.paused)
+            {
+                SendKeyStroke_StartStopp();
+                curVideoStatus = videoStatus.stopped;
+            }
+        }
+
+
+        private static void SendKeyStroke_StartStopp()
+        {
+            TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
             Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
             Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            System.Threading.Thread.Sleep(700);
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+        }
+
+        private static void SendKeyStroke_PauseResume()
+        {
+            TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
+
+            Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
+            System.Threading.Thread.Sleep(700);
+            Keyboard.keybd_event(Keyboard.VK_F10, 0, 0, UIntPtr.Zero);
+            System.Threading.Thread.Sleep(700);
+            Keyboard.keybd_event(Keyboard.VK_F10, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
             Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }

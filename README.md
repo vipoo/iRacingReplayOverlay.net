@@ -1,9 +1,9 @@
 iRacingReplayDirector
 =====================
 
-This project is the sucessor of the discontinued iRacingReplayOverlay.NET application developed by Vipoo. 
+This project is the sucessor of the discontinued iRacingReplayDirector.NET application developed by Vipoo. 
 
-As Vipoo no longer owns an active license for iRacing - nor has the time to commit to this project - I will take over managing the original repository (vipoo/iRacingReplayOverlay.net) and continue to coordinate future enhancements as well.  
+As Vipoo no longer owns an active license for iRacing - nor has the time to commit to this project - I will take over managing the original repository (vipoo/iRacingReplayDirector.net) and continue to coordinate future enhancements as well.  
 
 For the ease of processing most of the development activites will be managed in the fork MerlinCooper/iRacingReplayDirector. 
 
@@ -34,7 +34,7 @@ https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be
 
 https://www.youtube.com/watch?v=Zs4VyBPOCHw&list=UUjHTFbxIv3vi7KGreofr8Aw
 
-Please feel free to log feature requests, or bug issues in github issues tracker for the repo at: https://github.com/vipoo/iRacingReplayOverlay.net/issues
+Please feel free to log feature requests, or bug issues in github issues tracker for the repo at: https://github.com/vipoo/iRacingReplayDirector.net/issues
 
 You configure the rules for cameras selection - then with iRacing replay loaded, you press the big button saying 'Begin'.
 

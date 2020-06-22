@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <AssemblyName Condition=" '$(OverrideAssemblyName)' == '' ">iRacingReplayOverlay</AssemblyName>
     <AssemblyName Condition=" '$(OverrideAssemblyName)' != '' ">$(OverrideAssemblyName)</AssemblyName>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{F82A3871-1554-4964-BF81-59854E9C4BB3}</ProjectGuid>
+    <ProjectGuid>{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>iRacingReplayDirector</RootNamespace>
@@ -15,12 +15,26 @@
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
     <ProductName>iRacing Replay Director</ProductName>
     <PublisherName>Dean Netherton</PublisherName>
     <SuiteName>iRacing Apps</SuiteName>
-    <ApplicationRevision>34</ApplicationRevision>
-    <ApplicationVersion>1.0.0.34</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Optimize>false</Optimize>
@@ -33,6 +47,7 @@
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Optimize>false</Optimize>
@@ -53,45 +68,34 @@
   <PropertyGroup>
     <AssemblyName>iRacingReplayDirector</AssemblyName>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Reference Include="iRacingSDK, Version=1.0.0.36, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\iRacingSDK.1.0.0.36\lib\net40-client\iRacingSDK.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MediaFoundation.Net, Version=2.0.0.32, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\MediaFoundation.Net.2.0.0.32\lib\net35-client\MediaFoundation.Net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
-    <ProjectReference Include="SuperMFLib\mfnet\mflib\src\MediaFoundation.csproj">
-      <Project>{b78c0f3b-071a-4fd2-829d-7a67e0f7bd1c}</Project>
-      <Name>MediaFoundation</Name>
-    </ProjectReference>
-    <ProjectReference Include="SuperMFLib\SuperMFLib\SuperMFLib.csproj">
-      <Project>{59d2b4b5-2852-4396-a0d9-9ca546ac3c09}</Project>
-      <Name>SuperMFLib</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>697D9981E4692E9CAA02123AF402FEF6EA3DBE03</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>iRacingReplayDirector_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>iRacingReplayDirector_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>iRacingReplayDirector.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK.CloudWatchLogs, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>packages\AWSSDK.CloudWatchLogs.3.1.2.2\lib\net35\AWSSDK.CloudWatchLogs.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>packages\AWSSDK.Core.3.1.4.0\lib\net35\AWSSDK.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Octokit">
-      <HintPath>packages\Octokit.0.17.0\lib\net45\Octokit.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -111,9 +115,6 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\YamlDotNet.5.3.1\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutBox1.cs">
@@ -261,8 +262,8 @@
     <None Include="DeploymentSite\.gitignore" />
     <None Include="DeploymentSite\main.jsx" />
     <None Include="DeploymentSite\package.json" />
+    <None Include="iRacingReplayDirector_TemporaryKey.pfx" />
     <None Include="LICENSE.txt" />
-    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="README.md" />
     <None Include="tools\decrypt.cmd" />
@@ -321,7 +322,44 @@
     <Content Include="DeploymentSite\xmltojson.js" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="packages\AWSSDK.CloudWatchLogs.3.1.2.2\analyzers\dotnet\cs\AWSSDK.CloudWatchLogs.CodeAnalysis.dll" />
+    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
+      <Name>iRacingSDK</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudWatchLogs">
+      <Version>3.1.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="AWSSDK.Core">
+      <Version>3.1.4</Version>
+    </PackageReference>
+    <PackageReference Include="ILMerge">
+      <Version>3.0.40</Version>
+    </PackageReference>
+    <PackageReference Include="MediaFoundation.Net">
+      <Version>2.0.0.32</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Octokit">
+      <Version>0.17.0</Version>
+    </PackageReference>
+    <PackageReference Include="YamlDotNet">
+      <Version>5.3.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
 </Project>

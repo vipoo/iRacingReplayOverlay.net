@@ -1,35 +1,41 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 //
-// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// iRacingReplayDirector is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using iRacingReplayOverlay.Phases.Direction;
+using iRacingReplayDirector.Phases.Direction;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
 using System.Linq;
 using System.Threading;
 
-namespace iRacingReplayOverlay.Phases
+namespace iRacingReplayDirector.Phases
 {
     public partial class IRacingReplay
     {
+        static private VideoCapture raceVideo = new VideoCapture();
+
         void _CaptureOpeningScenes(Action onComplete)
         {
+            if (bRecordUsingPauseResume)
+            {
+
+            }
             var data = iRacing.GetDataFeed().First();
             var session = data.SessionData.SessionInfo.Sessions.Qualifying();
             if (session == null || session.ResultsPositions == null)
@@ -57,13 +63,13 @@ namespace iRacingReplayOverlay.Phases
             var aCar = data.SessionData.DriverInfo.CompetingDrivers[1].CarNumberRaw;
             iRacing.Replay.CameraOnDriver((short)aCar, (short)scenicCameras);
 
-            var videoCapture = new VideoCapture();
+            //var videoCapture = new VideoCapture();
 
-            videoCapture.Activate(workingFolder);
+            raceVideo.Activate(workingFolder);
 
             Thread.Sleep(shortTestOnly ? 5000 : 20000);
 
-            var fileNames = videoCapture.Deactivate();
+            var fileNames = raceVideo.Deactivate(bRecordUsingPauseResume);
             if( fileNames.Count == 0)
                 return;
 

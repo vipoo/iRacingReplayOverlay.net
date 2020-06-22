@@ -1,35 +1,36 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 //
-// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// iRacingReplayDirector is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay.Phases.Analysis;
-using iRacingReplayOverlay.Phases.Capturing;
+using iRacingReplayDirector.Phases.Analysis;
+using iRacingReplayDirector.Phases.Capturing;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System.Diagnostics;
 using System.Linq;
 
-namespace iRacingReplayOverlay.Phases.Direction
+namespace iRacingReplayDirector.Phases.Direction
 {
     public class ReplayControl
     {
         readonly IDirectionRule[] directionRules;
         readonly IVetoRule ruleRandom;
         IDirectionRule currentRule;
+        public static CameraControl cameraControl;
 
         public ReplayControl(SessionData sessionData, Incidents incidents, RemovalEdits removalEdits, TrackCameras trackCameras)
         {
@@ -43,7 +44,8 @@ namespace iRacingReplayOverlay.Phases.Direction
 
             var camera = cameras.First(tc => tc.IsRaceStart);
 
-            var cameraControl = new CameraControl(cameras);
+            //var cameraControl = new CameraControl(cameras);
+            cameraControl = new CameraControl(cameras);
             cameraControl.CameraOnPositon(1, camera.CameraNumber);
 
             var battleMarker = removalEdits.For(InterestState.Battle);

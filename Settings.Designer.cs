@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     public partial class Settings : ApplicationSettingsBase
     {

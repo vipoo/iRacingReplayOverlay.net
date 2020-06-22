@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingReplayOverlay;
-using iRacingReplayOverlay.Phases;
+using iRacingReplayDirector;
+using iRacingReplayDirector.Phases;
 using iRacingSDK;
 using System.IO;
 using System.Linq;

@@ -1,7 +1,7 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2016 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 
 // To enable AWS logging, update this file with an aws key
 // with permission to write to your specific log group/stream
@@ -12,7 +12,7 @@
 
 using System;
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     public class AwsKeys
     {
