@@ -82,6 +82,11 @@
   <ItemGroup>
     <None Include="tools\package.cmd" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="iRacingSDK">
+      <Version>1.0.0.43</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PostBuildEvent>
