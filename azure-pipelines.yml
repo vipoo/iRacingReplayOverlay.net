@@ -11,7 +11,7 @@ pool:
 
 variables:
 
-  solution: '**/*iRacingReplayDirectorApps*.sln'
+  solution: '**/iRacingReplayDirector.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Debug'
 
