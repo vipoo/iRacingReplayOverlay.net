@@ -1,29 +1,29 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 //
 // Copyright 2020 Merlin Cooper 
 // https://github.com/MerlinCooper/iRacingReplayDirector
 //
-// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// iRacingReplayDirector is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using iRacingReplayOverlay.Phases.Analysis;
-using iRacingReplayOverlay.Phases.Capturing;
-using iRacingReplayOverlay.Phases.Direction;
-using iRacingReplayOverlay.Support;
+using iRacingReplayDirector.Phases.Analysis;
+using iRacingReplayDirector.Phases.Capturing;
+using iRacingReplayDirector.Phases.Direction;
+using iRacingReplayDirector.Support;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System;
@@ -34,7 +34,7 @@ using System.Reflection;
 using System.Collections.Generic;
 
 
-namespace iRacingReplayOverlay.Phases
+namespace iRacingReplayDirector.Phases
 {
     public partial class IRacingReplay
     {

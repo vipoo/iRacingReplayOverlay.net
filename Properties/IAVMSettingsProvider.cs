@@ -1,4 +1,4 @@
-﻿namespace iRacingReplayOverlay
+﻿namespace iRacingReplayDirector
 {
     internal class IracingReplayDirectorProvider : PortableSettingsProvider
     {

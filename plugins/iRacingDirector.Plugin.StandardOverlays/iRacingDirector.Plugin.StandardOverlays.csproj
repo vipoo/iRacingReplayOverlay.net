@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5916B84C-0264-4102-9CCC-28006D84E4FA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>iRacingDirector.Plugin.StandardOverlays</RootNamespace>
+    <AssemblyName>iRacingDirector.Plugin.StandardOverlays</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="Exists('.\packages')">
+    <PackagesFolder>.\packages\</PackagesFolder>
+  </PropertyGroup>
+  <PropertyGroup Condition="Exists('.\..\packages')">
+    <PackagesFolder>.\..\packages\</PackagesFolder>
+  </PropertyGroup>
+  <PropertyGroup Condition="Exists('.\..\..\packages')">
+    <PackagesFolder>.\..\..\packages\</PackagesFolder>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
+    <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(SupportProject)' != ''">
+    <ProjectReference Include="$(SupportProject)">
+      <Project>{cec2bb31-324d-41e3-83c8-a5c35c63129b}</Project>
+      <Name>iRacingDirector.Plugin.Support</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(SupportProject)' == ''">
+    <Reference Include="iRacingDirector.Plugin.Support, Version=1.0.0.48, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(PackagesFolder)\iRacingDirector.Plugin.Support.1.0.0.48\lib\net40-client\iRacingDirector.Plugin.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MyPlugin.FastestLaps.cs" />
+    <Compile Include="MyPlugin.FlashCardOutro.cs" />
+    <Compile Include="MyPlugin.Extensions.cs" />
+    <Compile Include="MyPlugin.RaceMessages.cs" />
+    <Compile Include="MyPlugin.DriverCamera.cs" />
+    <Compile Include="MyPlugin.FlashCardIntro.cs" />
+    <Compile Include="MyPlugin.FlashCardHeading.cs" />
+    <Compile Include="MyPlugin.Leaderboard.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Styles.cs" />
+    <Compile Include="MyPlugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tools\package.cmd" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="iRacingSDK">
+      <Version>1.0.0.43</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <PostBuildEvent>
+      mkdir $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+      copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+      copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

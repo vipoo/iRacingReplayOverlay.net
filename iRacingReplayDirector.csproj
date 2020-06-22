@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <AssemblyName Condition=" '$(OverrideAssemblyName)' == '' ">iRacingReplayOverlay</AssemblyName>
+    <AssemblyName Condition=" '$(OverrideAssemblyName)' != '' ">$(OverrideAssemblyName)</AssemblyName>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{E9EB76FC-CB86-47EA-A1F3-01570C1BBC18}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>iRacingReplayDirector</RootNamespace>
+    <FileAlignment>512</FileAlignment>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>iRacing Replay Director</ProductName>
+    <PublisherName>Dean Netherton</PublisherName>
+    <SuiteName>iRacing Apps</SuiteName>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x64\Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <LangVersion>5</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x64\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>5</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DefineConstants>TRACE</DefineConstants>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>iRacingReplayDirector</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>697D9981E4692E9CAA02123AF402FEF6EA3DBE03</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>iRacingReplayDirector_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>iRacingReplayDirector_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>iRacingReplayDirector.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdvancedGeneralSettingsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedGeneralSettingsDlg.Designer.cs">
+      <DependentUpon>AdvancedGeneralSettingsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Aws\AwsKey.cs" />
+    <Compile Include="Aws\AwsLogListener.cs" />
+    <Compile Include="Phases\Capturing\LogCamDriver.cs" />
+    <Compile Include="Phases\TranscodeAndOverlay.cs" />
+    <Compile Include="PluginSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PluginSettings.Designer.cs">
+      <DependentUpon>PluginSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GeneralSettingFields.cs">
+    </Compile>
+    <Compile Include="Properties\IAVMSettingsProvider.cs" />
+    <Compile Include="ConfigureGeneralSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigureGeneralSettings.Designer.cs">
+      <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurePlugins.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigurePlugins.Designer.cs">
+      <DependentUpon>ConfigurePlugins.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\GitHubAccessSettings.cs" />
+    <Compile Include="GitHubReleases\GitHubAccess.cs" />
+    <Compile Include="GitHubReleases\GitHubCachedReleases.cs" />
+    <Compile Include="GitHubReleases\GitHubCachedResult.cs" />
+    <Compile Include="GitHubReleases\PortableSettingsProvider.cs" />
+    <Compile Include="GitHubReleases\RepoKey.cs" />
+    <Compile Include="GitHubReleases\VersionItem.cs" />
+    <Compile Include="Phases\Capturing\EditMarker.cs" />
+    <Compile Include="Phases\Direction\RulePaceLaps.cs" />
+    <Compile Include="Phases\Transcoding\FlashCardPaging.cs" />
+    <Compile Include="Phases\Transcoding\VideoCut.cs" />
+    <Compile Include="Phases\Transcoding\RaceHighlightEdits.cs" />
+    <Compile Include="LogMessages.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogMessages.Designer.cs">
+      <DependentUpon>LogMessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Phases\Capturing\LeaderBoard\CaptureLeaderBoardMiddleLaps.cs" />
+    <Compile Include="Phases\Capturing\LeaderBoard\CaptureLeaderBoardLastLap.cs" />
+    <Compile Include="Phases\Capturing\LeaderBoard\CaptureLeaderBoardFirstLap.cs" />
+    <Compile Include="Phases\Capturing\RecordPitStops.cs" />
+    <Compile Include="Phases\Capturing\SampleFilter.cs" />
+    <Compile Include="Phases\Capturing\CaptureCamDriver.cs" />
+    <Compile Include="Phases\Capturing\SessionDataCapture.cs" />
+    <Compile Include="Phases\Direction\CameraControl.cs" />
+    <Compile Include="Phases\Direction\IDirectionRule.cs" />
+    <Compile Include="Phases\Direction\RuleBattle.cs" />
+    <Compile Include="Phases\Direction\RuleRandomDriver.cs" />
+    <Compile Include="Phases\Direction\RuleFirstLapPeriod.cs" />
+    <Compile Include="Phases\Direction\RuleIncident.cs" />
+    <Compile Include="Phases\Direction\RuleLastLapPeriod.cs" />
+    <Compile Include="Phases\Direction\RuleVeto.cs" />
+    <Compile Include="Phases\Direction\Support\Battle.cs" />
+    <Compile Include="Phases\IRacingReplay.OverlayRaceDataOntoVideo.cs" />
+    <Compile Include="Phases\CaptureOpeningScenes.cs" />
+    <Compile Include="Phases\Capturing\RemovalEdits.cs" />
+    <Compile Include="Phases\Capturing\CommentaryMessages.cs" />
+    <Compile Include="Phases\Capturing\RecordFastestLaps.cs" />
+    <Compile Include="Phases\Direction\VideoCapture.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="SettingsAdditional.cs" />
+    <Compile Include="SettingsExtensions.cs" />
+    <Compile Include="Support\LogListener.cs" />
+    <Compile Include="Support\Messages.cs" />
+    <Compile Include="Support\PluginProxy.cs" />
+    <Compile Include="Support\PluginProxySettings.cs" />
+    <Compile Include="Support\SimpleProfiler.cs" />
+    <Compile Include="TestVideoConversion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestVideoConversion.Designer.cs">
+      <DependentUpon>TestVideoConversion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TestVideoCapture.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestVideoCapture.Designer.cs">
+      <DependentUpon>TestVideoCapture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrackCameras.cs" />
+    <Compile Include="DllImports\Win32\Messages.cs" />
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Phases\AnalyseRace.cs" />
+    <Compile Include="Phases\Analysis\Incident.cs" />
+    <Compile Include="Phases\CaptureRace.cs" />
+    <Compile Include="Phases\Capturing\CaptureLeaderBoard.cs" />
+    <Compile Include="Phases\IRacingReplay.cs" />
+    <Compile Include="Phases\WhenIRacingStarts.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\Extensions.cs" />
+    <Compile Include="Phases\Transcoding\LeaderBoard.cs" />
+    <Compile Include="Phases\Direction\ReplayControl.cs" />
+    <Compile Include="Phases\Capturing\OverlayData.cs" />
+    <Compile Include="Phases\Transcoding\Transcoder.cs" />
+    <Compile Include="ConfigureTrackCameras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigureTrackCameras.Designer.cs">
+      <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UsageDataRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UsageDataRequest.Designer.cs">
+      <DependentUpon>UsageDataRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Video\Attributes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="DeploymentSite\.gitignore" />
+    <None Include="DeploymentSite\main.jsx" />
+    <None Include="DeploymentSite\package.json" />
+    <None Include="iRacingReplayDirector_TemporaryKey.pfx" />
+    <None Include="LICENSE.txt" />
+    <None Include="Properties\app.manifest" />
+    <None Include="README.md" />
+    <None Include="tools\decrypt.cmd" />
+    <None Include="tools\package.cmd" />
+    <None Include="tools\test.cmd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdvancedGeneralSettingsDlg.resx">
+      <DependentUpon>AdvancedGeneralSettingsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigureGeneralSettings.resx">
+      <DependentUpon>ConfigureGeneralSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurePlugins.resx">
+      <DependentUpon>ConfigurePlugins.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogMessages.resx">
+      <DependentUpon>LogMessages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginSettings.resx">
+      <DependentUpon>PluginSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigureTrackCameras.resx">
+      <DependentUpon>ConfigureTrackCameras.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestVideoConversion.resx">
+      <DependentUpon>TestVideoConversion.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestVideoCapture.resx">
+      <DependentUpon>TestVideoCapture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UsageDataRequest.resx">
+      <DependentUpon>UsageDataRequest.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DeploymentSite\index.html" />
+    <Content Include="DeploymentSite\xmltojson.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
+      <Name>iRacingSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudWatchLogs">
+      <Version>3.1.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="AWSSDK.Core">
+      <Version>3.1.4</Version>
+    </PackageReference>
+    <PackageReference Include="ILMerge">
+      <Version>3.0.40</Version>
+    </PackageReference>
+    <PackageReference Include="MediaFoundation.Net">
+      <Version>2.0.0.32</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Octokit">
+      <Version>0.17.0</Version>
+    </PackageReference>
+    <PackageReference Include="YamlDotNet">
+      <Version>5.3.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+</Project>

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>iRacingDirector.Plugin.Tester</RootNamespace>
     <AssemblyName>iRacingDirector.Plugin.Tester</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile>
@@ -46,25 +46,12 @@
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\iRacingReplayOverlay.net.csproj">
-      <Project>{0e523573-2972-4dc0-aecb-c4cf746854bb}</Project>
-      <Name>iRacingReplayOverlay</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\YamlDotNet.5.3.1\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DomainForm.cs" />
@@ -99,9 +86,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -113,7 +97,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <PackageReference Include="iRacingSDK">
+      <Version>1.0.0.43</Version>
+    </PackageReference>
+    <PackageReference Include="YamlDotNet">
+      <Version>5.3.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\iRacingSDK.Net\iRacingSDK.csproj">
+      <Project>{5422ae20-f220-4be1-9e61-5296981abb5c}</Project>
+      <Name>iRacingSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\iRacingReplayDirector.csproj">
+      <Project>{ff13a533-25a3-4238-a412-45b39e7844f6}</Project>
+      <Name>iRacingReplayDirector</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

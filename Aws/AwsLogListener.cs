@@ -1,7 +1,7 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2016 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 
 using Amazon;
 using Amazon.CloudWatchLogs;
@@ -17,7 +17,7 @@ using System.Net;
 using System.Reflection;
 using System.Timers;
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     public class AwsLogListener : TraceListener
     {

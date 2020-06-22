@@ -1,7 +1,25 @@
-iRacingReplayOverlay.net
-========================
+iRacingReplayDirector
+=====================
 
-[![Build status](https://ci.appveyor.com/api/projects/status/15batnoaijxhvfjd?svg=true)](https://ci.appveyor.com/project/vipoo/iracingreplayoverlay-net)
+This project is the sucessor of the discontinued iRacingReplayDirector.NET application developed by Vipoo. 
+
+As Vipoo no longer owns an active license for iRacing - nor has the time to commit to this project - I will take over managing the original repository (vipoo/iRacingReplayDirector.net) and continue to coordinate future enhancements as well.  
+
+For the ease of processing most of the development activites will be managed in the fork MerlinCooper/iRacingReplayDirector. 
+
+Based on Azure DevOps continous integration is setup for two branches "master" and "Fast_Video_Recording_With_OBS". Whereas the master branch is being used for changes/modifications within the current program structure and the "Fast_Recording_With_OBS" branch is taking a different approach to significantly reduce the time to create a highlight video from long replays. 
+
+Current CI/CD Status
+--------------------
+Master:                         
+[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/MerlinCooper.iRacingReplayDirector?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=2&branchName=master)   
+
+Fast_Video_Recording_With_OBS   
+[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)   
+
+Former Readme File (to be updated) 
+==================================
+
 
 This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
 
@@ -16,7 +34,7 @@ https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be
 
 https://www.youtube.com/watch?v=Zs4VyBPOCHw&list=UUjHTFbxIv3vi7KGreofr8Aw
 
-Please feel free to log feature requests, or bug issues in github issues tracker for the repo at: https://github.com/vipoo/iRacingReplayOverlay.net/issues
+Please feel free to log feature requests, or bug issues in github issues tracker for the repo at: https://github.com/vipoo/iRacingReplayDirector.net/issues
 
 You configure the rules for cameras selection - then with iRacing replay loaded, you press the big button saying 'Begin'.
 

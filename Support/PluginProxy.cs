@@ -1,4 +1,4 @@
-﻿using iRacingReplayOverlay.Phases.Capturing;
+﻿using iRacingReplayDirector.Phases.Capturing;
 using iRacingSDK.Support;
 using MediaFoundation.Net;
 using System;
@@ -22,7 +22,7 @@ using System.Reflection;
 //TODO: Additional meta data for plugin - name, description, author, etc. - use assembly attributes
 //TODO: Extract timing logic into seperate methods
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     public class PluginProxy
     {

@@ -1,25 +1,25 @@
-﻿// This file is part of iRacingReplayOverlay.
+﻿// This file is part of iRacingReplayDirector.
 //
 // Copyright 2014 Dean Netherton
-// https://github.com/vipoo/iRacingReplayOverlay.net
+// https://github.com/vipoo/iRacingReplayDirector.net
 //
-// iRacingReplayOverlay is free software: you can redistribute it and/or modify
+// iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// iRacingReplayOverlay is distributed in the hope that it will be useful,
+// iRacingReplayDirector is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with iRacingReplayOverlay.  If not, see <http://www.gnu.org/licenses/>.
+// along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Windows.Forms;
 
-namespace iRacingReplayOverlay
+namespace iRacingReplayDirector
 {
     public partial class ConfigureGeneralSettings : Form
     {
@@ -121,6 +121,11 @@ The data is sent encypted to me - the developer - dean.netherton@gmail.com", "Se
             helpText.Text = "";
             if (this.ActiveControl.Tag != null)
                 helpText.Text = this.ActiveControl.Tag.ToString();
+        }
+
+        private void ConfigureGeneralSettings_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

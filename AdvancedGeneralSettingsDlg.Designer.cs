@@ -1,4 +1,4 @@
-﻿namespace iRacingReplayOverlay
+﻿namespace iRacingReplayDirector
 {
     partial class AdvanceGeneralSettingsDlg
     {
