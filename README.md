@@ -18,17 +18,6 @@ Fast_Video_Recording_With_OBS
 [![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)   
 
 
-Test Badges from AzuerDev
-==================================
-ImageURL
-https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)
-
-Image URL for specific branch
-https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=master
-
-Markdown link
-[![Build status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha))](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3)
-
 Former Readme File (to be updated) 
 ==================================
 
