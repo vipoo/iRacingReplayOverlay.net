@@ -1,5 +1,5 @@
-﻿using iRacingReplayDirector.Support;
-using iRacingSDK.Support;
+﻿using iRacingSDK.Support;
+using iRacingReplayDirector.Support;
 using System;
 using System.Diagnostics;
 using System.IO;

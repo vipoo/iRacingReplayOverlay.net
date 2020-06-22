@@ -44,6 +44,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingReplayDirector", "iR
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoOverlay", "plugins\NoOverlay\NoOverlay.csproj", "{C4ABC83D-1801-4407-B7C2-BDF9396D28AD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CEC2BB31-324D-41E3-83C8-A5C35C63129B} = {CEC2BB31-324D-41E3-83C8-A5C35C63129B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

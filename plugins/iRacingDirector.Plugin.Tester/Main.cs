@@ -3,7 +3,8 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using iRacingDirector.Phases;
+using iRacingDirector;
+using iRacingReplayDirector.Phases;
 
 namespace iRacingDirector.Plugin.Tester
 {

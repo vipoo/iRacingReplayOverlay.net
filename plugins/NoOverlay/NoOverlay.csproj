@@ -103,8 +103,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
-      copy $(TargetDir)\JockeOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
-      copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay</PostBuildEvent>
+copy $(TargetDir)\JockeOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay
+copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\NoOverlay</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

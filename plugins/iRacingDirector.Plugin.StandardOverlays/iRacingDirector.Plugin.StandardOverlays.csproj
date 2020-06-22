@@ -101,11 +101,10 @@
     <PreBuildEvent>rmdir /S /Q $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-      mkdir $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
-      copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
-      copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
-     copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\JockeOverlays\iRacingDirector.Plugin.StandardOverlays
+    <PostBuildEvent>mkdir $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+copy $(TargetDir)\iRacingDirector.Plugin.StandardOverlays.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\iRacingDirector.Plugin.StandardOverlays
+copy $(TargetDir)\iRacingDirector.Plugin.Support.* $(SolutionDir)\bin\x64\Debug\plugins\JockeOverlays\iRacingDirector.Plugin.StandardOverlays
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
