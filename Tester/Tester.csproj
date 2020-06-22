@@ -13,7 +13,7 @@
     <TargetFrameworkProfile />
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Optimize>false</Optimize>
@@ -45,16 +45,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\iRacingReplayDirector.csproj">
-      <Project>{ff13a533-25a3-4238-a412-45b39e7844f6}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="iRacingSDK">
       <Version>1.0.0.43</Version>
     </PackageReference>
+    
+    <ProjectReference Include="..\iRacingReplayDirector.csproj">
+      <Project>{ff13a533-25a3-4238-a412-45b39e7844f6}</Project>
+      <Name>iRacingReplayDirector</Name>
+    </ProjectReference>
+    
   </ItemGroup>
+  
+  
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

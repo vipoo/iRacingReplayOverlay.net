@@ -111,7 +111,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\iRacingReplayDirector.csproj">
       <Project>{ff13a533-25a3-4238-a412-45b39e7844f6}</Project>
-      <Name>iRacingSDK</Name>
+      <Name>iRacingReplayDirector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
