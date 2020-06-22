@@ -17,9 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDataModels", "iRacingSDK.Net\GenerateDataModels\GenerateDataModels.csproj", "{90126FE7-C20E-43EC-93AF-77AA5268E860}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BCCAE92-016E-41D6-9CB5-4FC83AC190BE}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet.config = NuGet.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingDirector.Plugin.StandardOverlays", "plugins\iRacingDirector.Plugin.StandardOverlays\iRacingDirector.Plugin.StandardOverlays.csproj", "{5916B84C-0264-4102-9CCC-28006D84E4FA}"
 	ProjectSection(ProjectDependencies) = postProject
