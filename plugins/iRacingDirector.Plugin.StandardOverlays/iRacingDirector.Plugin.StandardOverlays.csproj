@@ -42,7 +42,6 @@
   <PropertyGroup Condition="Exists('.\..\..\packages')">
     <PackagesFolder>.\..\..\packages\</PackagesFolder>
   </PropertyGroup>
-  
   <PropertyGroup>
     <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
     <SupportProject Condition="Exists('..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj')">..\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support\iRacingDirector.Plugin.Support.csproj</SupportProject>
@@ -82,6 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="tools\package.cmd" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="iRacingSDK">
+      <Version>1.0.0.43</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
