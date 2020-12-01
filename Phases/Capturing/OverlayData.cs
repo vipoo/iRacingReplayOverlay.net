@@ -66,6 +66,7 @@ namespace iRacingReplayDirector.Phases.Capturing
             public InterestState Interest;
             public bool WithOvertake;
             public int Position = int.MaxValue;
+            public int RaceLapNumber = 0;
 
             public override int GetHashCode()
             {

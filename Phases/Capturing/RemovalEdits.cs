@@ -83,13 +83,14 @@ namespace iRacingReplayDirector.Phases.Capturing
 
         void AddEvent(InterestState interest, DataSample d, TimeSpan t)
         {
-            raceEvents.Add(new OverlayData.RaceEvent 
+            raceEvents.Add(new OverlayData.RaceEvent
             {
-                Interest = interest, 
-                StartTime = lastStartTime.TotalSeconds, 
+                Interest = interest,
+                StartTime = lastStartTime.TotalSeconds,
                 EndTime = t.TotalSeconds,
                 WithOvertake = withOvertake,
-                Position = position
+                Position = position,
+                RaceLapNumber = d.Telemetry.Lap
             });
             lastStartTime = t;
 
