@@ -30,7 +30,7 @@ This program converts your iRacing replay's into edited video files for uploadin
 
 It creates 2 videos from your replays; the full replay and a 10 minute highlight video.
 
-The highlight video will contain the battles, incidents and remove any boring bits from the final video.
+The highlight video will contain the battles, incidents and remove any boring bits from the final video. 
 
 You can see some of the videos the application has created from my replays on my youtube channel at:
 https://www.youtube.com/user/nethd/videos
