@@ -18,7 +18,7 @@ Fast_Video_Recording_With_OBS
 [![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)
 
 
-Former Readme File (to be updated) 
+Former Readme File (to be updated)  
 ==================================
 
 
