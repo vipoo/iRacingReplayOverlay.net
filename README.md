@@ -26,7 +26,7 @@ To install the application you need to download the sources and compile them at 
 Former Readme File (to be updated)  
 ==================================
 
- This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
+This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
 
 It creates 2 videos from your replays; the full replay and a 10 minute highlight video.
 
