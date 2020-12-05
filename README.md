@@ -35,7 +35,7 @@ The highlight video will contain the battles, incidents and remove any boring bi
 You can see some of the videos the application has created from my replays on my youtube channel at:
 https://www.youtube.com/user/nethd/videos
 
-https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be
+https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be 
 
 https://www.youtube.com/watch?v=Zs4VyBPOCHw&list=UUjHTFbxIv3vi7KGreofr8Aw
 
