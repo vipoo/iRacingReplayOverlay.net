@@ -11,17 +11,22 @@ Based on Azure DevOps continous integration is setup for two branches "master" a
 
 Current CI/CD Status
 --------------------
-Master:                         
-[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/MerlinCooper.iRacingReplayDirector?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=2&branchName=master)   
+Master   
+![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_Master?branchName=master)
 
 Fast_Video_Recording_With_OBS   
-[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)   
+[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)
+
+Installation
+============
+
+To install the application you need to download the sources and compile them at the moment. Automated process to provide most recent binaries is being worked on. 
 
 
-Former Readme File (to be updated) 
+Former Readme File (to be updated)  
 ==================================
 
-
+ 
 This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
 
 It creates 2 videos from your replays; the full replay and a 10 minute highlight video.
@@ -56,12 +61,7 @@ This is where it joins the introduction scenic views recorded above and the main
 You still need a conventional capture software to capture your game video to a video file - I use Nvidia's ShadowPlay.  
 The program will send the required keystroke to the video capture software, once its position the replay to the start of the race.
 
-Installation
-============
 
-The application can be installed at: https://iracingreplaydirector.s3-ap-southeast-2.amazonaws.com/index.html
-
-Or if you a feeling adventurous, you can try ealier releases at: https://iracingreplaydirector-beta.s3.amazonaws.com/index.html
 
 How to use
 ===================
