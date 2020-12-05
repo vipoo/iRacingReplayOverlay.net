@@ -1,7 +1,7 @@
 iRacingReplayDirector
 =====================
 
-This project is the sucessor of the discontinued iRacingReplayDirector.NET application developed by Vipoo. 
+iRacingReplayDirector is the sucessor of the discontinued iRacingReplayDirector.NET application developed by Vipoo. 
 
 As Vipoo no longer owns an active license for iRacing - nor has the time to commit to this project - I will take over managing the original repository (vipoo/iRacingReplayDirector.net) and continue to coordinate future enhancements as well.  
 
