@@ -11,8 +11,8 @@ Based on Azure DevOps continous integration is setup for two branches "master" a
 
 Current CI/CD Status
 --------------------
-Master:                         
-[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_Master?branchName=master)   
+Master
+![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_Master?branchName=master)   
 
 Fast_Video_Recording_With_OBS   
 [![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)   
