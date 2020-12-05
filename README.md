@@ -21,7 +21,7 @@ Installation
 ============
 
 To install the application you need to download the sources and compile them at the moment. Automated process to provide most recent binaries is being worked on. 
-
+ 
 
 Former Readme File (to be updated)  
 ==================================
