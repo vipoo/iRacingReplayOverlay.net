@@ -84,4 +84,4 @@ Known Issues/Requirements
 * Video capture software must respond to ALT+F9 or F9 keypress to start/stop recording
 * Replays must captured details of all competitors (Under the graphics options, set the Max Cars to a number greater than number of competitors before recording a replay session)
 * Tested on Windows 7/Windows 8 only
-* Requires 64x version of windows
+* Requires 64x version of windows 
