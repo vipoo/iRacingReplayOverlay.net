@@ -80,8 +80,14 @@ namespace iRacingReplayDirector
 
         internal void AddKeyPressField(string caption, string description)
         {
-            var textBox = AddField(caption, description, "ALT+F9", tb => { });
-            textBox.ReadOnly = true;
+            if(caption.Contains("start"))
+            {
+                var textBox = AddField(caption, description, "ALT+F9", tb => { });
+                textBox.ReadOnly = true;
+            }else{
+                var textBox = AddField(caption, description, "ALT+F10", tb => { });
+                textBox.ReadOnly = true;
+            }
         }
 
         internal void AddNumberField(string caption, string description, string setting)
