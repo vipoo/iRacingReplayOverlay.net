@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "iRacingSDK.Net\Sample\Sample.csproj", "{8BDF1915-3140-478E-827F-25D495B8CDC5}"
 EndProject
@@ -60,11 +60,13 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Debug|x64.Build.0 = Debug|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.ActiveCfg = Release|Any CPU
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|Any CPU.Build.0 = Debug|x64
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|x64.ActiveCfg = Debug|x64
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Debug|x64.Build.0 = Debug|x64
 		{7D205FCC-6CE6-49B3-8012-DC14ED9924D1}.Release|Any CPU.ActiveCfg = Release|x64
@@ -108,6 +110,7 @@ Global
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.ActiveCfg = Release|Any CPU
 		{CEC2BB31-324D-41E3-83C8-A5C35C63129B}.Release|x64.Build.0 = Release|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Debug|x64.Build.0 = Debug|Any CPU
 		{96FA1C80-396C-4792-9E8B-C7CBFC25833D}.Release|Any CPU.ActiveCfg = Release|Any CPU
