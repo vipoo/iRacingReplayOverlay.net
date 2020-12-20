@@ -48,7 +48,8 @@ namespace iRacingReplayDirector
             f.AddMinuteField("Duration of Highlight video", "The duration to target for the length of the edited highlight videos.", "HighlightVideoTargetDuration");
 
             f.AddBlankRow();
-            f.AddKeyPressField("Hot Key for Video Capture", "The hotkey used by your video capture program.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9 or F9");
+            f.AddKeyPressField("Hot Key for Video Capture (stop/start)", "The hotkey used by your video capture program to stop/start a recording.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F9");
+            f.AddKeyPressField("Hot Key for Video Capture (pause/resume)", "The hotkey used by your video capture program to pause/resume a recording.  At this time, this can not be changed in iRacing Replay Director.  Ensure your video capture software uses ALT+F10");
 
             f.AddBlankRow();
             f.AddCheckboxField("Ignore Incidents Capture",
