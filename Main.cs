@@ -540,7 +540,8 @@ namespace iRacingReplayDirector
 
         void configureVideoCaptureButton_Click(object sender, EventArgs e)
         {
-            var settings = new ConfigureGeneralSettings(Settings.Default);
+            var settings = cb_UseNewSettingsDlg.Checked ? (Form)new AdvanceGeneralSettingsDlg() : (Form)new ConfigureGeneralSettings(Settings.Default);
+            //var settings = new ConfigureGeneralSettings(Settings.Default);
             settings.ShowDialog();
         }
 
@@ -622,6 +623,11 @@ namespace iRacingReplayDirector
         private void EncodeVideoAfterCapture_CheckedChanged(object sender, EventArgs e)
         {
             cb_FastVideoRecording.Checked = !cb_EncodeVideoAfterCapture.Checked;
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
