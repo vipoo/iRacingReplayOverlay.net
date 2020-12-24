@@ -7,14 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using iRacingSDK.Support;
 
 namespace iRacingReplayDirector
 {
-    public partial class AdvanceGeneralSettingsDlg : Form
+    public partial class AdvancedGeneralSettingsDlg : Form
     {
-        public AdvanceGeneralSettingsDlg()
+        private Action onSave;
+        private Settings settings;
+
+        public AdvancedGeneralSettingsDlg(Settings settings)
         {
+            this.settings = settings;
             InitializeComponent();
+
+            //this.cameraSwitchTimeInput.DataBindings.Add("Text", this.settings.CameraStickyPeriod, "Text");
         }
 
         private void button1_Click(object sender, EventArgs e)

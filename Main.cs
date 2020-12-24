@@ -540,7 +540,7 @@ namespace iRacingReplayDirector
 
         void configureVideoCaptureButton_Click(object sender, EventArgs e)
         {
-            var settings = cb_UseNewSettingsDlg.Checked ? (Form)new AdvanceGeneralSettingsDlg() : (Form)new ConfigureGeneralSettings(Settings.Default);
+            var settings = cb_UseNewSettingsDlg.Checked ? (Form)new AdvancedGeneralSettingsDlg(Settings.Default) : (Form)new ConfigureGeneralSettings(Settings.Default);
             //var settings = new ConfigureGeneralSettings(Settings.Default);
             settings.ShowDialog();
         }
@@ -602,12 +602,6 @@ namespace iRacingReplayDirector
         {
             var f = new ConfigurePlugins();
             f.ShowDialog();
-        }
-
-        private void configureVideoCaptureButton_Click_Test(object sender, EventArgs e)
-        {
-            var settingsDialog = new AdvanceGeneralSettingsDlg();
-            settingsDialog.ShowDialog();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)

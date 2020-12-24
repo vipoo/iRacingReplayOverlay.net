@@ -1,6 +1,6 @@
 ﻿namespace iRacingReplayDirector
 {
-    partial class AdvanceGeneralSettingsDlg
+    partial class AdvancedGeneralSettingsDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -166,7 +166,7 @@
             // 
             this.cameraSwitchTimeInput.Location = new System.Drawing.Point(309, 23);
             this.cameraSwitchTimeInput.Margin = new System.Windows.Forms.Padding(4);
-            this.cameraSwitchTimeInput.Mask = "000.0 sec";
+            this.cameraSwitchTimeInput.Mask = "00 sec";
             this.cameraSwitchTimeInput.Name = "cameraSwitchTimeInput";
             this.cameraSwitchTimeInput.Size = new System.Drawing.Size(132, 27);
             this.cameraSwitchTimeInput.TabIndex = 3;
@@ -477,7 +477,7 @@
             this.cancel_button.UseVisualStyleBackColor = true;
             this.cancel_button.Click += new System.EventHandler(this.button1_Click);
             // 
-            // AdvanceGeneralSettingsDlg
+            // AdvancedGeneralSettingsDlg
             // 
             this.AccessibleDescription = "General_Settings_Dialog";
             this.AccessibleName = "GeneralSettingsDlg";
@@ -490,7 +490,7 @@
             this.Controls.Add(this.incidents_settings_tab);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "AdvanceGeneralSettingsDlg";
+            this.Name = "AdvancedGeneralSettingsDlg";
             this.Text = "Configure General Settings";
             this.Load += new System.EventHandler(this.AdvanceGeneralSettingsDlg_Load);
             this.incidents_settings_tab.ResumeLayout(false);
