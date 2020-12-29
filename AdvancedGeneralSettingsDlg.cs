@@ -24,6 +24,8 @@ namespace iRacingReplayDirector
         private Binding dataFollowLeaderBeforeRaceEndPeriod;
         private Binding dataFollowLeaderAtRaceStartPeriod;
 
+        BindingManagerBase dataBinding;
+
 
 
         public AdvancedGeneralSettingsDlg(Settings settings)
@@ -31,12 +33,17 @@ namespace iRacingReplayDirector
             this.settings = settings;
             InitializeComponent();
 
-            dataCameraStickyPeriod = this.tbCameraStickyPeriod.DataBindings.Add("Text", this.settings, "CameraStickyPeriod", true, DataSourceUpdateMode.Never);
-            this.tbBattleStickyPeriod.DataBindings.Add("Text", this.settings, "BattleStickyPeriod", true, DataSourceUpdateMode.Never);
-            this.tbBattleGap.DataBindings.Add("Text", this.settings, "BattleGap", true, DataSourceUpdateMode.Never);
-            this.tbHighlightVideoTargetDuration.DataBindings.Add("Text", this.settings, "HighlightVideoTargetDuration", true, DataSourceUpdateMode.Never);
-            this.tbFollowLeaderBeforeRaceEndPeriod.DataBindings.Add("Text", this.settings, "FollowLeaderBeforeRaceEndPeriod", true, DataSourceUpdateMode.Never);
-            this.tbFollowLeaderAtRaceStartPeriod.DataBindings.Add("Text", this.settings, "FollowLeaderAtRaceStartPeriod", true, DataSourceUpdateMode.Never);
+            //dataBinding.AddNew();
+            
+            //DataBindings.Add(this.tbCameraStickyPeriod.DataBindings.Add("Text", this.settings, "CameraStickyPeriod", true, DataSourceUpdateMode.OnPropertyChanged));
+            //DataBindings.Add(this.tbCameraStickyPeriod.DataBindings.Add("Text", this.settings, "CameraStickyPeriod", true, DataSourceUpdateMode.OnPropertyChanged));
+
+            dataCameraStickyPeriod = this.tbCameraStickyPeriod.DataBindings.Add("Text", this.settings, "CameraStickyPeriod", true, DataSourceUpdateMode.OnPropertyChanged);
+            dataBattleStickyPeriod = this.tbBattleStickyPeriod.DataBindings.Add("Text", this.settings, "BattleStickyPeriod", true, DataSourceUpdateMode.OnPropertyChanged);
+            dataBattleGap = this.tbBattleGap.DataBindings.Add("Text", this.settings, "BattleGap", true, DataSourceUpdateMode.OnPropertyChanged);
+            dataHighlightVideoTargetDuration = this.tbHighlightVideoTargetDuration.DataBindings.Add("Text", this.settings, "HighlightVideoTargetDuration", true, DataSourceUpdateMode.OnPropertyChanged);
+            dataFollowLeaderBeforeRaceEndPeriod = this.tbFollowLeaderBeforeRaceEndPeriod.DataBindings.Add("Text", this.settings, "FollowLeaderBeforeRaceEndPeriod", true, DataSourceUpdateMode.OnPropertyChanged);
+            dataFollowLeaderAtRaceStartPeriod = this.tbFollowLeaderAtRaceStartPeriod.DataBindings.Add("Text", this.settings, "FollowLeaderAtRaceStartPeriod", true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -128,13 +135,14 @@ namespace iRacingReplayDirector
 
         private void ok_button_Click(object sender, EventArgs e)
         {
-            //this.tbCameraStickyPeriod.write
-            dataCameraStickyPeriod.WriteValue();
+            //Undo of changes of databinding doesn't work at the moment. Even when DataSourceUpdateMode.Never is used. 
+            /*dataCameraStickyPeriod.WriteValue();
+            dataBattleGap.WriteValue();
             dataBattleStickyPeriod.WriteValue();
             dataBattleGap.WriteValue();
             dataHighlightVideoTargetDuration.WriteValue();
             dataFollowLeaderBeforeRaceEndPeriod.WriteValue();
-            dataFollowLeaderAtRaceStartPeriod.WriteValue();
+            dataFollowLeaderAtRaceStartPeriod.WriteValue();*/
 
             //set Dialog Status to close form
             this.DialogResult = DialogResult.OK;
