@@ -593,6 +593,7 @@
             // 
             // cancel_button
             // 
+            this.cancel_button.Enabled = false;
             this.cancel_button.Location = new System.Drawing.Point(626, 110);
             this.cancel_button.Margin = new System.Windows.Forms.Padding(4);
             this.cancel_button.Name = "cancel_button";
