@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.incidents_settings_tab = new System.Windows.Forms.TabControl();
             this.tabPageTiming = new System.Windows.Forms.TabPage();
             this.grpBox_Timing_Settings = new System.Windows.Forms.GroupBox();
@@ -73,9 +74,15 @@
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.checkBox_PerferedDriversOnly = new System.Windows.Forms.CheckBox();
+            this.tabPageShortKeys = new System.Windows.Forms.TabPage();
             this.ok_button = new System.Windows.Forms.Button();
             this.cancel_button = new System.Windows.Forms.Button();
-            this.tabPageShortKeys = new System.Windows.Forms.TabPage();
+            this.hotkeySelector1 = new WK.Libraries.HotkeyListenerNS.HotkeySelector(this.components);
+            this.hotkeyListener1 = new WK.Libraries.HotkeyListenerNS.HotkeyListener(this.components);
+            this.tbHotKeyStopStart = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.tbHotKeyPauseResume = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.incidents_settings_tab.SuspendLayout();
             this.tabPageTiming.SuspendLayout();
             this.grpBox_Timing_Settings.SuspendLayout();
@@ -88,6 +95,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox_Drivers.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.tabPageShortKeys.SuspendLayout();
             this.SuspendLayout();
             // 
             // incidents_settings_tab
@@ -607,6 +615,20 @@
             this.checkBox_PerferedDriversOnly.UseVisualStyleBackColor = true;
             this.checkBox_PerferedDriversOnly.CheckedChanged += new System.EventHandler(this.checkBox_PerferedDriversOnly_CheckedChanged);
             // 
+            // tabPageShortKeys
+            // 
+            this.tabPageShortKeys.Controls.Add(this.label18);
+            this.tabPageShortKeys.Controls.Add(this.tbHotKeyPauseResume);
+            this.tabPageShortKeys.Controls.Add(this.label17);
+            this.tabPageShortKeys.Controls.Add(this.tbHotKeyStopStart);
+            this.tabPageShortKeys.Location = new System.Drawing.Point(4, 28);
+            this.tabPageShortKeys.Name = "tabPageShortKeys";
+            this.tabPageShortKeys.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageShortKeys.Size = new System.Drawing.Size(578, 541);
+            this.tabPageShortKeys.TabIndex = 3;
+            this.tabPageShortKeys.Text = "Short Keys";
+            this.tabPageShortKeys.UseVisualStyleBackColor = true;
+            // 
             // ok_button
             // 
             this.ok_button.Location = new System.Drawing.Point(626, 46);
@@ -630,15 +652,44 @@
             this.cancel_button.UseVisualStyleBackColor = true;
             this.cancel_button.Click += new System.EventHandler(this.cancel_button_Click);
             // 
-            // tabPageShortKeys
+            // hotkeySelector1
             // 
-            this.tabPageShortKeys.Location = new System.Drawing.Point(4, 28);
-            this.tabPageShortKeys.Name = "tabPageShortKeys";
-            this.tabPageShortKeys.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageShortKeys.Size = new System.Drawing.Size(578, 541);
-            this.tabPageShortKeys.TabIndex = 3;
-            this.tabPageShortKeys.Text = "Short Keys";
-            this.tabPageShortKeys.UseVisualStyleBackColor = true;
+            this.hotkeySelector1.EmptyHotkeyText = "None";
+            this.hotkeySelector1.InvalidHotkeyText = "Unsupported";
+            // 
+            // tbHotKeyStopStart
+            // 
+            this.tbHotKeyStopStart.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.tbHotKeyStopStart.Location = new System.Drawing.Point(325, 44);
+            this.tbHotKeyStopStart.Name = "tbHotKeyStopStart";
+            this.tbHotKeyStopStart.Size = new System.Drawing.Size(170, 27);
+            this.tbHotKeyStopStart.TabIndex = 0;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(34, 47);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(237, 19);
+            this.label17.TabIndex = 1;
+            this.label17.Text = "Hot-Key to Stop/Start video capture";
+            // 
+            // tbHotKeyPauseResume
+            // 
+            this.tbHotKeyPauseResume.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.tbHotKeyPauseResume.Location = new System.Drawing.Point(325, 87);
+            this.tbHotKeyPauseResume.Name = "tbHotKeyPauseResume";
+            this.tbHotKeyPauseResume.Size = new System.Drawing.Size(170, 27);
+            this.tbHotKeyPauseResume.TabIndex = 0;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(34, 90);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(270, 19);
+            this.label18.TabIndex = 1;
+            this.label18.Text = "Hot-Key to Pause/Resume video capture";
             // 
             // AdvancedGeneralSettingsDlg
             // 
@@ -675,6 +726,8 @@
             this.groupBox_Drivers.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.tabPageShortKeys.ResumeLayout(false);
+            this.tabPageShortKeys.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -729,5 +782,11 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox tbDescriptionDriversTab;
         private System.Windows.Forms.TabPage tabPageShortKeys;
+        private System.Windows.Forms.TextBox tbHotKeyStopStart;
+        private WK.Libraries.HotkeyListenerNS.HotkeySelector hotkeySelector1;
+        private WK.Libraries.HotkeyListenerNS.HotkeyListener hotkeyListener1;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox tbHotKeyPauseResume;
     }
 }
