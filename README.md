@@ -14,7 +14,8 @@ Current CI/CD Status
 Master Branch - latest Release   
 ![Build Status](https://dev.azure.com/MerlinCooper/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_Master?branchName=master)
 
-Master Branch - CI
+Master Branch - CI (compile state)
+
 [![Build status](https://dev.azure.com/MerlinCooper/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_Master_CI_compile%20only)](https://dev.azure.com/MerlinCooper/iRacingReplayDirector/_build/latest?definitionId=8)
 
 Fast_Video_Recording_With_OBS   
