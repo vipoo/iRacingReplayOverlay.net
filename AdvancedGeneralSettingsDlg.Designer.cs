@@ -66,6 +66,8 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox_IgnoreIncidentsCapture = new System.Windows.Forms.CheckBox();
             this.tabPageDrivers = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbDescriptionDriversTab = new System.Windows.Forms.TextBox();
             this.groupBox_Drivers = new System.Windows.Forms.GroupBox();
             this.listBox_PreferedDriverNames = new System.Windows.Forms.ListBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
@@ -73,8 +75,7 @@
             this.checkBox_PerferedDriversOnly = new System.Windows.Forms.CheckBox();
             this.ok_button = new System.Windows.Forms.Button();
             this.cancel_button = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tbDescriptionDriversTab = new System.Windows.Forms.TextBox();
+            this.tabPageShortKeys = new System.Windows.Forms.TabPage();
             this.incidents_settings_tab.SuspendLayout();
             this.tabPageTiming.SuspendLayout();
             this.grpBox_Timing_Settings.SuspendLayout();
@@ -84,9 +85,9 @@
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tabPageDrivers.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBox_Drivers.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // incidents_settings_tab
@@ -94,6 +95,7 @@
             this.incidents_settings_tab.Controls.Add(this.tabPageTiming);
             this.incidents_settings_tab.Controls.Add(this.tabPageIncidents);
             this.incidents_settings_tab.Controls.Add(this.tabPageDrivers);
+            this.incidents_settings_tab.Controls.Add(this.tabPageShortKeys);
             this.incidents_settings_tab.Location = new System.Drawing.Point(16, 18);
             this.incidents_settings_tab.Margin = new System.Windows.Forms.Padding(4);
             this.incidents_settings_tab.Name = "incidents_settings_tab";
@@ -534,6 +536,27 @@
             this.tabPageDrivers.Text = "Drivers";
             this.tabPageDrivers.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tbDescriptionDriversTab);
+            this.groupBox1.Location = new System.Drawing.Point(8, 368);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Size = new System.Drawing.Size(545, 164);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Description of Setting";
+            // 
+            // tbDescriptionDriversTab
+            // 
+            this.tbDescriptionDriversTab.Location = new System.Drawing.Point(12, 29);
+            this.tbDescriptionDriversTab.Margin = new System.Windows.Forms.Padding(4);
+            this.tbDescriptionDriversTab.Multiline = true;
+            this.tbDescriptionDriversTab.Name = "tbDescriptionDriversTab";
+            this.tbDescriptionDriversTab.Size = new System.Drawing.Size(509, 124);
+            this.tbDescriptionDriversTab.TabIndex = 0;
+            // 
             // groupBox_Drivers
             // 
             this.groupBox_Drivers.Controls.Add(this.listBox_PreferedDriverNames);
@@ -607,26 +630,15 @@
             this.cancel_button.UseVisualStyleBackColor = true;
             this.cancel_button.Click += new System.EventHandler(this.cancel_button_Click);
             // 
-            // groupBox1
+            // tabPageShortKeys
             // 
-            this.groupBox1.Controls.Add(this.tbDescriptionDriversTab);
-            this.groupBox1.Location = new System.Drawing.Point(8, 368);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(545, 164);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Description of Setting";
-            // 
-            // tbDescriptionDriversTab
-            // 
-            this.tbDescriptionDriversTab.Location = new System.Drawing.Point(12, 29);
-            this.tbDescriptionDriversTab.Margin = new System.Windows.Forms.Padding(4);
-            this.tbDescriptionDriversTab.Multiline = true;
-            this.tbDescriptionDriversTab.Name = "tbDescriptionDriversTab";
-            this.tbDescriptionDriversTab.Size = new System.Drawing.Size(509, 124);
-            this.tbDescriptionDriversTab.TabIndex = 0;
+            this.tabPageShortKeys.Location = new System.Drawing.Point(4, 28);
+            this.tabPageShortKeys.Name = "tabPageShortKeys";
+            this.tabPageShortKeys.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageShortKeys.Size = new System.Drawing.Size(578, 541);
+            this.tabPageShortKeys.TabIndex = 3;
+            this.tabPageShortKeys.Text = "Short Keys";
+            this.tabPageShortKeys.UseVisualStyleBackColor = true;
             // 
             // AdvancedGeneralSettingsDlg
             // 
@@ -658,11 +670,11 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.tabPageDrivers.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox_Drivers.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -716,5 +728,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox tbDescriptionDriversTab;
+        private System.Windows.Forms.TabPage tabPageShortKeys;
     }
 }
