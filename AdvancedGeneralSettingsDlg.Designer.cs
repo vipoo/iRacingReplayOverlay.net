@@ -60,7 +60,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbDescriptionIncidentsTab = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBoxIgnoreCarsInPitsDuringStart = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -73,6 +73,8 @@
             this.checkBox_PerferedDriversOnly = new System.Windows.Forms.CheckBox();
             this.ok_button = new System.Windows.Forms.Button();
             this.cancel_button = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbDescriptionDriversTab = new System.Windows.Forms.TextBox();
             this.incidents_settings_tab.SuspendLayout();
             this.tabPageTiming.SuspendLayout();
             this.grpBox_Timing_Settings.SuspendLayout();
@@ -84,6 +86,7 @@
             this.tabPageDrivers.SuspendLayout();
             this.groupBox_Drivers.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // incidents_settings_tab
@@ -95,7 +98,7 @@
             this.incidents_settings_tab.Margin = new System.Windows.Forms.Padding(4);
             this.incidents_settings_tab.Name = "incidents_settings_tab";
             this.incidents_settings_tab.SelectedIndex = 0;
-            this.incidents_settings_tab.Size = new System.Drawing.Size(586, 564);
+            this.incidents_settings_tab.Size = new System.Drawing.Size(586, 573);
             this.incidents_settings_tab.TabIndex = 0;
             // 
             // tabPageTiming
@@ -106,7 +109,7 @@
             this.tabPageTiming.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageTiming.Name = "tabPageTiming";
             this.tabPageTiming.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageTiming.Size = new System.Drawing.Size(578, 532);
+            this.tabPageTiming.Size = new System.Drawing.Size(578, 541);
             this.tabPageTiming.TabIndex = 0;
             this.tabPageTiming.Text = "Timing";
             this.tabPageTiming.UseVisualStyleBackColor = true;
@@ -387,7 +390,7 @@
             this.tabPageIncidents.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageIncidents.Name = "tabPageIncidents";
             this.tabPageIncidents.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageIncidents.Size = new System.Drawing.Size(578, 532);
+            this.tabPageIncidents.Size = new System.Drawing.Size(578, 541);
             this.tabPageIncidents.TabIndex = 1;
             this.tabPageIncidents.Text = "Incidents";
             this.tabPageIncidents.UseVisualStyleBackColor = true;
@@ -400,14 +403,14 @@
             this.groupBox5.Controls.Add(this.label6);
             this.groupBox5.Location = new System.Drawing.Point(15, 156);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(480, 119);
+            this.groupBox5.Size = new System.Drawing.Size(536, 119);
             this.groupBox5.TabIndex = 8;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Incident Parameters";
             // 
             // input_IgnoreIncidentBelow
             // 
-            this.input_IgnoreIncidentBelow.Location = new System.Drawing.Point(339, 61);
+            this.input_IgnoreIncidentBelow.Location = new System.Drawing.Point(388, 63);
             this.input_IgnoreIncidentBelow.Margin = new System.Windows.Forms.Padding(4);
             this.input_IgnoreIncidentBelow.Mask = "000";
             this.input_IgnoreIncidentBelow.Name = "input_IgnoreIncidentBelow";
@@ -419,7 +422,7 @@
             // 
             // input_IncidentScanWait
             // 
-            this.input_IncidentScanWait.Location = new System.Drawing.Point(339, 27);
+            this.input_IncidentScanWait.Location = new System.Drawing.Point(388, 29);
             this.input_IncidentScanWait.Margin = new System.Windows.Forms.Padding(4);
             this.input_IncidentScanWait.Mask = "000";
             this.input_IncidentScanWait.Name = "input_IncidentScanWait";
@@ -452,24 +455,24 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.textBox1);
+            this.groupBox4.Controls.Add(this.tbDescriptionIncidentsTab);
             this.groupBox4.Location = new System.Drawing.Point(15, 301);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox4.Size = new System.Drawing.Size(480, 164);
+            this.groupBox4.Size = new System.Drawing.Size(536, 164);
             this.groupBox4.TabIndex = 7;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Description of Setting";
             // 
-            // textBox1
+            // tbDescriptionIncidentsTab
             // 
-            this.textBox1.Location = new System.Drawing.Point(15, 29);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(456, 124);
-            this.textBox1.TabIndex = 0;
+            this.tbDescriptionIncidentsTab.Location = new System.Drawing.Point(15, 29);
+            this.tbDescriptionIncidentsTab.Margin = new System.Windows.Forms.Padding(4);
+            this.tbDescriptionIncidentsTab.Multiline = true;
+            this.tbDescriptionIncidentsTab.Name = "tbDescriptionIncidentsTab";
+            this.tbDescriptionIncidentsTab.Size = new System.Drawing.Size(505, 124);
+            this.tbDescriptionIncidentsTab.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -478,7 +481,7 @@
             this.groupBox3.Controls.Add(this.checkBox_IgnoreIncidentsCapture);
             this.groupBox3.Location = new System.Drawing.Point(15, 21);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(480, 119);
+            this.groupBox3.Size = new System.Drawing.Size(536, 119);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "General Incidents Settings";
@@ -519,13 +522,14 @@
             // 
             // tabPageDrivers
             // 
+            this.tabPageDrivers.Controls.Add(this.groupBox1);
             this.tabPageDrivers.Controls.Add(this.groupBox_Drivers);
             this.tabPageDrivers.Controls.Add(this.groupBox6);
             this.tabPageDrivers.Location = new System.Drawing.Point(4, 28);
             this.tabPageDrivers.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageDrivers.Name = "tabPageDrivers";
             this.tabPageDrivers.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageDrivers.Size = new System.Drawing.Size(578, 532);
+            this.tabPageDrivers.Size = new System.Drawing.Size(578, 541);
             this.tabPageDrivers.TabIndex = 2;
             this.tabPageDrivers.Text = "Drivers";
             this.tabPageDrivers.UseVisualStyleBackColor = true;
@@ -535,9 +539,9 @@
             this.groupBox_Drivers.Controls.Add(this.listBox_PreferedDriverNames);
             this.groupBox_Drivers.Controls.Add(this.checkedListBox1);
             this.groupBox_Drivers.Enabled = false;
-            this.groupBox_Drivers.Location = new System.Drawing.Point(7, 116);
+            this.groupBox_Drivers.Location = new System.Drawing.Point(7, 103);
             this.groupBox_Drivers.Name = "groupBox_Drivers";
-            this.groupBox_Drivers.Size = new System.Drawing.Size(480, 390);
+            this.groupBox_Drivers.Size = new System.Drawing.Size(546, 258);
             this.groupBox_Drivers.TabIndex = 1;
             this.groupBox_Drivers.TabStop = false;
             this.groupBox_Drivers.Text = "Drivers";
@@ -548,7 +552,7 @@
             this.listBox_PreferedDriverNames.ItemHeight = 19;
             this.listBox_PreferedDriverNames.Location = new System.Drawing.Point(15, 154);
             this.listBox_PreferedDriverNames.Name = "listBox_PreferedDriverNames";
-            this.listBox_PreferedDriverNames.Size = new System.Drawing.Size(422, 80);
+            this.listBox_PreferedDriverNames.Size = new System.Drawing.Size(511, 80);
             this.listBox_PreferedDriverNames.TabIndex = 1;
             // 
             // checkedListBox1
@@ -556,7 +560,7 @@
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(15, 44);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(422, 92);
+            this.checkedListBox1.Size = new System.Drawing.Size(511, 92);
             this.checkedListBox1.TabIndex = 0;
             // 
             // groupBox6
@@ -564,7 +568,7 @@
             this.groupBox6.Controls.Add(this.checkBox_PerferedDriversOnly);
             this.groupBox6.Location = new System.Drawing.Point(7, 18);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(480, 79);
+            this.groupBox6.Size = new System.Drawing.Size(546, 79);
             this.groupBox6.TabIndex = 1;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "General";
@@ -603,6 +607,27 @@
             this.cancel_button.UseVisualStyleBackColor = true;
             this.cancel_button.Click += new System.EventHandler(this.cancel_button_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tbDescriptionDriversTab);
+            this.groupBox1.Location = new System.Drawing.Point(8, 368);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Size = new System.Drawing.Size(545, 164);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Description of Setting";
+            // 
+            // tbDescriptionDriversTab
+            // 
+            this.tbDescriptionDriversTab.Location = new System.Drawing.Point(12, 29);
+            this.tbDescriptionDriversTab.Margin = new System.Windows.Forms.Padding(4);
+            this.tbDescriptionDriversTab.Multiline = true;
+            this.tbDescriptionDriversTab.Name = "tbDescriptionDriversTab";
+            this.tbDescriptionDriversTab.Size = new System.Drawing.Size(509, 124);
+            this.tbDescriptionDriversTab.TabIndex = 0;
+            // 
             // AdvancedGeneralSettingsDlg
             // 
             this.AccessibleDescription = "General_Settings_Dialog";
@@ -636,6 +661,8 @@
             this.groupBox_Drivers.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -662,7 +689,7 @@
         private System.Windows.Forms.TabPage tabPageDrivers;
         private System.Windows.Forms.TextBox textBoxSettingDescription;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbDescriptionIncidentsTab;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox checkBoxIgnoreCarsInPitsDuringStart;
         private System.Windows.Forms.CheckBox checkBox1;
@@ -687,5 +714,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox tbDescriptionDriversTab;
     }
 }
