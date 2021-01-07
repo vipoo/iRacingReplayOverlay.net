@@ -22,6 +22,7 @@ using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using iRacingReplayDirector.Phases.Direction.Support;
 
 namespace iRacingReplayDirector.Phases.Analysis
 {
@@ -49,6 +50,8 @@ namespace iRacingReplayDirector.Phases.Analysis
 
         public void Process(DataSample data)
         {
+                       //
+
             if (data.Telemetry.CamCar.TrackSurface == TrackLocation.InPitStall ||
                 data.Telemetry.CamCar.TrackSurface == TrackLocation.NotInWorld ||
                 data.Telemetry.CamCar.TrackSurface == TrackLocation.AproachingPits)
@@ -56,7 +59,14 @@ namespace iRacingReplayDirector.Phases.Analysis
                 TraceInfo.WriteLine("{0} Ignoring incident in the pits on lap {1}", data.Telemetry.SessionTimeSpan, data.Telemetry.RaceLaps);
                 return;
             }
-
+            
+            //when FocusOnPrefered drivers is selected and current data not belongs to driver listed as prefered driver 
+            if (Settings.Default.FocusOnPreferedDriver && !Battle.GetPreferredCarIdxs(data, Settings.Default.PreferredDrivers).Contains(data.Telemetry.CamCar.Details.CarIdx))
+            {
+                TraceInfo.WriteLine("{0} Ignoring incident of car {1} because FocusOnPrefered driver active", data.Telemetry.SessionTimeSpan, data.Telemetry.CamCar.Details.Driver.UserName);
+                return;
+            }
+                        
             var i = new Incident 
             {
                 LapNumber = data.Telemetry.RaceLaps, 
