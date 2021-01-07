@@ -59,10 +59,12 @@ namespace iRacingReplayDirector
         public PluginProxy(string pluginName)
         {
             if(!pluginName.ToLower().EndsWith(".dll"))
+                pluginName = Path.Combine(PluginPath, pluginName, pluginName + ".dll");
+                /* previous code handling StandardOverlay different than other plugins - likely not necessary - currently in testing
                 if (pluginName == StandardOverlaysName)
                     pluginName = Path.Combine(PluginPath, StandardOverlayDirectory, StandardOverlayDirectory + ".dll");
                 else
-                    pluginName = Path.Combine(PluginPath, pluginName, pluginName + ".dll");
+                    pluginName = Path.Combine(PluginPath, pluginName, pluginName + ".dll");*/
 
             var an = AssemblyName.GetAssemblyName(pluginName);
             var assembly = Assembly.Load(an);
