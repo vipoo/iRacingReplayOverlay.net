@@ -97,6 +97,9 @@
     <StartupObject>iRacingReplayDirector.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HotkeyControl">
+      <HintPath>..\..\..\Downloads\HotKey\hotkeycontrol_src\HotkeyControl\bin\Debug\HotkeyControl.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
