@@ -201,6 +201,7 @@
     </Compile>
     <Compile Include="SettingsAdditional.cs" />
     <Compile Include="SettingsExtensions.cs" />
+    <Compile Include="Support\KeyboardEmulator.cs" />
     <Compile Include="Support\LogListener.cs" />
     <Compile Include="Support\Messages.cs" />
     <Compile Include="Support\PluginProxy.cs" />
