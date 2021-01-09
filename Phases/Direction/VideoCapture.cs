@@ -155,7 +155,7 @@ namespace iRacingReplayDirector.Phases.Direction
         {
             TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
-            KeyboardEmulator.SendKeyStrokes();
+            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyStopStart);
 
 
             /*var simulator = new InputSimulator();

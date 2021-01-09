@@ -18,6 +18,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using WK.Libraries.HotkeyListenerNS;
+using System.Windows.Forms;
 
 namespace iRacingReplayDirector
 {
@@ -28,6 +30,21 @@ namespace iRacingReplayDirector
             get
             {
                 return PreferredDriverNames.Split(new [] { ',', ';' }).Select(name => name.Trim().ToLower()).ToList();
+            }
+        }
+
+        public Hotkey hotKeyStopStart
+        {
+            get
+            {
+                return new Hotkey(Keys.Menu, Keys.F9);
+            }
+        }
+        public Hotkey hotKeyPauseResume
+        {
+            get
+            {
+                return new Hotkey(Keys.Menu, Keys.F10);
             }
         }
     }

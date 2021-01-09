@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using WK.Libraries.HotkeyListenerNS;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace iRacingReplayDirector.Support
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
-        static public void SendKeyStrokes()
+        static public void SendKeyStrokes(Hotkey hotkey)
         {
 
             Byte menuKey = (Byte)Keys.Menu;
