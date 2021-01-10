@@ -15,17 +15,17 @@ namespace iRacingReplayDirector.Support
 
         static public void SendKeyStrokes(Hotkey hotkey)
         {
+            Keys modifierKey = hotkey.Modifiers;
+            Byte modifier = (Byte)modifierKey; 
+            Byte key = (Byte)(Keys)hotkey.KeyCode; 
 
-            Byte menuKey = (Byte)Keys.Menu;
-            Byte F9Key = (Byte)Keys.F9;
-
-            keybd_event(menuKey, 0, 0, UIntPtr.Zero);
+            keybd_event(modifier, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            keybd_event(F9Key, 0, 0, UIntPtr.Zero);
+            keybd_event(key, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            keybd_event(F9Key, 0, 0x02, UIntPtr.Zero);
+            keybd_event(key, 0, 0x02, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            keybd_event(menuKey, 0, 0x02, UIntPtr.Zero);
+            keybd_event(modifier, 0, 0x02, UIntPtr.Zero);
         }
 
     }
