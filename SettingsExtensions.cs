@@ -36,19 +36,23 @@ namespace iRacingReplayDirector
             }
         }
 
-        public Hotkey hotKeyStopStart
-        {
+        public Hotkey hotKeyStopStart = new Hotkey(Keys.Alt, Keys.F9);
+        /*{
             get
             {
-                return new Hotkey(Keys.Menu, Keys.F9);
+                return new Hotkey(Keys.Alt, Keys.F9);
             }
-        }
-        public Hotkey hotKeyPauseResume
-        {
+            set
+            {
+                hotKeyStopStart = value;
+            }
+        }*/
+        public Hotkey hotKeyPauseResume = new Hotkey(Keys.Alt, Keys.F10);
+        /*{
             get
             {
-                return new Hotkey(Keys.Menu, Keys.F10);
+                return new Hotkey(Keys.Alt, Keys.F10);
             }
-        }
+        }*/
     }
 }
