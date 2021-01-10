@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using iRacingSDK.Support;
+using WK.Libraries.HotkeyListenerNS;
+using iRacingReplayDirector.Support;
 
 namespace iRacingReplayDirector
 {
@@ -26,7 +28,7 @@ namespace iRacingReplayDirector
 
         BindingManagerBase dataBinding;
 
-
+        internal static HotkeySelector hotKeySelectorStopStart = new HotkeySelector();
 
         public AdvancedGeneralSettingsDlg(Settings settings)
         {
@@ -78,7 +80,7 @@ namespace iRacingReplayDirector
 
         private void AdvanceGeneralSettingsDlg_Load(object sender, EventArgs e)
         {
-
+            hotKeySelectorStopStart.Enable(tbHotKeyStopStart, Settings.Default.hotKeyStopStart);
         }
 
         private void label6_Click(object sender, EventArgs e)
@@ -151,6 +153,25 @@ namespace iRacingReplayDirector
         private void cancel_button_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
+        }
+
+        private void btTestStopStartHotKey_Click(object sender, EventArgs e)
+        {
+
+            Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
+            Settings.Default.hotKeyStopStart = newHotKey;
+
+            /*hotkeyListener.Update
+            (
+                // Reference the current clipping hotkey for directly updating 
+                // the hotkey without a need for restarting your application.
+                ref MainForm.clippingHotkey,
+
+                // Convert the selected hotkey's text representation 
+                // to a Hotkey object and update it.
+                HotkeyListener.Convert(txtClippingHotkey.Text)
+            );*/
+            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyStopStart);
         }
     }
 }
