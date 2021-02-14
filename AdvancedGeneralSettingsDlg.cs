@@ -29,6 +29,7 @@ namespace iRacingReplayDirector
         BindingManagerBase dataBinding;
 
         internal static HotkeySelector hotKeySelectorStopStart = new HotkeySelector();
+        internal static HotkeySelector hotKeySelectorPauseResume = new HotkeySelector();
 
         public AdvancedGeneralSettingsDlg(Settings settings)
         {
@@ -81,6 +82,8 @@ namespace iRacingReplayDirector
         private void AdvanceGeneralSettingsDlg_Load(object sender, EventArgs e)
         {
             hotKeySelectorStopStart.Enable(tbHotKeyStopStart, Settings.Default.hotKeyStopStart);
+            hotKeySelectorPauseResume.Enable(tbHotKeyPauseResume, new Hotkey(Settings.Default.strHotKeyPauseResume));
+
         }
 
         private void label6_Click(object sender, EventArgs e)
@@ -172,6 +175,14 @@ namespace iRacingReplayDirector
                 HotkeyListener.Convert(txtClippingHotkey.Text)
             );*/
             KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyStopStart);
+        }
+
+        private void btTestPauseResumeHotKey_Click(object sender, EventArgs e)
+        {
+            Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyPauseResume.Text);
+            Settings.Default.strHotKeyPauseResume = tbHotKeyPauseResume.Text;
+
+            KeyboardEmulator.SendKeyStrokes(newHotKey);
         }
     }
 }

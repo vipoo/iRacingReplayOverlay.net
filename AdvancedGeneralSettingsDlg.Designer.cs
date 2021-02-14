@@ -80,6 +80,8 @@
             this.label17 = new System.Windows.Forms.Label();
             this.ok_button = new System.Windows.Forms.Button();
             this.cancel_button = new System.Windows.Forms.Button();
+            this.tbHotKeyPauseResume = new System.Windows.Forms.TextBox();
+            this.btTestPauseResumeHotKey = new System.Windows.Forms.Button();
             this.incidents_settings_tab.SuspendLayout();
             this.tabPageTiming.SuspendLayout();
             this.grpBox_Timing_Settings.SuspendLayout();
@@ -614,7 +616,9 @@
             // 
             // tabPageShortKeys
             // 
+            this.tabPageShortKeys.Controls.Add(this.btTestPauseResumeHotKey);
             this.tabPageShortKeys.Controls.Add(this.btTestStopStartHotKey);
+            this.tabPageShortKeys.Controls.Add(this.tbHotKeyPauseResume);
             this.tabPageShortKeys.Controls.Add(this.tbHotKeyStopStart);
             this.tabPageShortKeys.Controls.Add(this.label18);
             this.tabPageShortKeys.Controls.Add(this.label17);
@@ -683,6 +687,23 @@
             this.cancel_button.Text = "Cancel";
             this.cancel_button.UseVisualStyleBackColor = true;
             this.cancel_button.Click += new System.EventHandler(this.cancel_button_Click);
+            // 
+            // tbHotKeyPauseResume
+            // 
+            this.tbHotKeyPauseResume.Location = new System.Drawing.Point(327, 87);
+            this.tbHotKeyPauseResume.Name = "tbHotKeyPauseResume";
+            this.tbHotKeyPauseResume.Size = new System.Drawing.Size(136, 27);
+            this.tbHotKeyPauseResume.TabIndex = 2;
+            // 
+            // btTestPauseResumeHotKey
+            // 
+            this.btTestPauseResumeHotKey.Location = new System.Drawing.Point(481, 87);
+            this.btTestPauseResumeHotKey.Name = "btTestPauseResumeHotKey";
+            this.btTestPauseResumeHotKey.Size = new System.Drawing.Size(75, 27);
+            this.btTestPauseResumeHotKey.TabIndex = 3;
+            this.btTestPauseResumeHotKey.Text = "Send";
+            this.btTestPauseResumeHotKey.UseVisualStyleBackColor = true;
+            this.btTestPauseResumeHotKey.Click += new System.EventHandler(this.btTestPauseResumeHotKey_Click);
             // 
             // AdvancedGeneralSettingsDlg
             // 
@@ -779,5 +800,7 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox tbHotKeyStopStart;
         private System.Windows.Forms.Button btTestStopStartHotKey;
+        private System.Windows.Forms.TextBox tbHotKeyPauseResume;
+        private System.Windows.Forms.Button btTestPauseResumeHotKey;
     }
 }
