@@ -236,7 +236,7 @@ namespace iRacingReplayDirector
             //    if (isNewVersionAvailable)
             //        newVersionMessage.Visible = true;
             //}
-            //catch(Exception ee)
+            //catch (Exception ee)
             //{
             //    TraceError.WriteLine(ee.Message);
             //    TraceError.WriteLine(ee.StackTrace);
@@ -266,8 +266,8 @@ namespace iRacingReplayDirector
                 TraceDebug.WriteLine("SystemPageSize:  {0}".F(Environment.SystemPageSize));
                 TraceDebug.WriteLine("Version:  {0}".F(Environment.Version));
 
-                LogDeviceInformation("Win32_Processor");
-                LogDeviceInformation("Win32_VideoController");
+                //LogDeviceInformation("Win32_Processor");
+                //LogDeviceInformation("Win32_VideoController");
             }
             catch
             {

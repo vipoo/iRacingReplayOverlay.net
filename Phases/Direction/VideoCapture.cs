@@ -156,38 +156,13 @@ namespace iRacingReplayDirector.Phases.Direction
             TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
             KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyStopStart);
-
-
-            /*var simulator = new InputSimulator();
-
-            // CTRL-C (effectively a copy command in many situations)
-            VirtualKeyCode modifier = VirtualKeyCode.CONTROL;
-            VirtualKeyCode key = VirtualKeyCode.F9;
-            //simulator.Keyboard.ModifiedKeyStroke(modifier, key);
-            simulator.Keyboard.KeyPress(key);*/
-                
-                //VirtualKeyCode.CONTROL, VirtualKeyCode.VK_C);
-
-            //Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
-            //System.Threading.Thread.Sleep(700);
-            //Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
-            //System.Threading.Thread.Sleep(700);
-            //Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
-            //System.Threading.Thread.Sleep(700);
-            //Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
 
         private static void SendKeyStroke_PauseResume()
         {
             TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
-            //Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
-            //System.Threading.Thread.Sleep(700);
-            //Keyboard.keybd_event(Keyboard.VK_F10, 0, 0, UIntPtr.Zero);
-            //System.Threading.Thread.Sleep(700);
-            //Keyboard.keybd_event(Keyboard.VK_F10, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
-            //System.Threading.Thread.Sleep(700);
-            //Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyPauseResume);
         }
     }
 }
