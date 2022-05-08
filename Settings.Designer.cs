@@ -390,20 +390,20 @@ namespace iRacingReplayDirector
             }
         }
 
-        [UserScopedSetting]
-        [SettingsProvider(typeof(IAVMSettingsProvider))]
-        [DebuggerNonUserCode]
-        public GitHubReleases.GitHubCachedReleases[] GitHubCachedReleases
-        {
-            get
-            {
-                return (GitHubReleases.GitHubCachedReleases[])this["GitHubCachedReleases"];
-            }
-            set
-            {
-                this["GitHubCachedReleases"] = value;
-            }
-        }
+        //[UserScopedSetting]
+        //[SettingsProvider(typeof(IAVMSettingsProvider))]
+        //[DebuggerNonUserCode]
+        //public GitHubReleases.GitHubCachedReleases[] GitHubCachedReleases
+        //{
+        //    get
+        //    {
+        //        return (GitHubReleases.GitHubCachedReleases[])this["GitHubCachedReleases"];
+        //    }
+        //    set
+        //    {
+        //        this["GitHubCachedReleases"] = value;
+        //    }
+        //}
 
         [UserScopedSetting]
         [SettingsProvider(typeof(IracingReplayDirectorProvider))]

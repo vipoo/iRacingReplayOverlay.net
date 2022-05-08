@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingReplayDirector.  If not, see <http://www.gnu.org/licenses/>.
 
-using GitHubReleases;
 using iRacingReplayDirector.Phases;
 using iRacingReplayDirector.Phases.Capturing;
 using iRacingReplayDirector.Support;
@@ -217,31 +216,31 @@ namespace iRacingReplayDirector
                 })
                 .InTheBackground(errorMessage => { });
 
-            try
-            {
-                var items = await GitHubAccess.GetVersions("vipoo", "iRacingReplayDirector.net");
+            //try
+            //{
+            //    var items = await GitHubAccess.GetVersions("vipoo", "iRacingReplayDirector.net");
 
-                var currentVersionItem = items.FirstOrDefault(r => r.VersionStamp == AboutBox1.AssemblyVersion);
-                var isNewVersionAvailable = false;
+            //    var currentVersionItem = items.FirstOrDefault(r => r.VersionStamp == AboutBox1.AssemblyVersion);
+            //    var isNewVersionAvailable = false;
 
-                if (currentVersionItem.VersionStamp == null)
-                    isNewVersionAvailable = true;
-                else
-                {
-                    var isPreRelease = currentVersionItem.Prerelease;
+            //    if (currentVersionItem.VersionStamp == null)
+            //        isNewVersionAvailable = true;
+            //    else
+            //    {
+            //        var isPreRelease = currentVersionItem.Prerelease;
 
-                    var latestVersion = items.OrderByDescending(r => new Version(r.VersionStamp)).Where(r => r.Prerelease == isPreRelease).First();
-                    isNewVersionAvailable = new Version(latestVersion.VersionStamp) > AboutBox1.AssemblyVersionStamp;
-                }
+            //        var latestVersion = items.OrderByDescending(r => new Version(r.VersionStamp)).Where(r => r.Prerelease == isPreRelease).First();
+            //        isNewVersionAvailable = new Version(latestVersion.VersionStamp) > AboutBox1.AssemblyVersionStamp;
+            //    }
 
-                if (isNewVersionAvailable)
-                    newVersionMessage.Visible = true;
-            }
-            catch(Exception ee)
-            {
-                TraceError.WriteLine(ee.Message);
-                TraceError.WriteLine(ee.StackTrace);
-            }
+            //    if (isNewVersionAvailable)
+            //        newVersionMessage.Visible = true;
+            //}
+            //catch(Exception ee)
+            //{
+            //    TraceError.WriteLine(ee.Message);
+            //    TraceError.WriteLine(ee.StackTrace);
+            //}
         }
 
         void LogSystemInformation()
