@@ -3,7 +3,7 @@
 
 // Copyright 2014 Dean Netherton and 
 // Copyright 2022 Merlin Cooper
-https://github.com/MerlinCooper/iRacingReplayDirector
+// https://github.com/MerlinCooper/iRacingReplayDirector
 //
 // iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
