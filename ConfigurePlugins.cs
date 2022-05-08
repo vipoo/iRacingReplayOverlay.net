@@ -135,14 +135,14 @@ namespace iRacingReplayDirector
             Settings.Default.Save();
         }
 
-        //private async void pluginNames_SelectedIndexChanged(object sender, EventArgs e)
-        //{
+        private async void pluginNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
         //    var versions = await GitHubAccess.GetVersions("vipoo", "iRacingDirector.Plugin.StandardOverlays");
 
         //    foreach(var v in versions)
         //        this.pluginVersions.Items.Add(v);
 
-        //}
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {

@@ -145,6 +145,7 @@
     </Compile>
     <Compile Include="GeneralSettingFields.cs">
     </Compile>
+    <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="Properties\IAVMSettingsProvider.cs" />
     <Compile Include="ConfigureGeneralSettings.cs">
       <SubType>Form</SubType>
@@ -158,13 +159,6 @@
     <Compile Include="ConfigurePlugins.Designer.cs">
       <DependentUpon>ConfigurePlugins.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\GitHubAccessSettings.cs" />
-    <Compile Include="GitHubReleases\GitHubAccess.cs" />
-    <Compile Include="GitHubReleases\GitHubCachedReleases.cs" />
-    <Compile Include="GitHubReleases\GitHubCachedResult.cs" />
-    <Compile Include="GitHubReleases\PortableSettingsProvider.cs" />
-    <Compile Include="GitHubReleases\RepoKey.cs" />
-    <Compile Include="GitHubReleases\VersionItem.cs" />
     <Compile Include="Phases\Capturing\EditMarker.cs" />
     <Compile Include="Phases\Direction\RulePaceLaps.cs" />
     <Compile Include="Phases\Transcoding\FlashCardPaging.cs" />

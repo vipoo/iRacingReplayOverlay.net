@@ -19,13 +19,13 @@ namespace iRacingReplayDirector.Support
             Byte modifier = (Byte)modifierKey; 
             Byte key = (Byte)(Keys)hotkey.KeyCode; 
 
-            keybd_event(modifierKey, 0, 0, UIntPtr.Zero);
+            keybd_event(modifier, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
             keybd_event(key, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
             keybd_event(key, 0, 0x02, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            keybd_event(modifierKey, 0, 0x02, UIntPtr.Zero);
+            keybd_event(modifier, 0, 0x02, UIntPtr.Zero);
         }
 
     }
