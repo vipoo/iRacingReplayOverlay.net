@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using WK.Libraries.HotkeyListenerNS;
 
 namespace iRacingReplayDirector
 {
@@ -389,20 +390,20 @@ namespace iRacingReplayDirector
             }
         }
 
-        [UserScopedSetting]
-        [SettingsProvider(typeof(IAVMSettingsProvider))]
-        [DebuggerNonUserCode]
-        public GitHubReleases.GitHubCachedReleases[] GitHubCachedReleases
-        {
-            get
-            {
-                return (GitHubReleases.GitHubCachedReleases[])this["GitHubCachedReleases"];
-            }
-            set
-            {
-                this["GitHubCachedReleases"] = value;
-            }
-        }
+        //[UserScopedSetting]
+        //[SettingsProvider(typeof(IAVMSettingsProvider))]
+        //[DebuggerNonUserCode]
+        //public GitHubReleases.GitHubCachedReleases[] GitHubCachedReleases
+        //{
+        //    get
+        //    {
+        //        return (GitHubReleases.GitHubCachedReleases[])this["GitHubCachedReleases"];
+        //    }
+        //    set
+        //    {
+        //        this["GitHubCachedReleases"] = value;
+        //    }
+        //}
 
         [UserScopedSetting]
         [SettingsProvider(typeof(IracingReplayDirectorProvider))]
@@ -461,6 +462,20 @@ namespace iRacingReplayDirector
             set
             {
                 this["IgnoreIncidentsDuringRaceStart"] = value;
+            }
+        }
+
+        [UserScopedSetting]
+        [DebuggerNonUserCode]
+        [DefaultSettingValue("Alt + F12")]
+        public string strHotKeyPauseResume  
+        {
+            get
+            {
+                return (string)this["strHotKeyPauseResume"];
+            }
+            set{
+                this["strHotKeyPauseResume"] = value;
             }
         }
     }

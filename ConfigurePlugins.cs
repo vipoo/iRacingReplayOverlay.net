@@ -1,5 +1,4 @@
-﻿using GitHubReleases;
-using iRacingSDK.Support;
+﻿using iRacingSDK.Support;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -28,8 +27,8 @@ namespace iRacingReplayDirector
         public ConfigurePlugins()
         {
             InitializeComponent();
-            twoColumnDropDown<PluginDetails>(pluginNames, (v, i) => i == 0 ? v.FriendlyName : "by {0}".F(v.Owner));
-            twoColumnDropDown<VersionItem>(pluginVersions, (v, i) => i == 0 ? v.VersionStamp : v.DateTimeStamp);
+            //twoColumnDropDown<PluginDetails>(pluginNames, (v, i) => i == 0 ? v.FriendlyName : "by {0}".F(v.Owner));
+            //twoColumnDropDown<VersionItem>(pluginVersions, (v, i) => i == 0 ? v.VersionStamp : v.DateTimeStamp);
         }
 
         [Serializable]
@@ -138,16 +137,16 @@ namespace iRacingReplayDirector
 
         private async void pluginNames_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var versions = await GitHubAccess.GetVersions("vipoo", "iRacingDirector.Plugin.StandardOverlays");
+        //    var versions = await GitHubAccess.GetVersions("vipoo", "iRacingDirector.Plugin.StandardOverlays");
 
-            foreach(var v in versions)
-                this.pluginVersions.Items.Add(v);
+        //    foreach(var v in versions)
+        //        this.pluginVersions.Items.Add(v);
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var version = (VersionItem)this.pluginVersions.SelectedItem;
+            /*var version = (VersionItem)this.pluginVersions.SelectedItem;
             this.Enabled = false;
 
             var process = new Process
@@ -166,7 +165,7 @@ namespace iRacingReplayDirector
                 this.Enabled = true;
                 UpdatePluginDetails();
             }, null);
-            process.Start();
+            process.Start();*/
         }
     }
 }

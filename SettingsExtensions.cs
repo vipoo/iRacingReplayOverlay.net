@@ -1,7 +1,10 @@
 ﻿// This file is part of iRacingReplayDirector.
 //
-// Copyright 2014 Dean Netherton
+// Copyright 2014 Dean Netherton (discontinued)
 // https://github.com/vipoo/iRacingReplayDirector.net
+//
+// Copyright 2021 Merlin Cooper 
+// https://github.com/MerlinCooper/iRacingReplayDirector
 //
 // iRacingReplayDirector is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,6 +21,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using WK.Libraries.HotkeyListenerNS;
+using System.Windows.Forms;
 
 namespace iRacingReplayDirector
 {
@@ -30,5 +35,9 @@ namespace iRacingReplayDirector
                 return PreferredDriverNames.Split(new [] { ',', ';' }).Select(name => name.Trim().ToLower()).ToList();
             }
         }
+
+        public Hotkey hotKeyStopStart = new Hotkey(Keys.Menu, Keys.F9);      //default HotKey to Stop/Start recording
+
+        public Hotkey hotKeyPauseResume = new Hotkey(Keys.Menu, Keys.F12);   //default HotKey to Pause/Resume recording
     }
 }

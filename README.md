@@ -1,7 +1,7 @@
 iRacingReplayDirector
 =====================
 
-This project is the sucessor of the discontinued iRacingReplayDirector.NET application developed by Vipoo. 
+iRacingReplayDirector is the sucessor of the discontinued iRacingReplayOverlay.NET application developed by Vipoo. 
 
 As Vipoo no longer owns an active license for iRacing - nor has the time to commit to this project - I will take over managing the original repository (vipoo/iRacingReplayDirector.net) and continue to coordinate future enhancements as well.  
 
@@ -11,27 +11,35 @@ Based on Azure DevOps continous integration is setup for two branches "master" a
 
 Current CI/CD Status
 --------------------
-Master:                         
-[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/MerlinCooper.iRacingReplayDirector?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=2&branchName=master)   
+Master Branch - latest Release   
+![Build Status](https://dev.azure.com/MerlinCooper/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_Master?branchName=master)
+
+Master Branch - CI (compile state)
+
+[![Build status](https://dev.azure.com/MerlinCooper/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_Master_CI_compile%20only)](https://dev.azure.com/MerlinCooper/iRacingReplayDirector/_build/latest?definitionId=8)
 
 Fast_Video_Recording_With_OBS   
-[![Build Status](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)   
+[![Build Status](https://dev.azure.com/MerlinCooper/iRacingReplayDirector/_apis/build/status/iRacingReplayDirector_OBS%20Fast%20Record%20Branch%20(alpha)?branchName=Fast_Video_Recording_With_OBS)](https://dev.azure.com/MerlinCooperDev/iRacingReplayDirector/_build/latest?definitionId=3&branchName=Fast_Video_Recording_With_OBS)
 
+Installation
+============
 
-Former Readme File (to be updated) 
-==================================
+To install the application you need to download the sources and compile them at the moment. Automated process to provide most recent binaries is being worked on. 
+ 
 
+Former Readme File (to be updated)   
+================================== 
 
 This program converts your iRacing replay's into edited video files for uploading to youtube.  It overlays the race with leaderboards and other race data.
 
 It creates 2 videos from your replays; the full replay and a 10 minute highlight video.
 
-The highlight video will contain the battles, incidents and remove any boring bits from the final video.
+The highlight video will contain the battles, incidents and remove any boring bits from the final video. 
 
 You can see some of the videos the application has created from my replays on my youtube channel at:
 https://www.youtube.com/user/nethd/videos
 
-https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be
+https://www.youtube.com/watch?v=h6BETG8z-_w&feature=youtu.be 
 
 https://www.youtube.com/watch?v=Zs4VyBPOCHw&list=UUjHTFbxIv3vi7KGreofr8Aw
 
@@ -56,12 +64,7 @@ This is where it joins the introduction scenic views recorded above and the main
 You still need a conventional capture software to capture your game video to a video file - I use Nvidia's ShadowPlay.  
 The program will send the required keystroke to the video capture software, once its position the replay to the start of the race.
 
-Installation
-============
 
-The application can be installed at: https://iracingreplaydirector.s3-ap-southeast-2.amazonaws.com/index.html
-
-Or if you a feeling adventurous, you can try ealier releases at: https://iracingreplaydirector-beta.s3.amazonaws.com/index.html
 
 How to use
 ===================
@@ -85,4 +88,4 @@ Known Issues/Requirements
 * Video capture software must respond to ALT+F9 or F9 keypress to start/stop recording
 * Replays must captured details of all competitors (Under the graphics options, set the Max Cars to a number greater than number of competitors before recording a replay session)
 * Tested on Windows 7/Windows 8 only
-* Requires 64x version of windows
+* Requires 64x version of windows 

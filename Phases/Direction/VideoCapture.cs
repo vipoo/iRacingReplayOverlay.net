@@ -20,10 +20,10 @@ using iRacingSDK.Support;
 using System;
 using System.IO;
 using System.Linq;
-using Win32;
 using System.Timers;
 using System.Collections.Generic;
 using iRacingReplayDirector.Phases.Capturing;
+using iRacingReplayDirector.Support;
 
 namespace iRacingReplayDirector.Phases.Direction
 {
@@ -155,26 +155,14 @@ namespace iRacingReplayDirector.Phases.Direction
         {
             TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
-            Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_F9, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_F9, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyStopStart);
         }
 
         private static void SendKeyStroke_PauseResume()
         {
             TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
-            Keyboard.keybd_event(Keyboard.VK_MENU, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_F10, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_F10, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
-            Keyboard.keybd_event(Keyboard.VK_MENU, 0, Keyboard.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyPauseResume);
         }
     }
 }

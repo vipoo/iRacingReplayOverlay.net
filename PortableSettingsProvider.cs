@@ -1,25 +1,23 @@
-﻿using iRacingSDK.Support;
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 
-public class IAVMSettingsProvider : PortableSettingsProvider
+internal abstract class PortableSettingsProvider : SettingsProvider
 {
-    public override string Name
+    public static void MakePortable<T>(ApplicationSettingsBase settings) where T : PortableSettingsProvider
     {
-        get { return "IAVMSettingsProvider"; }
+        var pp = settings.Providers.OfType<T>().First();
+
+        foreach (SettingsProperty p in settings.Properties)
+            p.Provider = pp;
+        settings.Reload();
     }
 
-    public override string GetAppSettingsFilename()
-    {
-        return "iracing-application-version-manager.settings";
-    }
-}
-public class PortableSettingsProvider : SettingsProvider
-{
     const string SETTINGSROOT = "Settings";
     XmlDocument _settingsXML = null;
 
@@ -44,10 +42,7 @@ public class PortableSettingsProvider : SettingsProvider
         return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     }
 
-    public virtual string GetAppSettingsFilename()
-    {
-        return "iracing-replay-director.settings";
-    }
+    public abstract string GetAppSettingsFilename();
 
     public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection propvals)
     {
@@ -77,7 +72,7 @@ public class PortableSettingsProvider : SettingsProvider
         {
             if (_settingsXML != null)
                 return _settingsXML;
-            
+
             _settingsXML = new XmlDocument();
 
             try
@@ -86,8 +81,8 @@ public class PortableSettingsProvider : SettingsProvider
             }
             catch (Exception ex)
             {
-                TraceDebug.WriteLine("Unable to load settings");
-                TraceDebug.WriteLine(ex.Message);
+                Trace.WriteLine("Unable to load settings", "DEBUG");
+                Trace.WriteLine(ex.Message, "DEBUG");
 
                 var dec = _settingsXML.CreateXmlDeclaration("1.0", "utf-8", string.Empty);
                 _settingsXML.AppendChild(dec);
@@ -125,7 +120,7 @@ public class PortableSettingsProvider : SettingsProvider
         {
             SettingNode = (XmlElement)SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + propVal.Name);
         }
-        catch 
+        catch
         {
         }
 
@@ -135,6 +130,13 @@ public class PortableSettingsProvider : SettingsProvider
             SettingsXML.SelectSingleNode(SETTINGSROOT).AppendChild(SettingNode);
         }
 
-        SettingNode.InnerText = propVal.SerializedValue == null ? null : propVal.SerializedValue.ToString();
+        if (propVal.SerializedValue != null && propVal.SerializedValue.ToString().StartsWith("<?"))
+        {
+            var cdata = SettingsXML.CreateCDataSection(propVal.SerializedValue.ToString());
+            SettingNode.RemoveAll();
+            SettingNode.AppendChild(cdata);
+        }
+        else
+            SettingNode.InnerText = propVal.SerializedValue == null ? null : propVal.SerializedValue.ToString();
     }
 }
