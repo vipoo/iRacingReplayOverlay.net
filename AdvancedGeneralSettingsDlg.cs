@@ -161,8 +161,8 @@ namespace iRacingReplayDirector
         private void btTestStopStartHotKey_Click(object sender, EventArgs e)
         {
 
-            Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
-            Settings.Default.hotKeyStopStart = newHotKey;
+            //Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
+            //Settings.Default.hotKeyStopStart = newHotKey;
 
             /*hotkeyListener.Update
             (
@@ -174,7 +174,11 @@ namespace iRacingReplayDirector
                 // to a Hotkey object and update it.
                 HotkeyListener.Convert(txtClippingHotkey.Text)
             );*/
-            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyStopStart);
+            //Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
+
+            //KeyboardEmulator.SendKeyStrokes(//newHotKey);
+            Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
+            KeyboardEmulator.SendKeyStrokes(newHotKey);
         }
 
         private void btTestPauseResumeHotKey_Click(object sender, EventArgs e)
@@ -183,6 +187,11 @@ namespace iRacingReplayDirector
             Settings.Default.strHotKeyPauseResume = tbHotKeyPauseResume.Text;
 
             KeyboardEmulator.SendKeyStrokes(newHotKey);
+        }
+
+        private void tbHotKeyStopStart_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
