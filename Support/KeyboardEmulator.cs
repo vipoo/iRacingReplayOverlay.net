@@ -23,39 +23,21 @@ namespace iRacingReplayDirector.Support
 
         static public void SendKeyStrokes(Hotkey hotkey)
         {
-            TraceDebug.WriteLine("keybd_event sent: modifier = {0} {1} | key = {2} {3}".F(hotkey.Modifiers.ToString(), (Byte)hotkey.Modifiers, hotkey.KeyCode.ToString(), (Byte)hotkey.KeyCode));
+            Win32VirtualKeyCodes modifier  = GetWin32KeyCode(hotkey.Modifiers);
+            Win32VirtualKeyCodes key = GetWin32KeyCode(hotkey.KeyCode);
 
-            Byte modifier = (Byte)(hotkey.Modifiers & Keys.Modifiers);
-            Byte key = (Byte)hotkey.KeyCode;
-
-            modifier = (Byte)Win32VirtualKeyCodes.VK_CONTROL;
-            key = (Byte)Win32VirtualKeyCodes.VK_F9;
-
-            System.Windows.Input.Key test = WinformsToWPFKey(hotkey.KeyCode);
-            Byte testByte = (Byte)test;
-            
-            test = WinformsToWPFKey(hotkey.Modifiers);
-            testByte = (Byte)test;
-
-            /*KeysConverter kc = new KeysConverter();
-            var convModifier = kc.ConvertFromString(hotkey.Modifiers.ToString());
-            //var test = kc.ConvertTo(hotkey.Modifiers.ToString(), typeof(Byte));
-            Win32VirtualKeyCodes vModifier = hotkey.Modifiers.ConvertEnum<Win32VirtualKeyCodes>();*/
-
-            modifier = (Byte)GetModifiers(hotkey.Modifiers);
-            key = (Byte)GetKeyCode(hotkey.KeyCode);
-
-
-            modifier  = (Byte)GetWin32KeyCode(hotkey.Modifiers);
-            key = (Byte)GetWin32KeyCode(hotkey.KeyCode);
-
-            keybd_event(modifier, 0, 0, UIntPtr.Zero);
+            keybd_event((Byte)modifier, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            keybd_event(key, 0, 0, UIntPtr.Zero);
+
+            keybd_event((Byte)key, 0, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            keybd_event(key, 0, 0x02, UIntPtr.Zero);
+
+            keybd_event((Byte)key, 0, 0x02, UIntPtr.Zero);
             System.Threading.Thread.Sleep(700);
-            keybd_event(modifier, 0, 0x02, UIntPtr.Zero);
+
+            keybd_event((Byte)modifier, 0, 0x02, UIntPtr.Zero);
+
+            TraceDebug.WriteLine("keybd_event sent: modifier = {0} {1} | key = {2} {3}".F(modifier.ToString(), (Byte)modifier, key.ToString(), (Byte)key));
         }
 
         public static Win32VirtualKeyCodes GetWin32KeyCode(this Keys source)

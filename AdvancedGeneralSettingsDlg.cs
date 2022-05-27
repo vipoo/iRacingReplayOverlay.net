@@ -149,6 +149,11 @@ namespace iRacingReplayDirector
             dataFollowLeaderBeforeRaceEndPeriod.WriteValue();
             dataFollowLeaderAtRaceStartPeriod.WriteValue();*/
 
+            //Store hotkeys to control recording software 
+            Settings.Default.strhotKeyStopStart = tbHotKeyStopStart.Text;
+            Settings.Default.strHotKeyPauseResume = tbHotKeyPauseResume.Text;
+            
+
             //set Dialog Status to close form
             this.DialogResult = DialogResult.OK;
         }
@@ -174,17 +179,18 @@ namespace iRacingReplayDirector
                 // to a Hotkey object and update it.
                 HotkeyListener.Convert(txtClippingHotkey.Text)
             );*/
-            //Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
+           
 
-            //KeyboardEmulator.SendKeyStrokes(//newHotKey);
+            //send hotkey to allow test whether recording software response
             Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
             KeyboardEmulator.SendKeyStrokes(newHotKey);
         }
 
         private void btTestPauseResumeHotKey_Click(object sender, EventArgs e)
         {
+            //send hotkey to allow test whether recording software response
             Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyPauseResume.Text);
-            Settings.Default.strHotKeyPauseResume = tbHotKeyPauseResume.Text;
+            
 
             KeyboardEmulator.SendKeyStrokes(newHotKey);
         }
