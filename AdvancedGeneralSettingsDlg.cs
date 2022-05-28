@@ -168,14 +168,14 @@ namespace iRacingReplayDirector
         {
             //send hotkey to test "Stop/Start" hotkey with your recording software 
             Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyStopStart.Text);
-            KeyboardEmulator.SendKeyStrokes(newHotKey);
+            KeyboardEmulator.SendHotkey(newHotKey);
         }
 
         private void btTestPauseResumeHotKey_Click(object sender, EventArgs e)
         {
             //send hotkey to test "Pause/Resume" hotkey with your recording software 
             Hotkey newHotKey = HotkeyListener.Convert(tbHotKeyPauseResume.Text);
-            KeyboardEmulator.SendKeyStrokes(newHotKey);
+            KeyboardEmulator.SendHotkey(newHotKey);
         }
 
         private void tbHotKeyStopStart_TextChanged(object sender, EventArgs e)

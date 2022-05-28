@@ -21,22 +21,41 @@ namespace iRacingReplayDirector.Support
 
         //static InputSimulator vKeyboard = new InputSimulator();
 
-        static public void SendKeyStrokes(Hotkey hotkey)
+        static public void SendHotkey(Hotkey hotkey)
         {
             Win32VirtualKeyCodes modifier  = GetWin32KeyCode(hotkey.Modifiers);
             Win32VirtualKeyCodes key = GetWin32KeyCode(hotkey.KeyCode);
 
-            keybd_event((Byte)modifier, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
+            SendKeyStrokes(key, modifier);
+        }
+
+        static public void SendHotkey(Win32VirtualKeyCodes key, Win32VirtualKeyCodes modifier)
+        {
+            SendKeyStrokes(key, modifier);
+        }
+
+
+        static private void SendKeyStrokes (Win32VirtualKeyCodes key= Win32VirtualKeyCodes.VK_NONAME, Win32VirtualKeyCodes modifier= Win32VirtualKeyCodes.VK_NONAME)
+        {
+            int keyPressDelay = 200;
+
+            if (modifier != Win32VirtualKeyCodes.VK_NONAME)
+            {
+                keybd_event((Byte)modifier, 0, 0, UIntPtr.Zero);
+                System.Threading.Thread.Sleep(keyPressDelay);
+            }
 
             keybd_event((Byte)key, 0, 0, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
+            System.Threading.Thread.Sleep(keyPressDelay);
 
             keybd_event((Byte)key, 0, 0x02, UIntPtr.Zero);
-            System.Threading.Thread.Sleep(700);
+            System.Threading.Thread.Sleep(keyPressDelay);
 
-            keybd_event((Byte)modifier, 0, 0x02, UIntPtr.Zero);
-
+            if (modifier != Win32VirtualKeyCodes.VK_NONAME)
+            {
+                keybd_event((Byte)modifier, 0, 0x02, UIntPtr.Zero); 
+            }
+                
             TraceDebug.WriteLine("keybd_event sent: modifier = {0} {1} | key = {2} {3}".F(modifier.ToString(), (Byte)modifier, key.ToString(), (Byte)key));
         }
 
@@ -74,7 +93,7 @@ namespace iRacingReplayDirector.Support
                                     //VK_XBUTTON2 	0x06 	X2-Maustaste
                                     //- 	0x07 	Nicht definiert
                                     //VK_BACK 	0x08 	Rücktaste
-                                    //VK_TAB 	0x09 	TABULATORTASTE
+            VK_TAB = 0x09, 	        //TABULATORTASTE
                                     //- 	0x0A-0B 	Reserviert
                                     //VK_CLEAR 	0x0C 	ENTF-TASTE
                                     //VK_RETURN 	0x0D 	EINGABETASTE
