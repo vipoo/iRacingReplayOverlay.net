@@ -154,14 +154,14 @@ namespace iRacingReplayDirector.Phases.Direction
 
         private static void SendKeyStroke_StartStopp()
         {
-            TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
+            TraceInfo.WriteLine("Sending key event to start/stopp recording {0}", Settings.Default.strHotKeyStopStart);
 
             KeyboardEmulator.SendHotkey(new Hotkey(Settings.Default.strHotKeyStopStart));
         }
 
         private static void SendKeyStroke_PauseResume()
         {
-            TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
+            TraceInfo.WriteLine("Sending key event to pause/resume recording {0}", Settings.Default.strHotKeyPauseResume);
 
             KeyboardEmulator.SendHotkey(new Hotkey(Settings.Default.strHotKeyPauseResume));
         }
