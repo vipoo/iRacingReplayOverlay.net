@@ -47,8 +47,18 @@ namespace iRacingReplayDirector.Support
                 case "Alt":     return Win32VirtualKeyCodes.VK_MENU;
                 case "Control": return Win32VirtualKeyCodes.VK_CONTROL;
                 case "Shift":   return Win32VirtualKeyCodes.VK_SHIFT;
+                case "F1":      return Win32VirtualKeyCodes.VK_F1;
+                case "F2":      return Win32VirtualKeyCodes.VK_F2;
+                case "F3":      return Win32VirtualKeyCodes.VK_F3;
+                case "F4":      return Win32VirtualKeyCodes.VK_F4;
+                case "F5":      return Win32VirtualKeyCodes.VK_F5;
+                case "F6":      return Win32VirtualKeyCodes.VK_F6;
+                case "F7":      return Win32VirtualKeyCodes.VK_F7;
+                case "F8":      return Win32VirtualKeyCodes.VK_F8;
                 case "F9":      return Win32VirtualKeyCodes.VK_F9;
                 case "F10":     return Win32VirtualKeyCodes.VK_F10;
+                case "F11":     return Win32VirtualKeyCodes.VK_F11;
+                case "F12":     return Win32VirtualKeyCodes.VK_F12;
             }
             return Win32VirtualKeyCodes.VK_NONAME;
         }

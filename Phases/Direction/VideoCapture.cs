@@ -24,6 +24,7 @@ using System.Timers;
 using System.Collections.Generic;
 using iRacingReplayDirector.Phases.Capturing;
 using iRacingReplayDirector.Support;
+using WK.Libraries.HotkeyListenerNS;
 
 namespace iRacingReplayDirector.Phases.Direction
 {
@@ -155,14 +156,14 @@ namespace iRacingReplayDirector.Phases.Direction
         {
             TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
-            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyStopStart);
+            KeyboardEmulator.SendKeyStrokes(new Hotkey(Settings.Default.strHotKeyStopStart));
         }
 
         private static void SendKeyStroke_PauseResume()
         {
             TraceInfo.WriteLine("Sending key event to start/stopp recording ALT+F9");
 
-            KeyboardEmulator.SendKeyStrokes(Settings.Default.hotKeyPauseResume);
+            KeyboardEmulator.SendKeyStrokes(new Hotkey(Settings.Default.strHotKeyPauseResume));
         }
     }
 }

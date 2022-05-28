@@ -482,7 +482,7 @@ namespace iRacingReplayDirector
         [UserScopedSetting]
         [DebuggerNonUserCode]
         [DefaultSettingValue("Alt + F9")]
-        public string strhotKeyStopStart
+        public string strHotKeyStopStart
         {
             get
             {
