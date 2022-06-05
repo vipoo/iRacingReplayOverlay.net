@@ -64,6 +64,7 @@ namespace iRacingReplayDirector.Phases
             {
                 //Retrieve list of raceEvents selected depending on the duration of the highlight video
                 var totalRaceEvents = RaceEventExtension.GetInterestingRaceEvents(overlayData.RaceEvents.ToList());
+                int prevEndFrame=0;
 
                 ApplyFirstLapCameraDirection(samples, replayControl);
 
@@ -82,19 +83,27 @@ namespace iRacingReplayDirector.Phases
                 foreach (var raceEvent in totalRaceEvents)
                 {
                     TraceInfo.WriteLine("ADV_RECORDING: Type: {0} | Durations-Span: {1} | ".F(raceEvent.GetType(), raceEvent.Duration));
+                    
 
                     //jump to selected RaceEvent in iRacing Replay
-                    int framePositionInRace = raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0);
-                    iRacing.Replay.MoveToFrame(raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0));
+                    
+                    int nextframePositionInRace = raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0);
+
+                    if (prevEndFrame == 0 || prevEndFrame < nextframePositionInRace)
+                    {
+                        prevEndFrame = nextframePositionInRace;
+                        iRacing.Replay.MoveToFrame(prevEndFrame);
+                    }
+                        
 
                     iRacing.Replay.SetSpeed((int)replaySpeeds.normal);           //start iRacing Replay at selected position                     
 
                     raceVideo.Resume();                                         //resume recording
 
-                    TraceDebug.WriteLine("Recording Race-Event. Frame-Position: {0}  | Duration: {1} ms".F(framePositionInRace, 1000 * raceEvent.Duration));
+                    TraceDebug.WriteLine("Recording Race-Event. Frame-Position: {0}  | Duration: {1} ms".F(nextframePositionInRace, 1000 * raceEvent.Duration));
 
                     Thread.Sleep((int)(1000 * raceEvent.Duration));                       //pause thread until scene is fully recorded.
-                    raceVideo.Pause();                                         //pause recording software before jumping to new position in iRacing Replay   
+                    //raceVideo.Pause();                                         //pause recording software before jumping to new position in iRacing Replay   
                 }
 
 
