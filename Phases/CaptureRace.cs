@@ -112,7 +112,7 @@ namespace iRacingReplayDirector.Phases
                     if (timeGap > 1.0)  
                     {
                         nextframePositionInRace = raceStartFrameNumber + (int)Math.Round(raceEvent.StartTime * 60.0);
-                        TraceDebug.WriteLine("ADV_RECORDING: Gap to prev. Race-Event identified. TimeDifference: {0} | Prev. End-Time: {1} | Cur.Start-Time: {2} | target-Frame: {3} ".F(timeGap, lastRaceEvent.EndTime,lastRaceEvent.StartTime, nextframePositionInRace));
+                        TraceDebug.WriteLine("ADV_RECORDING: Gap to prev. Race-Event identified. TimeDifference: {0} | Prev. End-Time: {1} | Cur.Start-Time: {2} | target-Frame: {3} ".F(timeGap, lastRaceEvent.EndTime,raceEvent.StartTime, nextframePositionInRace));
 
                         //pause video recording
                         raceVideo.Pause();                                                  //Pause recording by sending keystroke
@@ -124,6 +124,8 @@ namespace iRacingReplayDirector.Phases
 
                         //change camera to visualy indicate the change in the race time 
                         //var camera = cameraControl.FindACamera(new[] { CameraAngle.LookingInfrontOfCar, CameraAngle.LookingAtCar, CameraAngle.LookingAtTrack });
+                        //iRacing.Replay.
+                        //overlayData.CamDrivers.
 
                         //resume video recording
                         iRacing.Replay.SetSpeed((int)replaySpeeds.normal);                  //resume iRacing Replay
